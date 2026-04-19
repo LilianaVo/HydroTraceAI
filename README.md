@@ -1,76 +1,157 @@
-💧 HydroTrace AI
+Aquí tienes una versión más pulida, clara y profesional de tu README. Mantiene tu idea original pero mejora redacción, estructura, consistencia y estilo para que luzca más “proyecto serio de GitHub”:
 
-Optimización hídrica impulsada por IA Predictiva para la CDMX
+---
 
-Bienvenido al repositorio oficial de HydroTrace AI, una solución desarrollada por PumaScript Solutions (Facultad de Ingeniería, UNAM). Nuestro objetivo es combatir la crisis del agua y el "Agua No Contabilizada" (ANC) mediante inteligencia de datos, detectando fugas y extracciones irregulares en tiempo real.
+# 💧 HydroTrace AI
 
-🚀 Stack Tecnológico
+**Optimización hídrica con IA predictiva para la CDMX**
 
-Data Science & ML: Python, Pandas, Scikit-Learn, NumPy
+HydroTrace AI es una solución desarrollada por **PumaScript Solutions (Facultad de Ingeniería, UNAM)** enfocada en combatir la crisis del agua en la Ciudad de México.
 
-Modelos: Isolation Forest (Anomalías), K-Means (Segmentación), Regresión Lineal (Consumo Teórico)
+El sistema utiliza **ciencia de datos e inteligencia artificial** para detectar:
 
-Backend: Flask
+* Fugas en la red hidráulica
+* Extracciones irregulares
+* Patrones anómalos de consumo
 
-Frontend: HTML5, Tailwind CSS, JavaScript (Vanilla), Lucide Icons
+Todo esto en tiempo (casi) real, con el objetivo de reducir el **Agua No Contabilizada (ANC)** y mejorar la eficiencia operativa.
 
-📁 Estructura del Proyecto
+---
 
-El proyecto está diseñado de forma modular para separar el procesamiento de datos de la interfaz web:
+## 🚀 Stack Tecnológico
 
+**Data Science & Machine Learning**
+
+* Python
+* Pandas
+* NumPy
+* Scikit-Learn
+
+**Modelos implementados**
+
+* Isolation Forest → detección de anomalías
+* K-Means → segmentación de usuarios
+* Regresión Lineal → estimación de consumo teórico
+
+**Backend**
+
+* Flask
+
+**Frontend**
+
+* HTML5
+* Tailwind CSS
+* JavaScript (Vanilla)
+* Lucide Icons
+
+---
+
+## 📁 Estructura del Proyecto
+
+El proyecto sigue una arquitectura modular que separa claramente el procesamiento de datos, los modelos y la interfaz web:
+
+```
 HydroTraceAI/
-├── data/                       # Archivos CSV fuente y el dataset maestro generado
-├── Frontend/                   # Plantillas HTML para el servidor Flask
-│   ├── index.html              # Landing Page
-│   ├── dashboard_clientes.html # Vista para el organismo regulador (ROI)
-│   └── dashboard_admin.html    # Consola técnica de PumaScript
+├── data/                       # Archivos fuente (CSV) y dataset maestro
+├── Frontend/                   # Plantillas HTML (Flask)
+│   ├── index.html              # Landing page
+│   ├── dashboard_clientes.html # Vista ejecutiva (organismo regulador)
+│   └── dashboard_admin.html    # Consola técnica (PumaScript)
 ├── Frontend/assets/            # Recursos estáticos (CSS, JS, imágenes)
-├── etl_pipeline.py             # Script 1: Limpieza y unificación de datos
-├── modelos_ml.py               # Script 2: Entrenamiento y predicción de IA
-├── main.py                     # Script 3: Servidor web y API con Flask
-└── README.md                   # Este archivo
+├── etl_pipeline.py             # ETL: limpieza y unificación de datos
+├── modelos_ml.py               # Modelos de IA: entrenamiento y predicción
+├── main.py                     # Servidor Flask + API
+└── README.md                   # Documentación del proyecto
+```
 
+---
 
-⚙️ ¿Cómo ejecutar el proyecto localmente?
+## ⚙️ Ejecución local
 
-Para que los dashboards funcionen correctamente, es necesario seguir el flujo de datos exacto: desde la limpieza hasta el despliegue del servidor.
+Para ejecutar correctamente el proyecto, sigue el flujo completo de datos:
 
-1. Preparar el entorno
+### 1. Preparar el entorno
 
-Asegúrate de tener Python instalado y ejecuta el siguiente comando para instalar las dependencias necesarias:
+Asegúrate de tener Python instalado y ejecuta:
 
+```bash
 pip install flask pandas scikit-learn numpy
+```
 
+---
 
-2. Procesar los datos (ETL)
+### 2. Procesar datos (ETL)
 
-Toma los archivos fuente de la carpeta /data y genera el dataset_maestro.csv limpio y unificado:
+Genera el dataset limpio y unificado:
 
+```bash
 python etl_pipeline.py
+```
 
+Esto creará el archivo:
 
-3. Entrenar y ejecutar los Modelos (Machine Learning)
+```
+dataset_maestro.csv
+```
 
-Lee el dataset maestro, aplica los algoritmos de detección y genera el archivo resultados_anomalias.csv (que alimentará la web):
+---
 
+### 3. Ejecutar modelos de Machine Learning
+
+Procesa el dataset y genera las predicciones:
+
+```bash
 python modelos_ml.py
+```
 
+Salida:
 
-4. Levantar el Servidor Web
+```
+resultados_anomalias.csv
+```
 
-Inicia la aplicación Flask para visualizar la plataforma:
+---
 
+### 4. Levantar el servidor
+
+Inicia la aplicación web:
+
+```bash
 python main.py
+```
 
+---
 
-5. Visualizar
+### 5. Visualización
 
-Abre tu navegador web y visita:
+Accede desde tu navegador:
 
-🌍 Landing Page: http://127.0.0.1:5000/
+* 🌍 **Landing Page**
+  [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
 
-📊 Dashboard Ejecutivo: http://127.0.0.1:5000/dashboard-clientes
+* 📊 **Dashboard Ejecutivo**
+  [http://127.0.0.1:5000/dashboard-clientes](http://127.0.0.1:5000/dashboard-clientes)
 
-💻 Admin Console: http://127.0.0.1:5000/dashboard-admin
+* 💻 **Consola Administrativa**
+  [http://127.0.0.1:5000/dashboard-admin](http://127.0.0.1:5000/dashboard-admin)
 
-Desarrollado con 🖤 por el equipo de PumaScript Solutions - UNAM (2026).
+---
+
+## 🎯 Objetivo del proyecto
+
+HydroTrace AI busca demostrar cómo la inteligencia artificial puede aplicarse a problemas urbanos reales, generando herramientas que apoyen la toma de decisiones en infraestructura crítica.
+
+---
+
+## 👨‍💻 Equipo
+
+Desarrollado con 🖤 por **PumaScript Solutions**
+Facultad de Ingeniería, UNAM — 2026
+
+---
+
+Si quieres, en el siguiente paso puedo ayudarte a:
+
+* hacerlo más “impactante” para reclutadores (tipo portafolio)
+* agregar badges (build, license, Python version, etc.)
+* o convertirlo en README estilo startup 🚀
