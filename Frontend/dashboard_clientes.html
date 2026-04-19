@@ -3,287 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HydroTrace AI | Panel de Control Ejecutivo</title>
-    <!-- Tailwind CSS -->
+    <title>HydroTrace AI | Dashboard Ejecutivo</title>
+    <!-- Tailwind & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .gradient-text { background: linear-gradient(90deg, #22d3ee, #2563eb); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        input[type=range] { -webkit-appearance: none; background: transparent; }
-        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #1e293b; border-radius: 4px; }
-        input[type=range]::-webkit-slider-thumb { height: 18px; width: 18px; border-radius: 50%; background: #22d3ee; cursor: pointer; -webkit-appearance: none; margin-top: -6px; box-shadow: 0 0 10px rgba(34, 211, 238, 0.5); }
+        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
+        .gradient-border { border: 1px solid; border-image: linear-gradient(to right, #22d3ee, #2563eb) 1; }
     </style>
 </head>
-<body class="bg-[#020617] text-slate-200 min-h-screen p-4 md:p-8">
+<body class="bg-[#020617] text-slate-200 min-h-screen font-sans selection:bg-cyan-500/30">
 
-    <!-- HEADER PRINCIPAL -->
-    <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-        <div>
-            <h1 class="text-3xl font-bold gradient-text">HydroTrace AI</h1>
-            <p class="text-slate-400 text-sm">Sistema de Inteligencia Hídrica CDMX • PumaScript Solutions</p>
-        </div>
-        <div class="flex items-center gap-4 bg-slate-900/50 p-2 rounded-2xl border border-slate-800">
-            <div class="flex flex-col items-end px-4 border-r border-slate-700">
-                <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Estado del Sistema</span>
-                <span class="text-emerald-400 text-xs flex items-center gap-1 font-semibold">
-                    <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span></span>
-                    Modelos Activos (v2.5)
-                </span>
+    <div class="max-w-7xl mx-auto p-4 md:p-8">
+        <!-- HEADER -->
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
+            <div>
+                <h1 class="text-4xl font-extrabold tracking-tight text-white">
+                    Hydro<span class="text-cyan-400">Trace</span> <span class="text-blue-500 text-2xl">AI</span>
+                </h1>
+                <p class="text-slate-500 text-sm mt-1 uppercase tracking-widest font-semibold">Análisis de Red SACMEX CDMX</p>
             </div>
-            <button class="p-2 text-slate-400 hover:text-white transition-colors"><i data-lucide="bell"></i></button>
-            <button class="p-2 text-slate-400 hover:text-white transition-colors"><i data-lucide="settings"></i></button>
-        </div>
-    </header>
+            <div class="flex gap-3">
+                <button class="glass px-4 py-2 rounded-xl text-sm flex items-center gap-2 hover:bg-slate-800 transition">
+                    <i data-lucide="calendar" class="w-4 h-4 text-cyan-400"></i> Periodo: 2019
+                </button>
+                <button class="bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-cyan-900/20 transition flex items-center gap-2">
+                    <i data-lucide="download" class="w-4 h-4"></i> Informe Ejecutivo
+                </button>
+            </div>
+        </header>
 
-    <!-- FILA DE ORO (KPIs) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="glass p-6 rounded-3xl group hover:border-cyan-500/50 transition-all">
-            <div class="flex justify-between items-start mb-4">
-                <div class="p-3 bg-emerald-500/10 rounded-2xl text-emerald-400"><i data-lucide="dollar-sign"></i></div>
-                <span class="text-[10px] text-slate-500 font-bold">MENSUAL</span>
+        <!-- KPI CARDS - AQUÍ INYECTAMOS LAS VARIABLES -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <!-- Dinero en Riesgo -->
+            <div class="glass p-8 rounded-[2.5rem] relative overflow-hidden group">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-emerald-500/10 rounded-2xl text-emerald-400">
+                        <i data-lucide="dollar-sign"></i>
+                    </div>
+                    <span class="text-slate-400 font-medium">Dinero en Riesgo Anual</span>
+                </div>
+                <!-- VARIABLE: dinero_riesgo -->
+                <p class="text-4xl font-bold text-white mb-2">${{ dinero_riesgo }}</p>
+                <p class="text-xs text-emerald-500 font-semibold tracking-wide">PÉRDIDA ESTIMADA POR ANC</p>
             </div>
-            <h3 class="text-slate-400 text-xs mb-1">Capital en Riesgo</h3>
-            <p class="text-2xl font-bold text-white">$15,420,000</p>
-            <p class="text-[10px] text-rose-400 mt-2 flex items-center gap-1"><i data-lucide="trending-up" class="w-3 h-3"></i> +2.4% vs mes anterior</p>
-        </div>
-        <div class="glass p-6 rounded-3xl group hover:border-cyan-500/50 transition-all">
-            <div class="flex justify-between items-start mb-4">
-                <div class="p-3 bg-cyan-500/10 rounded-2xl text-cyan-400"><i data-lucide="droplets"></i></div>
-                <span class="text-[10px] text-slate-500 font-bold">TOTAL CDMX</span>
-            </div>
-            <h3 class="text-slate-400 text-xs mb-1">Agua No Contabilizada</h3>
-            <p class="text-2xl font-bold text-white">38.52%</p>
-            <p class="text-[10px] text-slate-500 mt-2 italic">Meta SACMEX: 25.0%</p>
-        </div>
-        <div class="glass p-6 rounded-3xl group hover:border-rose-500/50 transition-all border-rose-500/20">
-            <div class="flex justify-between items-start mb-4">
-                <div class="p-3 bg-rose-500/10 rounded-2xl text-rose-500"><i data-lucide="alert-triangle"></i></div>
-                <span class="text-[10px] text-rose-500 font-bold animate-pulse">CRÍTICO</span>
-            </div>
-            <h3 class="text-slate-400 text-xs mb-1">Zonas en Riesgo Alto</h3>
-            <p class="text-2xl font-bold text-white">3 Sectores</p>
-            <p class="text-[10px] text-slate-500 mt-2">Iztapalapa, Azcapotzalco, GAM</p>
-        </div>
-        <div class="glass p-6 rounded-3xl group hover:border-blue-500/50 transition-all">
-            <div class="flex justify-between items-start mb-4">
-                <div class="p-3 bg-blue-500/10 rounded-2xl text-blue-400"><i data-lucide="calendar"></i></div>
-                <span class="text-[10px] text-slate-500 font-bold">ESTIMACIÓN</span>
-            </div>
-            <h3 class="text-slate-400 text-xs mb-1">Días p/ Día Cero</h3>
-            <p id="dia-cero-val" class="text-2xl font-bold text-white">142 Días</p>
-            <p class="text-[10px] text-emerald-400 mt-2 flex items-center gap-1"><i data-lucide="shield-check" class="w-3 h-3"></i> +12 días ganados hoy</p>
-        </div>
-    </div>
 
-    <!-- CUERPO PRINCIPAL -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
-        
-        <!-- MAPA Y FILTROS -->
-        <div class="lg:col-span-8 flex flex-col gap-6">
-            <div class="glass p-6 rounded-3xl relative overflow-hidden h-[500px]">
-                <div class="flex justify-between items-center mb-6 relative z-10">
-                    <h2 class="text-xl font-semibold flex items-center gap-2">
-                        <i data-lucide="map" class="text-cyan-400 w-5 h-5"></i> Mapa de Calor Predictivo
+            <!-- Volumen ANC -->
+            <div class="glass p-8 rounded-[2.5rem] relative overflow-hidden group">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all"></div>
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-cyan-500/10 rounded-2xl text-cyan-400">
+                        <i data-lucide="droplet"></i>
+                    </div>
+                    <span class="text-slate-400 font-medium">Eficiencia de la Red</span>
+                </div>
+                <!-- VARIABLE: anc_porcentaje -->
+                <p class="text-4xl font-bold text-white mb-2">{{ anc_porcentaje }}%</p>
+                <p class="text-xs text-cyan-500 font-semibold tracking-wide">DESVIACIÓN RESPECTO AL TEÓRICO</p>
+            </div>
+
+            <!-- Alertas -->
+            <div class="glass p-8 rounded-[2.5rem] relative overflow-hidden group">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-rose-500/10 rounded-full blur-2xl group-hover:bg-rose-500/20 transition-all"></div>
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="p-3 bg-rose-500/10 rounded-2xl text-rose-500">
+                        <i data-lucide="alert-circle"></i>
+                    </div>
+                    <span class="text-slate-400 font-medium">Zonas en Riesgo Crítico</span>
+                </div>
+                <!-- VARIABLE: alertas_criticas -->
+                <p class="text-4xl font-bold text-white mb-2">{{ alertas_criticas }} Alcaldías</p>
+                <p class="text-xs text-rose-500 font-semibold tracking-wide">DETECCIÓN POR ISOLATION FOREST</p>
+            </div>
+        </div>
+
+        <!-- MAIN SECTION -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            <!-- MAPA SIMULADO (A la izquierda) -->
+            <div class="lg:col-span-3 glass rounded-[3rem] p-8 flex flex-col">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-xl font-bold flex items-center gap-3">
+                        <i data-lucide="map-pin" class="text-cyan-400"></i> Mapa de Calor de Anomalías
                     </h2>
-                    <!-- FILTRO DE USO DE SUELO -->
-                    <div class="flex bg-slate-900 rounded-xl p-1 border border-slate-800">
-                        <button id="view-res" onclick="toggleView('res')" class="px-4 py-1.5 text-xs font-bold rounded-lg bg-cyan-600 text-white transition-all">Residencial</button>
-                        <button id="view-ind" onclick="toggleView('ind')" class="px-4 py-1.5 text-xs font-bold rounded-lg text-slate-500 hover:text-white transition-all">Industrial</button>
+                    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
+                        <button class="px-4 py-1.5 text-xs font-bold bg-cyan-600 text-white rounded-lg">Residencial</button>
+                        <button class="px-4 py-1.5 text-xs font-bold text-slate-500 hover:text-white transition">Industrial</button>
                     </div>
                 </div>
-
-                <!-- SVG STYLIZED MAP -->
-                <div class="flex items-center justify-center h-full -mt-8">
-                    <svg viewBox="0 0 400 500" class="w-full h-full max-w-sm drop-shadow-[0_0_30px_rgba(6,182,212,0.1)]">
-                        <path d="M200 50 L280 100 L320 200 L280 350 L200 450 L120 350 L80 200 L120 100 Z" fill="rgba(30, 41, 59, 0.4)" stroke="#334155" stroke-width="2" />
-                        <!-- Puntos de calor (visibles solo en Residencial por defecto) -->
-                        <g id="heat-layers">
-                            <circle cx="210" cy="320" r="40" class="fill-rose-500/20 animate-pulse" />
-                            <circle cx="210" cy="320" r="12" class="fill-rose-500" />
-                            <circle cx="150" cy="180" r="30" class="fill-rose-500/10" />
-                            <circle cx="150" cy="180" r="8" class="fill-rose-500" />
-                        </g>
-                    </svg>
-                    
-                    <!-- EXPLICABILIDAD (SHAP TOOLTIP) -->
-                    <div class="absolute top-1/2 left-1/4 glass p-4 rounded-2xl shadow-2xl border-rose-500/30">
-                        <p class="text-xs font-bold text-rose-500 mb-2 uppercase tracking-tighter">Iztapalapa • Sector 04</p>
-                        <div class="space-y-2">
-                            <div class="flex justify-between items-center gap-6">
-                                <span class="text-[10px] text-slate-400">Consumo vs Población</span>
-                                <span class="text-[10px] text-rose-400 font-bold">+342%</span>
-                            </div>
-                            <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
-                                <div class="bg-rose-500 h-full w-[85%]"></div>
-                            </div>
-                            <div class="flex justify-between items-center gap-6">
-                                <span class="text-[10px] text-slate-400">Presión de Red</span>
-                                <span class="text-[10px] text-amber-400 font-bold">Anómalo</span>
-                            </div>
-                            <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
-                                <div class="bg-amber-500 h-full w-[60%]"></div>
-                            </div>
-                        </div>
-                        <p class="mt-3 text-[9px] text-slate-500 italic border-t border-slate-800 pt-2">Algoritmo: Isolation Forest • Confianza 94%</p>
-                    </div>
-                </div>
-
-                <div class="absolute bottom-6 left-6 flex gap-4 text-[9px] font-bold uppercase tracking-widest text-slate-500">
-                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-rose-500"></span> Fuga Probable</span>
-                    <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-amber-500"></span> Huachicol</span>
+                <div class="flex-1 bg-slate-950/50 rounded-[2rem] border border-slate-800 flex items-center justify-center relative group cursor-crosshair">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+                    <p class="text-slate-600 italic group-hover:text-cyan-400 transition">Visualizador Geoespacial (Folium Integration Pending)</p>
                 </div>
             </div>
 
-            <!-- SIMULADOR ROI Y DÍA CERO -->
-            <div class="glass p-8 rounded-3xl bg-gradient-to-r from-slate-900 to-blue-900/30">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <h2 class="text-xl font-bold mb-2">Simulador de Estrategia</h2>
-                        <p class="text-xs text-slate-400 mb-6">Ajusta la eficiencia de las cuadrillas para ver el impacto financiero y operativo real.</p>
-                        <div class="space-y-6">
-                            <div>
-                                <div class="flex justify-between mb-2">
-                                    <span class="text-sm font-semibold">Tasa de Mitigación (ANC)</span>
-                                    <span id="slider-val" class="text-sm font-bold text-cyan-400">25%</span>
-                                </div>
-                                <input type="range" id="roi-slider" min="0" max="100" value="25" class="w-full h-2">
-                                <div class="flex justify-between mt-2 text-[10px] text-slate-500 font-bold italic">
-                                    <span>Plan Actual</span>
-                                    <span>Escenario Optimista</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-slate-950/50 p-4 rounded-2xl border border-slate-800">
-                            <p class="text-[10px] text-slate-500 font-bold mb-1">Ahorro Mensual</p>
-                            <p id="ahorro-val" class="text-xl font-bold text-emerald-400">$3,855,000</p>
-                        </div>
-                        <div class="bg-slate-950/50 p-4 rounded-2xl border border-slate-800">
-                            <p class="text-[10px] text-slate-500 font-bold mb-1">Suministro Extra</p>
-                            <p id="dias-ganados" class="text-xl font-bold text-cyan-400">+12 Días</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- LATERAL: RANKING E INCIDENTES -->
-        <div class="lg:col-span-4 flex flex-col gap-6">
-            <!-- TOP PRIORIDADES -->
-            <div class="glass p-6 rounded-3xl">
-                <h2 class="text-lg font-semibold mb-6 flex items-center gap-2">
-                    <i data-lucide="list-ordered" class="text-cyan-400 w-5 h-5"></i> Ranking de Acción
-                </h2>
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-800/30 border border-rose-500/20">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-500 flex items-center justify-center text-xs font-bold">01</div>
-                            <div>
-                                <p class="text-xs font-bold">IZTAPALAPA</p>
-                                <p class="text-[9px] text-slate-500">Desv: +420k m³</p>
-                            </div>
-                        </div>
-                        <button class="text-[9px] font-bold text-rose-500 bg-rose-500/10 px-2 py-1 rounded-lg">VER SHAP</button>
-                    </div>
-                    <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-800/30 border border-rose-500/20">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-rose-500/20 text-rose-500 flex items-center justify-center text-xs font-bold">02</div>
-                            <div>
-                                <p class="text-xs font-bold">AZCAPOTZALCO</p>
-                                <p class="text-[9px] text-slate-500">Desv: +310k m³</p>
-                            </div>
-                        </div>
-                        <button class="text-[9px] font-bold text-rose-500 bg-rose-500/10 px-2 py-1 rounded-lg">VER SHAP</button>
-                    </div>
-                    <div class="flex items-center justify-between p-3 rounded-2xl bg-slate-800/30 border border-slate-700">
-                        <div class="flex items-center gap-3">
-                            <div class="w-8 h-8 rounded-lg bg-slate-800 text-slate-500 flex items-center justify-center text-xs font-bold">03</div>
-                            <div>
-                                <p class="text-xs font-bold text-slate-400">BENITO JUÁREZ</p>
-                                <p class="text-[9px] text-slate-600">Desv: +15k m³</p>
-                            </div>
-                        </div>
-                        <span class="text-[9px] font-bold text-emerald-500 px-2 py-1">NORMAL</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- LOG DE INCIDENTES (ALERTAS RECIENTES) -->
-            <div class="glass p-6 rounded-3xl flex-1">
-                <h2 class="text-lg font-semibold mb-6 flex items-center gap-2">
-                    <i data-lucide="activity" class="text-cyan-400 w-5 h-5"></i> Incidentes Recientes
+            <!-- RANKING (A la derecha) -->
+            <div class="lg:col-span-2 glass rounded-[3rem] p-8">
+                <h2 class="text-xl font-bold mb-8 flex items-center gap-3">
+                    <i data-lucide="list-ordered" class="text-cyan-400"></i> Focos Rojos de Atención
                 </h2>
                 <div class="space-y-4">
-                    <div class="flex gap-3 relative">
-                        <div class="w-2 h-2 rounded-full bg-rose-500 mt-1 z-10"></div>
-                        <div class="absolute left-[3px] top-2 w-[2px] h-full bg-slate-800"></div>
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-200 uppercase tracking-tighter">Iztapalapa • 08:42 AM</p>
-                            <p class="text-[9px] text-slate-500">Posible Macro-fuga detectada en sector X-04. Flujo anómalo constante.</p>
+                    <!-- LOOP: ranking -->
+                    {% for item in ranking %}
+                    <div class="flex items-center justify-between p-5 bg-slate-950/50 rounded-2xl border border-slate-800 hover:border-slate-700 transition group">
+                        <div class="flex items-center gap-4">
+                            <div class="w-2 h-10 rounded-full {% if item.Riesgo == 'Alto' %}bg-rose-500{% else %}bg-amber-500{% endif %}"></div>
+                            <div>
+                                <p class="font-bold text-white">{{ item.alcaldia }}</p>
+                                <p class="text-xs text-slate-500 mt-0.5">Desviación: {{ item.desviacion_consumo|round(2) }} m³</p>
+                            </div>
                         </div>
+                        <span class="{% if item.Riesgo == 'Alto' %}text-rose-400 bg-rose-500/10 border-rose-500/20{% else %}text-amber-400 bg-amber-500/10 border-amber-500/20{% endif %} px-3 py-1 rounded-lg text-[10px] font-black border uppercase tracking-tighter">
+                            {{ item.Riesgo }}
+                        </span>
                     </div>
-                    <div class="flex gap-3 relative">
-                        <div class="w-2 h-2 rounded-full bg-amber-500 mt-1 z-10"></div>
-                        <div class="absolute left-[3px] top-2 w-[2px] h-full bg-slate-800"></div>
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-200 uppercase tracking-tighter">Venustiano Carranza • 07:15 AM</p>
-                            <p class="text-[9px] text-slate-500">Patrón de huachicol nocturno identificado. Incremento súbito de presión.</p>
-                        </div>
-                    </div>
-                    <div class="flex gap-3 relative">
-                        <div class="w-2 h-2 rounded-full bg-emerald-500 mt-1 z-10"></div>
-                        <div>
-                            <p class="text-[10px] font-bold text-slate-200 uppercase tracking-tighter">Miguel Hidalgo • 06:30 AM</p>
-                            <p class="text-[9px] text-slate-500">Reparación validada por sensor ML. Retorno a niveles normales.</p>
-                        </div>
-                    </div>
+                    {% endfor %}
+                    
+                    {% if not ranking %}
+                    <p class="text-center text-slate-600 py-10">Corre modelos_ml.py para generar alertas...</p>
+                    {% endif %}
                 </div>
-                <button class="w-full mt-6 bg-cyan-600 py-3 rounded-2xl text-xs font-bold shadow-lg shadow-cyan-900/20 hover:bg-cyan-500 transition-all flex items-center justify-center gap-2">
-                    <i data-lucide="download" class="w-4 h-4"></i> Exportar Auditoría PDF
+                <button class="w-full mt-8 py-4 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition flex items-center justify-center gap-2">
+                    Ver Informe de Trazabilidad <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
             </div>
         </div>
+
+        <!-- SIMULADOR ROI (Full width abajo) -->
+        <div class="mt-8 glass rounded-[3rem] p-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-2xl font-black text-white mb-4">Simulador de Recuperación (ROI)</h2>
+                    <p class="text-slate-400 mb-8 leading-relaxed">Ajusta la capacidad operativa de tus cuadrillas para ver cuánto dinero recuperas mensualmente al reparar las anomalías detectadas por la IA.</p>
+                    <div class="space-y-6">
+                        <label class="flex justify-between text-sm font-bold text-slate-300">
+                            <span>Eficiencia de Reparación</span>
+                            <span id="slider-val" class="text-cyan-400">25%</span>
+                        </label>
+                        <input type="range" id="roi-slider" min="0" max="100" value="25" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+                    </div>
+                </div>
+                <div class="bg-slate-950/80 p-8 rounded-[2rem] border border-cyan-500/10 flex flex-col items-center justify-center text-center">
+                    <p class="text-slate-500 text-xs font-black uppercase tracking-widest mb-2">Ahorro Mensual Proyectado</p>
+                    <h3 id="ahorro-val" class="text-5xl font-black text-emerald-400 mb-4">$3,855,000</h3>
+                    <div class="flex gap-4">
+                        <div class="px-4 py-2 bg-slate-900 rounded-xl border border-slate-800">
+                            <p class="text-[10px] text-slate-500 uppercase">Impacto Cutzamala</p>
+                            <p id="dias-ganados" class="text-sm font-bold text-white">+12 Días</p>
+                        </div>
+                        <div class="px-4 py-2 bg-slate-900 rounded-xl border border-slate-800">
+                            <p class="text-[10px] text-slate-500 uppercase">Estado Día Cero</p>
+                            <p id="dia-cero-val" class="text-sm font-bold text-white">154 Días</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- FOOTER -->
-    <footer class="border-t border-slate-900 mt-12 pt-6 flex flex-col md:flex-row justify-between text-[10px] text-slate-600 font-bold uppercase tracking-[0.3em]">
-        <p>© 2026 PumaScript Solutions | Facultad de Ingeniería UNAM</p>
-        <div class="flex gap-4">
-            <span>Server: Amazon Web Services</span>
-            <span>Dataset: CDMX-2019-CLEAN</span>
-        </div>
-    </footer>
-
     <script>
-        // Inicializar Iconos
         lucide.createIcons();
-
-        // Lógica del Filtro
-        function toggleView(type) {
-            const resBtn = document.getElementById('view-res');
-            const indBtn = document.getElementById('view-ind');
-            const mapLayer = document.getElementById('heat-layers');
-
-            if(type === 'ind') {
-                indBtn.classList.add('bg-cyan-600', 'text-white');
-                indBtn.classList.remove('text-slate-500');
-                resBtn.classList.remove('bg-cyan-600', 'text-white');
-                resBtn.classList.add('text-slate-500');
-                mapLayer.style.opacity = '0.3'; // Simular cambio de vista
-            } else {
-                resBtn.classList.add('bg-cyan-600', 'text-white');
-                resBtn.classList.remove('text-slate-500');
-                indBtn.classList.remove('bg-cyan-600', 'text-white');
-                indBtn.classList.add('text-slate-500');
-                mapLayer.style.opacity = '1';
-            }
-        }
 
         // Lógica del Simulador ROI
         const slider = document.getElementById('roi-slider');
@@ -296,18 +175,14 @@
             const val = e.target.value;
             sliderVal.innerText = val + '%';
             
-            // Cálculos ficticios basados en el contexto del PDF
+            // Cálculos ficticios basados en el contexto de tu PDF
             const baseLoss = 15420000;
             const savings = (baseLoss * (val / 100));
-            const extraDays = Math.floor(val / 2); // 50% ahorro = 25 días ganados
+            const extraDays = Math.floor(val / 2); // Un supuesto de tu ingeniería
             
-            ahorroVal.innerText = '$' + savings.toLocaleString('es-MX');
+            ahorroVal.innerText = '$' + savings.toLocaleString('es-MX', {maximumFractionDigits: 0});
             diasGanadosVal.innerText = '+' + extraDays + ' Días';
             diaCeroVal.innerText = (142 + extraDays) + ' Días';
-            
-            // Color dinámico según efectividad
-            if(val > 50) diasGanadosVal.classList.replace('text-cyan-400', 'text-emerald-400');
-            else diasGanadosVal.classList.replace('text-emerald-400', 'text-cyan-400');
         });
     </script>
 </body>
