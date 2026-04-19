@@ -1,1179 +1,937 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="es" class="scroll-smooth">
 <head>
-  <!--====== Required meta tags ======-->
-  <meta charset="utf-8" />
-  <meta http-equiv="x-ua-compatible" content="ie=edge" />
-  <meta name="description" content="" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HydroTrace AI | Enterprise Water Intelligence</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet">
 
-  <!--====== Title ======-->
-  <title>PumaScript Solutions | Bootstrap 5 Puma Template</title>
+    <!-- TIPOGRAFÍA -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
 
-  <!--====== Favicon Icon ======-->
-  <link rel="shortcut icon" href="../assets/images/favicon.svg" type="image/svg" />
 
-  <!--====== Bootstrap css ======-->
-  <link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+    <style>
 
-  <!--====== Line Icons css ======-->
-  <link rel="stylesheet" href="assets/css/lineicons.css" />
+        :root {
+            --bg-deep: #050A15;
+            --accent-blue: #3B82F6;
+            --accent-cyan: #06B6D4;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
 
-  <!--====== Tiny Slider css ======-->
-  <link rel="stylesheet" href="assets/css/tiny-slider.css" />
+            /* FUENTES */
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-body: 'Inter', sans-serif;
 
-  <!--====== gLightBox css ======-->
-  <link rel="stylesheet" href="assets/css/glightbox.min.css" />
+        }
 
-  <link rel="stylesheet" href="style.css" />
+        body {
+            font-family: var(--font-body);
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, .font-display {
+            font-family: var(--font-main);
+            letter-spacing: -0.02em;
+        }
+
+        .tech-tag {
+            font-family: 'Fira Code', monospace;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #000a1a;
+            color: #ffffff;
+        }
+
+        /* Clases de utilidad para aplicar rápido */
+        .bg-surface { background-color: var(--bg-surface); }
+        .bg-base { background-color: var(--bg-base); }
+
+        .text-cyan-glow {
+            color: #00E5FF;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+        }
+
+        .bg-deep-blue { background-color: #001B48; }
+        .border-cyan { border-color: #00E5FF; }
+        .text-smoke { color: #C0C0C0; }
+        .bg-safety-orange { background-color: #FF8C00; }
+        
+        .card-glass {
+            background: rgba(0, 27, 72, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .card-glass:hover {
+            border-color: #00E5FF;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.1);
+        }
+
+        .gradient-border {
+            border-bottom: 2px solid;
+            border-image: linear-gradient(to right, #001B48, #00E5FF, #001B48) 1;
+        }
+
+    /* --- ANIMACIONES DEL MARQUEE --- */
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    @keyframes marquee2 {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(0%); }
+    }
+
+    .animate-marquee {
+      animation: marquee 25s linear infinite; /*  */
+    }
+
+    .animate-marquee2 {
+      animation: marquee2 25s linear infinite; /*  */
+    }
+
+    .animate-marquee:hover, .animate-marquee2:hover {
+      animation-play-state: paused; /* [cite: 7] */
+    }
+
+    /* Actualiza o añade esto en tu bloque de <style> */
+.card-glass {
+    /* Subimos la opacidad inicial a 0.15 y la final a 0.05 para que sea más visible */
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.03) 100%);
+    
+    /* Mantenemos el blur alto para el efecto esmerilado */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    
+    /* Un borde un poco más brillante para definir la silueta del cristal */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 2.5rem;
+    
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05); /* Brillo interno sutil */
+}
+
+
+/* Efecto de brillo interno */
+.card-glass::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+    transition: 0.5s;
+}
+
+.card-glass:hover::before {
+    left: 100%;
+}
+
+    /* Scrollbar Personalizado estilo Ingeniería UNAM */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #020617; }
+    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #22d3ee; }
+
+    .card-glass {
+    /* Cristal Degradado: de un blanco traslúcido a casi transparente */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px); /* Soporte para Safari */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2rem; /* Bordes extra redondeados como pediste */
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-glass:hover {
+    transform: translateY(-15px);
+    
+    /* Al pasar el mouse, el azul también es más opaco */
+    background: linear-gradient(160deg, rgba(0, 229, 255, 0.2) 0%, rgba(0, 31, 72, 0.6) 100%);
+    
+    border-color: rgba(0, 229, 255, 0.6);
+    
+    /* Sombra con más "cuerpo" */
+    box-shadow: 0 30px 60px -12px rgba(0, 229, 255, 0.5);
+}
+
+/* El link de "Conoce más" con efecto neón sutil */
+.btn-know-more {
+    margin-top: auto;
+    color: #00e5ff;
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.card-glass:hover .btn-know-more {
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+    gap: 0.8rem; /* Pequeño movimiento de la flecha */
+}
+
+    /* Estilos para los Inputs del Formulario */
+
+    .form-input-pro {
+        width: 100%;
+        background: #f8fafc; /* Fondo gris muy claro */
+        border: 1px solid #e2e8f0;
+        padding: 0.875rem 1.25rem;
+        border-radius: 0.75rem;
+        color: #1e293b;
+        font-size: 0.875rem;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .form-input-pro:focus {
+        background: white;
+        border-color: #2563eb; /* Azul corporativo */
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    .form-input-pro::placeholder {
+        color: #94a3b8;
+    }
+
+    /* Mapa en escala de grises sutil para que no choque con el diseño */
+    iframe {
+        filter: contrast(1.1) brightness(0.9);
+    }
+
+    </style>
 </head>
 
-<body>
+<body class="overflow-x-hidden">
 
-  <!--====== NAVBAR NINE PART START ======-->
+    <!-- Navegación -->
 
-  <section class="navbar-area navbar-nine">
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <nav class="navbar navbar-expand-lg">
-            <a class="navbar-brand" href="index.html">
-              <img src="assets/images/white-logo.svg" alt="Logo" />
+    <nav class="fixed w-full z-50 backdrop-blur-md border-b border-white/5 bg-[#050A15]/90">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+        <div class="flex justify-between items-center h-20">
+            <a class="flex items-center gap-3 group" href="index.html">
+                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-900/40">
+                    <i class="lni lni-drop text-white text-xl group-hover:rotate-12 transition-transform"></i>
+                </div>
+                <span class="text-xl font-bold tracking-tight text-white font-display">
+                    HydroTrace<span class="text-blue-500 font-light italic">AI</span>
+                </span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNine"
-              aria-controls="navbarNine" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="toggler-icon"></span>
-              <span class="toggler-icon"></span>
-              <span class="toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse sub-menu-bar" id="navbarNine">
-              <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                  <a class="page-scroll active" href="#hero-area">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="page-scroll" href="#services">Services</a>
-                </li>
-
-                <li class="nav-item">
-                  <a class="page-scroll" href="#pricing">Pricing</a>
-                </li>
-                <li class="nav-item">
-                  <a class="page-scroll" href="#contact">Contact</a>
-                </li>
-              </ul>
-            </div>
-
-            <div class="navbar-btn d-none d-lg-inline-block">
-              <a class="menu-bar" href="#side-menu-left"><i class="lni lni-menu"></i></a>
-            </div>
-          </nav>
-          <!-- navbar -->
-        </div>
-      </div>
-      <!-- row -->
-    </div>
-    <!-- container -->
-  </section>
-
-  <!--====== NAVBAR NINE PART ENDS ======-->
-
-  <!--====== SIDEBAR PART START ======-->
-
-  <div class="sidebar-left">
-    <div class="sidebar-close">
-      <a class="close" href="#close"><i class="lni lni-close"></i></a>
-    </div>
-    <div class="sidebar-content">
-      <div class="sidebar-logo">
-        <a href="index.html"><img src="assets/images/logo.svg" alt="Logo" /></a>
-      </div>
-      <p class="text">Lorem ipsum dolor sit amet adipisicing elit. Sapiente fuga nisi rerum iusto intro.</p>
-      <!-- logo -->
-      <div class="sidebar-menu">
-        <h5 class="menu-title">Quick Links</h5>
-        <ul>
-          <li><a href="javascript:void(0)">About Us</a></li>
-          <li><a href="javascript:void(0)">Our Team</a></li>
-          <li><a href="javascript:void(0)">Latest News</a></li>
-          <li><a href="javascript:void(0)">Contact Us</a></li>
-        </ul>
-      </div>
-      <!-- menu -->
-      <div class="sidebar-social align-items-center justify-content-center">
-        <h5 class="social-title">Follow Us On</h5>
-        <ul>
-          <li>
-            <a href="javascript:void(0)"><i class="lni lni-facebook-filled"></i></a>
-          </li>
-          <li>
-            <a href="javascript:void(0)"><i class="lni lni-twitter-original"></i></a>
-          </li>
-          <li>
-            <a href="javascript:void(0)"><i class="lni lni-linkedin-original"></i></a>
-          </li>
-          <li>
-            <a href="javascript:void(0)"><i class="lni lni-youtube"></i></a>
-          </li>
-        </ul>
-      </div>
-      <!-- sidebar social -->
-    </div>
-    <!-- content -->
-  </div>
-  <div class="overlay-left"></div>
-
-  <!--====== SIDEBAR PART ENDS ======-->
-
-  <!-- Start header Area -->
-  <section id="hero-area" class="header-area header-eight">
-    <div class="header-content">
-  <h1>Detecta Fugas y Huachicol de Agua<br />
-    con Inteligencia Artificial.</h1>
-  <p>
-    HydroTrace AI analiza en tiempo real la red de distribución hídrica
-    de tu dependencia. Identifica pérdidas físicas, tomas clandestinas
-    y anomalías de presión antes de que se conviertan en crisis —
-    con precisión de Machine Learning y trazabilidad total del sistema.
-  </p>
-  <div class="button">
-    <a href="#contact" class="btn primary-btn">Solicitar Demo</a>
-    <a href="https://www.youtube.com/watch?v=r44RKWyfcFw"
-      class="glightbox video-button">
-      <span class="btn icon-btn rounded-full">
-        <i class="lni lni-play"></i>
-      </span>
-      <span class="text">Ver Plataforma</span>
-    </a>
-  </div>
-</div>
-  </section>
-  <!-- End header Area -->
-
-  <!--====== ABOUT FIVE PART START ======-->
-
-  <section class="about-area about-five">
-    <div class="container">
-      <div class="row align-items-center">
-        <div class="col-lg-6 col-12">
-          <div class="about-image-five">
-            <svg class="shape" width="106" height="134" viewBox="0 0 106 134" fill="none"
-              xmlns="http://www.w3.org/2000/svg">
-              <circle cx="1.66654" cy="1.66679" r="1.66667" fill="#DADADA" />
-              <circle cx="1.66654" cy="16.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="1.66654" cy="31.0001" r="1.66667" fill="#DADADA" />
-              <circle cx="1.66654" cy="45.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="1.66654" cy="60.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="1.66654" cy="88.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="1.66654" cy="117.667" r="1.66667" fill="#DADADA" />
-              <circle cx="1.66654" cy="74.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="1.66654" cy="103" r="1.66667" fill="#DADADA" />
-              <circle cx="1.66654" cy="132" r="1.66667" fill="#DADADA" />
-              <circle cx="16.3333" cy="1.66679" r="1.66667" fill="#DADADA" />
-              <circle cx="16.3333" cy="16.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="16.3333" cy="31.0001" r="1.66667" fill="#DADADA" />
-              <circle cx="16.3333" cy="45.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="16.333" cy="60.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="16.333" cy="88.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="16.333" cy="117.667" r="1.66667" fill="#DADADA" />
-              <circle cx="16.333" cy="74.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="16.333" cy="103" r="1.66667" fill="#DADADA" />
-              <circle cx="16.333" cy="132" r="1.66667" fill="#DADADA" />
-              <circle cx="30.9998" cy="1.66679" r="1.66667" fill="#DADADA" />
-              <circle cx="74.6665" cy="1.66679" r="1.66667" fill="#DADADA" />
-              <circle cx="30.9998" cy="16.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="74.6665" cy="16.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="30.9998" cy="31.0001" r="1.66667" fill="#DADADA" />
-              <circle cx="74.6665" cy="31.0001" r="1.66667" fill="#DADADA" />
-              <circle cx="30.9998" cy="45.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="74.6665" cy="45.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="31" cy="60.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="74.6668" cy="60.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="31" cy="88.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="74.6668" cy="88.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="31" cy="117.667" r="1.66667" fill="#DADADA" />
-              <circle cx="74.6668" cy="117.667" r="1.66667" fill="#DADADA" />
-              <circle cx="31" cy="74.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="74.6668" cy="74.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="31" cy="103" r="1.66667" fill="#DADADA" />
-              <circle cx="74.6668" cy="103" r="1.66667" fill="#DADADA" />
-              <circle cx="31" cy="132" r="1.66667" fill="#DADADA" />
-              <circle cx="74.6668" cy="132" r="1.66667" fill="#DADADA" />
-              <circle cx="45.6665" cy="1.66679" r="1.66667" fill="#DADADA" />
-              <circle cx="89.3333" cy="1.66679" r="1.66667" fill="#DADADA" />
-              <circle cx="45.6665" cy="16.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="89.3333" cy="16.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="45.6665" cy="31.0001" r="1.66667" fill="#DADADA" />
-              <circle cx="89.3333" cy="31.0001" r="1.66667" fill="#DADADA" />
-              <circle cx="45.6665" cy="45.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="89.3333" cy="45.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="45.6665" cy="60.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="89.3333" cy="60.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="45.6665" cy="88.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="89.3333" cy="88.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="45.6665" cy="117.667" r="1.66667" fill="#DADADA" />
-              <circle cx="89.3333" cy="117.667" r="1.66667" fill="#DADADA" />
-              <circle cx="45.6665" cy="74.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="89.3333" cy="74.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="45.6665" cy="103" r="1.66667" fill="#DADADA" />
-              <circle cx="89.3333" cy="103" r="1.66667" fill="#DADADA" />
-              <circle cx="45.6665" cy="132" r="1.66667" fill="#DADADA" />
-              <circle cx="89.3333" cy="132" r="1.66667" fill="#DADADA" />
-              <circle cx="60.3333" cy="1.66679" r="1.66667" fill="#DADADA" />
-              <circle cx="104" cy="1.66679" r="1.66667" fill="#DADADA" />
-              <circle cx="60.3333" cy="16.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="104" cy="16.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="60.3333" cy="31.0001" r="1.66667" fill="#DADADA" />
-              <circle cx="104" cy="31.0001" r="1.66667" fill="#DADADA" />
-              <circle cx="60.3333" cy="45.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="104" cy="45.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="60.333" cy="60.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="104" cy="60.3335" r="1.66667" fill="#DADADA" />
-              <circle cx="60.333" cy="88.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="104" cy="88.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="60.333" cy="117.667" r="1.66667" fill="#DADADA" />
-              <circle cx="104" cy="117.667" r="1.66667" fill="#DADADA" />
-              <circle cx="60.333" cy="74.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="104" cy="74.6668" r="1.66667" fill="#DADADA" />
-              <circle cx="60.333" cy="103" r="1.66667" fill="#DADADA" />
-              <circle cx="104" cy="103" r="1.66667" fill="#DADADA" />
-              <circle cx="60.333" cy="132" r="1.66667" fill="#DADADA" />
-              <circle cx="104" cy="132" r="1.66667" fill="#DADADA" />
-            </svg>
-            <img src="assets/images/about/about-img1.jpg" alt="about" />
-          </div>
-        </div>
-        <div class="col-lg-6 col-12">
-          <div class="about-five-content">
-  <h6 class="small-title text-lg">NUESTRA HISTORIA</h6>
-  <h2 class="main-title fw-bold">
-    Tecnología de punta al servicio de la seguridad hídrica nacional
-  </h2>
-  <div class="about-five-tab">
-    <nav>
-      <div class="nav nav-tabs" id="nav-tab" role="tablist">
-        <button class="nav-link active" id="nav-who-tab"
-          data-bs-toggle="tab" data-bs-target="#nav-who"
-          type="button" role="tab" aria-controls="nav-who"
-          aria-selected="true">Quiénes Somos</button>
-        <button class="nav-link" id="nav-vision-tab"
-          data-bs-toggle="tab" data-bs-target="#nav-vision"
-          type="button" role="tab" aria-controls="nav-vision"
-          aria-selected="false">Nuestra Visión</button>
-        <button class="nav-link" id="nav-history-tab"
-          data-bs-toggle="tab" data-bs-target="#nav-history"
-          type="button" role="tab" aria-controls="nav-history"
-          aria-selected="false">Nuestra Historia</button>
-      </div>
-    </nav>
-    <div class="tab-content" id="nav-tabContent">
-
-      <!-- Tab: Quiénes Somos -->
-      <div class="tab-pane fade show active" id="nav-who"
-        role="tabpanel" aria-labelledby="nav-who-tab">
-        <p>
-          PumaScript Solutions es una empresa mexicana de desarrollo de
-          software especializada en plataformas de análisis inteligente
-          para infraestructura crítica. Nuestros equipos de ingeniería
-          combinan experiencia en IoT, Machine Learning y ciberseguridad
-          para entregar soluciones robustas y auditables a organismos
-          operadores de agua en todo el país.
-        </p>
-        <p>
-          HydroTrace AI es nuestra plataforma insignia: un sistema de
-          detección automatizada de fugas y tomas no autorizadas diseñado
-          bajo los estándares de la Comisión Nacional del Agua (CONAGUA)
-          y las mejores prácticas internacionales de seguridad hídrica.
-        </p>
-      </div>
-
-      <!-- Tab: Nuestra Visión -->
-      <div class="tab-pane fade" id="nav-vision"
-        role="tabpanel" aria-labelledby="nav-vision-tab">
-        <p>
-          Nuestra visión es un México donde ninguna gota de agua se pierda
-          por negligencia o sustracción ilícita. Trabajamos para que cada
-          dependencia pública cuente con inteligencia operativa en tiempo
-          real: datos accionables, alertas tempranas y evidencia técnica
-          sólida para la toma de decisiones estratégicas.
-        </p>
-        <p>
-          En PumaScript creemos que la tecnología aplicada con propósito
-          transforma la gestión pública. HydroTrace AI es la herramienta
-          que cierra la brecha entre la infraestructura física del agua y
-          la inteligencia digital que merece.
-        </p>
-      </div>
-
-      <!-- Tab: Nuestra Historia -->
-      <div class="tab-pane fade" id="nav-history"
-        role="tabpanel" aria-labelledby="nav-history-tab">
-        <p>
-          Fundada en 2018 por ingenieros egresados del IPN y del ITESM,
-          PumaScript Solutions nació con un mandato claro: aplicar
-          inteligencia artificial a los retos más urgentes del sector
-          público. Tras tres años de I+D colaborativo con organismos
-          operadores piloto, lanzamos HydroTrace AI en 2021.
-        </p>
-        <p>
-          Hoy operamos en más de 12 estados de la república, protegiendo
-          redes que abastecen a más de 4 millones de usuarios. Cada
-          implementación ha reforzado nuestra plataforma con datos reales
-          de campo, haciendo de HydroTrace AI el sistema de detección más
-          preciso y contextualizado del mercado nacional.
-        </p>
-      </div>
-
-    </div>
-  </div>
-</div>
-          
-        </div>
-      </div>
-    </div>
-    <!-- container -->
-  </section>
-
-  <!--====== ABOUT FIVE PART ENDS ======-->
-
-  <!-- ===== service-area start ===== -->
-  <section id="services" class="services-area services-eight">
-    <!--======  Start Section Title Five ======-->
-    <div class="section-title-five">
-      <div class="container">
-        <div class="row">
-
-  <!-- 1. Detección Predictiva de Fugas -->
-  <div class="col-lg-4 col-md-6">
-    <div class="single-services">
-      <div class="service-icon">
-        <i class="lni lni-pulse"></i>
-      </div>
-      <div class="service-content">
-        <h4>Detección Predictiva de Fugas</h4>
-        <p>
-          Modelos de ML entrenados con patrones de presión y caudal
-          anticipan fallas en la red hasta 72 horas antes de que
-          ocurran, reduciendo pérdidas físicas de agua hasta un 38%.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 2. Detección de Huachicol (Tomas Clandestinas) -->
-  <div class="col-lg-4 col-md-6">
-    <div class="single-services">
-      <div class="service-icon">
-        <i class="lni lni-shield"></i>
-      </div>
-      <div class="service-content">
-        <h4>Detección de Tomas No Autorizadas</h4>
-        <p>
-          El motor de anomalías analiza balances hídricos en tiempo
-          real e identifica derivaciones no registradas, generando
-          alertas georreferenciadas con coordenadas de incidencia.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3. Mapas de Calor de Riesgo -->
-  <div class="col-lg-4 col-md-6">
-    <div class="single-services">
-      <div class="service-icon">
-        <i class="lni lni-map"></i>
-      </div>
-      <div class="service-content">
-        <h4>Mapas de Calor de Riesgo</h4>
-        <p>
-          Visualiza en capas GIS la probabilidad de falla por zona,
-          antigüedad de tubería y presión histórica. Prioriza
-          intervenciones con criterio técnico, no por reactividad.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 4. Monitoreo IoT en Tiempo Real -->
-  <div class="col-lg-4 col-md-6">
-    <div class="single-services">
-      <div class="service-icon">
-        <i class="lni lni-dashboard"></i>
-      </div>
-      <div class="service-content">
-        <h4>Monitoreo IoT en Tiempo Real</h4>
-        <p>
-          Integración con sensores de presión, caudalímetros y
-          dataloggers existentes. Panel de control centralizado con
-          lecturas cada 15 segundos y umbral de alerta configurable.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 5. Simulador de ROI Hídrico -->
-  <div class="col-lg-4 col-md-6">
-    <div class="single-services">
-      <div class="service-icon">
-        <i class="lni lni-stats-up"></i>
-      </div>
-      <div class="service-content">
-        <h4>Simulador de ROI Hídrico</h4>
-        <p>
-          Calcula el retorno de inversión proyectado en función de
-          tu Índice de Agua No Contabilizada (IANC) actual. Genera
-          reportes de justificación para procesos de licitación pública.
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- 6. Trazabilidad y Reportes Regulatorios -->
-  <div class="col-lg-4 col-md-6">
-    <div class="single-services">
-      <div class="service-icon">
-        <i class="lni lni-files"></i>
-      </div>
-      <div class="service-content">
-        <h4>Trazabilidad y Reportes Regulatorios</h4>
-        <p>
-          Exporta informes técnicos con cadena de custodia digital
-          compatibles con los formatos requeridos por CONAGUA, ANEAS
-          y auditorías de la ASF. Evidencia lista para presentar.
-        </p>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /.row services -->
-        <!-- row -->
-      </div>
-      <!-- container -->
-    </div>
-    <!--======  End Section Title Five ======-->
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4 col-md-6">
-          <div class="single-services">
-            <div class="service-icon">
-              <i class="lni lni-capsule"></i>
-            </div>
-            <div class="service-content">
-              <h4>Refreshing Design</h4>
-              <p>
-                Lorem ipsum dolor sit amet, adipscing elitr, sed diam nonumy
-                eirmod tempor ividunt labor dolore magna.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="single-services">
-            <div class="service-icon">
-              <i class="lni lni-bootstrap"></i>
-            </div>
-            <div class="service-content">
-              <h4>Solid Bootstrap 5</h4>
-              <p>
-                Lorem ipsum dolor sit amet, adipscing elitr, sed diam nonumy
-                eirmod tempor ividunt labor dolore magna.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="single-services">
-            <div class="service-icon">
-              <i class="lni lni-shortcode"></i>
-            </div>
-            <div class="service-content">
-              <h4>100+ Components</h4>
-              <p>
-                Lorem ipsum dolor sit amet, adipscing elitr, sed diam nonumy
-                eirmod tempor ividunt labor dolore magna.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="single-services">
-            <div class="service-icon">
-              <i class="lni lni-dashboard"></i>
-            </div>
-            <div class="service-content">
-              <h4>Speed Optimized</h4>
-              <p>
-                Lorem ipsum dolor sit amet, adipscing elitr, sed diam nonumy
-                eirmod tempor ividunt labor dolore magna.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="single-services">
-            <div class="service-icon">
-              <i class="lni lni-layers"></i>
-            </div>
-            <div class="service-content">
-              <h4>Fully Customizable</h4>
-              <p>
-                Lorem ipsum dolor sit amet, adipscing elitr, sed diam nonumy
-                eirmod tempor ividunt labor dolore magna.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6">
-          <div class="single-services">
-            <div class="service-icon">
-              <i class="lni lni-reload"></i>
-            </div>
-            <div class="service-content">
-              <h4>Regular Updates</h4>
-              <p>
-                Lorem ipsum dolor sit amet, adipscing elitr, sed diam nonumy
-                eirmod tempor ividunt labor dolore magna.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- ===== service-area end ===== -->
-
-
-  <!-- Start Pricing  Area -->
-  <section id="pricing" class="pricing-area pricing-fourteen">
-    <!--======  Start Section Title Five ======-->
-    <div class="section-title-five">
-      <div class="container">
-        <div class="row">
-
-  <!-- Plan 1: Básico -->
-  <div class="col-lg-4 col-md-6 col-12">
-    <div class="pricing-style-fourteen">
-      <div class="table-head">
-        <h6 class="title">Plan Básico</h6>
-        <p>
-          Vigilancia esencial para organismos operadores
-          de tamaño mediano. Arranque rápido, sin obra civil.
-        </p>
-        <div class="price">
-          <h2 class="amount">
-            <span class="currency">$</span>Cotizar<span class="duration"> /anual</span>
-          </h2>
-        </div>
-      </div>
-      <div class="light-rounded-buttons">
-        <a href="#contact" class="btn primary-btn-outline">
-          Solicitar Propuesta
-        </a>
-      </div>
-      <div class="table-content">
-        <ul class="table-list">
-          <li><i class="lni lni-checkmark-circle"></i> Hasta 200 puntos de monitoreo</li>
-          <li><i class="lni lni-checkmark-circle"></i> Detección de fugas en tiempo real</li>
-          <li><i class="lni lni-checkmark-circle"></i> Dashboard web y app móvil</li>
-          <li><i class="lni lni-checkmark-circle deactive"></i> Mapas de calor de riesgo</li>
-          <li><i class="lni lni-checkmark-circle deactive"></i> Detección de tomas clandestinas</li>
-          <li><i class="lni lni-checkmark-circle deactive"></i> Reportes regulatorios CONAGUA/ASF</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- Plan 2: Operativo (destacado) -->
-  <div class="col-lg-4 col-md-6 col-12">
-    <div class="pricing-style-fourteen middle">
-      <div class="table-head">
-        <h6 class="title">Plan Operativo</h6>
-        <p>
-          Gestión integral para grandes organismos estatales
-          y sistemas intermunicipales de agua potable.
-        </p>
-        <div class="price">
-          <h2 class="amount">
-            <span class="currency">$</span>Cotizar<span class="duration"> /anual</span>
-          </h2>
-        </div>
-      </div>
-      <div class="light-rounded-buttons">
-        <a href="#contact" class="btn primary-btn">
-          Solicitar Propuesta
-        </a>
-      </div>
-      <div class="table-content">
-        <ul class="table-list">
-          <li><i class="lni lni-checkmark-circle"></i> Hasta 1,000 puntos de monitoreo</li>
-          <li><i class="lni lni-checkmark-circle"></i> Detección de fugas en tiempo real</li>
-          <li><i class="lni lni-checkmark-circle"></i> Dashboard web y app móvil</li>
-          <li><i class="lni lni-checkmark-circle"></i> Mapas de calor de riesgo</li>
-          <li><i class="lni lni-checkmark-circle"></i> Detección de tomas clandestinas</li>
-          <li><i class="lni lni-checkmark-circle deactive"></i> Reportes regulatorios CONAGUA/ASF</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- Plan 3: Inteligencia Total -->
-  <div class="col-lg-4 col-md-6 col-12">
-    <div class="pricing-style-fourteen">
-      <div class="table-head">
-        <h6 class="title">Inteligencia Total</h6>
-        <p>
-          Plataforma completa con IA avanzada, trazabilidad
-          forense y soporte dedicado para dependencias federales.
-        </p>
-        <div class="price">
-          <h2 class="amount">
-            <span class="currency">$</span>Cotizar<span class="duration"> /anual</span>
-          </h2>
-        </div>
-      </div>
-      <div class="light-rounded-buttons">
-        <a href="#contact" class="btn primary-btn-outline">
-          Solicitar Propuesta
-        </a>
-      </div>
-      <div class="table-content">
-        <ul class="table-list">
-          <li><i class="lni lni-checkmark-circle"></i> Puntos de monitoreo ilimitados</li>
-          <li><i class="lni lni-checkmark-circle"></i> Detección de fugas en tiempo real</li>
-          <li><i class="lni lni-checkmark-circle"></i> Dashboard web y app móvil</li>
-          <li><i class="lni lni-checkmark-circle"></i> Mapas de calor de riesgo</li>
-          <li><i class="lni lni-checkmark-circle"></i> Detección de tomas clandestinas</li>
-          <li><i class="lni lni-checkmark-circle"></i> Reportes regulatorios CONAGUA/ASF</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-</div><!-- /.row pricing -->
-        <!-- row -->
-      </div>
-      <!-- container -->
-    </div>
-    <!--======  End Section Title Five ======-->
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4 col-md-6 col-12">
-          <div class="pricing-style-fourteen">
-            <div class="table-head">
-              <h6 class="title">Starter</h4>
-                <p>Lorem Ipsum is simply dummy text of the printing and industry.</p>
-                <div class="price">
-                  <h2 class="amount">
-                    <span class="currency">$</span>0<span class="duration">/mo </span>
-                  </h2>
+            
+            <div class="hidden md:flex items-center space-x-10 text-[11px] font-bold uppercase tracking-[0.15em]">
+                <a href="#inicio" class="text-slate-400 hover:text-white transition-colors duration-300">Inicio</a>
+                <a href="#problematica" class="text-slate-400 hover:text-white transition-colors duration-300">Reto</a>
+                <a href="#tecnologia" class="text-slate-400 hover:text-white transition-colors duration-300">Tecnología</a>
+                <a href="#negocio" class="text-slate-400 hover:text-white transition-colors duration-300">Negocio</a>
+                <a href="#nosotros" class="text-slate-400 hover:text-white transition-colors duration-300">Nosotros</a>
+                
+                <div class="flex gap-4 border-l border-white/10 pl-8">
+                        <a href="http://localhost:8501" target="_blank" class="px-4 py-2 rounded-full border border-blue-500 ...">
+                            Portal Cliente
+                        </a>
+                    <button class="px-5 py-2.5 rounded-full bg-safety-orange text-white hover:bg-orange-600 hover:shadow-orange-500/30 transition-all duration-300 font-bold shadow-lg shadow-orange-500/10">
+                        Admin Panel <i class="fas fa-lock ml-2 text-[10px]"></i>
+                    </button>
                 </div>
             </div>
-
-            <div class="light-rounded-buttons">
-              <a href="javascript:void(0)" class="btn primary-btn-outline">
-                Start free trial
-              </a>
-            </div>
-
-            <div class="table-content">
-              <ul class="table-list">
-                <li> <i class="lni lni-checkmark-circle"></i> Cras justo odio.</li>
-                <li> <i class="lni lni-checkmark-circle"></i> Dapibus ac facilisis in.</li>
-                <li> <i class="lni lni-checkmark-circle deactive"></i> Morbi leo risus.</li>
-                <li> <i class="lni lni-checkmark-circle deactive"></i> Excepteur sint occaecat velit.</li>
-              </ul>
-            </div>
-          </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-12">
-          <div class="pricing-style-fourteen middle">
-            <div class="table-head">
-              <h6 class="title">Exclusive</h4>
-                <p>Lorem Ipsum is simply dummy text of the printing and industry.</p>
-                <div class="price">
-                  <h2 class="amount">
-                    <span class="currency">$</span>99<span class="duration">/mo </span>
-                  </h2>
-                </div>
-            </div>
-
-            <div class="light-rounded-buttons">
-              <a href="javascript:void(0)" class="btn primary-btn">
-                Start free trial
-              </a>
-            </div>
-
-            <div class="table-content">
-              <ul class="table-list">
-                <li> <i class="lni lni-checkmark-circle"></i> Cras justo odio.</li>
-                <li> <i class="lni lni-checkmark-circle"></i> Dapibus ac facilisis in.</li>
-                <li> <i class="lni lni-checkmark-circle"></i> Morbi leo risus.</li>
-                <li> <i class="lni lni-checkmark-circle deactive"></i> Excepteur sint occaecat velit.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-4 col-md-6 col-12">
-          <div class="pricing-style-fourteen">
-            <div class="table-head">
-              <h6 class="title">Premium</h4>
-                <p>Lorem Ipsum is simply dummy text of the printing and industry.</p>
-                <div class="price">
-                  <h2 class="amount">
-                    <span class="currency">$</span>150<span class="duration">/mo </span>
-                  </h2>
-                </div>
-            </div>
-
-            <div class="light-rounded-buttons">
-              <a href="javascript:void(0)" class="btn primary-btn-outline">
-                Start free trial
-              </a>
-            </div>
-
-            <div class="table-content">
-              <ul class="table-list">
-                <li> <i class="lni lni-checkmark-circle"></i> Cras justo odio.</li>
-                <li> <i class="lni lni-checkmark-circle"></i> Dapibus ac facilisis in.</li>
-                <li> <i class="lni lni-checkmark-circle"></i> Morbi leo risus.</li>
-                <li> <i class="lni lni-checkmark-circle"></i> Excepteur sint occaecat velit.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </section>
-  <!--/ End Pricing  Area -->
+</nav>
 
-
-
-  <!-- Start Cta Area -->
-  <section id="call-action" class="call-action">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-xxl-6 col-xl-7 col-lg-8 col-md-9">
-          <div class="inner-content">
-            <h2>We love to make perfect <br />solutions for your business</h2>
-            <p>
-              Why I say old chap that is, spiffing off his nut cor blimey
-              guvnords geeza<br />
-              bloke knees up bobby, sloshed arse William cack Richard. Bloke
-              fanny around chesed of bum bag old lost the pilot say there
-              spiffing off his nut.
+    <!-- Hero Section -->
+    <section id="inicio" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Background Decor -->
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+        
+        <div class="text-left">
+            <p class="text-cyan-400 font-bold tracking-[0.3em] uppercase mb-4 text-sm">PumaScript Solutions presenta</p>
+            <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight text-white">
+                Optimización hídrica impulsada por
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">IA Predictiva</span>
+            </h1>
+            <p class="text-lg text-gray-300 max-w-xl mb-10">
+                Estrategia de Inteligencia de Datos para combatir el Agua No Contabilizada. Usamos <span class="text-cyan-400 font-mono">Isolation Forest</span> para detectar extracciones ilegales en tiempo real.
             </p>
-            <div class="light-rounded-buttons">
-              <a href="javascript:void(0)" class="btn primary-btn-outline">Get Started</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- End Cta Area -->
-
-
-
-  <!-- Start Latest News Area -->
-  <div id="blog" class="latest-news-area section">
-    <!--======  Start Section Title Five ======-->
-    <div class="section-title-five">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <div class="content">
-              <h6>latest news</h6>
-              <h2 class="fw-bold">Latest News & Blog</h2>
-              <p>
-                There are many variations of passages of Lorem Ipsum available,
-                but the majority have suffered alteration in some form.
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- row -->
-      </div>
-      <!-- container -->
-    </div>
-    <!--======  End Section Title Five ======-->
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-4 col-md-6 col-12">
-          <!-- Single News -->
-          <div class="single-news">
-            <div class="image">
-              <a href="javascript:void(0)"><img class="thumb" src="assets/images/blog/1.jpg" alt="Blog" /></a>
-              <div class="meta-details">
-                <img class="thumb" src="assets/images/blog/b6.jpg" alt="Author" />
-                <span>BY TIM NORTON</span>
-              </div>
-            </div>
-            <div class="content-body">
-              <h4 class="title">
-                <a href="javascript:void(0)"> Make your team a Design driven company </a>
-              </h4>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard.
-              </p>
-            </div>
-          </div>
-          <!-- End Single News -->
-        </div>
-        <div class="col-lg-4 col-md-6 col-12">
-          <!-- Single News -->
-          <div class="single-news">
-            <div class="image">
-              <a href="javascript:void(0)"><img class="thumb" src="assets/images/blog/2.jpg" alt="Blog" /></a>
-              <div class="meta-details">
-                <img class="thumb" src="assets/images/blog/b6.jpg" alt="Author" />
-                <span>BY TIM NORTON</span>
-              </div>
-            </div>
-            <div class="content-body">
-              <h4 class="title">
-                <a href="javascript:void(0)">
-                  The newest web framework that changed the world
+            <div class="flex flex-col sm:flex-row gap-6">
+                <a href="#problematica" class="bg-cyan-500 text-black font-black px-8 py-4 rounded-xl hover:scale-105 transition-all shadow-xl shadow-cyan-500/20 text-center">
+                    DESCUBRE LA SOLUCIÓN
                 </a>
-              </h4>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard.
-              </p>
+                <div class="flex items-center gap-4 text-gray-400">
+                    <span class="h-px w-10 bg-white/20"></span>
+                    <span class="text-xs font-bold uppercase tracking-widest italic">Powered by Machine Learning</span>
+                </div>
+            </div>        </div>
+
+        <div class="relative group">
+            <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+            
+            <div class="relative bg-black/40 backdrop-blur-xl border border-white/10 p-6 rounded-2xl">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-white font-bold flex items-center gap-2">
+                        <span class="w-3 h-3 bg-cyan-500 rounded-full animate-pulse"></span>
+                        Simulador de ROI: HydroTrace AI
+                    </h3>
+                    <span class="text-[10px] text-cyan-400 border border-cyan-400/30 px-2 py-1 rounded">LIVE DATA</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-gray-300">
+                        <thead>
+                            <tr class="border-b border-white/10">
+                                <th class="pb-3 font-medium">Métrica Operativa</th>
+                                <th class="pb-3 font-medium text-right">Tradicional</th>
+                                <th class="pb-3 font-medium text-right text-cyan-400">Con IA</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr>
+                                <td class="py-3">Detección de fugas</td>
+                                <td class="py-3 text-right">15 días</td>
+                                <td class="py-3 text-right font-bold text-white">48 hrs</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3">Agua No Contabilizada</td>
+                                <td class="py-3 text-right">~40%</td>
+                                <td class="py-3 text-right font-bold text-white">~18%</td>
+                            </tr>
+                            <tr>
+                                <td class="py-3">Costo Inspección</td>
+                                <td class="py-3 text-right">Alto (Reactivo)</td>
+                                <td class="py-3 text-right font-bold text-green-400">-35% ROI</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-6 p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-lg">
+                    <p class="text-[11px] text-cyan-200 uppercase tracking-tighter mb-1">Impacto Estimado en CDMX</p>
+                    <p class="text-xl font-black text-white">$12.4M <span class="text-sm font-normal text-gray-400 text-right italic">ahorro proyectado/anual</span></p>
+                </div>
             </div>
-          </div>
-          <!-- End Single News -->
         </div>
-        <div class="col-lg-4 col-md-6 col-12">
-          <!-- Single News -->
-          <div class="single-news">
-            <div class="image">
-              <a href="javascript:void(0)"><img class="thumb" src="assets/images/blog/3.jpg" alt="Blog" /></a>
-              <div class="meta-details">
-                <img class="thumb" src="assets/images/blog/b6.jpg" alt="Author" />
-                <span>BY TIM NORTON</span>
-              </div>
+
+    </div>
+</div>
+    </section>
+
+    <div class="relative flex overflow-x-hidden border-y border-white/10 bg-cyan-500/5 py-4 backdrop-blur-sm">
+  <div class="animate-marquee whitespace-nowrap flex items-center">
+    <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+      <i class="lni lni-pulse"></i> Machine Learning en Tiempo Real
+    </span>
+    <span class="mx-8 text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+      <i class="lni lni-database"></i> Algoritmo Isolation Forest
+    </span>
+    <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+      <i class="lni lni-map-marker"></i> Optimización para SACMEX
+    </span>
+    <span class="mx-8 text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+      <i class="lni lni-drop"></i> Reducción de Agua No Contabilizada
+    </span>
+    <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+      <i class="lni lni-shield"></i> Trazabilidad de Datos 2019
+    </span>
+    </div>
+
+  <div class="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center py-4">
+    <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+      <i class="lni lni-pulse"></i> Machine Learning en Tiempo Real
+    </span>
+    <span class="mx-8 text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+      <i class="lni lni-database"></i> Algoritmo Isolation Forest
+    </span>
+    <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+      <i class="lni lni-map-marker"></i> Optimización para SACMEX
+    </span>
+    <span class="mx-8 text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+      <i class="lni lni-drop"></i> Reducción de Agua No Contabilizada
+    </span>
+    <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+      <i class="lni lni-shield"></i> Trazabilidad de Datos 2019
+    </span>
+  </div>
+</div>
+    
+
+    <!-- Problemática -->
+    <section id="problematica" class="py-24 bg-[#001B48]/20">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl font-black mb-8">EL DESAFÍO DEL <span class="text-cyan-400 underline decoration-cyan-400/30">40%</span></h2>
+                    <p class="text-lg text-smoke mb-6 leading-relaxed">
+                        La Ciudad de México enfrenta una crisis histórica. Con niveles del Cutzamala en mínimos críticos y la amenaza del <strong>Día Cero</strong>, no podemos permitirnos el lujo de la ineficiencia.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 bg-red-500/20 p-2 rounded text-red-400"><i class="fas fa-exclamation-triangle"></i></div>
+                            <p class="text-smoke"><strong class="text-white">Agua No Contabilizada (ANC):</strong> Casi la mitad del agua se pierde antes de llegar al consumidor por fugas físicas y "huachicol".</p>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 bg-cyan-500/20 p-2 rounded text-cyan-400"><i class="fas fa-tools"></i></div>
+                            <p class="text-smoke"><strong class="text-white">Gestión Reactiva:</strong> Actualmente se opera bajo reportes tardíos, incrementando costos operativos y desperdicio.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="card-glass p-8 text-center">
+                        <span class="block text-5xl font-black text-cyan-400 mb-2">40%</span>
+                        <span class="text-xs font-bold uppercase tracking-widest text-smoke">Pérdida de Suministro</span>
+                    </div>
+                    <div class="card-glass p-8 text-center mt-8">
+                        <span class="block text-5xl font-black text-red-500 mb-2">Día 0</span>
+                        <span class="text-xs font-bold uppercase tracking-widest text-smoke">Riesgo Estructural</span>
+                    </div>
+                    <div class="card-glass p-8 text-center">
+                        <span class="block text-5xl font-black text-white mb-2">2019</span>
+                        <span class="text-xs font-bold uppercase tracking-widest text-smoke">Base del Modelo</span>
+                    </div>
+                    <div class="card-glass p-8 text-center mt-8">
+                        <span class="block text-5xl font-black text-cyan-400 mb-2">16</span>
+                        <span class="text-xs font-bold uppercase tracking-widest text-smoke">Alcaldías Cubiertas</span>
+                    </div>
+                </div>
             </div>
-            <div class="content-body">
-              <h4 class="title">
-                <a href="javascript:void(0)">
-                  5 ways to improve user retention for your startup
+        </div>
+    </section>
+
+    <!-- Tecnología -->
+    <section id="tecnologia" class="py-24 bg-surface">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-black mb-4 tracking-tight uppercase">EL CEREBRO DETRÁS DEL FLUJO</h2>
+            <p class="text-smoke max-w-2xl mx-auto">Nuestra arquitectura de IA combina modelos estadísticos y de aprendizaje profundo para una detección de anomalías con precisión quirúrgica.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <div class="card-glass p-8 group">
+                <div class="text-cyan-400 text-3xl mb-6">
+                    <i class="fas fa-project-diagram"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 uppercase text-white tracking-tight">K-Means Clustering</h3>
+                <p class="text-sm text-gray-400 mb-8 leading-relaxed">
+                    Segmentación geoespacial inteligente para agrupar alcaldías con perfiles de consumo y densidad poblacional similares.
+                </p>
+                <a href="#" class="btn-know-more">
+                    Conoce más <i class="fas fa-arrow-right text-[10px]"></i>
                 </a>
-              </h4>
-              <p>
-                Lorem Ipsum is simply dummy text of the printing and
-                typesetting industry. Lorem Ipsum has been the industry's
-                standard.
-              </p>
             </div>
-          </div>
-          <!-- End Single News -->
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- End Latest News Area -->
 
-  <!-- Start Brand Area -->
-  <div id="clients" class="brand-area section">
-    <!--======  Start Section Title Five ======-->
-    <div class="section-title-five">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <div class="content">
-              <h6>Meet our Clients</h6>
-              <h2 class="fw-bold">Our Awesome Clients</h2>
-              <p>
-                There are many variations of passages of Lorem Ipsum available,
-                but the majority have suffered alteration in some form.
-              </p>
-            </div>
-          </div>
-        </div>
-        <!-- row -->
-      </div>
-      <!-- container -->
-    </div>
-    <!--======  End Section Title Five ======-->
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 offset-lg-2 col-12">
-          <div class="clients-logos">
-            <div class="single-image">
-              <img src="assets/images/client-logo/graygrids.svg" alt="Brand Logo Images" />
-            </div>
-            <div class="single-image">
-              <img src="assets/images/client-logo/uideck.svg" alt="Brand Logo Images" />
-            </div>
-            <div class="single-image">
-              <img src="assets/images/client-logo/ayroui.svg" alt="Brand Logo Images" />
-            </div>
-            <div class="single-image">
-              <img src="assets/images/client-logo/lineicons.svg" alt="Brand Logo Images" />
-            </div>
-            <div class="single-image">
-              <img src="assets/images/client-logo/tailwindtemplates.svg" alt="Brand Logo Images" />
-            </div>
-            <div class="single-image">
-              <img src="assets/images/client-logo/ecomhtml.svg" alt="Brand Logo Images" />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- End Brand Area -->
-
-  <!-- ========================= contact-section start ========================= -->
-  <section id="contact" class="contact-section">
-    <div class="container">
-      <div class="row">
-        <div class="col-xl-4">
-          <div class="contact-item-wrapper">
-            <div class="row">
-              <div class="col-12 col-md-6 col-xl-12">
-                <div class="contact-item">
-                  <div class="contact-icon">
-                    <i class="lni lni-phone"></i>
-                  </div>
-                  <div class="contact-content">
-                    <h4>Contact</h4>
-                    <p>0984537278623</p>
-                    <p>yourmail@gmail.com</p>
-                  </div>
+            <div class="card-glass p-8 group">
+                <div class="text-cyan-400 text-3xl mb-6">
+                    <i class="fas fa-user-secret"></i>
                 </div>
-              </div>
-              <div class="col-12 col-md-6 col-xl-12">
-                <div class="contact-item">
-                  <div class="contact-icon">
-                    <i class="lni lni-map-marker"></i>
-                  </div>
-                  <div class="contact-content">
-                    <h4>Address</h4>
-                    <p>175 5th Ave, New York, NY 10010</p>
-                    <p>United States</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-md-6 col-xl-12">
-                <div class="contact-item">
-                  <div class="contact-icon">
-                    <i class="lni lni-alarm-clock"></i>
-                  </div>
-                  <div class="contact-content">
-                    <h4>Schedule</h4>
-                    <p>24 Hours / 7 Days Open</p>
-                    <p>Office time: 10 AM - 5:30 PM</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-8">
-          <div class="contact-form-wrapper">
-            <div class="row">
-              <div class="col-xl-10 col-lg-8 mx-auto">
-                <div class="section-title text-center">
-                  <span> Get in Touch </span>
-                  <h2>
-                    Ready to Get Started
-                  </h2>
-                  <p>
-                    At vero eos et accusamus et iusto odio dignissimos ducimus
-                    quiblanditiis praesentium
-                  </p>
-                </div>
-              </div>
-            </div>
-            <form action="#" class="contact-form">
-              <div class="row">
-                <div class="col-md-6">
-                  <input type="text" name="name" id="name" placeholder="Name" required />
-                </div>
-                <div class="col-md-6">
-                  <input type="email" name="email" id="email" placeholder="Email" required />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-md-6">
-                  <input type="text" name="phone" id="phone" placeholder="Phone" required />
-                </div>
-                <div class="col-md-6">
-                  <input type="text" name="subject" id="email" placeholder="Subject" required />
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-12">
-                  <textarea name="message" id="message" placeholder="Type Message" rows="5"></textarea>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-12">
-                  <div class="button text-center rounded-buttons">
-                    <button type="submit" class="btn primary-btn rounded-full">
-                      Send Message
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- ========================= contact-section end ========================= -->
-
-  <!-- ========================= map-section end ========================= -->
-  <section class="map-section map-style-9">
-    <div class="map-container">
-      <object style="border:0; height: 500px; width: 100%;"
-        data="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3102.7887109309127!2d-77.44196278417968!3d38.95165507956235!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzjCsDU3JzA2LjAiTiA3N8KwMjYnMjMuMiJX!5e0!3m2!1sen!2sbd!4v1545420879707"></object>
-    </div>
-    </div>
-  </section>
-  <!-- ========================= map-section end ========================= -->
-
-  <!-- Start Footer Area -->
-  <footer class="footer-area footer-eleven">
-    <!-- Start Footer Top -->
-    <div class="footer-top">
-      <div class="container">
-        <div class="inner-content">
-          <div class="row">
-            <div class="col-lg-4 col-md-6 col-12">
-              <!-- Single Widget -->
-              <div class="footer-widget f-about">
-                <div class="logo">
-                  <a href="index.html">
-                    <img src="assets/images/logo.svg" alt="#" class="img-fluid" />
-                  </a>
-                </div>
-                <p>
-                  Making the world a better place through constructing elegant
-                  hierarchies.
+                <h3 class="text-xl font-bold mb-4 uppercase text-white tracking-tight">Isolation Forest</h3>
+                <p class="text-sm text-gray-400 mb-8 leading-relaxed">
+                    Detección avanzada de anomalías que aísla colonias con consumos sospechosos, identificando posibles extracciones ilegales.
                 </p>
-                <p class="copyright-text">
-                  <span>© 2024 Ayro UI.</span>Designed and Developed by
-                  <a href="javascript:void(0)" rel="nofollow"> Ayro UI </a>
+                <a href="#" class="btn-know-more">
+                    Conoce más <i class="fas fa-arrow-right text-[10px]"></i>
+                </a>
+            </div>
+
+            <div class="card-glass p-8 group">
+                <div class="text-cyan-400 text-3xl mb-6">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 uppercase text-white tracking-tight">Regresión Lineal</h3>
+                <p class="text-sm text-gray-400 mb-8 leading-relaxed">
+                    Cálculo del consumo teórico ideal basado en la realidad demográfica de la Ciudad de México para detectar pérdidas físicas.
                 </p>
-              </div>
-              <!-- End Single Widget -->
+                <a href="#" class="btn-know-more">
+                    Conoce más <i class="fas fa-arrow-right text-[10px]"></i>
+                </a>
             </div>
-            <div class="col-lg-2 col-md-6 col-12">
-              <!-- Single Widget -->
-              <div class="footer-widget f-link">
-                <h5>Solutions</h5>
-                <ul>
-                  <li><a href="javascript:void(0)">Marketing</a></li>
-                  <li><a href="javascript:void(0)">Analytics</a></li>
-                  <li><a href="javascript:void(0)">Commerce</a></li>
-                  <li><a href="javascript:void(0)">Insights</a></li>
-                </ul>
-              </div>
-              <!-- End Single Widget -->
+
+            <div class="card-glass p-8 group">
+                <div class="text-cyan-400 text-3xl mb-6">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 uppercase text-white tracking-tight">Análisis Temporal</h3>
+                <p class="text-sm text-gray-400 mb-8 leading-relaxed">
+                    Modelado predictivo de demanda hídrica utilizando la base de datos histórica de 2019 para anticipar picos de consumo.
+                </p>
+                <a href="#" class="btn-know-more">
+                    Conoce más <i class="fas fa-arrow-right text-[10px]"></i>
+                </a>
             </div>
-            <div class="col-lg-2 col-md-6 col-12">
-              <!-- Single Widget -->
-              <div class="footer-widget f-link">
-                <h5>Support</h5>
-                <ul>
-                  <li><a href="javascript:void(0)">Pricing</a></li>
-                  <li><a href="javascript:void(0)">Documentation</a></li>
-                  <li><a href="javascript:void(0)">Guides</a></li>
-                  <li><a href="javascript:void(0)">API Status</a></li>
-                </ul>
-              </div>
-              <!-- End Single Widget -->
+
+            <div class="card-glass p-8 group">
+                <div class="text-cyan-400 text-3xl mb-6">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 uppercase text-white tracking-tight">Deep Learning</h3>
+                <p class="text-sm text-gray-400 mb-8 leading-relaxed">
+                    Implementación de redes LSTM para identificar patrones complejos de fugas imperceptibles para métodos tradicionales.
+                </p>
+                <a href="#" class="btn-know-more">
+                    Conoce más <i class="fas fa-arrow-right text-[10px]"></i>
+                </a>
             </div>
-            <div class="col-lg-4 col-md-6 col-12">
-              <!-- Single Widget -->
-              <div class="footer-widget newsletter">
-                <h5>Subscribe</h5>
-                <p>Subscribe to our newsletter for the latest updates</p>
-                <form action="#" method="get" target="_blank" class="newsletter-form">
-                  <input name="EMAIL" placeholder="Email address" required="required" type="email" />
-                  <div class="button">
-                    <button class="sub-btn">
-                      <i class="lni lni-envelope"></i>
-                    </button>
-                  </div>
-                </form>
-              </div>
-              <!-- End Single Widget -->
+
+            <div class="card-glass p-8 group">
+                <div class="text-cyan-400 text-3xl mb-6">
+                    <i class="fas fa-crosshairs"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-4 uppercase text-white tracking-tight">DBSCAN Analysis</h3>
+                <p class="text-sm text-gray-400 mb-8 leading-relaxed">
+                    Localización precisa de "puntos calientes" de riesgo donde se concentran múltiples irregularidades y tomas clandestinas.
+                </p>
+                <a href="#" class="btn-know-more">
+                    Conoce más <i class="fas fa-arrow-right text-[10px]"></i>
+                </a>
             </div>
-          </div>
+
         </div>
-      </div>
     </div>
-    <!--/ End Footer Top -->
-  </footer>
-  <!--/ End Footer Area -->
+</section>
 
-	<div class="made-in-ayroui mt-4">
-		<a href="https://ayroui.com" target="_blank" rel="nofollow">
-		  <img style="width:220px" src="assets/images/ayroui.svg">
-		</a>
-	</div>
+    <!-- Negocio / ROI -->
+    <section id="negocio" class="py-24 bg-deep-blue/10 border-y border-white/5">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl font-black mb-8">TRANSFORMAMOS PÉRDIDAS EN RENDIMIENTO</h2>
+                    <p class="text-lg text-smoke mb-8">
+                        HydroTrace AI no es solo software; es una herramienta de inteligencia de negocio (B2B) diseñada para optimizar el retorno de inversión mediante el ahorro operativo.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="card-glass p-6">
+                            <h4 class="font-black text-cyan-400 uppercase text-sm mb-2">Modelo SaaS</h4>
+                            <p class="text-sm text-smoke">Licenciamiento mensual de <strong>$50,000 MXN</strong> por acceso total al dashboard y alertas de riesgo.</p>
+                        </div>
+                        <div class="card-glass p-6">
+                            <h4 class="font-black text-cyan-400 uppercase text-sm mb-2">Punto de Equilibrio</h4>
+                            <p class="text-sm text-smoke">Recuperación total de la inversión inicial de desarrollo en solo <strong>8 meses</strong> con un cliente activo.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-[#001B48] p-1 rounded-2xl shadow-2xl overflow-hidden">
+                    <div class="bg-black/40 p-10">
+                        <h3 class="text-2xl font-black mb-6 text-center">PROYECCIÓN FINANCIERA</h3>
+                        <div class="space-y-6">
+                            <div class="flex justify-between border-b border-white/10 pb-4">
+                                <span class="text-smoke">Inversión Inicial (CAPEX)</span>
+                                <span class="font-bold">$300,000 MXN</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/10 pb-4">
+                                <span class="text-smoke">Costo Operativo Anual (OPEX)</span>
+                                <span class="font-bold">$180,000 MXN</span>
+                            </div>
+                            <div class="flex justify-between border-b border-white/10 pb-4">
+                                <span class="text-smoke">Ingreso Proyectado (Anual/Cliente)</span>
+                                <span class="font-bold text-cyan-400">$600,000 MXN</span>
+                            </div>
+                            <div class="pt-4 text-center">
+                                <p class="text-xs text-smoke uppercase tracking-tighter mb-4">"Una sola fuga masiva detectada paga la licencia de todo el año"</p>
+                                <button class="w-full bg-safety-orange py-4 rounded-xl font-black uppercase tracking-widest hover:scale-[1.02] transition-transform">
+                                    Solicitar Demo Ejecutiva
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <a href="#" class="scroll-top btn-hover">
-    <i class="lni lni-chevron-up"></i>
-  </a>
+    <section id="demo" class="py-24 relative overflow-hidden">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full filter blur-[120px] pointer-events-none"></div>
 
-  <!--====== js ======-->
-  <script src="assets/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/js/glightbox.min.js"></script>
-  <script src="assets/js/main.js"></script>
-  <script src="assets/js/tiny-slider.js"></script>
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+        <div class="text-center mb-16">
+            <p class="text-cyan-400 font-bold tracking-[0.3em] uppercase mb-4 text-xs">Interfaz del Sistema</p>
+            <h2 class="text-4xl font-black uppercase">Visualiza el <span class="text-cyan-400">Impacto en Tiempo Real</span></h2>
+            <p class="text-smoke max-w-2xl mx-auto mt-4">Una ventana directa a los algoritmos. Así es como nuestros clientes monitorean las irregularidades en la red.</p>
+        </div>
 
-  <script>
+        <div class="card-glass p-4 md:p-8 border-white/20 shadow-2xl shadow-cyan-500/5">
+            <div class="flex flex-wrap justify-between items-center mb-8 gap-4 border-b border-white/10 pb-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-cyan-500 rounded-lg flex items-center justify-center">
+                        <i class="fas fa-chart-pie text-black text-sm"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-bold text-sm">Dashboard Operativo - SACMEX</h4>
+                        <p class="text-[10px] text-gray-400 uppercase tracking-widest">Vista de Analista de Datos</p>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <span class="px-3 py-1 bg-green-500/10 text-green-400 text-[10px] font-bold rounded-full border border-green-500/20">SISTEMA ONLINE</span>
+                    <span class="px-3 py-1 bg-white/5 text-white text-[10px] font-bold rounded-full border border-white/10 italic">2026 DATA FEED</span>
+                </div>
+            </div>
 
-    //===== close navbar-collapse when a  clicked
-    let navbarTogglerNine = document.querySelector(
-      ".navbar-nine .navbar-toggler"
-    );
-    navbarTogglerNine.addEventListener("click", function () {
-      navbarTogglerNine.classList.toggle("active");
-    });
+            <div class="grid lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-black/40 rounded-3xl h-[400px] relative overflow-hidden border border-white/5 group">
+                    <img src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&q=80&w=1200" alt="Mapa CDMX" class="w-full h-full object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-1000">
+                    
+                    <div class="absolute top-1/3 left-1/4 w-4 h-4 bg-red-500 rounded-full animate-ping"></div>
+                    <div class="absolute top-1/2 left-1/2 w-6 h-6 bg-cyan-500 rounded-full animate-pulse blur-sm"></div>
+                    <div class="absolute bottom-1/4 right-1/3 w-3 h-3 bg-red-400 rounded-full animate-ping"></div>
+                    
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                    <div class="absolute bottom-6 left-6">
+                        <p class="text-white font-black text-lg">Mapa de Irregularidades</p>
+                        <p class="text-xs text-cyan-400 uppercase tracking-widest">Detección por Isolation Forest</p>
+                    </div>
+                </div>
 
-    // ==== left sidebar toggle
-    let sidebarLeft = document.querySelector(".sidebar-left");
-    let overlayLeft = document.querySelector(".overlay-left");
-    let sidebarClose = document.querySelector(".sidebar-close .close");
+                <div class="flex flex-col gap-4">
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Alertas Críticas</p>
+                        <p class="text-3xl font-black text-red-500">14</p>
+                        <p class="text-[10px] text-red-400/60 mt-2 italic">+3 detectadas en las últimas 24h</p>
+                    </div>
+                    <div class="bg-white/5 p-6 rounded-2xl border border-white/10">
+                        <p class="text-[10px] text-gray-400 uppercase font-bold mb-1">Ahorro Estimado</p>
+                        <p class="text-3xl font-black text-green-400">$1.2M <span class="text-sm font-normal text-white/50 italic">MXN</span></p>
+                    </div>
+                    <div class="bg-cyan-500/10 p-6 rounded-2xl border border-cyan-500/20 flex-grow">
+                        <p class="text-[10px] text-cyan-400 uppercase font-bold mb-4">Acceso Directo</p>
+                        <div class="space-y-3">
+                            <a href="#" class="block w-full py-3 bg-cyan-500 text-black text-center text-[10px] font-black uppercase rounded-lg hover:scale-105 transition-all">Ir al Portal Cliente</a>
+                            <a href="#" class="block w-full py-3 border border-white/20 text-white text-center text-[10px] font-black uppercase rounded-lg hover:bg-white/5 transition-all">Acceso Admin</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    overlayLeft.addEventListener("click", function () {
-      sidebarLeft.classList.toggle("open");
-      overlayLeft.classList.toggle("open");
-    });
-    sidebarClose.addEventListener("click", function () {
-      sidebarLeft.classList.remove("open");
-      overlayLeft.classList.remove("open");
-    });
+<section id="roadmap" class="py-24 relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4">
+        <h2 class="text-4xl font-black text-center mb-16 uppercase italic">Roadmap <span class="text-cyan-400">2026-2027</span></h2>
+        
+        <div class="grid md:grid-cols-3 gap-12 relative">
+            <div class="hidden md:block absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent -translate-y-1/2"></div>
 
-    // ===== navbar nine sideMenu
-    let sideMenuLeftNine = document.querySelector(".navbar-nine .menu-bar");
+            <div class="card-glass p-8 relative z-10">
+                <div class="w-12 h-12 bg-cyan-500 text-black rounded-full flex items-center justify-center font-black mb-6 shadow-[0_0_20px_rgba(34,211,238,0.5)]">1</div>
+                <h5 class="text-cyan-400 font-bold uppercase text-xs tracking-widest mb-2">Q2 2026 (Actual)</h5>
+                <h4 class="text-xl font-bold text-white mb-4 italic">Análisis Histórico</h4>
+                <p class="text-sm text-gray-400">Consolidación de modelos basados en datos de 2019 para la identificación de patrones base de consumo en CDMX. </p>
+            </div>
 
-    sideMenuLeftNine.addEventListener("click", function () {
-      sidebarLeft.classList.add("open");
-      overlayLeft.classList.add("open");
-    });
+            <div class="card-glass p-8 relative z-10 border-cyan-400/40">
+                <div class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center font-black mb-6">2</div>
+                <h5 class="text-gray-400 font-bold uppercase text-xs tracking-widest mb-2">Q4 2026</h5>
+                <h4 class="text-xl font-bold text-white mb-4 italic">Integración Live</h4>
+                <p class="text-sm text-gray-400">Implementación de modelos de Regresión Lineal e Isolation Forest para monitoreo en tiempo real mediante telemetría. </p>
+            </div>
 
-    //========= glightbox
-    GLightbox({
-      'href': 'https://www.youtube.com/watch?v=r44RKWyfcFw&fbclid=IwAR21beSJORalzmzokxDRcGfkZA1AtRTE__l5N4r09HcGS5Y6vOluyouM9EM',
-      'type': 'video',
-      'source': 'youtube', //vimeo, youtube or local
-      'width': 900,
-      'autoplayVideos': true,
-    });
+            <div class="card-glass p-8 relative z-10">
+                <div class="w-12 h-12 bg-blue-800 text-white rounded-full flex items-center justify-center font-black mb-6">3</div>
+                <h5 class="text-gray-400 font-bold uppercase text-xs tracking-widest mb-2">2027</h5>
+                <h4 class="text-xl font-bold text-white mb-4 italic">Escalabilidad SaaS</h4>
+                <p class="text-sm text-gray-400">Expansión del servicio a zonas industriales y otros estados de México para mitigar la crisis hídrica nacional. </p>
+            </div>
+        </div>
+    </div>
+</section>
 
-  </script>
+    <section id="blog" class="py-24 bg-[#000a1a]">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+            <div class="max-w-2xl">
+                <p class="text-cyan-400 font-bold tracking-[0.3em] uppercase mb-2 text-xs">Actualidad y Datos</p>
+                <h2 class="text-4xl font-black uppercase">Últimas Noticias e <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Insights</span></h2>
+            </div>
+            <a href="#" class="btn-know-more border border-cyan-400/20 px-6 py-2 rounded-full hover:bg-cyan-400/10 transition-all">
+                Ver todo el blog <i class="fas fa-external-link-alt ml-2 text-[10px]"></i>
+            </a>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            
+            <article class="card-glass group cursor-pointer">
+                <div class="h-48 overflow-hidden rounded-t-[2.5rem]">
+                    <img src="https://images.unsplash.com/photo-1581094794329-c8112a4e5190?auto=format&fit=crop&q=80&w=800" alt="SACMEX Tech" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 group-hover:opacity-100">
+                </div>
+                <div class="p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded font-bold uppercase">Infraestructura</span>
+                        <span class="text-[10px] text-gray-500 font-bold uppercase">15 Abr, 2026</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-white leading-tight group-hover:text-cyan-400 transition-colors">SACMEX anuncia inversión masiva en telemetría para 2026.</h3>
+                    <p class="text-sm text-gray-400 mb-6">El organismo busca integrar modelos de IA para reducir la pérdida por fugas físicas en las 16 alcaldías.</p>
+                    <span class="btn-know-more">Leer Artículo <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </article>
+
+            <article class="card-glass group cursor-pointer">
+                <div class="h-48 overflow-hidden rounded-t-[2.5rem]">
+                    <img src="https://images.unsplash.com/photo-1518063319789-7217e6706ec9?auto=format&fit=crop&q=80&w=800" alt="Sistema Cutzamala" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 group-hover:opacity-100">
+                </div>
+                <div class="p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-[10px] bg-red-500/20 text-red-300 px-2 py-1 rounded font-bold uppercase">Alerta</span>
+                        <span class="text-[10px] text-gray-500 font-bold uppercase">10 Abr, 2026</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-white leading-tight group-hover:text-cyan-400 transition-colors">Estado del Cutzamala: Los niveles más bajos en 30 años.</h3>
+                    <p class="text-sm text-gray-400 mb-6">Expertos de la UNAM advierten que la eficiencia hídrica es la única salida antes de llegar al punto crítico.</p>
+                    <span class="btn-know-more">Leer Artículo <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </article>
+
+            <article class="card-glass group cursor-pointer">
+                <div class="h-48 overflow-hidden rounded-t-[2.5rem]">
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc48?auto=format&fit=crop&q=80&w=800" alt="Machine Learning" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 group-hover:opacity-100">
+                </div>
+                <div class="p-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-1 rounded font-bold uppercase">Tecnología</span>
+                        <span class="text-[10px] text-gray-500 font-bold uppercase">02 Abr, 2026</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-white leading-tight group-hover:text-cyan-400 transition-colors">¿Cómo el Isolation Forest está salvando el agua en CDMX?</h3>
+                    <p class="text-sm text-gray-400 mb-6">Análisis detallado sobre cómo los algoritmos de detección de anomalías encuentran el "huachicol" hídrico.</p>
+                    <span class="btn-know-more">Leer Artículo <i class="fas fa-arrow-right"></i></span>
+                </div>
+            </article>
+
+        </div>
+    </div>
+</section>
+
+<section id="faq" class="py-24 bg-[#000a1a]">
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="text-center mb-16">
+            <h2 class="text-4xl font-black uppercase tracking-tighter">Consultas <span class="text-cyan-400">Técnicas</span></h2>
+            <p class="text-smoke mt-4">Respuestas detalladas sobre la arquitectura y viabilidad de HydroTrace AI.</p>
+        </div>
+
+        <div class="space-y-6">
+            <div class="card-glass p-8 group">
+                <h4 class="text-lg font-bold text-white flex justify-between items-center cursor-pointer">
+                    ¿Por qué utilizar el conjunto de datos de 2019 como base?
+                    <i class="fas fa-chevron-down text-cyan-400 group-hover:rotate-180 transition-transform"></i>
+                </h4>
+                <div class="mt-4 text-sm text-gray-400 leading-relaxed">
+                    Utilizamos los registros históricos de 2019 como nuestra base sólida de datos para generar los dashboards interactivos iniciales. Esta referencia nos permite establecer un "consumo normal" antes de las variaciones extremas de la crisis hídrica actual, sirviendo como el fundamento para que nuestros algoritmos identifiquen desviaciones significativas.
+                </div>
+            </div>
+
+            <div class="card-glass p-8 group">
+                <h4 class="text-lg font-bold text-white flex justify-between items-center cursor-pointer">
+                    ¿Qué tan preciso es el sistema contra las extracciones irregulares?
+                    <i class="fas fa-chevron-down text-cyan-400 group-hover:rotate-180 transition-transform"></i>
+                </h4>
+                <div class="mt-4 text-sm text-gray-400 leading-relaxed">
+                    El sistema utiliza modelos como <strong>Isolation Forest</strong> para identificar discrepancias críticas entre el consumo registrado y la densidad poblacional real. Al localizar estas irregularidades, podemos mitigar tanto las fugas físicas como las extracciones ilegales de manera quirúrgica, transformando el análisis en decisiones rentables.
+                </div>
+            </div>
+
+            <div class="card-glass p-8 group">
+                <h4 class="text-lg font-bold text-white flex justify-between items-center cursor-pointer">
+                    ¿Cómo se integra esta solución con SACMEX?
+                    <i class="fas fa-chevron-down text-cyan-400 group-hover:rotate-180 transition-transform"></i>
+                </h4>
+                <div class="mt-4 text-sm text-gray-400 leading-relaxed">
+                    HydroTrace AI se estructura bajo un modelo <strong>SaaS</strong> diseñado para optimizar los recursos de organismos como SACMEX. El sistema no reemplaza su infraestructura, sino que la potencia al priorizar inspecciones en zonas de alto riesgo, reduciendo drásticamente el Agua No Contabilizada (ANC) mediante una estrategia preventiva.
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contacto" class="py-24 bg-[#020617] relative">
+    <div class="max-w-7xl mx-auto px-4">
+        
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-light tracking-tight text-white sm:text-4xl uppercase">Contáctanos</h2>
+            <p class="mt-4 text-xl text-slate-400">Estamos listos para <span class="text-white font-semibold">Ayudarte</span></p>
+            <div class="mt-4 h-1 w-20 bg-blue-600 mx-auto rounded-full"></div>
+        </div>
+
+        <div class="grid lg:grid-cols-3 gap-8 items-stretch">
+            
+            <div class="flex flex-col gap-4">
+                <div class="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl flex flex-col gap-4">
+                    <div class="text-blue-500 text-xl"><i class="fas fa-envelope"></i></div>
+                    <div>
+                        <h4 class="text-white font-bold text-sm uppercase tracking-wider">Canal Oficial</h4>
+                        <p class="text-slate-400 text-sm mt-1">pumascript@ingenieria.unam.mx</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl flex flex-col gap-4">
+                    <div class="text-blue-500 text-xl"><i class="fas fa-map-marker-alt"></i></div>
+                    <div>
+                        <h4 class="text-white font-bold text-sm uppercase tracking-wider">Ubicación Estratégica</h4>
+                        <p class="text-slate-400 text-sm mt-1">Facultad de Ingeniería, Edificio Principal</p>
+                        <p class="text-slate-500 text-xs uppercase">Ciudad Universitaria, CDMX</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900/50 border border-slate-800 p-8 rounded-2xl flex flex-col gap-4">
+                    <div class="text-blue-500 text-xl"><i class="fas fa-clock"></i></div>
+                    <div>
+                        <h4 class="text-white font-bold text-sm uppercase tracking-wider">Atención Especializada</h4>
+                        <p class="text-slate-400 text-sm mt-1">Lunes a Viernes: 09:00 - 18:00 hrs</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2">
+                <div class="bg-white rounded-3xl p-8 md:p-12 shadow-2xl">
+                    <form action="#" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-slate-700 text-xs font-bold uppercase tracking-wider">Nombre Completo</label>
+                            <input type="text" placeholder="Ej. Ileana Lee" class="form-input-pro">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-slate-700 text-xs font-bold uppercase tracking-wider">Email Corporativo</label>
+                            <input type="email" placeholder="nombre@empresa.com" class="form-input-pro">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-slate-700 text-xs font-bold uppercase tracking-wider">Teléfono</label>
+                            <input type="text" placeholder="+52 55..." class="form-input-pro">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-slate-700 text-xs font-bold uppercase tracking-wider">Asunto</label>
+                            <input type="text" placeholder="Consultoría Técnica" class="form-input-pro">
+                        </div>
+                        <div class="md:col-span-2 space-y-2">
+                            <label class="text-slate-700 text-xs font-bold uppercase tracking-wider">Mensaje</label>
+                            <textarea rows="4" placeholder="Describe brevemente tu requerimiento..." class="form-input-pro"></textarea>
+                        </div>
+                        
+                        <div class="md:col-span-2 pt-4">
+                            <button type="submit" class="w-full bg-blue-700 text-white font-bold uppercase py-4 rounded-xl hover:bg-blue-800 transition-colors shadow-lg shadow-blue-900/20 tracking-widest text-sm">
+                                Enviar Mensaje
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-16 rounded-3xl overflow-hidden border border-slate-800 h-[350px] shadow-inner">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1882.5273760447196!2d-99.1843477!3d19.3323063!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d1fff400000001%3A0x6a0c0b8939c3e2e0!2sFacultad%20de%20Ingenier%C3%ADa%2C%20UNAM!5e0!3m2!1ses-419!2smx!4v1713460000000!5m2!1ses-419!2smx" 
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </div>
+    </div>
+</section>  
+
+    <!-- Footer -->
+    <footer class="bg-[#020617] text-white pt-20 pb-10 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            
+            <div class="space-y-6">
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center font-black text-xl">H</div>
+                    <span class="text-2xl font-black tracking-tighter uppercase">HydroTrace <span class="text-blue-500">AI</span></span>
+                </div>
+                <p class="text-slate-400 text-sm leading-relaxed">
+                    Impulsando la eficiencia hídrica en la Ciudad de México mediante inteligencia de datos y modelos avanzados de Machine Learning desde 2026.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 bg-slate-900 border border-slate-800 rounded flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 transition-all text-slate-400 hover:text-white">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-slate-900 border border-slate-800 rounded flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 transition-all text-slate-400 hover:text-white">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-slate-900 border border-slate-800 rounded flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 transition-all text-slate-400 hover:text-white">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-slate-900 border border-slate-800 rounded flex items-center justify-center hover:bg-blue-600 hover:border-blue-600 transition-all text-slate-400 hover:text-white">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-black uppercase tracking-[0.2em] mb-8 border-b border-blue-600 w-fit pb-1">Enlaces Rápidos</h4>
+                <ul class="space-y-4 text-slate-400 text-sm font-medium">
+                    <li><a href="#inicio" class="hover:text-blue-400 transition-colors flex items-center gap-2"><span class="text-blue-600">›</span> Inicio</a></li>
+                    <li><a href="#problematica" class="hover:text-blue-400 transition-colors flex items-center gap-2"><span class="text-blue-600">›</span> Problemática</a></li>
+                    <li><a href="#tecnologia" class="hover:text-blue-400 transition-colors flex items-center gap-2"><span class="text-blue-600">›</span> Tecnología</a></li>
+                    <li><a href="#negocio" class="hover:text-blue-400 transition-colors flex items-center gap-2"><span class="text-blue-600">›</span> Negocio</a></li>
+                    <li><a href="#contacto" class="hover:text-blue-400 transition-colors flex items-center gap-2"><span class="text-blue-600">›</span> Contacto</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-black uppercase tracking-[0.2em] mb-8 border-b border-blue-600 w-fit pb-1">Arquitectura IA</h4>
+                <ul class="space-y-4 text-slate-400 text-sm font-medium">
+                    <li><a href="#" class="hover:text-blue-400 transition-colors flex items-center gap-2"><span class="text-blue-600">›</span> Isolation Forest</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition-colors flex items-center gap-2"><span class="text-blue-600">›</span> K-Means Clustering</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition-colors flex items-center gap-2"><span class="text-blue-600">›</span> Regresión Lineal</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition-colors flex items-center gap-2"><span class="text-blue-600">›</span> Detección de Fugas</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition-colors flex items-center gap-2"><span class="text-blue-600">›</span> Análisis Geoespacial</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-sm font-black uppercase tracking-[0.2em] mb-8 border-b border-blue-600 w-fit pb-1">Contacto Directo</h4>
+                <ul class="space-y-5 text-slate-400 text-sm">
+                    <li class="flex items-start gap-4">
+                        <i class="fas fa-map-marker-alt text-blue-500 mt-1"></i>
+                        <span>Edificio Principal, Facultad de Ingeniería, UNAM, Ciudad Universitaria, CDMX</span>
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <i class="fas fa-phone-alt text-blue-500"></i>
+                        <span>+52 55 5622 3000</span>
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <i class="fas fa-envelope text-blue-500"></i>
+                        <span>pumascript@ingenieria.unam.mx</span>
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <i class="fas fa-clock text-blue-500"></i>
+                        <span>Lun–Vie, 9am – 6pm</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="pt-8 border-t border-white/5 flex flex-col md:row justify-between items-center gap-6">
+            <p class="text-xs text-slate-500 uppercase tracking-widest text-center">
+                Copyright © 2026 <span class="text-white font-bold">PumaScript Solutions</span>. All Rights Reserved. 
+            </p>
+            <div class="flex gap-8 text-[10px] font-black uppercase tracking-tighter text-slate-500">
+                <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition-colors">Terms of Use</a>
+                <a href="#" class="hover:text-white transition-colors">Cookie Policy</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
 </body>
-
 </html>
