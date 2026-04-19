@@ -14,7 +14,7 @@ Todo esto en tiempo (casi) real, con el objetivo de reducir el **Agua No Contabi
 
 ---
 
-## 🚀 Stack Tecnológico
+## Proyecto enfocado en:
 
 **Data Science & Machine Learning**
 
