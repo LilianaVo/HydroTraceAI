@@ -1,7 +1,3 @@
-Aquí tienes una versión más pulida, clara y profesional de tu README. Mantiene tu idea original pero mejora redacción, estructura, consistencia y estilo para que luzca más “proyecto serio de GitHub”:
-
----
-
 # 💧 HydroTrace AI
 
 **Optimización hídrica con IA predictiva para la CDMX**
@@ -72,10 +68,11 @@ Para ejecutar correctamente el proyecto, sigue el flujo completo de datos:
 
 ### 1. Preparar el entorno
 
-Asegúrate de tener Python instalado y ejecuta:
+Asegúrate de tener Python instalado y luego instala las dependencias desde el archivo requirements.txt:
 
 ```bash
-pip install flask pandas scikit-learn numpy
+pip install -r requirements.txt
+
 ```
 
 ---
@@ -124,34 +121,17 @@ python main.py
 
 ### 5. Visualización
 
-Accede desde tu navegador:
-
-* 🌍 **Landing Page**
-  [http://127.0.0.1:5000/](http://127.0.0.1:5000/)
-
-* 📊 **Dashboard Ejecutivo**
-  [http://127.0.0.1:5000/dashboard-clientes](http://127.0.0.1:5000/dashboard-clientes)
-
-* 💻 **Consola Administrativa**
-  [http://127.0.0.1:5000/dashboard-admin](http://127.0.0.1:5000/dashboard-admin)
-
 ---
 
-## 🎯 Objetivo del proyecto
+## Objetivo del proyecto
 
 HydroTrace AI busca demostrar cómo la inteligencia artificial puede aplicarse a problemas urbanos reales, generando herramientas que apoyen la toma de decisiones en infraestructura crítica.
 
 ---
 
-## 👨‍💻 Equipo
+## Equipo
 
-Desarrollado con 🖤 por **PumaScript Solutions**
+Desarrollado por **PumaScript Solutions**
 Facultad de Ingeniería, UNAM — 2026
 
 ---
-
-Si quieres, en el siguiente paso puedo ayudarte a:
-
-* hacerlo más “impactante” para reclutadores (tipo portafolio)
-* agregar badges (build, license, Python version, etc.)
-* o convertirlo en README estilo startup 🚀
