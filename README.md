@@ -82,7 +82,7 @@ pip install -r requirements.txt
 Genera el dataset limpio y unificado:
 
 ```bash
-python etl_pipeline.py
+py etl_pipeline.py
 ```
 
 Esto creará el archivo:
@@ -98,7 +98,7 @@ dataset_maestro.csv
 Procesa el dataset y genera las predicciones:
 
 ```bash
-python modelos_ml.py
+py modelos_ml.py
 ```
 
 Salida:
@@ -114,7 +114,7 @@ resultados_anomalias.csv
 Inicia la aplicación web:
 
 ```bash
-python main.py
+py main.py
 ```
 
 ---
