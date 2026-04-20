@@ -6,222 +6,182 @@
     <title>HydroTrace AI | Enterprise Water Intelligence</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet">
 
-    <!-- TIPOGRAFÍA -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-
+        /* --- 1. VARIABLES GLOBALES --- */
         :root {
+            /* Paleta de colores principal */
             --bg-deep: #050A15;
+            --bg-surface: #001B48;
             --accent-blue: #3B82F6;
             --accent-cyan: #06B6D4;
+            --safety-orange: #FF8C00;
+            
+            /* Colores de texto */
             --text-main: #F8FAFC;
             --text-muted: #94A3B8;
+            --text-smoke: #C0C0C0;
 
-            /* FUENTES */
+            /* Sistema tipográfico */
             --font-main: 'Plus Jakarta Sans', sans-serif;
             --font-body: 'Inter', sans-serif;
-
+            --font-code: 'Fira Code', monospace;
+            --font-alt: 'Montserrat', sans-serif;
         }
 
+        /* --- 2. RESET Y ESTILOS BASE --- */
         body {
             font-family: var(--font-body);
             background-color: var(--bg-deep);
             color: var(--text-main);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
+        /* Títulos y fuentes de display */
         h1, h2, h3, h4, .font-display {
             font-family: var(--font-main);
             letter-spacing: -0.02em;
         }
 
-        .tech-tag {
-            font-family: 'Fira Code', monospace;
-        }
-        
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #000a1a;
-            color: #ffffff;
-        }
-
-        /* Clases de utilidad para aplicar rápido */
-        .bg-surface { background-color: var(--bg-surface); }
-        .bg-base { background-color: var(--bg-base); }
-
-        .text-cyan-glow {
-            color: #00E5FF;
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
-        }
-
-        .bg-deep-blue { background-color: #001B48; }
-        .border-cyan { border-color: #00E5FF; }
-        .text-smoke { color: #C0C0C0; }
-        .bg-safety-orange { background-color: #FF8C00; }
-        
+        /* --- 3. COMPONENTES UI --- */
+        /* Tarjetas con efecto Glassmorphism */
         .card-glass {
-            background: rgba(0, 27, 72, 0.4);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 229, 255, 0.2);
-            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 2rem;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .card-glass:hover {
-            border-color: #00E5FF;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 229, 255, 0.1);
+            transform: translateY(-15px);
+            background: linear-gradient(160deg, rgba(0, 229, 255, 0.15) 0%, rgba(0, 27, 72, 0.6) 100%);
+            border-color: rgba(6, 182, 212, 0.6);
+            box-shadow: 0 30px 60px -12px rgba(6, 182, 212, 0.3);
         }
 
-        .gradient-border {
-            border-bottom: 2px solid;
-            border-image: linear-gradient(to right, #001B48, #00E5FF, #001B48) 1;
+        /* Efecto de brillo (Scanline) en hover para las tarjetas */
+        .card-glass::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: 0.6s;
         }
 
-    /* --- ANIMACIONES DEL MARQUEE --- */
-    @keyframes marquee {
-      0% { transform: translateX(0%); }
-      100% { transform: translateX(-100%); }
-    }
+        .card-glass:hover::before {
+            left: 100%;
+        }
 
-    @keyframes marquee2 {
-      0% { transform: translateX(100%); }
-      100% { transform: translateX(0%); }
-    }
+        /* Botones de acción dentro de las tarjetas */
+        .btn-know-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: auto;
+            color: var(--accent-cyan);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: 0.3s ease;
+        }
 
-    .animate-marquee {
-      animation: marquee 25s linear infinite; /*  */
-    }
+        .card-glass:hover .btn-know-more {
+            gap: 0.8rem;
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
+        }
 
-    .animate-marquee2 {
-      animation: marquee2 25s linear infinite; /*  */
-    }
+        /* Inputs de formulario premium */
+        .form-input-pro {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.75rem;
+            color: #1E293B;
+            font-size: 0.875rem;
+            transition: all 0.2s ease-in-out;
+        }
 
-    .animate-marquee:hover, .animate-marquee2:hover {
-      animation-play-state: paused; /* [cite: 7] */
-    }
+        .form-input-pro:focus {
+            background: #FFFFFF;
+            border-color: var(--accent-blue);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
 
-    /* Actualiza o añade esto en tu bloque de <style> */
-.card-glass {
-    /* Subimos la opacidad inicial a 0.15 y la final a 0.05 para que sea más visible */
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.03) 100%);
-    
-    /* Mantenemos el blur alto para el efecto esmerilado */
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    
-    /* Un borde un poco más brillante para definir la silueta del cristal */
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 2.5rem;
-    
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05); /* Brillo interno sutil */
-}
+        /* --- 4. ANIMACIONES --- */
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-100%); }
+        }
 
+        @keyframes marquee2 {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(0%); }
+        }
 
-/* Efecto de brillo interno */
-.card-glass::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-    transition: 0.5s;
-}
+        .animate-marquee { 
+            animation: marquee 25s linear infinite; 
+        }
+        
+        .animate-marquee2 { 
+            animation: marquee2 25s linear infinite; 
+        }
+        
+        .animate-marquee:hover, 
+        .animate-marquee2:hover { 
+            animation-play-state: paused; 
+        }
 
-.card-glass:hover::before {
-    left: 100%;
-}
+        /* --- 5. CLASES DE UTILIDAD (Helpers) --- */
+        .text-cyan-glow {
+            color: var(--accent-cyan);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+        }
+        
+        .tech-tag { 
+            font-family: var(--font-code); 
+        }
+        
+        .bg-safety-orange { 
+            background-color: var(--safety-orange); 
+        }
+        
+        /* Modificación del mapa/iframes */
+        iframe { 
+            filter: contrast(1.1) brightness(0.9) grayscale(0.2); 
+        }
 
-    /* Scrollbar Personalizado estilo Ingeniería UNAM */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: #020617; }
-    ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #22d3ee; }
-
-    .card-glass {
-    /* Cristal Degradado: de un blanco traslúcido a casi transparente */
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px); /* Soporte para Safari */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 2rem; /* Bordes extra redondeados como pediste */
-    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-}
-
-.card-glass:hover {
-    transform: translateY(-15px);
-    
-    /* Al pasar el mouse, el azul también es más opaco */
-    background: linear-gradient(160deg, rgba(0, 229, 255, 0.2) 0%, rgba(0, 31, 72, 0.6) 100%);
-    
-    border-color: rgba(0, 229, 255, 0.6);
-    
-    /* Sombra con más "cuerpo" */
-    box-shadow: 0 30px 60px -12px rgba(0, 229, 255, 0.5);
-}
-
-/* El link de "Conoce más" con efecto neón sutil */
-.btn-know-more {
-    margin-top: auto;
-    color: #00e5ff;
-    font-size: 0.75rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.3s ease;
-}
-
-.card-glass:hover .btn-know-more {
-    text-shadow: 0 0 10px rgba(0, 229, 255, 0.8);
-    gap: 0.8rem; /* Pequeño movimiento de la flecha */
-}
-
-    /* Estilos para los Inputs del Formulario */
-
-    .form-input-pro {
-        width: 100%;
-        background: #f8fafc; /* Fondo gris muy claro */
-        border: 1px solid #e2e8f0;
-        padding: 0.875rem 1.25rem;
-        border-radius: 0.75rem;
-        color: #1e293b;
-        font-size: 0.875rem;
-        transition: all 0.2s ease-in-out;
-    }
-
-    .form-input-pro:focus {
-        background: white;
-        border-color: #2563eb; /* Azul corporativo */
-        outline: none;
-        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-    }
-
-    .form-input-pro::placeholder {
-        color: #94a3b8;
-    }
-
-    /* Mapa en escala de grises sutil para que no choque con el diseño */
-    iframe {
-        filter: contrast(1.1) brightness(0.9);
-    }
-
+        /* --- 6. SCROLLBAR PERSONALIZADO --- */
+        ::-webkit-scrollbar { 
+            width: 8px; 
+        }
+        ::-webkit-scrollbar-track { 
+            background: var(--bg-deep); 
+        }
+        ::-webkit-scrollbar-thumb { 
+            background: #1E293B; 
+            border-radius: 10px; 
+        }
+        ::-webkit-scrollbar-thumb:hover { 
+            background: var(--accent-cyan); 
+        }
     </style>
 </head>
 
@@ -261,121 +221,135 @@
     </div>
 </nav>
 
-    <!-- Hero Section -->
-    <section id="inicio" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-        <!-- Background Decor -->
-        <div class="max-w-7xl mx-auto px-4 relative z-10">
-    <div class="grid lg:grid-cols-2 gap-12 items-center">
+<section id="inicio" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+    
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
         
-        <div class="text-left">
-            <p class="text-cyan-400 font-bold tracking-[0.3em] uppercase mb-4 text-sm">PumaScript Solutions presenta</p>
-            <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight text-white">
-                Optimización hídrica impulsada por
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">IA Predictiva</span>
-            </h1>
-            <p class="text-lg text-gray-300 max-w-xl mb-10">
-                Estrategia de Inteligencia de Datos para combatir el Agua No Contabilizada. Usamos <span class="text-cyan-400 font-mono">Isolation Forest</span> para detectar extracciones ilegales en tiempo real.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-6">
-                <a href="#problematica" class="bg-cyan-500 text-black font-black px-8 py-4 rounded-xl hover:scale-105 transition-all shadow-xl shadow-cyan-500/20 text-center">
-                    DESCUBRE LA SOLUCIÓN
-                </a>
-                <div class="flex items-center gap-4 text-gray-400">
-                    <span class="h-px w-10 bg-white/20"></span>
-                    <span class="text-xs font-bold uppercase tracking-widest italic">Powered by Machine Learning</span>
-                </div>
-            </div>        </div>
-
-        <div class="relative group">
-            <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
             
-            <div class="relative bg-black/40 backdrop-blur-xl border border-white/10 p-6 rounded-2xl">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-white font-bold flex items-center gap-2">
-                        <span class="w-3 h-3 bg-cyan-500 rounded-full animate-pulse"></span>
-                        Simulador de ROI: HydroTrace AI
-                    </h3>
-                    <span class="text-[10px] text-cyan-400 border border-cyan-400/30 px-2 py-1 rounded">LIVE DATA</span>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-sm text-gray-300">
-                        <thead>
-                            <tr class="border-b border-white/10">
-                                <th class="pb-3 font-medium">Métrica Operativa</th>
-                                <th class="pb-3 font-medium text-right">Tradicional</th>
-                                <th class="pb-3 font-medium text-right text-cyan-400">Con IA</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-white/5">
-                            <tr>
-                                <td class="py-3">Detección de fugas</td>
-                                <td class="py-3 text-right">15 días</td>
-                                <td class="py-3 text-right font-bold text-white">48 hrs</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3">Agua No Contabilizada</td>
-                                <td class="py-3 text-right">~40%</td>
-                                <td class="py-3 text-right font-bold text-white">~18%</td>
-                            </tr>
-                            <tr>
-                                <td class="py-3">Costo Inspección</td>
-                                <td class="py-3 text-right">Alto (Reactivo)</td>
-                                <td class="py-3 text-right font-bold text-green-400">-35% ROI</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="mt-6 p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-lg">
-                    <p class="text-[11px] text-cyan-200 uppercase tracking-tighter mb-1">Impacto Estimado en CDMX</p>
-                    <p class="text-xl font-black text-white">$12.4M <span class="text-sm font-normal text-gray-400 text-right italic">ahorro proyectado/anual</span></p>
+            <div class="text-left">
+                <p class="text-cyan-400 font-bold tracking-[0.3em] uppercase mb-4 text-sm">
+                    PumaScript Solutions presenta
+                </p>
+                
+                <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight text-white">
+                    Optimización hídrica impulsada por
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">IA Predictiva</span>
+                </h1>
+                
+                <p class="text-lg text-gray-300 max-w-xl mb-10">
+                    Estrategia de Inteligencia de Datos para combatir el Agua No Contabilizada. Usamos <span class="text-cyan-400 font-mono">Isolation Forest</span> para detectar extracciones ilegales en tiempo real.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6">
+                    <a href="#problematica" class="bg-cyan-500 text-black font-black px-8 py-4 rounded-xl hover:scale-105 transition-all shadow-xl shadow-cyan-500/20 text-center">
+                        DESCUBRE LA SOLUCIÓN
+                    </a>
+                    
+                    <div class="flex items-center gap-4 text-gray-400">
+                        <span class="h-px w-10 bg-white/20"></span>
+                        <span class="text-xs font-bold uppercase tracking-widest italic">Powered by Machine Learning</span>
+                    </div>
                 </div>
             </div>
+
+            <div class="relative group">
+                <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+                
+                <div class="relative bg-black/40 backdrop-blur-xl border border-white/10 p-6 rounded-2xl">
+                    
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-white font-bold flex items-center gap-2">
+                            <span class="w-3 h-3 bg-cyan-500 rounded-full animate-pulse"></span>
+                            Simulador de ROI: HydroTrace AI
+                        </h3>
+                        <span class="text-[10px] text-cyan-400 border border-cyan-400/30 px-2 py-1 rounded">LIVE DATA</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-gray-300">
+                            <thead>
+                                <tr class="border-b border-white/10">
+                                    <th class="pb-3 font-medium">Métrica Operativa</th>
+                                    <th class="pb-3 font-medium text-right">Tradicional</th>
+                                    <th class="pb-3 font-medium text-right text-cyan-400">Con IA</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-white/5">
+                                <tr>
+                                    <td class="py-3">Detección de fugas</td>
+                                    <td class="py-3 text-right">15 días</td>
+                                    <td class="py-3 text-right font-bold text-white">48 hrs</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3">Agua No Contabilizada</td>
+                                    <td class="py-3 text-right">~40%</td>
+                                    <td class="py-3 text-right font-bold text-white">~18%</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-3">Costo Inspección</td>
+                                    <td class="py-3 text-right">Alto (Reactivo)</td>
+                                    <td class="py-3 text-right font-bold text-green-400">-35% ROI</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-lg">
+                        <p class="text-[11px] text-cyan-200 uppercase tracking-tighter mb-1">Impacto Estimado en CDMX</p>
+                        <p class="text-xl font-black text-white">
+                            $12.4M <span class="text-sm font-normal text-gray-400 text-right italic">ahorro proyectado/anual</span>
+                        </p>
+                    </div>
+                    
+                </div>
+            </div>
+
         </div>
-
     </div>
-</div>
-    </section>
+</section>
 
-    <div class="relative flex overflow-x-hidden border-y border-white/10 bg-cyan-500/5 py-4 backdrop-blur-sm">
-  <div class="animate-marquee whitespace-nowrap flex items-center">
-    <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
-      <i class="lni lni-pulse"></i> Machine Learning en Tiempo Real
-    </span>
-    <span class="mx-8 text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
-      <i class="lni lni-database"></i> Algoritmo Isolation Forest
-    </span>
-    <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
-      <i class="lni lni-map-marker"></i> Optimización para SACMEX
-    </span>
-    <span class="mx-8 text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
-      <i class="lni lni-drop"></i> Reducción de Agua No Contabilizada
-    </span>
-    <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
-      <i class="lni lni-shield"></i> Trazabilidad de Datos 2019
-    </span>
-    </div>
+<!-- Marquee de tecnologías y logros -->
 
-  <div class="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center py-4">
-    <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
-      <i class="lni lni-pulse"></i> Machine Learning en Tiempo Real
-    </span>
-    <span class="mx-8 text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
-      <i class="lni lni-database"></i> Algoritmo Isolation Forest
-    </span>
-    <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
-      <i class="lni lni-map-marker"></i> Optimización para SACMEX
-    </span>
-    <span class="mx-8 text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
-      <i class="lni lni-drop"></i> Reducción de Agua No Contabilizada
-    </span>
-    <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
-      <i class="lni lni-shield"></i> Trazabilidad de Datos 2019
-    </span>
-  </div>
-</div>
+<div class="relative flex overflow-x-hidden border-y border-white/10 bg-cyan-500/5 py-4 backdrop-blur-sm">
     
+    <div class="animate-marquee whitespace-nowrap flex items-center">
+        <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+            <i class="lni lni-pulse"></i> Machine Learning en Tiempo Real
+        </span>
+        <span class="mx-8 text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+            <i class="lni lni-database"></i> Algoritmo Isolation Forest
+        </span>
+        <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+            <i class="lni lni-map-marker"></i> Optimización para SACMEX
+        </span>
+        <span class="mx-8 text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+            <i class="lni lni-drop"></i> Reducción de Agua No Contabilizada
+        </span>
+        <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+            <i class="lni lni-shield"></i> Trazabilidad de Datos 2019
+        </span>
+    </div>
+
+    <div class="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center py-4">
+        <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+            <i class="lni lni-pulse"></i> Machine Learning en Tiempo Real
+        </span>
+        <span class="mx-8 text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+            <i class="lni lni-database"></i> Algoritmo Isolation Forest
+        </span>
+        <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+            <i class="lni lni-map-marker"></i> Optimización para SACMEX
+        </span>
+        <span class="mx-8 text-sm font-bold text-white uppercase tracking-widest flex items-center gap-2">
+            <i class="lni lni-drop"></i> Reducción de Agua No Contabilizada
+        </span>
+        <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
+            <i class="lni lni-shield"></i> Trazabilidad de Datos 2019
+        </span>
+    </div>
+    
+</div>
 
     <!-- Problemática -->
     <section id="problematica" class="py-24 bg-[#001B48]/20">
@@ -561,6 +535,9 @@
         </div>
     </section>
 
+
+        <!-- Dashboard Interactivo -->
+
     <section id="demo" class="py-24 relative overflow-hidden">
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full filter blur-[120px] pointer-events-none"></div>
 
@@ -626,6 +603,8 @@
     </div>
 </section>
 
+    <!-- Roadmap -->
+
 <section id="roadmap" class="py-24 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4">
         <h2 class="text-4xl font-black text-center mb-16 uppercase italic">Roadmap <span class="text-cyan-400">2026-2027</span></h2>
@@ -656,6 +635,8 @@
         </div>
     </div>
 </section>
+
+    <!-- Noticias & Insights -->
 
     <section id="blog" class="py-24 bg-[#000a1a]">
     <div class="max-w-7xl mx-auto px-4">
@@ -720,6 +701,9 @@
     </div>
 </section>
 
+
+    <!-- Consultas Técnicas -->
+
 <section id="faq" class="py-24 bg-[#000a1a]">
     <div class="max-w-4xl mx-auto px-4">
         <div class="text-center mb-16">
@@ -760,6 +744,8 @@
         </div>
     </div>
 </section>
+
+    <!-- Formulario y contacto -->
 
 <section id="contacto" class="py-24 bg-[#020617] relative">
     <div class="max-w-7xl mx-auto px-4">
@@ -804,7 +790,7 @@
                     <form action="#" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-2">
                             <label class="text-slate-700 text-xs font-bold uppercase tracking-wider">Nombre Completo</label>
-                            <input type="text" placeholder="Ej. Ileana Lee" class="form-input-pro">
+                            <input type="text" placeholder="Ej. Jimena López" class="form-input-pro">
                         </div>
                         <div class="space-y-2">
                             <label class="text-slate-700 text-xs font-bold uppercase tracking-wider">Email Corporativo</label>
