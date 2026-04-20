@@ -11,6 +11,7 @@
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet">
 
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
         /* --- 1. VARIABLES GLOBALES --- */
@@ -49,7 +50,41 @@
             letter-spacing: -0.02em;
         }
 
-        /* --- 3. COMPONENTES UI --- */
+        .logo-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* --- 3. EFECTOS DE REVELADO (SCROLL) --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), 
+                transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            visibility: hidden;
+            will-change: transform, opacity;
+
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), 
+                transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform, opacity;
+        }
+        
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* --- 4. COMPONENTES UI --- */
         /* Tarjetas con efecto Glassmorphism */
         .card-glass {
             position: relative;
@@ -85,6 +120,27 @@
 
         .card-glass:hover::before {
             left: 100%;
+        }
+
+        /* Efecto para el Video "Transparente" */
+        .video-container {
+            position: relative;
+            border-radius: 2rem;
+            overflow: hidden;
+            background: transparent;
+        }
+
+        /* Fondo del video es negro y que aparezca transparente */
+        .video-blend {
+            mix-blend-mode: screen; 
+            filter: brightness(1.2) contrast(1.1);
+        }
+
+        .glow-overlay {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         /* Botones de acción dentro de las tarjetas */
@@ -125,7 +181,7 @@
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
 
-        /* --- 4. ANIMACIONES --- */
+        /* --- 5. ANIMACIONES --- */
         @keyframes marquee {
             0% { transform: translateX(0%); }
             100% { transform: translateX(-100%); }
@@ -149,7 +205,7 @@
             animation-play-state: paused; 
         }
 
-        /* --- 5. CLASES DE UTILIDAD (Helpers) --- */
+        /* --- 6. CLASES DE UTILIDAD (Helpers) --- */
         .text-cyan-glow {
             color: var(--accent-cyan);
             text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
@@ -168,7 +224,7 @@
             filter: contrast(1.1) brightness(0.9) grayscale(0.2); 
         }
 
-        /* --- 6. SCROLLBAR PERSONALIZADO --- */
+        /* --- 7. SCROLLBAR PERSONALIZADO --- */
         ::-webkit-scrollbar { 
             width: 8px; 
         }
@@ -187,121 +243,117 @@
 
 <body class="overflow-x-hidden">
 
-    <!-- Navegación -->
+<!-- Navegación -->
 
-    <nav class="fixed w-full z-50 backdrop-blur-md border-b border-white/5 bg-[#050A15]/90">
+<nav id="navbar" class="fixed w-full z-50 backdrop-blur-md border-b border-gray-200 bg-white transition-transform duration-500 ease-in-out will-change-transform">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
+            
+            <!-- LOGO -->
             <a class="flex items-center gap-3 group" href="index.html">
-                <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-900/40">
-                    <i class="lni lni-drop text-white text-xl group-hover:rotate-12 transition-transform"></i>
-                </div>
-                <span class="text-xl font-bold tracking-tight text-white font-display">
-                    HydroTrace<span class="text-blue-500 font-light italic">AI</span>
-                </span>
+                <img src="assets/logo/logo_cara.png" class="h-12 w-auto object-contain">
+                <img src="assets/logo/logo_letras.png" class="h-8 w-auto object-contain">
             </a>
             
+            <!-- MENU -->
             <div class="hidden md:flex items-center space-x-10 text-[11px] font-bold uppercase tracking-[0.15em]">
-                <a href="#inicio" class="text-slate-400 hover:text-white transition-colors duration-300">Inicio</a>
-                <a href="#problematica" class="text-slate-400 hover:text-white transition-colors duration-300">Reto</a>
-                <a href="#tecnologia" class="text-slate-400 hover:text-white transition-colors duration-300">Tecnología</a>
-                <a href="#negocio" class="text-slate-400 hover:text-white transition-colors duration-300">Negocio</a>
-                <a href="#nosotros" class="text-slate-400 hover:text-white transition-colors duration-300">Nosotros</a>
                 
-                <div class="flex gap-4 border-l border-white/10 pl-8">
-                        <a href="/dashboard-clientes" target="_blank" class="px-4 py-2 rounded-full border border-blue-500 ...">
-                            Portal Cliente
-                        </a>
-                    <a href="/dashboard-admin" class="px-5 py-2.5 rounded-full bg-safety-orange text-white hover:bg-orange-600 hover:shadow-orange-500/30 transition-all duration-300 font-bold shadow-lg shadow-orange-500/10">
+                <a href="#inicio" class="text-gray-700 hover:text-blue-700 transition-colors duration-300">Inicio</a>
+                <a href="#problematica" class="text-gray-700 hover:text-blue-700 transition-colors duration-300">Reto</a>
+                <a href="#tecnologia" class="text-gray-700 hover:text-blue-700 transition-colors duration-300">Tecnología</a>
+                <a href="#negocio" class="text-gray-700 hover:text-blue-700 transition-colors duration-300">Negocio</a>
+                <a href="#nosotros" class="text-gray-700 hover:text-blue-700 transition-colors duration-300">Nosotros</a>
+                
+                <div class="flex gap-4 border-l border-gray-200 pl-8">
+                    
+                    <a href="/dashboard-clientes" target="_blank"
+                       class="px-4 py-2 rounded-full border border-blue-600 text-blue-600 hover:bg-blue-50 transition-all">
+                        Portal Cliente
+                    </a>
+
+                    <!-- ESTE NO SE TOCA -->
+                    <a href="/dashboard-admin"
+                       class="px-5 py-2.5 rounded-full bg-safety-orange text-white hover:bg-orange-600 hover:shadow-orange-500/30 transition-all duration-300 font-bold shadow-lg shadow-orange-500/10">
                         Admin Panel <i class="fas fa-lock ml-2 text-[10px]"></i>
                     </a>
+
                 </div>
             </div>
         </div>
     </div>
-</nav>
+</nav>    
 
-<section id="inicio" class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
-    
-    <div class="max-w-7xl mx-auto px-4 relative z-10">
-        
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-            
-            <div class="text-left">
-                <p class="text-cyan-400 font-bold tracking-[0.3em] uppercase mb-4 text-sm">
-                    PumaScript Solutions presenta
+<!-- Hero section -->
+
+<section id="inicio" class="relative h-screen flex items-center justify-center overflow-hidden">
+
+    <!-- Fondo con imagen -->
+     <div class="absolute inset-0 z-0">
+        <img 
+            src="assets/imagenes/Ciudad1.png" 
+            class="w-full h-full object-cover opacity-50"
+            alt="Ciudad"
+        >
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 relative z-10"> 
+        <div class="grid lg:grid-cols-2 gap-12 items-center"> 
+
+            <!-- TEXTO (IZQUIERDA) -->
+            <div class="text-left reveal-left active">
+                <p class="text-cyan-400 font-bold tracking-[0.3em] uppercase mb-4 text-sm"> 
+                    PumaScript Solutions presenta 
                 </p>
-                
+
                 <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight text-white">
-                    Optimización hídrica impulsada por
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">IA Predictiva</span>
+                    Optimización hídrica con <br>
+                    
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 italic">
+                        IA Predictiva</span>
                 </h1>
+
+                IA predictiva para la optimización hídrica
                 
                 <p class="text-lg text-gray-300 max-w-xl mb-10">
-                    Estrategia de Inteligencia de Datos para combatir el Agua No Contabilizada. Usamos <span class="text-cyan-400 font-mono">Isolation Forest</span> para detectar extracciones ilegales en tiempo real.
+                    Estrategia de inteligencia de datos para combatir el Agua No Contabilizada en la CDMX mediante algoritmos avanzados.
                 </p>
                 
                 <div class="flex flex-col sm:flex-row gap-6">
                     <a href="#problematica" class="bg-cyan-500 text-black font-black px-8 py-4 rounded-xl hover:scale-105 transition-all shadow-xl shadow-cyan-500/20 text-center">
                         DESCUBRE LA SOLUCIÓN
                     </a>
-                    
-                    <div class="flex items-center gap-4 text-gray-400">
-                        <span class="h-px w-10 bg-white/20"></span>
-                        <span class="text-xs font-bold uppercase tracking-widest italic">Powered by Machine Learning</span>
-                    </div>
                 </div>
             </div>
 
-            <div class="relative group">
-                <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
+            <!-- VIDEO (DERECHA) -->
+            <div class="relative group reveal">
                 
-                <div class="relative bg-black/40 backdrop-blur-xl border border-white/10 p-6 rounded-2xl">
+                <!-- Glow -->
+                <div class="absolute -inset-10 bg-blue-600/20 rounded-full blur-[100px] opacity-50"></div>
+                
+                <div class="video-container card-glass p-2 border-white/10 shadow-2xl relative">
                     
-                    <div class="flex justify-between items-center mb-6">
-                        <h3 class="text-white font-bold flex items-center gap-2">
-                            <span class="w-3 h-3 bg-cyan-500 rounded-full animate-pulse"></span>
-                            Simulador de ROI: HydroTrace AI
-                        </h3>
-                        <span class="text-[10px] text-cyan-400 border border-cyan-400/30 px-2 py-1 rounded">LIVE DATA</span>
+                    <div class="glow-overlay"></div>
+                    
+                    <video 
+                        class="w-full h-full object-cover rounded-2xl video-blend" 
+                        autoplay 
+                        loop 
+                        muted 
+                        playsinline
+                    >
+                        <source src="assets/videos/TuberiaNaturaleza.mp4" type="video/mp4">
+                        Tu navegador no soporta videos.
+                    </video>
+                    
+                    <!-- UI flotante -->
+                    <div class="absolute top-6 left-6 flex items-center gap-2">
+                        <div class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></div>
+                        <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-widest bg-black/40 px-2 py-1 rounded">
+                            Demo interactiva
+                        </span>
                     </div>
 
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left text-sm text-gray-300">
-                            <thead>
-                                <tr class="border-b border-white/10">
-                                    <th class="pb-3 font-medium">Métrica Operativa</th>
-                                    <th class="pb-3 font-medium text-right">Tradicional</th>
-                                    <th class="pb-3 font-medium text-right text-cyan-400">Con IA</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-white/5">
-                                <tr>
-                                    <td class="py-3">Detección de fugas</td>
-                                    <td class="py-3 text-right">15 días</td>
-                                    <td class="py-3 text-right font-bold text-white">48 hrs</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-3">Agua No Contabilizada</td>
-                                    <td class="py-3 text-right">~40%</td>
-                                    <td class="py-3 text-right font-bold text-white">~18%</td>
-                                </tr>
-                                <tr>
-                                    <td class="py-3">Costo Inspección</td>
-                                    <td class="py-3 text-right">Alto (Reactivo)</td>
-                                    <td class="py-3 text-right font-bold text-green-400">-35% ROI</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="mt-6 p-4 bg-cyan-500/10 border border-cyan-500/20 rounded-lg">
-                        <p class="text-[11px] text-cyan-200 uppercase tracking-tighter mb-1">Impacto Estimado en CDMX</p>
-                        <p class="text-xl font-black text-white">
-                            $12.4M <span class="text-sm font-normal text-gray-400 text-right italic">ahorro proyectado/anual</span>
-                        </p>
-                    </div>
-                    
                 </div>
             </div>
 
@@ -311,7 +363,7 @@
 
 <!-- Marquee de tecnologías y logros -->
 
-<div class="relative flex overflow-x-hidden border-y border-white/10 bg-cyan-500/5 py-4 backdrop-blur-sm">
+<div class="relative flex overflow-x-hidden border-y border-white/10 bg-cyan-500/5 py-4 backdrop-blur-sm -mt-10">
     
     <div class="animate-marquee whitespace-nowrap flex items-center">
         <span class="mx-8 text-sm font-bold text-cyan-400 uppercase tracking-widest flex items-center gap-2">
@@ -351,133 +403,188 @@
     
 </div>
 
-    <!-- Problemática -->
-    <section id="problematica" class="py-24 bg-[#001B48]/20">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid md:grid-cols-2 gap-16 items-center">
-                <div>
-                    <h2 class="text-4xl font-black mb-8">EL DESAFÍO DEL <span class="text-cyan-400 underline decoration-cyan-400/30">40%</span></h2>
-                    <p class="text-lg text-smoke mb-6 leading-relaxed">
-                        La Ciudad de México enfrenta una crisis histórica. Con niveles del Cutzamala en mínimos críticos y la amenaza del <strong>Día Cero</strong>, no podemos permitirnos el lujo de la ineficiencia.
-                    </p>
-                    <div class="space-y-4">
-                        <div class="flex items-start gap-4">
-                            <div class="mt-1 bg-red-500/20 p-2 rounded text-red-400"><i class="fas fa-exclamation-triangle"></i></div>
-                            <p class="text-smoke"><strong class="text-white">Agua No Contabilizada (ANC):</strong> Casi la mitad del agua se pierde antes de llegar al consumidor por fugas físicas y "huachicol".</p>
+<!-- Problemática -->
+<section id="problematica" class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+            
+            <!-- TEXTO -->
+            <div class="reveal-left">
+                <h2 class="text-4xl font-black mb-8 text-gray-900">
+                    El desafío del 
+                    <span class="text-cyan-600 underline decoration-cyan-400/30">40%</span>
+                </h2>
+
+                <p class="text-lg text-gray-600 mb-6 leading-relaxed">
+                    La Ciudad de México enfrenta una crisis hídrica crítica. Con niveles del Cutzamala en mínimos históricos y la amenaza del <strong>Día Cero</strong>, la eficiencia ya no es opcional.
+                </p>
+
+                <div class="space-y-5">
+                    
+                    <div class="flex items-start gap-4">
+                        <div class="mt-1 bg-red-100 p-3 rounded-lg text-red-500">
+                            <i class="fas fa-exclamation-triangle"></i>
                         </div>
-                        <div class="flex items-start gap-4">
-                            <div class="mt-1 bg-cyan-500/20 p-2 rounded text-cyan-400"><i class="fas fa-tools"></i></div>
-                            <p class="text-smoke"><strong class="text-white">Gestión Reactiva:</strong> Actualmente se opera bajo reportes tardíos, incrementando costos operativos y desperdicio.</p>
+                        <p class="text-gray-600">
+                            <strong class="text-gray-900">Agua No Contabilizada (ANC):</strong> 
+                            Casi la mitad del agua se pierde antes de llegar al consumidor.
+                        </p>
+                    </div>
+
+                    <div class="flex items-start gap-4">
+                        <div class="mt-1 bg-cyan-100 p-3 rounded-lg text-cyan-600">
+                            <i class="fas fa-tools"></i>
                         </div>
+                        <p class="text-gray-600">
+                            <strong class="text-gray-900">Gestión Reactiva:</strong> 
+                            Procesos tardíos que incrementan costos y desperdicio.
+                        </p>
                     </div>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="card-glass p-8 text-center">
-                        <span class="block text-5xl font-black text-cyan-400 mb-2">40%</span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-smoke">Pérdida de Suministro</span>
-                    </div>
-                    <div class="card-glass p-8 text-center mt-8">
-                        <span class="block text-5xl font-black text-red-500 mb-2">Día 0</span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-smoke">Riesgo Estructural</span>
-                    </div>
-                    <div class="card-glass p-8 text-center">
-                        <span class="block text-5xl font-black text-white mb-2">2019</span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-smoke">Base del Modelo</span>
-                    </div>
-                    <div class="card-glass p-8 text-center mt-8">
-                        <span class="block text-5xl font-black text-cyan-400 mb-2">16</span>
-                        <span class="text-xs font-bold uppercase tracking-widest text-smoke">Alcaldías Cubiertas</span>
-                    </div>
+
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Tecnología -->
-    <section id="tecnologia" class="py-24 bg-surface">
+            <!-- TARJETAS -->
+            <div class="grid grid-cols-2 gap-6">
+                
+                <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm text-center reveal hover:shadow-md transition">
+                    <span class="block text-4xl font-black text-cyan-600 mb-2">40%</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-500">
+                        Pérdida de suministro
+                    </span>
+                </div>
+
+                <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm text-center mt-8 reveal hover:shadow-md transition">
+                    <span class="block text-4xl font-black text-red-500 mb-2">Día 0</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-500">
+                        Riesgo estructural
+                    </span>
+                </div>
+
+                <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm text-center reveal hover:shadow-md transition">
+                    <span class="block text-4xl font-black text-gray-900 mb-2">2019</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-500">
+                        Base del modelo
+                    </span>
+                </div>
+
+                <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm text-center mt-8 reveal hover:shadow-md transition">
+                    <span class="block text-4xl font-black text-cyan-600 mb-2">16</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-gray-500">
+                        Alcaldías cubiertas
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- Tecnología -->
+<section id="tecnologia" class="py-24 bg-white">
     <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-black mb-4 tracking-tight uppercase">EL CEREBRO DETRÁS DEL FLUJO</h2>
-            <p class="text-smoke max-w-2xl mx-auto">Nuestra arquitectura de IA combina modelos estadísticos y de aprendizaje profundo para una detección de anomalías con precisión quirúrgica.</p>
+        
+        <!-- Header -->
+        <div class="text-center mb-16 reveal">
+            <h2 class="text-4xl font-black mb-4 tracking-tight text-gray-900">
+                El cerebro detrás del flujo
+            </h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">
+                Nuestra arquitectura de IA combina modelos estadísticos y aprendizaje profundo para una detección de anomalías precisa y escalable.
+            </p>
         </div>
 
+        <!-- Cards -->
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             
-            <div class="card-glass p-8 group">
-                <div class="text-cyan-400 text-3xl mb-6">
+            <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition reveal">
+                <div class="text-cyan-600 text-3xl mb-6">
                     <i class="fas fa-project-diagram"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-4 uppercase text-white tracking-tight">K-Means Clustering</h3>
-                <p class="text-sm text-gray-400 mb-8 leading-relaxed">
-                    Segmentación geoespacial inteligente para agrupar alcaldías con perfiles de consumo y densidad poblacional similares.
+                <h3 class="text-lg font-bold mb-3 text-gray-900">
+                    K-Means Clustering
+                </h3>
+                <p class="text-sm text-gray-600 mb-6 leading-relaxed">
+                    Segmentación geoespacial para agrupar alcaldías con perfiles de consumo similares.
                 </p>
-                <a href="#" class="btn-know-more">
-                    Conoce más <i class="fas fa-arrow-right text-[10px]"></i>
+                <a href="#" class="text-cyan-600 text-sm font-semibold hover:underline">
+                    Conoce más →
                 </a>
             </div>
 
-            <div class="card-glass p-8 group">
-                <div class="text-cyan-400 text-3xl mb-6">
+            <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition reveal">
+                <div class="text-cyan-600 text-3xl mb-6">
                     <i class="fas fa-user-secret"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-4 uppercase text-white tracking-tight">Isolation Forest</h3>
-                <p class="text-sm text-gray-400 mb-8 leading-relaxed">
-                    Detección avanzada de anomalías que aísla colonias con consumos sospechosos, identificando posibles extracciones ilegales.
+                <h3 class="text-lg font-bold mb-3 text-gray-900">
+                    Isolation Forest
+                </h3>
+                <p class="text-sm text-gray-600 mb-6 leading-relaxed">
+                    Identificación de anomalías para detectar consumos irregulares y posibles extracciones ilegales.
                 </p>
-                <a href="#" class="btn-know-more">
-                    Conoce más <i class="fas fa-arrow-right text-[10px]"></i>
+                <a href="#" class="text-cyan-600 text-sm font-semibold hover:underline">
+                    Conoce más →
                 </a>
             </div>
 
-            <div class="card-glass p-8 group">
-                <div class="text-cyan-400 text-3xl mb-6">
+            <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition reveal">
+                <div class="text-cyan-600 text-3xl mb-6">
                     <i class="fas fa-chart-line"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-4 uppercase text-white tracking-tight">Regresión Lineal</h3>
-                <p class="text-sm text-gray-400 mb-8 leading-relaxed">
-                    Cálculo del consumo teórico ideal basado en la realidad demográfica de la Ciudad de México para detectar pérdidas físicas.
+                <h3 class="text-lg font-bold mb-3 text-gray-900">
+                    Regresión Lineal
+                </h3>
+                <p class="text-sm text-gray-600 mb-6 leading-relaxed">
+                    Estimación del consumo ideal basado en variables demográficas.
                 </p>
-                <a href="#" class="btn-know-more">
-                    Conoce más <i class="fas fa-arrow-right text-[10px]"></i>
+                <a href="#" class="text-cyan-600 text-sm font-semibold hover:underline">
+                    Conoce más →
                 </a>
             </div>
 
-            <div class="card-glass p-8 group">
-                <div class="text-cyan-400 text-3xl mb-6">
+            <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition reveal">
+                <div class="text-cyan-600 text-3xl mb-6">
                     <i class="fas fa-clock"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-4 uppercase text-white tracking-tight">Análisis Temporal</h3>
-                <p class="text-sm text-gray-400 mb-8 leading-relaxed">
-                    Modelado predictivo de demanda hídrica utilizando la base de datos histórica de 2019 para anticipar picos de consumo.
+                <h3 class="text-lg font-bold mb-3 text-gray-900">
+                    Análisis Temporal
+                </h3>
+                <p class="text-sm text-gray-600 mb-6 leading-relaxed">
+                    Modelos predictivos para anticipar patrones de consumo a partir de datos históricos.
                 </p>
-                <a href="#" class="btn-know-more">
-                    Conoce más <i class="fas fa-arrow-right text-[10px]"></i>
+                <a href="#" class="text-cyan-600 text-sm font-semibold hover:underline">
+                    Conoce más →
                 </a>
             </div>
 
-            <div class="card-glass p-8 group">
-                <div class="text-cyan-400 text-3xl mb-6">
+            <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition reveal">
+                <div class="text-cyan-600 text-3xl mb-6">
                     <i class="fas fa-brain"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-4 uppercase text-white tracking-tight">Deep Learning</h3>
-                <p class="text-sm text-gray-400 mb-8 leading-relaxed">
-                    Implementación de redes LSTM para identificar patrones complejos de fugas imperceptibles para métodos tradicionales.
+                <h3 class="text-lg font-bold mb-3 text-gray-900">
+                    Deep Learning
+                </h3>
+                <p class="text-sm text-gray-600 mb-6 leading-relaxed">
+                    Redes LSTM para detectar patrones complejos de fugas invisibles.
                 </p>
-                <a href="#" class="btn-know-more">
-                    Conoce más <i class="fas fa-arrow-right text-[10px]"></i>
+                <a href="#" class="text-cyan-600 text-sm font-semibold hover:underline">
+                    Conoce más →
                 </a>
             </div>
 
-            <div class="card-glass p-8 group">
-                <div class="text-cyan-400 text-3xl mb-6">
+            <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition reveal">
+                <div class="text-cyan-600 text-3xl mb-6">
                     <i class="fas fa-crosshairs"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-4 uppercase text-white tracking-tight">DBSCAN Analysis</h3>
-                <p class="text-sm text-gray-400 mb-8 leading-relaxed">
-                    Localización precisa de "puntos calientes" de riesgo donde se concentran múltiples irregularidades y tomas clandestinas.
+                <h3 class="text-lg font-bold mb-3 text-gray-900">
+                    DBSCAN Analysis
+                </h3>
+                <p class="text-sm text-gray-600 mb-6 leading-relaxed">
+                    Identificación de zonas críticas donde se concentran irregularidades.
                 </p>
-                <a href="#" class="btn-know-more">
-                    Conoce más <i class="fas fa-arrow-right text-[10px]"></i>
+                <a href="#" class="text-cyan-600 text-sm font-semibold hover:underline">
+                    Conoce más →
                 </a>
             </div>
 
@@ -486,7 +593,7 @@
 </section>
 
     <!-- Negocio / ROI -->
-    <section id="negocio" class="py-24 bg-deep-blue/10 border-y border-white/5">
+    <section id="negocio" class="py-24 bg-white text-black border-y border-white/5 reveal">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid md:grid-cols-2 gap-16 items-center">
                 <div>
@@ -505,8 +612,10 @@
                         </div>
                     </div>
                 </div>
+
+                    <!-- Tabla -->
                 
-                <div class="bg-[#001B48] p-1 rounded-2xl shadow-2xl overflow-hidden">
+                <div class="bg-white text-black p-1 rounded-2xl shadow-2xl overflow-hidden">
                     <div class="bg-black/40 p-10">
                         <h3 class="text-2xl font-black mb-6 text-center">PROYECCIÓN FINANCIERA</h3>
                         <div class="space-y-6">
@@ -538,7 +647,7 @@
 
         <!-- Dashboard Interactivo -->
 
-    <section id="demo" class="py-24 relative overflow-hidden">
+    <section id="demo" class="py-24 bg-[#050A15] relative overflow-hidden reveal">
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/10 rounded-full filter blur-[120px] pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 relative z-10">
@@ -603,99 +712,193 @@
     </div>
 </section>
 
-    <!-- Roadmap -->
-
-<section id="roadmap" class="py-24 relative overflow-hidden">
+<!-- Roadmap -->
+<section id="roadmap" class="py-24 bg-white relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4">
-        <h2 class="text-4xl font-black text-center mb-16 uppercase italic">Roadmap <span class="text-cyan-400">2026-2027</span></h2>
+        
+        <h2 class="text-4xl font-black text-center mb-16 text-gray-900">
+            Roadmap <span class="text-cyan-600">2026–2027</span>
+        </h2>
         
         <div class="grid md:grid-cols-3 gap-12 relative">
-            <div class="hidden md:block absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-cyan-500/30 to-transparent -translate-y-1/2"></div>
+            
+            <!-- Línea -->
+            <div class="hidden md:block absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent -translate-y-1/2"></div>
 
-            <div class="card-glass p-8 relative z-10">
-                <div class="w-12 h-12 bg-cyan-500 text-black rounded-full flex items-center justify-center font-black mb-6 shadow-[0_0_20px_rgba(34,211,238,0.5)]">1</div>
-                <h5 class="text-cyan-400 font-bold uppercase text-xs tracking-widest mb-2">Q2 2026 (Actual)</h5>
-                <h4 class="text-xl font-bold text-white mb-4 italic">Análisis Histórico</h4>
-                <p class="text-sm text-gray-400">Consolidación de modelos basados en datos de 2019 para la identificación de patrones base de consumo en CDMX. </p>
+            <!-- CARD 1 -->
+            <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition relative z-10 reveal">
+                <div class="w-12 h-12 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold mb-6">
+                    1
+                </div>
+                <h5 class="text-cyan-600 font-bold text-xs uppercase tracking-widest mb-2">
+                    Q2 2026 (Actual)
+                </h5>
+                <h4 class="text-lg font-bold text-gray-900 mb-3">
+                    Análisis Histórico
+                </h4>
+                <p class="text-sm text-gray-600">
+                    Consolidación de modelos basados en datos de 2019 para identificar patrones base de consumo en CDMX.
+                </p>
             </div>
 
-            <div class="card-glass p-8 relative z-10 border-cyan-400/40">
-                <div class="w-12 h-12 bg-white text-black rounded-full flex items-center justify-center font-black mb-6">2</div>
-                <h5 class="text-gray-400 font-bold uppercase text-xs tracking-widest mb-2">Q4 2026</h5>
-                <h4 class="text-xl font-bold text-white mb-4 italic">Integración Live</h4>
-                <p class="text-sm text-gray-400">Implementación de modelos de Regresión Lineal e Isolation Forest para monitoreo en tiempo real mediante telemetría. </p>
+            <!-- CARD 2 -->
+            <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition relative z-10 reveal">
+                <div class="w-12 h-12 bg-gray-900 text-white rounded-full flex items-center justify-center font-bold mb-6">
+                    2
+                </div>
+                <h5 class="text-gray-500 font-bold text-xs uppercase tracking-widest mb-2">
+                    Q4 2026
+                </h5>
+                <h4 class="text-lg font-bold text-gray-900 mb-3">
+                    Integración Live
+                </h4>
+                <p class="text-sm text-gray-600">
+                    Implementación de modelos de Regresión Lineal e Isolation Forest para monitoreo en tiempo real mediante telemetría.
+                </p>
             </div>
 
-            <div class="card-glass p-8 relative z-10">
-                <div class="w-12 h-12 bg-blue-800 text-white rounded-full flex items-center justify-center font-black mb-6">3</div>
-                <h5 class="text-gray-400 font-bold uppercase text-xs tracking-widest mb-2">2027</h5>
-                <h4 class="text-xl font-bold text-white mb-4 italic">Escalabilidad SaaS</h4>
-                <p class="text-sm text-gray-400">Expansión del servicio a zonas industriales y otros estados de México para mitigar la crisis hídrica nacional. </p>
+            <!-- CARD 3 -->
+            <div class="bg-white border border-gray-200 p-8 rounded-2xl shadow-sm hover:shadow-md transition relative z-10 reveal">
+                <div class="w-12 h-12 bg-cyan-600 text-white rounded-full flex items-center justify-center font-bold mb-6">
+                    3
+                </div>
+                <h5 class="text-gray-500 font-bold text-xs uppercase tracking-widest mb-2">
+                    2027
+                </h5>
+                <h4 class="text-lg font-bold text-gray-900 mb-3">
+                    Escalabilidad SaaS
+                </h4>
+                <p class="text-sm text-gray-600">
+                    Expansión del servicio a zonas industriales y otros estados de México para mitigar la crisis hídrica.
+                </p>
             </div>
+
         </div>
     </div>
 </section>
 
-    <!-- Noticias & Insights -->
-
-    <section id="blog" class="py-24 bg-[#000a1a]">
+<!-- Noticias & Insights -->
+<section id="blog" class="py-24 bg-white">
     <div class="max-w-7xl mx-auto px-4">
+        
+        <!-- Header -->
         <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
             <div class="max-w-2xl">
-                <p class="text-cyan-400 font-bold tracking-[0.3em] uppercase mb-2 text-xs">Actualidad y Datos</p>
-                <h2 class="text-4xl font-black uppercase">Últimas Noticias e <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Insights</span></h2>
+                <p class="text-cyan-600 font-bold tracking-[0.3em] uppercase mb-2 text-xs">
+                    Actualidad y Datos
+                </p>
+                <h2 class="text-4xl font-black text-gray-900">
+                    Últimas Noticias e 
+                    <span class="text-cyan-600">Insights</span>
+                </h2>
             </div>
-            <a href="#" class="btn-know-more border border-cyan-400/20 px-6 py-2 rounded-full hover:bg-cyan-400/10 transition-all">
-                Ver todo el blog <i class="fas fa-external-link-alt ml-2 text-[10px]"></i>
+
+            <a href="#" class="text-cyan-600 border border-gray-200 px-6 py-2 rounded-full hover:bg-gray-50 transition text-sm font-semibold">
+                Ver todo el blog →
             </a>
         </div>
 
+        <!-- Cards -->
         <div class="grid md:grid-cols-3 gap-8">
             
-            <article class="card-glass group cursor-pointer">
-                <div class="h-48 overflow-hidden rounded-t-[2.5rem]">
-                    <img src="https://images.unsplash.com/photo-1581094794329-c8112a4e5190?auto=format&fit=crop&q=80&w=800" alt="SACMEX Tech" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 group-hover:opacity-100">
+            <!-- CARD 1 -->
+            <a href="#" target="_blank" class="group bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition block reveal">
+                
+                <div class="h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1581094794329-c8112a4e5190?auto=format&fit=crop&q=80&w=800" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                 </div>
-                <div class="p-8">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="text-[10px] bg-cyan-500/20 text-cyan-300 px-2 py-1 rounded font-bold uppercase">Infraestructura</span>
-                        <span class="text-[10px] text-gray-500 font-bold uppercase">15 Abr, 2026</span>
-                    </div>
-                    <h3 class="text-xl font-bold mb-4 text-white leading-tight group-hover:text-cyan-400 transition-colors">SACMEX anuncia inversión masiva en telemetría para 2026.</h3>
-                    <p class="text-sm text-gray-400 mb-6">El organismo busca integrar modelos de IA para reducir la pérdida por fugas físicas en las 16 alcaldías.</p>
-                    <span class="btn-know-more">Leer Artículo <i class="fas fa-arrow-right"></i></span>
-                </div>
-            </article>
 
-            <article class="card-glass group cursor-pointer">
-                <div class="h-48 overflow-hidden rounded-t-[2.5rem]">
-                    <img src="https://images.unsplash.com/photo-1518063319789-7217e6706ec9?auto=format&fit=crop&q=80&w=800" alt="Sistema Cutzamala" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 group-hover:opacity-100">
-                </div>
-                <div class="p-8">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="text-[10px] bg-red-500/20 text-red-300 px-2 py-1 rounded font-bold uppercase">Alerta</span>
-                        <span class="text-[10px] text-gray-500 font-bold uppercase">10 Abr, 2026</span>
+                <div class="p-6">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-[10px] bg-cyan-100 text-cyan-600 px-2 py-1 rounded font-bold uppercase">
+                            Infraestructura
+                        </span>
+                        <span class="text-[10px] text-gray-400 font-semibold uppercase">
+                            15 Abr, 2026
+                        </span>
                     </div>
-                    <h3 class="text-xl font-bold mb-4 text-white leading-tight group-hover:text-cyan-400 transition-colors">Estado del Cutzamala: Los niveles más bajos en 30 años.</h3>
-                    <p class="text-sm text-gray-400 mb-6">Expertos de la UNAM advierten que la eficiencia hídrica es la única salida antes de llegar al punto crítico.</p>
-                    <span class="btn-know-more">Leer Artículo <i class="fas fa-arrow-right"></i></span>
-                </div>
-            </article>
 
-            <article class="card-glass group cursor-pointer">
-                <div class="h-48 overflow-hidden rounded-t-[2.5rem]">
-                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc48?auto=format&fit=crop&q=80&w=800" alt="Machine Learning" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-60 group-hover:opacity-100">
+                    <h3 class="text-lg font-bold mb-3 text-gray-900 leading-tight group-hover:text-cyan-600 transition">
+                        SACMEX anuncia inversión masiva en telemetría para 2026
+                    </h3>
+
+                    <p class="text-sm text-gray-600 mb-4">
+                        El organismo busca integrar modelos de IA para reducir la pérdida por fugas físicas.
+                    </p>
+
+                    <span class="text-cyan-600 text-sm font-semibold">
+                        Leer artículo →
+                    </span>
                 </div>
-                <div class="p-8">
-                    <div class="flex items-center gap-3 mb-4">
-                        <span class="text-[10px] bg-purple-500/20 text-purple-300 px-2 py-1 rounded font-bold uppercase">Tecnología</span>
-                        <span class="text-[10px] text-gray-500 font-bold uppercase">02 Abr, 2026</span>
+
+            </a>
+
+            <!-- CARD 2 -->
+            <a href="#" target="_blank" class="group bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition block reveal">
+                
+                <div class="h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1518063319789-7217e6706ec9?auto=format&fit=crop&q=80&w=800" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                </div>
+
+                <div class="p-6">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-[10px] bg-red-100 text-red-500 px-2 py-1 rounded font-bold uppercase">
+                            Alerta
+                        </span>
+                        <span class="text-[10px] text-gray-400 font-semibold uppercase">
+                            10 Abr, 2026
+                        </span>
                     </div>
-                    <h3 class="text-xl font-bold mb-4 text-white leading-tight group-hover:text-cyan-400 transition-colors">¿Cómo el Isolation Forest está salvando el agua en CDMX?</h3>
-                    <p class="text-sm text-gray-400 mb-6">Análisis detallado sobre cómo los algoritmos de detección de anomalías encuentran el "huachicol" hídrico.</p>
-                    <span class="btn-know-more">Leer Artículo <i class="fas fa-arrow-right"></i></span>
+
+                    <h3 class="text-lg font-bold mb-3 text-gray-900 leading-tight group-hover:text-cyan-600 transition">
+                        Estado del Cutzamala: niveles más bajos en 30 años
+                    </h3>
+
+                    <p class="text-sm text-gray-600 mb-4">
+                        Expertos advierten que la eficiencia hídrica es clave antes del punto crítico.
+                    </p>
+
+                    <span class="text-cyan-600 text-sm font-semibold">
+                        Leer artículo →
+                    </span>
                 </div>
-            </article>
+
+            </a>
+
+            <!-- CARD 3 -->
+            <a href="#" target="_blank" class="group bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition block reveal">
+                
+                <div class="h-48 overflow-hidden">
+                    <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc48?auto=format&fit=crop&q=80&w=800" 
+                         class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                </div>
+
+                <div class="p-6">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-[10px] bg-purple-100 text-purple-600 px-2 py-1 rounded font-bold uppercase">
+                            Tecnología
+                        </span>
+                        <span class="text-[10px] text-gray-400 font-semibold uppercase">
+                            02 Abr, 2026
+                        </span>
+                    </div>
+
+                    <h3 class="text-lg font-bold mb-3 text-gray-900 leading-tight group-hover:text-cyan-600 transition">
+                        ¿Cómo el Isolation Forest detecta anomalías en consumo?
+                    </h3>
+
+                    <p class="text-sm text-gray-600 mb-4">
+                        Algoritmos avanzados permiten identificar patrones irregulares en tiempo real.
+                    </p>
+
+                    <span class="text-cyan-600 text-sm font-semibold">
+                        Leer artículo →
+                    </span>
+                </div>
+
+            </a>
 
         </div>
     </div>
@@ -704,7 +907,7 @@
 
     <!-- Consultas Técnicas -->
 
-<section id="faq" class="py-24 bg-[#000a1a]">
+<section id="faq" class="py-24 bg-[#000a1a] reveal">
     <div class="max-w-4xl mx-auto px-4">
         <div class="text-center mb-16">
             <h2 class="text-4xl font-black uppercase tracking-tighter">Consultas <span class="text-cyan-400">Técnicas</span></h2>
@@ -747,7 +950,7 @@
 
     <!-- Formulario y contacto -->
 
-<section id="contacto" class="py-24 bg-[#020617] relative">
+<section id="contacto" class="py-24 bg-[#020617] relative reveal">
     <div class="max-w-7xl mx-auto px-4">
         
         <div class="text-center mb-16">
@@ -918,6 +1121,56 @@
         </div>
     </div>
 </footer>
+
+    <!-- JAVASCRIPT: EL MOTOR DE LAS TRANSICIONES -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Configuramos el observador
+            const observerOptions = {
+                root: null, // usa el viewport del navegador
+                threshold: 0.1, // se activa cuando el 10% del elemento es visible
+                rootMargin: "0px 0px -50px 0px" // margen inferior para que se active un poco antes de llegar
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Agregamos la clase 'active' para disparar el CSS
+                        entry.target.classList.add('active');
+                        // Dejamos de observar una vez que ya se reveló (opcional)
+                        // observer.unobserve(entry.target); 
+                    }
+                });
+            }, observerOptions);
+
+            // Seleccionamos todos los elementos con la clase 'reveal'
+            const revealElements = document.querySelectorAll('.reveal, .reveal-left');            
+            revealElements.forEach(el => observer.observe(el));
+        });
+    </script>
+
+    
+    <script>
+let lastScroll = 0;
+const navbar = document.getElementById("navbar");
+
+window.addEventListener("scroll", () => {
+    let currentScroll = window.pageYOffset;
+
+    if (currentScroll <= 0) {
+        navbar.style.transform = "translateY(0)";
+        return;
+    }
+
+    if (currentScroll > lastScroll) {
+        navbar.style.transform = "translateY(-100%)";
+    } else {
+        navbar.style.transform = "translateY(0)";
+    }
+
+    lastScroll = currentScroll;
+});
+</script>
 
 </body>
 </html>
