@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
 """
-HydroTrace AI - ETL Pipeline
-Autor: Proyecto Universitario CDMX
 Descripcion: Carga, limpia y une los 4 datasets fuente,
-             calcula variables derivadas y genera dataset_maestro.csv
+             calcula variables derivadas y genera el dataset_maestro.csv
 """
 
 import os
