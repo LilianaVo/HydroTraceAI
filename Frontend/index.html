@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> HydroTrace AI | Plataforma de inteligencia hídrica </title>
 
-    <!-- Favicon principal -->
+    <!-- Icon principal -->
     <link rel="icon" href="assets/logo/logo_cara.png" type="image/png">
 
-    <!-- Apple devices -->
     <link rel="apple-touch-icon" href="assets/logo/logo_cara.png">
 
 
@@ -21,6 +20,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
+
 /* --- 1. VARIABLES GLOBALES --- */
 :root {
     --bg-deep: #050A15;
@@ -88,7 +88,7 @@ h1, h2, h3, h4 {
     transform: translateY(-5px);
 }
 
-/* --- 5. TARJETAS GLASS (mantener para secciones oscuras) --- */
+/* --- 5. TARJETAS GLASS --- */
 .card-glass {
     background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
     backdrop-filter: blur(15px);
@@ -419,6 +419,7 @@ h1, h2, h3, h4 {
 <body class="overflow-x-hidden">
 
 <!-- Navegación -->
+
 <nav id="navbar" class="fixed w-full z-50 backdrop-blur-md border-b border-gray-200 bg-white transition-transform duration-500 ease-in-out will-change-transform">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <div class="flex justify-between items-center h-20">
@@ -457,6 +458,7 @@ h1, h2, h3, h4 {
 
 
 <!-- Hero section -->
+ 
 <section id="inicio" class="relative min-h-screen flex items-center justify-center overflow-hidden">
 
     <!-- Fondo con imagen -->
@@ -540,7 +542,8 @@ h1, h2, h3, h4 {
 </section>
 
 
-<!-- MARQUEE limpio y fluido -->
+<!-- MARQUEE -->
+
 <div class="relative flex overflow-x-hidden py-5 bg-transparent">
 
     <!-- Fade lateral izquierdo -->
@@ -697,7 +700,6 @@ h1, h2, h3, h4 {
 
 <section id="tecnologia" class="relative py-40 bg-cyan-50 overflow-hidden">
 
-    <!-- Fondo decorativo -->
     <div class="absolute inset-0 z-0">
 
         <div class="absolute w-[600px] h-[600px] border border-cyan-400 rounded-full 
@@ -715,6 +717,7 @@ h1, h2, h3, h4 {
     </div>
 
     <!-- Contenido -->
+
     <div class="relative z-10 max-w-4xl mx-auto text-center px-6 reveal">
 
         <h2 class="text-xs font-bold tracking-[0.4em] text-cyan-600 uppercase mb-6">
@@ -736,12 +739,12 @@ h1, h2, h3, h4 {
 
 
 <!-- TRANSICIÓN: TECNOLOGÍA → NEGOCIO -->
+
 <div class="relative w-full flex justify-center">
 
     <!-- Fade superior -->
     <div class="absolute -top-10 w-full h-20 bg-gradient-to-b from-cyan-50 to-transparent"></div>
 
-    <!-- Línea elegante tipo data flow -->
     <div class="w-40 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-70"></div>
 
     <!-- Fade inferior -->
@@ -843,6 +846,7 @@ h1, h2, h3, h4 {
         <div class="bg-white rounded-[2.5rem] shadow-[0_32px_64px_-15px_rgba(0,0,0,0.1)] border border-slate-200 overflow-hidden flex flex-col md:flex-row h-[700px] reveal">
             
             <!-- Sidebar -->
+
             <aside class="w-20 md:w-24 bg-slate-900 flex flex-col items-center py-10 gap-10">
                 <div class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center text-white">
                     <i data-lucide="droplet" class="w-5 h-5"></i>
@@ -857,8 +861,7 @@ h1, h2, h3, h4 {
                     <img src="https://ui-avatars.com/api/?name=Admin&background=3b82f6&color=fff" class="w-10 h-10 rounded-full border-2 border-slate-700">
                 </div>
             </aside>
-
-            <!-- Main Content Area -->
+             
             <main class="flex-1 flex flex-col bg-slate-50/50 overflow-y-auto">
                 <header class="p-8 border-b border-slate-200 bg-white flex justify-between items-center">
                     <div>
@@ -1087,9 +1090,6 @@ h1, h2, h3, h4 {
 </section>
 
 
-
-<!-- Nosotros / Empresa -->
-
 <!-- Nosotros / Empresa -->
 
 <section id="nosotros" class="py-32 bg-white px-6 relative overflow-hidden">
@@ -1108,7 +1108,6 @@ h1, h2, h3, h4 {
 
     </div>
 
-    <!-- overlays -->
     <div class="absolute inset-0 z-0">
         <div class="absolute inset-0 bg-gradient-to-b from-white/20 via-white/10 to-white/30"></div>
         <div class="absolute inset-0 bg-gradient-to-tr from-cyan-100/20 via-transparent to-blue-100/20"></div>
@@ -1539,6 +1538,7 @@ bg-gradient-to-b from-white via-cyan-50 to-white">
         </div>
 
         <!-- bottom -->
+
         <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
            <p class="text-xs text-slate-500 uppercase tracking-widest text-center">
                 © 2026 <span class="text-white font-bold">PumaScript Solutions</span> HydroTraceAI · Innovación en gestión hídrica
@@ -1630,6 +1630,7 @@ cards.forEach(card => {
 });
 
 // fondo animado
+
 const bg = document.getElementById('bg-anim');
 
 if(bg){
