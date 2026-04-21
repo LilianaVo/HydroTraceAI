@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HydroTrace AI | Enterprise Water Intelligence</title>
-    
+    <title> HydroTrace AI | Plataforma de inteligencia hídrica </title>
+
+    <!-- Favicon principal -->
+    <link rel="icon" href="assets/logo/logo_cara.png" type="image/png">
+
+    <!-- Apple devices -->
+    <link rel="apple-touch-icon" href="assets/logo/logo_cara.png">
+
+
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -406,6 +413,9 @@ h1, h2, h3, h4 {
 
 </head>
 
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+
 <body class="overflow-x-hidden">
 
 <!-- Navegación -->
@@ -444,8 +454,9 @@ h1, h2, h3, h4 {
     </div>
 </nav>
 
-<!-- Hero section -->
 
+
+<!-- Hero section -->
 <section id="inicio" class="relative min-h-screen flex items-center justify-center overflow-hidden">
 
     <!-- Fondo con imagen -->
@@ -455,7 +466,6 @@ h1, h2, h3, h4 {
             class="w-full h-full object-cover"
             alt="Ciudad"
         >
-        
         <div class="absolute inset-0 bg-black/70"></div>
     </div>
 
@@ -497,7 +507,7 @@ h1, h2, h3, h4 {
                 </div>
             </div>
 
-            <!-- VIDEO / VISUAL -->
+            <!-- VISUAL -->
             <div class="relative group reveal">
 
                 <div class="absolute -inset-10 bg-blue-600/20 rounded-full blur-[100px] opacity-50"></div>
@@ -514,7 +524,6 @@ h1, h2, h3, h4 {
                         <source src="assets/videos/TuberiaNaturaleza.mp4" type="video/mp4">
                     </video>
 
-                    <!-- UI flotante -->
                     <div class="absolute top-6 left-6 flex items-center gap-2">
                         <div class="w-2 h-2 bg-cyan-500 rounded-full animate-pulse"></div>
                         <span class="text-[10px] font-bold text-cyan-400 uppercase tracking-widest bg-black/40 px-2 py-1 rounded">
@@ -527,12 +536,13 @@ h1, h2, h3, h4 {
 
         </div>
     </div>
+
 </section>
 
-<!-- Marquee de tecnologías y capacidades -->
 
-<div class="relative flex overflow-x-hidden py-4 marquee-container -mt-16 z-20">
-    
+<!-- MARQUEE (sin cortes visuales raros) -->
+<div class="relative flex overflow-x-hidden py-4 marquee-container bg-white">
+
     <!-- Línea 1 -->
     <div class="animate-marquee whitespace-nowrap flex items-center">
 
@@ -660,36 +670,41 @@ h1, h2, h3, h4 {
     </div>
 </section>
 
+<div class="h-24 w-full bg-gradient-to-b from-white to-cyan-50"></div>
+
 <!-- Tecnología -->
 
-<section id="tecnologia" class="relative py-40 bg-white overflow-hidden">
+<section id="tecnologia" class="relative py-40 bg-cyan-50 overflow-hidden">
 
+    <!-- Fondo decorativo -->
     <div class="absolute inset-0 z-0">
 
         <div class="absolute w-[600px] h-[600px] border border-cyan-400 rounded-full 
-                    top-[-200px] left-[-150px] opacity-60 line-anim"></div>
+                    top-[-200px] left-[-150px] opacity-40 line-anim"></div>
 
         <div class="absolute w-[800px] h-[800px] border border-blue-400 rounded-full 
-                    top-[20%] right-[-300px] opacity-60 line-anim"></div>
+                    top-[20%] right-[-300px] opacity-30 line-anim"></div>
 
-        <div class="absolute w-[500px] h-[500px] border border-cyan-400 rounded-full 
-                    bottom-[-200px] left-[30%] opacity-60 line-anim"></div>
+        <div class="absolute w-[500px] h-[500px] border border-cyan-300 rounded-full 
+                    bottom-[-200px] left-[30%] opacity-30 line-anim"></div>
 
         <div class="absolute top-1/2 left-1/2 w-[600px] h-[600px] 
                     bg-cyan-200/20 blur-[120px] -translate-x-1/2 -translate-y-1/2 line-anim"></div>
+
     </div>
 
+    <!-- Contenido -->
     <div class="relative z-10 max-w-4xl mx-auto text-center px-6 reveal">
 
         <h2 class="text-xs font-bold tracking-[0.4em] text-cyan-600 uppercase mb-6">
             Customer Journey
         </h2>
 
-        <h3 class="text-4xl md:text-6xl font-black text-gray-900 mb-6">
+        <h3 class="text-4xl md:text-6xl font-black text-gray-900 mb-6 leading-tight">
             Garantizamos una experiencia <br>segura y fluida
         </h3>
 
-        <p class="text-gray-500 text-lg max-w-2xl mx-auto">
+        <p class="text-gray-600 text-lg max-w-2xl mx-auto">
             Nuestra inteligencia artificial conecta cada punto del sistema hídrico, 
             detectando anomalías y optimizando decisiones en tiempo real.
         </p>
@@ -699,9 +714,25 @@ h1, h2, h3, h4 {
 </section>
 
 
+<!-- TRANSICIÓN: TECNOLOGÍA → NEGOCIO -->
+<div class="relative w-full flex justify-center">
+
+    <!-- Fade superior -->
+    <div class="absolute -top-10 w-full h-20 bg-gradient-to-b from-cyan-50 to-transparent"></div>
+
+    <!-- Línea elegante tipo data flow -->
+    <div class="w-40 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-70"></div>
+
+    <!-- Fade inferior -->
+    <div class="absolute -bottom-10 w-full h-20 bg-gradient-to-t from-white to-transparent"></div>
+
+</div>
+
+
 <!-- Negocio -->
 
-<section id="negocio" class="py-32 bg-white px-6">
+<section id="negocio" class="relative py-40 bg-white overflow-hidden">
+
     <div class="max-w-7xl mx-auto">
 
         <div class="relative bg-gradient-to-br from-slate-900 to-slate-800 
@@ -1034,119 +1065,144 @@ h1, h2, h3, h4 {
     </div>
 </section>
 
-<!-- Nosotros, información empresarial -->
+
+
+<!-- Nosotros / Empresa -->
+
+<!-- Nosotros / Empresa -->
 
 <section id="nosotros" class="py-32 bg-white px-6 relative overflow-hidden">
-    
-    <div class="max-w-7xl mx-auto">
-        
-        <div class="text-center mb-20 reveal">
-            <p class="text-cyan-600 uppercase tracking-[0.3em] text-xs font-bold mb-4">
-                Quiénes somos
-            </p>
 
-            <h2 class="text-4xl md:text-6xl font-black text-slate-900 mb-6">
-                Construyendo inteligencia para el agua
+    <!-- Lottie fondo -->
+    <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-50">
+
+        <lottie-player
+            src="assets/animaciones/tech_pattern.json"
+            background="transparent"
+            speed="1"
+            loop
+            autoplay
+            class="w-full h-full scale-125">
+        </lottie-player>
+
+    </div>
+
+    <!-- overlays -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-b from-white/20 via-white/10 to-white/30"></div>
+        <div class="absolute inset-0 bg-gradient-to-tr from-cyan-100/20 via-transparent to-blue-100/20"></div>
+    </div>
+
+    <!-- contenido -->
+    <div class="relative z-10 max-w-7xl mx-auto">
+
+        <!-- Branding -->
+        <div class="text-center mb-28 reveal">
+
+            <div class="inline-block p-4 rounded-3xl bg-slate-50 mb-8 border border-slate-100 shadow-sm">
+                <img src="assets/logo/logo_pumascript.png"
+                     class="h-20 md:h-24 w-auto mx-auto object-contain"
+                     alt="PumaScript">
+            </div>
+
+            <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-6">
+                PumaScript Solutions
             </h2>
 
-            <p class="text-gray-500 max-w-2xl mx-auto text-lg">
-                Aplicamos inteligencia artificial y ciencia de datos para transformar la gestión del agua en sistemas más eficientes, precisos y sostenibles.
+            <p class="text-gray-600 max-w-2xl mx-auto text-lg">
+                Diseñamos soluciones de inteligencia artificial y analítica avanzada que convierten datos complejos en decisiones estratégicas para la gestión de infraestructura urbana.
             </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-8 reveal">
-            
-            <!-- Miembro 1 -->
-            <div class="text-center group">
-                <div class="relative w-32 h-32 mx-auto mb-6">
-                    <div class="absolute inset-0 bg-cyan-500 rounded-full scale-0 group-hover:scale-110 transition-transform duration-300 opacity-20"></div>
-                    
-                    <div class="w-full h-full rounded-full border-2 border-slate-200 bg-slate-100 flex items-center justify-center relative z-10">
-                        <i class="lni lni-user text-3xl text-slate-500"></i>
-                    </div>
-                </div>
-
-                <h4 class="font-bold text-slate-900">Nombre aquí</h4>
-                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-1">
-                    Rol por definir
-                </p>
-            </div>
-
-            <!-- Miembro 2 -->
-            <div class="text-center group">
-                <div class="relative w-32 h-32 mx-auto mb-6">
-                    <div class="absolute inset-0 bg-blue-500 rounded-full scale-0 group-hover:scale-110 transition-transform duration-300 opacity-20"></div>
-                    
-                    <div class="w-full h-full rounded-full border-2 border-slate-200 bg-slate-100 flex items-center justify-center relative z-10">
-                        <i class="lni lni-cog text-3xl text-slate-500"></i>
-                    </div>
-                </div>
-
-                <h4 class="font-bold text-slate-900">Nombre aquí</h4>
-                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-1">
-                    Rol por definir
-                </p>
-            </div>
-
-            <!-- Miembro 3 -->
-            <div class="text-center group">
-                <div class="relative w-32 h-32 mx-auto mb-6">
-                    <div class="absolute inset-0 bg-cyan-500 rounded-full scale-0 group-hover:scale-110 transition-transform duration-300 opacity-20"></div>
-                    
-                    <div class="w-full h-full rounded-full border-4 border-cyan-300 bg-slate-100 flex items-center justify-center relative z-10 shadow-md">
-                        <i class="lni lni-bar-chart text-3xl text-slate-500"></i>
-                    </div>
-                </div>
-
-                <h4 class="font-bold text-slate-900">Nombre aquí</h4>
-                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-1">
-                    Rol por definir
-                </p>
-            </div>
-
-            <!-- Miembro 4 -->
-            <div class="text-center group">
-                <div class="relative w-32 h-32 mx-auto mb-6">
-                    <div class="absolute inset-0 bg-blue-500 rounded-full scale-0 group-hover:scale-110 transition-transform duration-300 opacity-20"></div>
-                    
-                    <div class="w-full h-full rounded-full border-2 border-slate-200 bg-slate-100 flex items-center justify-center relative z-10">
-                        <i class="lni lni-database text-3xl text-slate-500"></i>
-                    </div>
-                </div>
-
-                <h4 class="font-bold text-slate-900">Nombre aquí</h4>
-                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-1">
-                    Rol por definir
-                </p>
-            </div>
-
-            <!-- Miembro 5 -->
-            <div class="text-center group">
-                <div class="relative w-32 h-32 mx-auto mb-6">
-                    <div class="absolute inset-0 bg-cyan-500 rounded-full scale-0 group-hover:scale-110 transition-transform duration-300 opacity-20"></div>
-                    
-                    <div class="w-full h-full rounded-full border-2 border-slate-200 bg-slate-100 flex items-center justify-center relative z-10">
-                        <i class="lni lni-shield text-3xl text-slate-500"></i>
-                    </div>
-                </div>
-
-                <h4 class="font-bold text-slate-900">Nombre aquí</h4>
-                <p class="text-xs text-slate-500 uppercase font-bold tracking-widest mt-1">
-                    Rol por definir
-                </p>
-            </div>
 
         </div>
 
-        <div class="mt-20 pt-10 border-t border-slate-100 flex flex-col md:flex-row items-center justify-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all reveal">
-            <p class="text-sm font-bold text-slate-400 uppercase tracking-widest">
-                Proyecto desarrollado en
+        <!-- Enfoque -->
+        <div class="text-center mb-28 reveal">
+
+            <p class="text-cyan-600 uppercase tracking-[0.4em] text-xs font-black mb-4">
+                Enfoque tecnológico
             </p>
-            <div class="flex items-center gap-4">
-                <span class="font-black text-xl text-slate-800">Facultad de Ingeniería</span>
-                <span class="w-1 h-1 bg-slate-400 rounded-full"></span>
-                <span class="font-black text-xl text-slate-800">UNAM</span>
+
+            <h3 class="text-4xl md:text-6xl font-light text-slate-900 mb-8 italic leading-tight md:leading-snug">
+                Inteligencia aplicada a la
+                <span class="block font-black not-italic text-transparent bg-clip-text bg-gradient-to-r from-cyan-500 to-blue-600">
+                    gestión eficiente del agua
+                </span>
+            </h3>
+
+            <p class="text-gray-600 max-w-3xl mx-auto text-lg">
+                HydroTrace AI detecta fugas, predice patrones de consumo y optimiza el uso del agua en tiempo real mediante modelos de machine learning diseñados para entornos urbanos complejos.
+            </p>
+
+        </div>
+
+        <!-- Equipo -->
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 reveal">
+
+            <div class="text-center group">
+                <div class="relative w-28 h-28 mx-auto mb-6">
+                    <div class="absolute inset-0 bg-slate-900 rounded-2xl opacity-10 group-hover:opacity-20 transition"></div>
+                    <div class="absolute inset-0 bg-white rounded-2xl border border-slate-200 flex items-center justify-center relative z-10">
+                        <i class="lni lni-user text-3xl text-slate-400 group-hover:text-cyan-600"></i>
+                    </div>
+                </div>
+                <h4 class="font-bold text-slate-900 text-sm">Nombre aquí</h4>
+                <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mt-2">
+                    Ingeniería de integración
+                </p>
             </div>
+
+            <div class="text-center group">
+                <div class="relative w-28 h-28 mx-auto mb-6">
+                    <div class="absolute inset-0 bg-slate-900 rounded-2xl opacity-10 group-hover:opacity-20 transition"></div>
+                    <div class="absolute inset-0 bg-white rounded-2xl border border-slate-200 flex items-center justify-center relative z-10">
+                        <i class="lni lni-cog text-3xl text-slate-400 group-hover:text-cyan-600"></i>
+                    </div>
+                </div>
+                <h4 class="font-bold text-slate-900 text-sm">Nombre aquí</h4>
+                <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mt-2">
+                    Automatización inteligente
+                </p>
+            </div>
+
+            <div class="text-center group">
+                <div class="relative w-28 h-28 mx-auto mb-6">
+                    <div class="absolute inset-0 bg-slate-900 rounded-2xl opacity-10 group-hover:opacity-20 transition"></div>
+                    <div class="absolute inset-0 bg-white rounded-2xl border border-slate-200 flex items-center justify-center relative z-10">
+                        <i class="lni lni-bar-chart text-3xl text-slate-400 group-hover:text-cyan-600"></i>
+                    </div>
+                </div>
+                <h4 class="font-bold text-slate-900 text-sm">Nombre aquí</h4>
+                <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mt-2">
+                    Ciencia de datos
+                </p>
+            </div>
+
+            <div class="text-center group">
+                <div class="relative w-28 h-28 mx-auto mb-6">
+                    <div class="absolute inset-0 bg-slate-900 rounded-2xl opacity-10 group-hover:opacity-20 transition"></div>
+                    <div class="absolute inset-0 bg-white rounded-2xl border border-slate-200 flex items-center justify-center relative z-10">
+                        <i class="lni lni-database text-3xl text-slate-400 group-hover:text-cyan-600"></i>
+                    </div>
+                </div>
+                <h4 class="font-bold text-slate-900 text-sm">Nombre aquí</h4>
+                <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mt-2">
+                    Arquitectura de datos
+                </p>
+            </div>
+
+            <div class="text-center group">
+                <div class="relative w-28 h-28 mx-auto mb-6">
+                    <div class="absolute inset-0 bg-slate-900 rounded-2xl opacity-10 group-hover:opacity-20 transition"></div>
+                    <div class="absolute inset-0 bg-white rounded-2xl border border-slate-200 flex items-center justify-center relative z-10">
+                        <i class="lni lni-shield text-3xl text-slate-400 group-hover:text-cyan-600"></i>
+                    </div>
+                </div>
+                <h4 class="font-bold text-slate-900 text-sm">Nombre aquí</h4>
+                <p class="text-[10px] text-slate-500 uppercase font-black tracking-widest mt-2">
+                    Seguridad y trazabilidad
+                </p>
+            </div>
+
         </div>
 
     </div>
