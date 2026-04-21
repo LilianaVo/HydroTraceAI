@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-HydroTrace AI — Modelos de Machine Learning
-Autor: Proyecto Universitario CDMX
-Descripción: Aplica K-Means, Isolation Forest y Regresión Lineal
+Descripción: Se aplica K-Means, Isolation Forest y Regresión Lineal
              al dataset_maestro.csv y exporta resultados_anomalias.csv
 """
 
