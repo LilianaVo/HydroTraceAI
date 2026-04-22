@@ -386,11 +386,24 @@ h1, h2, h3, h4 {
     outline: none;
 }
 
+.btn-contacto { 
+    width: 100%; 
+    background: linear-gradient(135deg, #06b6d4, #3b82f6); 
+    color: white; 
+    font-weight: bold; 
+    padding: 0.9rem; 
+    border-radius: 0.75rem; 
+    transition: 0.3s; 
+}
+
+.btn-contacto:disabled { opacity: 0.7; cursor: not-allowed; }
+
 .form-pro:focus {
     border-color: #06b6d4;
     background: white;
     box-shadow: 0 0 0 3px rgba(6,182,212,0.15);
 }
+        
 
 /* botón */
 .btn-contacto {
@@ -1363,27 +1376,17 @@ h1, h2, h3, h4 {
     </div>
 </section>
 
-<!-- Formulario de contacto -->
-
-<section id="contacto" class="py-32 text-slate-900 relative overflow-hidden 
-bg-gradient-to-b from-white via-cyan-50 to-white">
-
+<!-- Formulario de contacto conectado a la base de datos -->
+          
+<section id="contacto" class="py-32 text-slate-900 relative overflow-hidden bg-gradient-to-b from-white via-cyan-50 to-white">
     <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center">
-
         <div class="reveal-left">
-            <p class="text-cyan-600 uppercase tracking-[0.3em] text-xs font-bold mb-4">
-                Contacto
-            </p>
+            <p class="text-cyan-600 uppercase tracking-[0.3em] text-xs font-bold mb-4">Contacto</p>
+            <h2 class="text-4xl md:text-5xl font-black mb-6">¿Tu red tiene pérdidas que no puedes ubicar?</h2>
+            <p class="text-gray-600 mb-8">Cuéntanos cómo opera tu sistema y en menos de 24 horas te decimos si HydroTrace AI puede ayudarte — sin compromiso.</p>
 
-            <h2 class="text-4xl md:text-5xl font-black mb-6">
-                ¿Tu red tiene pérdidas que no puedes ubicar?
-            </h2>
-
-            <p class="text-gray-600 mb-8">
-                Cuéntanos cómo opera tu sistema y en menos de 24 horas te decimos si HydroTrace AI puede ayudarte — sin compromiso.
-            </p>
-
-            <div class="space-y-4 text-gray-600">
+            <!-- ... iconos de contacto ... -->
+             <div class="space-y-4 text-gray-600">
                 <div class="flex items-center gap-3">
                     <i data-lucide="mail" class="w-5 h-5 text-cyan-600"></i>
                     <span>contacto@pumascriptsolutions.ai</span>
@@ -1400,36 +1403,30 @@ bg-gradient-to-b from-white via-cyan-50 to-white">
         </div>
 
         <div class="bg-white rounded-3xl p-10 shadow-2xl border border-gray-200 reveal">
-
-            <form class="space-y-6">
-
-                <input type="text" placeholder="Nombre completo" class="form-pro">
-                <input type="email" placeholder="Correo electrónico" class="form-pro">
-                <input type="text" placeholder="Organismo / Empresa" class="form-pro">
-
-                <select class="form-pro">
-                    <option>¿Qué te interesa explorar?</option>
-                    <option>Detección de fugas y pérdidas</option>
-                    <option>Análisis de consumo por zona</option>
-                    <option>Integración con sistemas existentes</option>
-                    <option>Demo de la plataforma</option>
-                </select>
-
-                <textarea rows="4" placeholder="Describe brevemente tu red o el problema que enfrentas..." class="form-pro"></textarea>
-
-                <button class="btn-contacto">
-                    Enviar y recibir respuesta →
-                </button>
-
-            </form>
-
+            <!-- Agregamos un ID al formulario para el JS -->
+                <form id="form-contacto" action="/contacto" method="POST" class="space-y-6">
+                    <input type="text" name="nombre" placeholder="Nombre" class="form-pro" required>
+                    <input type="email" name="email" placeholder="Correo" class="form-pro" required>
+                    <input type="text" name="empresa" placeholder="Empresa" class="form-pro">
+                    <select name="interes" class="form-pro">
+                        <option value="Demo">Demo</option>
+                        <option value="Consulta">Consulta</option>
+                    </select>
+                    <textarea name="mensaje" rows="4" placeholder="Mensaje..." class="form-pro"></textarea>
+                    <button type="submit" id="btn-enviar" class="btn-contacto">
+                        Enviar mensaje →
+                    </button>
+                </form>
+            
+            <!-- Mensaje opcional de éxito -->
+            <div id="success-container" class="hidden mt-6 p-4 bg-emerald-50 border border-emerald-100 rounded-xl">
+                <p class="text-emerald-700 text-center font-bold flex items-center justify-center gap-2">
+                    <i data-lucide="check-circle" class="w-5 h-5"></i> ¡Mensaje enviado con éxito!
+                </p>
+            </div>
         </div>
-
     </div>
-
 </section>
-
-<div class="h-[1px] w-full bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
 
 <!-- Footer -->
 
@@ -1574,6 +1571,29 @@ window.addEventListener("scroll", () => {
 
     lastScroll = currentScroll;
 });
+
+// --- PREVENCIÓN DE DUPLICADOS EN EL CLIENTE ---
+
+        const form = document.getElementById('form-contacto');
+        const btn = document.getElementById('btn-enviar');
+
+        form.addEventListener('submit', () => {
+            btn.disabled = true;
+            btn.innerHTML = 'Enviando...';
+        });
+
+        // --- SCROLL Y MENSAJE DE ÉXITO ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('success')) {
+                document.getElementById('success-container').classList.remove('hidden');
+                setTimeout(() => {
+                    document.getElementById('contacto').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 300);
+            }
+        });
+
+
 </script>
 
 <script>
