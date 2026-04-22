@@ -40,7 +40,6 @@
 
         <main class="flex-1 overflow-hidden flex flex-col p-6 gap-6">
             
-            <!-- TECH STATS -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="admin-glass p-4 rounded-lg">
                     <p class="text-slate-500 text-[10px] mb-1">DATASET_SIZE</p>
@@ -133,7 +132,6 @@
                         
                         <!-- FILTRO ALCALDIA -->
                         <form action="/dashboard-admin" method="GET" class="flex gap-2">
-                            <!-- Conservamos los filtros de leads -->
                             <input type="hidden" name="search_leads" value="{{ search_q }}">
                             <input type="hidden" name="status_leads" value="{{ status_f }}">
                             

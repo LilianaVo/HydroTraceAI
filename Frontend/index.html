@@ -916,7 +916,6 @@
 
         <!-- PASOS -->
         <div class="relative">
-          <!-- línea conectora (solo visible en desktop) -->
           <div
             class="hidden md:block absolute top-10 left-[calc(16.6%)] right-[calc(16.6%)] h-[2px] bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-400 opacity-40"
           ></div>
@@ -1601,6 +1600,20 @@
       </div>
     </section>
 
+
+     <!-- TRANSICIÓN -->
+
+    <div class="relative w-full flex justify-center">
+      <div
+        class="w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-70"
+      ></div>
+
+      <!-- Fade inferior -->
+      <div
+        class="absolute -bottom-10 w-full h-20 bg-gradient-to-t from-white to-transparent"
+      ></div>
+    </div>
+    
     <!-- Nosotros / Empresa -->
 
     <section id="nosotros" class="py-32 bg-white px-6 relative overflow-hidden">
@@ -1798,6 +1811,19 @@
       </div>
     </section>
 
+    <!-- TRANSICIÓN -->
+
+    <div class="relative w-full flex justify-center">
+      <div
+        class="w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-70"
+      ></div>
+
+      <!-- Fade inferior -->
+      <div
+        class="absolute -bottom-10 w-full h-20 bg-gradient-to-t from-white to-transparent"
+      ></div>
+    </div>
+
     <!-- Formulario de contacto conectado a la base de datos -->
 
     <section
@@ -1906,32 +1932,48 @@
 
     <!-- Footer -->
 
-
-    <footer class="bg-[#020617] text-white pt-20 pb-10 border-t border-white/5 relative overflow-hidden">
-      <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_30%,#06b6d4,transparent_40%),radial-gradient(circle_at_80%_70%,#3b82f6,transparent_40%)]"></div>
+    <footer
+      class="bg-[#020617] text-white pt-20 pb-10 border-t border-white/5 relative overflow-hidden"
+    >
+      <div
+        class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_30%,#06b6d4,transparent_40%),radial-gradient(circle_at_80%_70%,#3b82f6,transparent_40%)]"
+      ></div>
 
       <div class="max-w-7xl mx-auto px-4 relative z-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
-          
+        <div
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"
+        >
           <div class="space-y-6">
             <div class="flex items-center gap-4">
-              <img src="assets/logo/logo_cara.png" alt="HydroTrace AI Logo" class="w-14 h-14 object-contain" />
-              <span class="text-2xl font-black tracking-tighter uppercase leading-none">
+              <img
+                src="assets/logo/logo_cara.png"
+                alt="HydroTrace AI Logo"
+                class="w-14 h-14 object-contain"
+              />
+              <span
+                class="text-2xl font-black tracking-tighter uppercase leading-none"
+              >
                 <span class="text-cyan-400">Hydro</span>Trace
                 <span class="text-cyan-400">AI</span>
               </span>
             </div>
 
             <p class="text-slate-400 text-sm leading-relaxed">
-              Inteligencia artificial diseñada para proteger el recurso más vital. 
-              Identificamos fugas y extracciones irregulares con precisión predictiva 
-              para asegurar un futuro resiliente.
+              Inteligencia artificial diseñada para proteger el recurso más
+              vital. Identificamos fugas y extracciones irregulares con
+              precisión predictiva para asegurar un futuro resiliente.
             </p>
 
             <div class="flex gap-4">
-              <a href="#" class="social-icon" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-              <a href="#" class="social-icon" title="Twitter"><i class="fab fa-twitter"></i></a>
-              <a href="#" class="social-icon" title="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="social-icon" title="LinkedIn"
+                ><i class="fab fa-linkedin-in"></i
+              ></a>
+              <a href="#" class="social-icon" title="Twitter"
+                ><i class="fab fa-twitter"></i
+              ></a>
+              <a href="#" class="social-icon" title="Instagram"
+                ><i class="fab fa-instagram"></i
+              ></a>
             </div>
           </div>
 
@@ -1976,13 +2018,23 @@
           </div>
         </div>
 
-        <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p class="text-xs text-slate-500 uppercase tracking-widest text-center">
-            © 2026 <span class="text-white font-bold">PumaScript Solutions</span> | HydroTrace AI: 
-            <span class="italic text-slate-400 font-normal">Innovación en gestión hídrica</span>
+        <div
+          class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6"
+        >
+          <p
+            class="text-xs text-slate-500 uppercase tracking-widest text-center"
+          >
+            © 2026
+            <span class="text-white font-bold">PumaScript Solutions</span> |
+            HydroTrace AI:
+            <span class="italic text-slate-400 font-normal"
+              >Innovación en gestión hídrica</span
+            >
           </p>
 
-          <div class="flex gap-8 text-[10px] font-black uppercase tracking-tighter text-slate-500">
+          <div
+            class="flex gap-8 text-[10px] font-black uppercase tracking-tighter text-slate-500"
+          >
             <a href="#" class="hover:text-white transition">Privacidad</a>
             <a href="#" class="hover:text-white transition">Términos</a>
             <a href="#" class="hover:text-white transition">Cookies</a>

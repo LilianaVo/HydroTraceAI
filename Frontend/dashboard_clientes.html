@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HydroTrace AI | Dashboard Ejecutivo</title>
-    <!-- Tailwind & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -129,7 +128,7 @@
             </div>
         </div>
 
-        <!-- SIMULADOR ROI (Full width abajo) -->
+        <!-- SIMULADOR ROI -->
         <div class="mt-8 glass rounded-[3rem] p-10">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                 <div>
@@ -175,10 +174,10 @@
             const val = e.target.value;
             sliderVal.innerText = val + '%';
             
-            // Cálculos ficticios basados en el contexto de tu PDF
+            // Cálculos ficticios basados en el contexto del PDF
             const baseLoss = 15420000;
             const savings = (baseLoss * (val / 100));
-            const extraDays = Math.floor(val / 2); // Un supuesto de tu ingeniería
+            const extraDays = Math.floor(val / 2); // Un supuesto 
             
             ahorroVal.innerText = '$' + savings.toLocaleString('es-MX', {maximumFractionDigits: 0});
             diasGanadosVal.innerText = '+' + extraDays + ' Días';
