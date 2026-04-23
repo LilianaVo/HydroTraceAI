@@ -64,36 +64,29 @@
       }
 
       /* --- ACTUALIZACIÓN DE REVEAL ANIMATIONS --- */
-
-      /* Estado base para todos los elementos que se revelan */
       .reveal,
       .reveal-left,
       .reveal-right {
         opacity: 0;
-        filter: blur(10px); /* El toque difuminado inicial */
+        filter: blur(10px);
         will-change: transform, opacity, filter;
         transition:
           opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
           transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
           filter 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
       }
-
-      /* Reveal estándar (hacia arriba) */
       .reveal {
         transform: translateY(50px) scale(0.98);
       }
 
-      /* Reveal desde la izquierda */
       .reveal-left {
         transform: translateX(-60px);
       }
 
-      /* Reveal desde la derecha */
       .reveal-right {
         transform: translateX(60px);
       }
 
-      /* ESTADO ACTIVO: Cuando el elemento entra en el viewport */
       .reveal.active,
       .reveal-left.active,
       .reveal-right.active {
@@ -102,8 +95,6 @@
         filter: blur(0);
       }
 
-      /* Utilidad para retrasos (staggering) */
-      /* Esto permite que si tienes varios elementos, no aparezcan todos de golpe */
       .delay-100 {
         transition-delay: 100ms;
       }
@@ -264,7 +255,6 @@
         animation: floatSlow 12s ease-in-out infinite;
       }
 
-      /* Glassmorphism sutil para el dashboard */
       .glass-panel {
         background: rgba(255, 255, 255, 0.7);
         backdrop-filter: blur(10px);
@@ -318,7 +308,6 @@
         opacity: 1;
       }
 
-      /* Borde animado */
       .card-tech::after {
         content: "";
         position: absolute;
@@ -464,7 +453,6 @@
         color: white;
         transform: translateY(-3px);
       }
-      /* inputs */
       .form-pro {
         width: 100%;
         padding: 0.9rem 1.2rem;
@@ -496,7 +484,6 @@
         box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
       }
 
-      /* botón */
       .btn-contacto {
         width: 100%;
         background: linear-gradient(135deg, #06b6d4, #3b82f6);
@@ -512,30 +499,54 @@
         box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
       }
 
-      /* Efecto Typewriter para el Hero */
+      /* === EFECTO MAQUINA DE ESCRIBIR === */
+
       .hero-typewriter-container {
-        display: inline-block;
-        vertical-align: bottom;
-        padding-bottom: 0.1em;
+        display: table;
+        line-height: 1.2;
+        margin-bottom: 0.4rem;
       }
 
       .hero-typewriter {
         display: inline-block;
         overflow: hidden;
         white-space: nowrap;
-        border-right: 4px solid #3b82f6; /* Cursor azul */
+        border-right: 4px solid transparent;
         width: 0;
         opacity: 0;
-        line-height: 1.2;
+        vertical-align: bottom;
+        padding-bottom: 0.15em;
+        margin-bottom: -0.15em;
       }
 
-      /* Se activa con la clase .active del Intersection Observer */
-      .active .hero-typewriter {
+      .active .line-1 {
+        opacity: 1;
+        border-right-color: #3b82f6;
+        animation:
+          typing-hero 1.2s steps(20, end) forwards,
+          blink-hero 0.7s step-end 3,
+          hide-cursor 0s linear forwards;
+        animation-delay: 0.2s, 0.2s, 1.4s;
+      }
+
+      .active .line-2 {
         opacity: 1;
         animation:
-          typing-hero 2s steps(25, end) forwards,
-          blink-hero 0.8s step-end infinite;
-        animation-delay: 0.2s;
+          typing-hero 1.2s steps(20, end) forwards,
+          show-cursor-blue 0s linear forwards,
+          blink-hero 0.7s step-end 5,
+          hide-cursor 0s linear forwards;
+        animation-delay: 1.5s, 1.5s, 1.5s, 4.5s;
+      }
+
+      .delay-reveal-final {
+        transition-delay: 3s !important;
+      }
+
+      @keyframes show-cursor-blue {
+        to {
+          border-right-color: #3b82f6;
+        }
       }
 
       @keyframes typing-hero {
@@ -557,14 +568,20 @@
         }
       }
 
-      /* Ajuste para móviles: permite que el texto rompa si es necesario */
+      @keyframes hide-cursor {
+        to {
+          border-right-color: transparent;
+        }
+      }
+      /* Ajuste para móviles: quitamos el efecto para que no se rompa el texto */
       @media (max-width: 768px) {
         .hero-typewriter {
           white-space: normal;
           border-right: none;
           width: auto;
           opacity: 1;
-          animation: none;
+          display: block;
+          animation: none !important;
         }
       }
     </style>
@@ -676,22 +693,25 @@
             <p
               class="text-cyan-600 font-bold tracking-[0.3em] uppercase mb-4 text-sm reveal-left delay-100"
             >
-              — Desarrollado por PumaScript Solutions
+              Desarrollado por PumaScript Solutions
             </p>
 
-            <!-- Título con efecto de tecleado en la primera línea -->
             <h1
-              class="text-5xl md:text-7xl font-black mb-6 leading-[1.15] md:leading-[1.1] text-slate-900 reveal"
+              class="text-5xl md:text-7xl font-black mb-6 leading-[1.1] text-slate-900 reveal active"
             >
+              <!-- Línea 1 -->
               <span class="hero-typewriter-container">
-                <span class="hero-typewriter"
-                  >Sabes que se <br />
-                  pierde agua.</span
-                >
+                <span class="hero-typewriter line-1">Sabes que se</span>
               </span>
-              <br />
+
+              <!-- Línea 2 -->
+              <span class="hero-typewriter-container">
+                <span class="hero-typewriter line-2">pierde agua.</span>
+              </span>
+
+              <!-- Línea final: Ahora con delay-reveal-final para que espere al tecleado -->
               <span
-                class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 italic pr-4 reveal delay-1000"
+                class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-fuchsia-600 italic pr-4 reveal delay-reveal-final"
               >
                 Ahora puedes saber dónde.
               </span>
@@ -824,18 +844,18 @@
           <p
             class="text-cyan-600 font-bold tracking-[0.3em] uppercase mb-4 text-xs"
           >
-            — Lo que está pasando hoy
+            El desafío actual
           </p>
 
           <h2
             class="text-4xl md:text-5xl font-black text-slate-900 leading-tight"
           >
-            El problema no es saber que se pierde agua —
+            <span class="font-normal italic"> No es el agua. </span>
             <br />
             <span
-              class="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-red-600"
+              class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-700 to-blue-800"
             >
-              es no saber dónde ni cuánto cuesta.
+              — Es la falta de claridad para tomar decisiones.
             </span>
           </h2>
         </div>
@@ -1036,7 +1056,8 @@
           <h3
             class="text-4xl md:text-6xl font-black text-gray-900 mb-6 leading-tight"
           >
-            De datos dispersos <br />a una acción concreta
+            De datos dispersos <br />
+            <span class="text-sky-400"> a una acción concreta </span>
           </h3>
           <p class="text-gray-600 text-lg max-w-2xl mx-auto">
             HydroTrace AI conecta fuentes que antes estaban separadas y
@@ -1103,8 +1124,9 @@
               >
                 <span class="text-3xl font-black text-white">3</span>
               </div>
-              <h4 class="text-xl font-bold mb-4 text-gray-900">
-                Actúa donde más importa
+              <h4 class="text-xl font-bold mb-4">
+                Actúa donde
+                <span class="text-cyan-600">más importa</span>
               </h4>
               <p class="text-gray-500 text-base leading-relaxed">
                 El sistema prioriza por impacto económico y operativo — para que
@@ -1670,12 +1692,11 @@
           >
             Consideraciones clave
           </p>
-          <h2 class="text-4xl md:text-5xl font-black mb-6">
-            Lo que necesitas saber antes de implementarlo
+          <h2 class="text-4xl md:text-5xl font-black mb-6 text-slate-900">
+            Antes de implementarlo
           </h2>
           <p class="text-gray-600 max-w-2xl mx-auto mb-16 reveal delay-100">
-            Resolvemos las dudas operativas más comunes al integrar HydroTrace
-            AI en sistemas reales.
+            Resolvemos las dudas operativas más comunes al integrar HydroTrace AI en tu sistema.
           </p>
         </div>
 
