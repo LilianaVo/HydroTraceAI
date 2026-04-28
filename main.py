@@ -58,7 +58,6 @@ def dashboard_admin():
     anomalias = Anomalia.query.order_by(Anomalia.alcaldia).all()
     leads = Lead.query.order_by(Lead.fecha_registro.desc()).all()
     
-    # 2. DEFINIMOS EL DICCIONARIO (Esto es lo que te faltaba y causa el NameError)
     metricas = {
         "total_registros": len(anomalias),
         "anomalias_totales": len([a for a in anomalias if a.es_anomalia]),
@@ -76,7 +75,7 @@ def dashboard_admin():
 @app.route('/dashboard-clientes')
 def dashboard_clientes():
     # Ileana: El front ya está conectado a estas variables
-    # Ana debe proveer la lógica de ROI para calcular 'dinero_riesgo'
+    # Ana: lógica de ROI para calcular 'dinero_riesgo'
     anomalias = Anomalia.query.all()
     return render_template('dashboard_clientes.html', ranking=anomalias)
 
