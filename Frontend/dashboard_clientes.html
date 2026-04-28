@@ -1,166 +1,2254 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HydroTrace AI | Dashboard Ejecutivo</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .accent-bg { background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%); }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: #050a15; /* El fondo profundo de tu index */
+        color: #f8fafc;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 260px;
+        background: #080e1a; /* Un tono un pelín más claro que el fondo */
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        box-shadow: none;
+        border-right: 1px solid rgba(6, 182, 212, 0.1); /* Borde sutil en cyan */
+      }
+
+      .top-nav {
+        background: #0c162d; /* Superficie tipo card del index */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 14px 30px;
+      }
+
+      .sidebar-logo {
+        padding: 28px 15px 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .logo-icon-box {
+        width: 38px;
+        height: 38px;
+        background: rgba(0, 242, 255, 0.1);
+        border: 1px solid rgba(0, 242, 255, 0.2);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: none;
+      }
+
+      .logo-text-block .name {
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        line-height: 1.1;
+      }
+
+      .logo-text-block .sub {
+        font-size: 10px;
+        opacity: 0.6;
+        font-weight: 400;
+        letter-spacing: 0.08em;
+      }
+
+      .nav-section {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.45);
+        padding: 18px 15px 8px;
+      }
+
+      .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 25px;
+        font-size: 13px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.4);
+        transition: all 0.3s ease;
+        border-left: 3px solid transparent;
+      }
+
+      .nav-link:hover {
+        color: #06b6d4; /* Cyan del index */
+        background: rgba(6, 182, 212, 0.05);
+        border-left: 3px solid #06b6d4;
+      }
+
+      .nav-link:hover::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: #00f2ff;
+        box-shadow: 0 0 10px #00f2ff;
+      }
+
+      /* Estado activo */
+      .nav-link.active {
+        color: #06b6d4;
+        background: rgba(6, 182, 212, 0.1);
+        border-left: 3px solid #06b6d4;
+        font-weight: 700;
+      }
+
+      .nav-link.active::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: #00f2ff;
+      }
+
+      .nav-link svg {
+        flex-shrink: 0;
+        opacity: 0.9;
+      }
+
+      .sidebar-bottom {
+        margin-top: auto;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        padding-top: 16px;
+      }
+
+      .user-chip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      .user-chip:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        overflow: hidden;
+        flex-shrink: 0;
+      }
+
+      /* ── MAIN ── */
+      .main-wrap {
+        margin-left: 260px;
+        min-height: 100vh;
+      }
+
+      .breadcrumb-text {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      .breadcrumb-text span {
+        color: rgba(255, 255, 255, 0.75);
+        font-weight: 600;
+      }
+
+      .top-nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .search-wrap {
+        position: relative;
+      }
+
+      .search-wrap svg {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.35;
+      }
+
+      .search-input {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 7px 16px 7px 32px;
+        font-size: 12px;
+        color: #fff;
+        outline: none;
+        width: 180px;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        transition: border-color 0.2s;
+      }
+
+      .search-input:focus {
+        border-color: rgba(29, 140, 248, 0.5);
+      }
+      .search-input::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      .icon-btn {
+        width: 36px;
+        height: 36px;
+        background: rgba(255, 255, 255, 0.07);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s;
+        color: rgba(255, 255, 255, 0.55);
+      }
+
+      .icon-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+      }
+
+      /* ── CONTENT ── */
+      .content {
+        padding: 30px;
+      }
+
+      .page-header {
+        margin-bottom: 28px;
+      }
+
+      .page-header h1 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+
+      .page-header p {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* ── KPI CARDS ── */
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+
+      .kpi-card {
+        background: #27293d;
+        border-radius: 12px;
+        padding: 20px 22px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .kpi-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(6, 182, 212, 0.2) !important;
+      }
+
+      .kpi-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+
+      .kpi-icon-wrap {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .kpi-label {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.45);
+        margin-bottom: 6px;
+      }
+
+      .kpi-value {
+        font-size: 32px;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -0.02em;
+        margin-bottom: 6px;
+      }
+
+      .kpi-footer {
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.4);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .kpi-footer .up {
+        color: #00d6b4;
+      }
+      .kpi-footer .down {
+        color: #ff8d72;
+      }
+
+      /* ── BADGE PILL ── */
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+      }
+
+      /* ── MAIN 2-col grid ── */
+      .mid-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.65fr;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+
+      /* ── PANEL ── */
+      .panel {
+        background: #27293d;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        overflow: hidden;
+      }
+
+      .panel-header {
+        padding: 18px 22px 14px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .panel-title {
+        font-size: 13px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .panel-title-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+
+      .panel-body {
+        padding: 18px 22px;
+      }
+
+      .panel,
+      .kpi-card,
+      .mini-stat {
+        background: #0c162d !important;
+        border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+      }
+
+      /* ── RANKING ── */
+      .rank-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 11px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        transition: padding-left 0.2s;
+      }
+
+      .rank-item:last-child {
+        border-bottom: none;
+      }
+      .rank-item:hover {
+        padding-left: 4px;
+      }
+
+      .rank-num {
+        font-size: 11px;
+        font-weight: 700;
+        color: rgba(255, 255, 255, 0.25);
+        width: 18px;
+        flex-shrink: 0;
+      }
+
+      .rank-info {
+        flex: 1;
+      }
+
+      .rank-name {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .rank-bar-track {
+        height: 4px;
+        background: rgba(255, 255, 255, 0.07);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+
+      .rank-bar {
+        height: 100%;
+        border-radius: 2px;
+        transition: width 0.8s ease;
+      }
+
+      .rank-right {
+        text-align: right;
+        flex-shrink: 0;
+      }
+
+      .rank-badge {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        padding: 3px 8px;
+        border-radius: 4px;
+        display: block;
+        margin-bottom: 3px;
+        text-align: center;
+      }
+
+      .rank-m3 {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.3);
+      }
+
+      /* ── MAP PLACEHOLDER ── */
+      .map-box {
+        background: #1e1e2f;
+        border-radius: 8px;
+        min-height: 280px;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .map-dot-grid {
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(
+          rgba(29, 140, 248, 0.12) 1px,
+          transparent 1px
+        );
+        background-size: 22px 22px;
+      }
+
+      .map-pin {
+        position: absolute;
+        cursor: pointer;
+        transform: translate(-50%, -50%);
+      }
+
+      .map-pin-circle {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        position: relative;
+      }
+
+      .map-pin-circle::after {
+        content: "";
+        position: absolute;
+        inset: -5px;
+        border-radius: 50%;
+        border: 1.5px solid;
+        animation: ripple 2.5s ease-out infinite;
+        opacity: 0;
+      }
+
+      @keyframes ripple {
+        0% {
+          transform: scale(0.6);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(2.2);
+          opacity: 0;
+        }
+      }
+
+      .map-pin-label {
+        position: absolute;
+        top: -22px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 9px;
+        font-weight: 700;
+        white-space: nowrap;
+        color: rgba(255, 255, 255, 0.7);
+        background: rgba(30, 30, 47, 0.85);
+        padding: 2px 6px;
+        border-radius: 3px;
+      }
+
+      .map-legend-row {
+        position: absolute;
+        bottom: 14px;
+        right: 14px;
+        display: flex;
+        gap: 12px;
+      }
+
+      .map-legend-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 9px;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.45);
+      }
+
+      .map-legend-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+      }
+
+      /* ── BOTTOM GRID ── */
+      .bot-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        gap: 20px;
+        margin-bottom: 24px;
+      }
+
+      /* ── ROI SIMULATOR ── */
+      .roi-result {
+        background: #1e1e2f;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .roi-amount {
+        font-size: 38px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        line-height: 1;
+        margin: 6px 0 4px;
+      }
+
+      /* Range slider Creative Tim style */
+      input[type="range"] {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 5px;
+        border-radius: 3px;
+        outline: none;
+        cursor: pointer;
+        background: linear-gradient(
+          90deg,
+          #1d8cf8 var(--fill, 20%),
+          rgba(255, 255, 255, 0.1) var(--fill, 20%)
+        );
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #1d8cf8;
+        box-shadow: 0 2px 8px rgba(29, 140, 248, 0.5);
+        cursor: pointer;
+        border: 2px solid #fff;
+      }
+
+      /* ── ALERTS ── */
+      .alert-row {
+        display: flex;
+        gap: 12px;
+        padding: 11px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      }
+
+      .alert-row:last-child {
+        border-bottom: none;
+      }
+
+      .alert-icon-wrap {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .alert-time {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.3);
+        margin-bottom: 2px;
+      }
+
+      .alert-text {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+        line-height: 1.4;
+      }
+
+      .alert-text strong {
+        color: #fff;
+        font-weight: 600;
+      }
+
+      /* ── TEAM TAGS ── */
+      .team-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 14px 22px;
+        border-top: 1px solid rgba(255, 255, 255, 0.04);
+      }
+
+      .team-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 600;
+      }
+
+      .team-tag-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+      }
+
+      /* ── MINI STATS BAR ── */
+      .mini-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      .mini-stat {
+        background: #27293d;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: 10px;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .mini-stat-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
+
+      .mini-stat-val {
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: 2px;
+      }
+
+      .mini-stat-label {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 0.4);
+      }
+
+      /* ── CHART AREA ── */
+      .chart-panel {
+        background: #27293d;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        margin-bottom: 24px;
+      }
+
+      .chart-header {
+        padding: 18px 22px 12px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .chart-legend {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.45);
+      }
+
+      .legend-line {
+        width: 18px;
+        height: 3px;
+        border-radius: 2px;
+      }
+
+      .chart-body {
+        padding: 18px 22px 16px;
+      }
+
+      /* ── FOOTER ── */
+      .footer-bar {
+        padding: 14px 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        color: rgba(255, 255, 255, 0.25);
+      }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 1024px) {
+        .sidebar {
+          display: none;
+        }
+        .main-wrap {
+          margin-left: 0;
+        }
+        .kpi-grid {
+          grid-template-columns: 1fr;
+        }
+        .mid-grid {
+          grid-template-columns: 1fr;
+        }
+        .bot-grid {
+          grid-template-columns: 1fr;
+        }
+        .mini-stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      /* ── LIVE DOT ── */
+      .live-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #00d6b4;
+        display: inline-block;
+        animation: blink 2s ease-in-out infinite;
+      }
+
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      /* ── BTN ── */
+      .btn-blue {
+        background: linear-gradient(135deg, #1d8cf8, #3358f4);
+        color: #fff;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 9px 20px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        transition: opacity 0.2s;
+        box-shadow: 0 4px 14px rgba(29, 140, 248, 0.35);
+      }
+
+      .btn-blue:hover {
+        opacity: 0.88;
+      }
+
+      .btn-ghost {
+        background: transparent;
+        color: rgba(255, 255, 255, 0.55);
+        font-weight: 600;
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 9px 18px;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        transition: all 0.2s;
+      }
+
+      .btn-ghost:hover {
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #fff;
+      }
+
+      /* --- CRÍTICO (Fucsia Neón) --- */
+      .critical-accent {
+        color: #f026ff !important;
+      }
+      .bg-critical-soft {
+        background: rgba(240, 38, 255, 0.1) !important;
+      }
+
+      /* Aplicar a la tarjeta de alertas e Irving IA */
+      .kpi-card:nth-child(2) .kpi-value {
+        color: #f026ff !important;
+      }
+      .kpi-card:nth-child(2) .kpi-icon-wrap {
+        background: rgba(240, 38, 255, 0.1) !important;
+      }
+      .kpi-card:nth-child(2) svg {
+        stroke: #f026ff !important;
+      }
+      .pill-critical {
+        background: rgba(240, 38, 255, 0.1);
+        color: #f026ff;
+      }
+
+      /* --- DINERO (Verde Money) --- */
+      .money-accent {
+        color: #00ffa3 !important;
+      }
+      #roi-display,
+      .roi-amount {
+        color: #00ffa3 !important;
+        text-shadow: 0 0 15px rgba(0, 255, 163, 0.3);
+      }
+
+      /* Aplicar a la tarjeta de ROI */
+      .kpi-card:nth-child(3) .kpi-value {
+        color: #00ffa3 !important;
+      }
+      .kpi-card:nth-child(3) .kpi-icon-wrap {
+        background: rgba(0, 255, 163, 0.1) !important;
+      }
+      .kpi-card:nth-child(3) svg {
+        stroke: #00ffa3 !important;
+      }
+
+      /* Slider en verde money */
+      input[type="range"] {
+        background: linear-gradient(
+          90deg,
+          #00ffa3 var(--fill, 20%),
+          rgba(255, 255, 255, 0.05) var(--fill, 20%)
+        );
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        background: #00ffa3;
+        box-shadow: 0 0 15px rgba(0, 255, 163, 0.5);
+      }
+
+      /* --- TECH / BIEN (Cyan) --- */
+      .tech-accent {
+        color: #06b6d4 !important;
+      }
+      .mini-stat-val {
+        color: #06b6d4 !important;
+      }
     </style>
-</head>
-<body class="bg-[#020617] text-slate-200 min-h-screen pb-12">
+  </head>
+  <body>
+    <!-- ──────────────── SIDEBAR ──────────────── -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="logo-icon-box">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#fff"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+          </svg>
+        </div>
+        <div class="logo-text-block">
+          <div class="name">HydroTrace AI</div>
+          <div class="sub">Panel Ejecutivo</div>
+        </div>
+      </div>
 
-    <div class="max-w-7xl mx-auto p-6 md:p-10">
-        <!-- HEADER -->
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+      <div class="nav-section">Principal</div>
+
+      <a class="nav-link active" href="#">
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="3" y="3" width="7" height="7" />
+          <rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" />
+          <rect x="3" y="14" width="7" height="7" />
+        </svg>
+        Dashboard
+      </a>
+      <a class="nav-link" href="#">
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polygon points="3 11 22 2 13 21 11 13 3 11" />
+        </svg>
+        Mapa de Riesgo
+      </a>
+      <a class="nav-link" href="#">
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+        </svg>
+        Análisis IA
+      </a>
+      <a class="nav-link" href="#">
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="12" y1="1" x2="12" y2="23" />
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        </svg>
+        Simulador ROI
+      </a>
+
+      <div class="nav-section">Reportes</div>
+
+      <a class="nav-link" href="#">
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+          />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        Reportes ANC
+      </a>
+      <a class="nav-link" href="#">
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+          <circle cx="12" cy="10" r="3" />
+        </svg>
+        Capa Geoespacial
+      </a>
+      <a class="nav-link" href="#">
+        <svg
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="3" />
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+          <path d="M4.93 4.93a10 10 0 0 0 0 14.14" />
+        </svg>
+        Alertas en Vivo
+      </a>
+
+      <div class="sidebar-bottom">
+        <div class="user-chip">
+          <div class="avatar">
+            <img
+              src="https://api.dicebear.com/7.x/avataaars/svg?seed=HydroTrace"
+              alt="User"
+              style="width: 100%; height: 100%; object-fit: cover"
+            />
+          </div>
+          <div>
+            <div style="font-size: 13px; font-weight: 600">Ileana García</div>
+            <div style="font-size: 10px; opacity: 0.5">Ing. UNAM · SACMEX</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ──────────────── MAIN ──────────────── -->
+    <div class="main-wrap">
+      <!-- TOP NAV -->
+      <div class="top-nav">
+        <div class="breadcrumb-text">
+          Panel de Control / <span>Dashboard</span>
+        </div>
+        <div class="top-nav-actions">
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              font-size: 11px;
+              color: rgba(255, 255, 255, 0.4);
+            "
+          >
+            <span class="live-dot"></span>
+            <span id="live-clock">14:37:00</span>
+          </div>
+          <div class="search-wrap">
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input class="search-input" placeholder="Buscar zona..." />
+          </div>
+          <div class="icon-btn">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            </svg>
+          </div>
+          <div class="icon-btn">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENT -->
+      <div class="content">
+        <!-- Page header -->
+        <div class="page-header">
+          <h1>Resumen de Operaciones</h1>
+          <p>Centro de Mando Ejecutivo · SACMEX · Ciudad de México</p>
+        </div>
+
+        <!-- Mini stats -->
+        <div class="mini-stats">
+          <div class="mini-stat">
+            <div
+              class="mini-stat-icon"
+              style="background: rgba(29, 140, 248, 0.12)"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#1d8cf8"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </div>
             <div>
-                <h1 class="text-4xl font-extrabold tracking-tight text-white">
-                    Hydro<span class="text-cyan-400">Trace</span> <span class="text-blue-500 text-2xl font-black">AI</span>
-                </h1>
-                <p class="text-slate-500 text-xs font-bold uppercase tracking-[0.3em] mt-2">Panel de Control Estratégico</p>
+              <div class="mini-stat-val" style="color: #1d8cf8">16</div>
+              <div class="mini-stat-label">Alcaldías</div>
             </div>
-            <div class="flex gap-4">
-                <div class="glass px-5 py-3 rounded-2xl flex items-center gap-3">
-                    <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <span class="text-[10px] font-black uppercase text-slate-400">Análisis: Octubre 2026</span>
+          </div>
+          <div class="mini-stat">
+            <div
+              class="mini-stat-icon"
+              style="background: rgba(255, 141, 114, 0.12)"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#ff8d72"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <circle cx="12" cy="12" r="2" />
+                <path
+                  d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="mini-stat-val" style="color: #ff8d72">842</div>
+              <div class="mini-stat-label">Sensores activos</div>
+            </div>
+          </div>
+          <div class="mini-stat">
+            <div
+              class="mini-stat-icon"
+              style="background: rgba(0, 214, 180, 0.12)"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#00d6b4"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+                <polyline points="16 7 22 7 22 13" />
+              </svg>
+            </div>
+            <div>
+              <div class="mini-stat-val" style="color: #00d6b4">98.3%</div>
+              <div class="mini-stat-label">Uptime sistema</div>
+            </div>
+          </div>
+          <div class="mini-stat">
+            <div
+              class="mini-stat-icon"
+              style="background: rgba(253, 206, 90, 0.12)"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#fdce5a"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <polygon
+                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="mini-stat-val" style="color: #fdce5a">7</div>
+              <div class="mini-stat-label">Modelos IA activos</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+          <!-- ANC -->
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <div>
+                <div class="kpi-label">Mermas ANC · Bolívar</div>
+                <div class="kpi-value" style="color: #1d8cf8">38.4%</div>
+                <div class="kpi-footer">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#ff8d72"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="18 15 12 9 6 15" />
+                  </svg>
+                  <span class="up">+2.1%</span>
+                  <span>vs. mes anterior · 47,200 m³/día</span>
                 </div>
-                <button class="accent-bg hover:opacity-90 text-white px-6 py-3 rounded-2xl text-xs font-black shadow-lg shadow-cyan-900/20 transition flex items-center gap-2">
-                    <i data-lucide="file-text" class="w-4 h-4"></i> EXPORTAR REPORTE
+              </div>
+              <div
+                class="kpi-icon-wrap"
+                style="background: rgba(29, 140, 248, 0.12)"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#1d8cf8"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                </svg>
+              </div>
+            </div>
+            <div
+              style="
+                height: 4px;
+                background: rgba(255, 255, 255, 0.06);
+                border-radius: 2px;
+                margin-top: 14px;
+                overflow: hidden;
+              "
+            >
+              <div
+                style="
+                  width: 38.4%;
+                  height: 100%;
+                  background: linear-gradient(90deg, #1d8cf8, #3358f4);
+                  border-radius: 2px;
+                "
+              ></div>
+            </div>
+          </div>
+
+          <!-- Alertas -->
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <div>
+                <div class="kpi-label">Focos Críticos · Irving IA</div>
+                <div class="kpi-value" style="color: #ff8d72">23</div>
+                <div class="kpi-footer">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#ff8d72"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="18 15 12 9 6 15" />
+                  </svg>
+                  <span class="down">5 nuevos hoy</span>
+                  <span>· Modelo anomalías v3.2</span>
+                </div>
+              </div>
+              <div
+                class="kpi-icon-wrap"
+                style="background: rgba(255, 141, 114, 0.12)"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#ff8d72"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                  />
+                  <line x1="12" y1="9" x2="12" y2="13" />
+                  <line x1="12" y1="17" x2="12.01" y2="17" />
+                </svg>
+              </div>
+            </div>
+            <div
+              style="
+                height: 4px;
+                background: rgba(255, 255, 255, 0.06);
+                border-radius: 2px;
+                margin-top: 14px;
+                overflow: hidden;
+              "
+            >
+              <div
+                style="
+                  width: 72%;
+                  height: 100%;
+                  background: linear-gradient(90deg, #ff8d72, #ff5722);
+                  border-radius: 2px;
+                "
+              ></div>
+            </div>
+          </div>
+
+          <!-- ROI -->
+          <div class="kpi-card">
+            <div class="kpi-top">
+              <div>
+                <div class="kpi-label">Impacto Económico · Ana</div>
+                <div class="kpi-value" style="color: #00d6b4">$15.4M</div>
+                <div class="kpi-footer">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#00d6b4"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="18 15 12 9 6 15" />
+                  </svg>
+                  <span class="up">Recuperable</span>
+                  <span>MXN / mes</span>
+                </div>
+              </div>
+              <div
+                class="kpi-icon-wrap"
+                style="background: rgba(0, 214, 180, 0.12)"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#00d6b4"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <line x1="12" y1="1" x2="12" y2="23" />
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+              </div>
+            </div>
+            <div
+              style="
+                height: 4px;
+                background: rgba(255, 255, 255, 0.06);
+                border-radius: 2px;
+                margin-top: 14px;
+                overflow: hidden;
+              "
+            >
+              <div
+                style="
+                  width: 85%;
+                  height: 100%;
+                  background: linear-gradient(90deg, #00d6b4, #00a896);
+                  border-radius: 2px;
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mid grid: Ranking + Mapa -->
+        <div class="mid-grid">
+          <!-- Ranking -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <div class="panel-title-dot" style="background: #ff8d72"></div>
+                Zonas Prioritarias
+              </div>
+              <span
+                class="pill"
+                style="background: rgba(255, 141, 114, 0.12); color: #ff8d72"
+                >Irving IA</span
+              >
+            </div>
+            <div class="panel-body" id="ranking-list"></div>
+            <div style="padding: 0 22px 18px; display: flex; gap: 8px">
+              <button class="btn-ghost" style="flex: 1">Ver todas</button>
+              <button class="btn-blue" style="flex: 1">Exportar</button>
+            </div>
+          </div>
+
+          <!-- Mapa -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <div class="panel-title-dot" style="background: #1d8cf8"></div>
+                Localización Geoespacial · Christian
+              </div>
+              <div style="display: flex; gap: 6px">
+                <button
+                  style="
+                    background: rgba(29, 140, 248, 0.15);
+                    border: 1px solid rgba(29, 140, 248, 0.3);
+                    color: #1d8cf8;
+                    font-size: 10px;
+                    font-weight: 700;
+                    padding: 4px 12px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-family: &quot;Plus Jakarta Sans&quot;, sans-serif;
+                  "
+                >
+                  CDMX
                 </button>
+                <button
+                  style="
+                    background: transparent;
+                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    color: rgba(255, 255, 255, 0.4);
+                    font-size: 10px;
+                    font-weight: 700;
+                    padding: 4px 12px;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    font-family: &quot;Plus Jakarta Sans&quot;, sans-serif;
+                  "
+                >
+                  EDOMEX
+                </button>
+              </div>
             </div>
-        </header>
+            <div class="panel-body" style="padding-top: 14px">
+              <div class="map-box">
+                <div class="map-dot-grid"></div>
 
-        <!-- KPI GRID -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <!-- Dinero en Riesgo -->
-            <div class="glass p-8 rounded-[2.5rem] relative overflow-hidden group">
-                <div class="absolute -right-4 -top-4 w-24 h-24 bg-rose-500/10 rounded-full blur-2xl"></div>
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="p-3 bg-rose-500/10 rounded-2xl text-rose-500">
-                        <i data-lucide="dollar-sign"></i>
-                    </div>
-                    <span class="text-slate-400 text-xs font-bold uppercase">Pérdida Económica Anual</span>
+                <!-- Pins -->
+                <div class="map-pin" style="top: 30%; left: 50%">
+                  <div class="map-pin-label">Iztapalapa</div>
+                  <div
+                    class="map-pin-circle"
+                    style="
+                      background: #ff5252;
+                      box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.2);
+                    "
+                  >
+                    <div
+                      style="
+                        position: absolute;
+                        inset: -5px;
+                        border-radius: 50%;
+                        border: 1.5px solid #ff5252;
+                        animation: ripple 2s ease-out infinite;
+                        opacity: 0;
+                      "
+                    ></div>
+                  </div>
                 </div>
-                <p class="text-5xl font-black text-white mb-2">${{ dinero_riesgo }}</p>
-                <p class="text-[10px] text-rose-500 font-black uppercase tracking-widest">Capital en Riesgo por ANC</p>
-            </div>
+                <div class="map-pin" style="top: 58%; left: 32%">
+                  <div class="map-pin-label">Tlalpan</div>
+                  <div
+                    class="map-pin-circle"
+                    style="
+                      background: #ff5252;
+                      box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.2);
+                    "
+                  >
+                    <div
+                      style="
+                        position: absolute;
+                        inset: -5px;
+                        border-radius: 50%;
+                        border: 1.5px solid #ff5252;
+                        animation: ripple 2.5s ease-out 0.3s infinite;
+                        opacity: 0;
+                      "
+                    ></div>
+                  </div>
+                </div>
+                <div class="map-pin" style="top: 22%; left: 63%">
+                  <div class="map-pin-label">Venustiano C.</div>
+                  <div
+                    class="map-pin-circle"
+                    style="
+                      background: #ff8d72;
+                      box-shadow: 0 0 0 3px rgba(255, 141, 114, 0.2);
+                    "
+                  >
+                    <div
+                      style="
+                        position: absolute;
+                        inset: -5px;
+                        border-radius: 50%;
+                        border: 1.5px solid #ff8d72;
+                        animation: ripple 2s ease-out 0.6s infinite;
+                        opacity: 0;
+                      "
+                    ></div>
+                  </div>
+                </div>
+                <div class="map-pin" style="top: 42%; left: 58%">
+                  <div class="map-pin-label">Iztacalco</div>
+                  <div
+                    class="map-pin-circle"
+                    style="
+                      background: #ff8d72;
+                      box-shadow: 0 0 0 3px rgba(255, 141, 114, 0.15);
+                    "
+                  >
+                    <div
+                      style="
+                        position: absolute;
+                        inset: -5px;
+                        border-radius: 50%;
+                        border: 1.5px solid #ff8d72;
+                        animation: ripple 2.5s ease-out 0.9s infinite;
+                        opacity: 0;
+                      "
+                    ></div>
+                  </div>
+                </div>
+                <div class="map-pin" style="top: 65%; left: 52%">
+                  <div class="map-pin-label">Xochimilco</div>
+                  <div
+                    class="map-pin-circle"
+                    style="
+                      background: #1d8cf8;
+                      box-shadow: 0 0 0 3px rgba(29, 140, 248, 0.2);
+                    "
+                  >
+                    <div
+                      style="
+                        position: absolute;
+                        inset: -5px;
+                        border-radius: 50%;
+                        border: 1.5px solid #1d8cf8;
+                        animation: ripple 2s ease-out 1.2s infinite;
+                        opacity: 0;
+                      "
+                    ></div>
+                  </div>
+                </div>
+                <div class="map-pin" style="top: 37%; left: 26%">
+                  <div class="map-pin-label">Álvaro Obregón</div>
+                  <div
+                    class="map-pin-circle"
+                    style="
+                      background: #1d8cf8;
+                      box-shadow: 0 0 0 3px rgba(29, 140, 248, 0.15);
+                    "
+                  >
+                    <div
+                      style="
+                        position: absolute;
+                        inset: -5px;
+                        border-radius: 50%;
+                        border: 1.5px solid #1d8cf8;
+                        animation: ripple 2s ease-out 1.5s infinite;
+                        opacity: 0;
+                      "
+                    ></div>
+                  </div>
+                </div>
 
-            <!-- Eficiencia -->
-            <div class="glass p-8 rounded-[2.5rem] relative overflow-hidden group">
-                <div class="absolute -right-4 -top-4 w-24 h-24 bg-cyan-500/10 rounded-full blur-2xl"></div>
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="p-3 bg-cyan-500/10 rounded-2xl text-cyan-400">
-                        <i data-lucide="droplets"></i>
-                    </div>
-                    <span class="text-slate-400 text-xs font-bold uppercase">Mermas Detectadas</span>
+                <div class="map-legend-row">
+                  <div class="map-legend-item">
+                    <div
+                      class="map-legend-dot"
+                      style="background: #ff5252"
+                    ></div>
+                    Alto
+                  </div>
+                  <div class="map-legend-item">
+                    <div
+                      class="map-legend-dot"
+                      style="background: #ff8d72"
+                    ></div>
+                    Medio
+                  </div>
+                  <div class="map-legend-item">
+                    <div
+                      class="map-legend-dot"
+                      style="background: #1d8cf8"
+                    ></div>
+                    Bajo
+                  </div>
                 </div>
-                <p class="text-5xl font-black text-white mb-2">{{ anc_porcentaje }}%</p>
-                <p class="text-[10px] text-cyan-500 font-black uppercase tracking-widest">Desviación vs Consumo Teórico</p>
+              </div>
             </div>
-
-            <!-- Alertas -->
-            <div class="glass p-8 rounded-[2.5rem] relative overflow-hidden group">
-                <div class="absolute -right-4 -top-4 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl"></div>
-                <div class="flex items-center gap-4 mb-6">
-                    <div class="p-3 bg-amber-500/10 rounded-2xl text-amber-500">
-                        <i data-lucide="alert-triangle"></i>
-                    </div>
-                    <span class="text-slate-400 text-xs font-bold uppercase">Alertas Críticas</span>
-                </div>
-                <p class="text-5xl font-black text-white mb-2">{{ alertas_criticas }}</p>
-                <p class="text-[10px] text-amber-500 font-black uppercase tracking-widest">Zonas con anomalía alta</p>
-            </div>
+          </div>
         </div>
 
-        <!-- MAIN LAYOUT -->
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <!-- Ranking -->
-            <div class="lg:col-span-2 glass rounded-[3rem] p-8">
-                <h2 class="text-xl font-black mb-8 flex items-center gap-3">
-                    <i data-lucide="trending-up" class="text-cyan-400"></i> Focos de Intervención
-                </h2>
-                <div class="space-y-4">
-                    {% for item in ranking %}
-                    <div class="flex items-center justify-between p-5 bg-slate-900/50 rounded-2xl border border-slate-800 hover:border-slate-700 transition">
-                        <div class="flex items-center gap-4">
-                            <div class="w-1 h-10 rounded-full {% if item.riesgo == 'Alto' %}bg-rose-500{% else %}bg-amber-500{% endif %}"></div>
-                            <div>
-                                <p class="font-bold text-white text-sm">{{ item.alcaldia }}</p>
-                                <p class="text-[10px] text-slate-500 mt-1">+{{ item.desviacion_consumo|round(2) }} m³ Desviación</p>
-                            </div>
-                        </div>
-                        <span class="{% if item.riesgo == 'Alto' %}text-rose-400 bg-rose-500/10{% else %}text-amber-400 bg-amber-500/10{% endif %} px-3 py-1 rounded-lg text-[9px] font-black uppercase border border-white/5">
-                            {{ item.riesgo }}
-                        </span>
-                    </div>
-                    {% endfor %}
-                </div>
+        <!-- Chart -->
+        <div class="chart-panel">
+          <div class="chart-header">
+            <div class="panel-title">
+              <div class="panel-title-dot" style="background: #1d8cf8"></div>
+              Evolución ANC Histórica · Bolívar — Últimos 12 meses
             </div>
-
-            <!-- Mapa / Viz -->
-            <div class="lg:col-span-3 glass rounded-[3rem] p-8 flex flex-col">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-xl font-black flex items-center gap-3">
-                        <i data-lucide="map" class="text-cyan-400"></i> Análisis Geoespacial
-                    </h2>
-                    <div class="bg-slate-950 p-1 rounded-xl flex border border-white/5">
-                        <button class="px-4 py-1 text-[10px] font-black bg-cyan-600 rounded-lg text-white">ANOMALÍAS</button>
-                        <button class="px-4 py-1 text-[10px] font-black text-slate-500">CONSUMO</button>
-                    </div>
-                </div>
-                <div class="flex-1 bg-slate-950/50 rounded-[2rem] border border-slate-800 flex items-center justify-center relative group">
-                    <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 30px 30px;"></div>
-                    <div class="text-center">
-                        <i data-lucide="crosshair" class="w-12 h-12 text-slate-800 mx-auto mb-4 group-hover:text-cyan-500 transition-colors"></i>
-                        <p class="text-slate-600 italic text-xs">Capa de datos Folium integrada (Fase 2)</p>
-                    </div>
-                </div>
+            <div class="chart-legend">
+              <div class="legend-item">
+                <div class="legend-line" style="background: #1d8cf8"></div>
+                ANC %
+              </div>
+              <div class="legend-item">
+                <div class="legend-line" style="background: #ff8d72"></div>
+                Alertas
+              </div>
             </div>
+          </div>
+          <div class="chart-body">
+            <canvas id="ancChart" height="95"></canvas>
+          </div>
         </div>
 
-        <!-- SIMULADOR ROI -->
-        <div class="mt-8 glass rounded-[3rem] p-12 bg-gradient-to-r from-slate-900 to-slate-900/50">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+        <!-- Bottom grid: ROI + Alertas -->
+        <div class="bot-grid">
+          <!-- ROI Simulator -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <div class="panel-title-dot" style="background: #00d6b4"></div>
+                Simulador de Recuperación · Ana
+              </div>
+              <span
+                class="pill"
+                style="background: rgba(0, 214, 180, 0.1); color: #00d6b4"
+                >ROI Estimado</span
+              >
+            </div>
+            <div class="panel-body">
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: 20px;
+                  align-items: center;
+                "
+              >
                 <div>
-                    <h2 class="text-3xl font-black text-white mb-4">Simulador de Recuperación</h2>
-                    <p class="text-slate-400 text-sm mb-8 leading-relaxed">Ajusta el porcentaje de intervención operativa para calcular el ahorro directo en infraestructura y potabilización.</p>
-                    <div class="space-y-6">
-                        <div class="flex justify-between text-xs font-black uppercase">
-                            <span class="text-slate-500">Capacidad de Reparación</span>
-                            <span id="slider-val" class="text-cyan-400">30%</span>
-                        </div>
-                        <input type="range" id="roi-slider" min="0" max="100" value="30" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+                  <div style="margin-bottom: 18px">
+                    <div
+                      style="
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: 10px;
+                      "
+                    >
+                      <span
+                        style="
+                          font-size: 11px;
+                          color: rgba(255, 255, 255, 0.45);
+                          font-weight: 600;
+                          text-transform: uppercase;
+                          letter-spacing: 0.08em;
+                        "
+                        >Nivel de reparación</span
+                      >
+                      <span
+                        id="pct-label"
+                        style="
+                          font-size: 13px;
+                          font-weight: 800;
+                          color: #1d8cf8;
+                        "
+                        >20%</span
+                      >
                     </div>
-                </div>
-                <div class="bg-slate-950/80 p-10 rounded-[2.5rem] border border-cyan-500/10 text-center">
-                    <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] mb-4">Ahorro Mensual Proyectado</p>
-                    <h3 id="ahorro-val" class="text-6xl font-black text-white mb-4">$4,626,000</h3>
-                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-xl text-emerald-400 text-xs font-bold">
-                        <i data-lucide="check-circle" class="w-4 h-4"></i> Viabilidad Financiera Confirmada
+                    <input
+                      type="range"
+                      id="roi-slider"
+                      min="0"
+                      max="100"
+                      value="20"
+                      step="1"
+                    />
+                  </div>
+
+                  <div
+                    style="
+                      display: grid;
+                      grid-template-columns: 1fr 1fr;
+                      gap: 10px;
+                    "
+                  >
+                    <div
+                      style="
+                        background: #1e1e2f;
+                        border: 1px solid rgba(255, 255, 255, 0.05);
+                        border-radius: 8px;
+                        padding: 12px;
+                      "
+                    >
+                      <div
+                        style="
+                          font-size: 9px;
+                          text-transform: uppercase;
+                          letter-spacing: 0.12em;
+                          color: rgba(255, 255, 255, 0.3);
+                          margin-bottom: 4px;
+                        "
+                      >
+                        Pérdida base
+                      </div>
+                      <div
+                        style="
+                          font-size: 16px;
+                          font-weight: 800;
+                          color: rgba(255, 255, 255, 0.6);
+                        "
+                      >
+                        $15.4M
+                      </div>
                     </div>
+                    <div
+                      style="
+                        background: #1e1e2f;
+                        border: 1px solid rgba(255, 255, 255, 0.05);
+                        border-radius: 8px;
+                        padding: 12px;
+                      "
+                    >
+                      <div
+                        style="
+                          font-size: 9px;
+                          text-transform: uppercase;
+                          letter-spacing: 0.12em;
+                          color: rgba(255, 255, 255, 0.3);
+                          margin-bottom: 4px;
+                        "
+                      >
+                        m³ afectados
+                      </div>
+                      <div
+                        style="
+                          font-size: 16px;
+                          font-weight: 800;
+                          color: rgba(255, 255, 255, 0.6);
+                        "
+                      >
+                        47,200
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    style="
+                      margin-top: 12px;
+                      padding: 10px 14px;
+                      background: rgba(255, 141, 114, 0.08);
+                      border: 1px solid rgba(255, 141, 114, 0.15);
+                      border-radius: 8px;
+                    "
+                  >
+                    <div
+                      style="font-size: 10px; color: #ff8d72; font-weight: 700"
+                    >
+                      IA sugiere intervención ≥ 35% para punto de equilibrio
+                    </div>
+                  </div>
                 </div>
+
+                <div class="roi-result">
+                  <div
+                    style="
+                      font-size: 9px;
+                      font-weight: 700;
+                      letter-spacing: 0.15em;
+                      text-transform: uppercase;
+                      color: rgba(255, 255, 255, 0.3);
+                      margin-bottom: 8px;
+                    "
+                  >
+                    Ahorro Mensual
+                  </div>
+                  <div
+                    class="roi-amount"
+                    style="color: #00d6b4"
+                    id="roi-display"
+                  >
+                    $3,084,000
+                  </div>
+                  <div
+                    style="
+                      font-size: 10px;
+                      color: rgba(255, 255, 255, 0.3);
+                      margin-top: 4px;
+                    "
+                  >
+                    MXN / mes
+                  </div>
+                  <div
+                    style="
+                      margin-top: 16px;
+                      padding: 8px 12px;
+                      background: rgba(0, 214, 180, 0.1);
+                      border: 1px solid rgba(0, 214, 180, 0.2);
+                      border-radius: 6px;
+                    "
+                  >
+                    <div
+                      style="font-size: 10px; font-weight: 700; color: #00d6b4"
+                    >
+                      ✓ Viabilidad confirmada por IA
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
+          </div>
+
+          <!-- Alertas -->
+          <div class="panel" style="display: flex; flex-direction: column">
+            <div class="panel-header">
+              <div class="panel-title">
+                <div
+                  class="panel-title-dot"
+                  style="
+                    background: #ff8d72;
+                    box-shadow: 0 0 6px rgba(255, 141, 114, 0.5);
+                    animation: blink 2s infinite;
+                  "
+                ></div>
+                Alertas en Tiempo Real
+              </div>
+              <span
+                class="pill"
+                style="background: rgba(255, 141, 114, 0.1); color: #ff8d72"
+                >Irving IA</span
+              >
+            </div>
+            <div class="panel-body" style="flex: 1">
+              <div class="alert-row">
+                <div
+                  class="alert-icon-wrap"
+                  style="background: rgba(255, 82, 82, 0.12)"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#ff5252"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                    />
+                    <line x1="12" y1="9" x2="12" y2="13" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="alert-time">14:35 · Hoy</div>
+                  <div class="alert-text">
+                    <strong>Iztapalapa — Zona 7</strong> — Desviación de 1,840
+                    m³. Presión fuera de rango.
+                  </div>
+                </div>
+              </div>
+              <div class="alert-row">
+                <div
+                  class="alert-icon-wrap"
+                  style="background: rgba(255, 82, 82, 0.12)"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#ff5252"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
+                    />
+                    <line x1="12" y1="9" x2="12" y2="13" />
+                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="alert-time">14:29 · Hoy</div>
+                  <div class="alert-text">
+                    <strong>Tlalpan — Sector Norte</strong> — Fuga potencial
+                    detectada. Confianza: 94.2%
+                  </div>
+                </div>
+              </div>
+              <div class="alert-row">
+                <div
+                  class="alert-icon-wrap"
+                  style="background: rgba(29, 140, 248, 0.12)"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#1d8cf8"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="alert-time">14:21 · Hoy</div>
+                  <div class="alert-text">
+                    <strong>Venustiano C. — Cuadrante 3</strong> — ANC semanal
+                    en límite. Monitorear.
+                  </div>
+                </div>
+              </div>
+              <div class="alert-row">
+                <div
+                  class="alert-icon-wrap"
+                  style="background: rgba(29, 140, 248, 0.12)"
+                >
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#1d8cf8"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="alert-time">13:58 · Hoy</div>
+                  <div class="alert-text">
+                    <strong>Iztacalco — Red Secundaria</strong> — Sensor 0x2F4A
+                    actualizado. Dentro del rango.
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="team-tags">
+              <div
+                class="team-tag"
+                style="background: rgba(29, 140, 248, 0.1); color: #1d8cf8"
+              >
+                <div class="team-tag-dot" style="background: #1d8cf8"></div>
+                Bolívar · Datos
+              </div>
+              <div
+                class="team-tag"
+                style="background: rgba(255, 141, 114, 0.1); color: #ff8d72"
+              >
+                <div class="team-tag-dot" style="background: #ff8d72"></div>
+                Irving · IA
+              </div>
+              <div
+                class="team-tag"
+                style="background: rgba(0, 214, 180, 0.1); color: #00d6b4"
+              >
+                <div class="team-tag-dot" style="background: #00d6b4"></div>
+                Ana · Negocio
+              </div>
+              <div
+                class="team-tag"
+                style="background: rgba(51, 88, 244, 0.12); color: #7b8ff8"
+              >
+                <div class="team-tag-dot" style="background: #7b8ff8"></div>
+                Christian · Mapa
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+      <!-- /content -->
+
+      <!-- FOOTER -->
+      <div class="footer-bar">
+        <div>HydroTrace AI · Ingeniería UNAM · SACMEX 2024</div>
+        <div id="footer-clock">Actualización: 14:37:00 · Latencia: 42ms</div>
+      </div>
     </div>
 
     <script>
-        lucide.createIcons();
-        const slider = document.getElementById('roi-slider');
-        const sliderVal = document.getElementById('slider-val');
-        const ahorroVal = document.getElementById('ahorro-val');
+      // ── RANKING DATA ──
+      const rankingData = [
+        { alcaldia: "Iztapalapa", desviacion: 4820, riesgo: "Alto", pct: 95 },
+        { alcaldia: "Tlalpan", desviacion: 3210, riesgo: "Alto", pct: 82 },
+        {
+          alcaldia: "Venustiano Carranza",
+          desviacion: 2190,
+          riesgo: "Alto",
+          pct: 68,
+        },
+        { alcaldia: "Iztacalco", desviacion: 1540, riesgo: "Medio", pct: 54 },
+        {
+          alcaldia: "Álvaro Obregón",
+          desviacion: 980,
+          riesgo: "Medio",
+          pct: 38,
+        },
+        { alcaldia: "Xochimilco", desviacion: 620, riesgo: "Medio", pct: 24 },
+      ];
 
-        slider.addEventListener('input', (e) => {
-            const val = e.target.value;
-            sliderVal.innerText = val + '%';
-            const baseLoss = 15420000;
-            const savings = (baseLoss * (val / 100));
-            ahorroVal.innerText = '$' + Math.floor(savings).toLocaleString('es-MX');
-        });
+      const list = document.getElementById("ranking-list");
+      rankingData.forEach((d, i) => {
+        const isAlto = d.riesgo === "Alto";
+        list.innerHTML += `
+            <div class="rank-item">
+                <div class="rank-num">0${i + 1}</div>
+                <div class="rank-info">
+                    <div class="rank-name">${d.alcaldia}</div>
+                    <div class="rank-bar-track">
+                        <div class="rank-bar" style="width:${d.pct}%;background:${isAlto ? "linear-gradient(90deg,#ff5252,#ff8d72)" : "linear-gradient(90deg,#1d8cf8,#3358f4)"};"></div>
+                    </div>
+                </div>
+                <div class="rank-right">
+                    <span class="rank-badge" style="background:${isAlto ? "rgba(255,82,82,0.1)" : "rgba(29,140,248,0.1)"};color:${isAlto ? "#ff5252" : "#1d8cf8"};">${d.riesgo}</span>
+                    <div class="rank-m3">${d.desviacion.toLocaleString("es-MX")} m³</div>
+                </div>
+            </div>`;
+      });
+
+      // ── ROI SLIDER ──
+      const slider = document.getElementById("roi-slider");
+      const pctLabel = document.getElementById("pct-label");
+      const roiDisplay = document.getElementById("roi-display");
+      const perdidaBase = 15420000;
+
+      function updateRoi(val) {
+        slider.style.setProperty("--fill", val + "%");
+        pctLabel.textContent = val + "%";
+        const ahorro = Math.round((perdidaBase * val) / 100);
+        roiDisplay.textContent = "$" + ahorro.toLocaleString("es-MX");
+      }
+
+      slider.addEventListener("input", (e) => updateRoi(+e.target.value));
+      updateRoi(20);
+
+      // ── CHART ──
+      const ctx = document.getElementById("ancChart").getContext("2d");
+      const meses = [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic",
+      ];
+      const ancVals = [
+        41.2, 40.8, 39.9, 40.5, 39.1, 38.7, 39.4, 38.9, 38.2, 38.6, 38.1, 38.4,
+      ];
+      const alertVals = [18, 22, 19, 25, 21, 20, 23, 19, 22, 21, 20, 23];
+
+      const gradBlue = ctx.createLinearGradient(0, 0, 0, 240);
+      gradBlue.addColorStop(0, "rgba(29,140,248,0.3)");
+      gradBlue.addColorStop(1, "rgba(29,140,248,0)");
+
+      new Chart(ctx, {
+        data: {
+          labels: meses,
+          datasets: [
+            {
+              type: "line",
+              label: "ANC %",
+              data: ancVals,
+              borderColor: "#1d8cf8",
+              backgroundColor: gradBlue,
+              borderWidth: 2.5,
+              pointBackgroundColor: "#1d8cf8",
+              pointBorderColor: "#27293d",
+              pointBorderWidth: 2,
+              pointRadius: 4,
+              pointHoverRadius: 6,
+              fill: true,
+              tension: 0.42,
+              yAxisID: "y",
+            },
+            {
+              type: "bar",
+              label: "Alertas",
+              data: alertVals,
+              backgroundColor: "rgba(255,141,114,0.25)",
+              borderColor: "rgba(255,141,114,0.55)",
+              borderWidth: 1,
+              borderRadius: 4,
+              yAxisID: "y1",
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          interaction: { mode: "index", intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: "#1e1e2f",
+              borderColor: "rgba(255,255,255,0.08)",
+              borderWidth: 1,
+              titleColor: "rgba(255,255,255,0.8)",
+              bodyColor: "rgba(255,255,255,0.5)",
+              padding: 12,
+              titleFont: {
+                family: "Plus Jakarta Sans",
+                weight: "700",
+                size: 12,
+              },
+              bodyFont: { family: "Plus Jakarta Sans", size: 11 },
+            },
+          },
+          scales: {
+            x: {
+              grid: { color: "rgba(255,255,255,0.04)", drawBorder: false },
+              ticks: {
+                color: "rgba(255,255,255,0.3)",
+                font: { family: "Plus Jakarta Sans", size: 11 },
+              },
+            },
+            y: {
+              position: "left",
+              grid: { color: "rgba(255,255,255,0.04)", drawBorder: false },
+              ticks: {
+                color: "#1d8cf8",
+                font: { family: "Plus Jakarta Sans", size: 11 },
+                callback: (v) => v + "%",
+              },
+            },
+            y1: {
+              position: "right",
+              grid: { display: false },
+              ticks: {
+                color: "#ff8d72",
+                font: { family: "Plus Jakarta Sans", size: 11 },
+              },
+            },
+          },
+        },
+      });
+
+      // ── LIVE CLOCK ──
+      function tick() {
+        const now = new Date();
+        const hms = [now.getHours(), now.getMinutes(), now.getSeconds()]
+          .map((n) => String(n).padStart(2, "0"))
+          .join(":");
+        const el = document.getElementById("live-clock");
+        if (el) el.textContent = hms;
+        const ft = document.getElementById("footer-clock");
+        if (ft)
+          ft.textContent = `Actualización: ${hms} · Latencia: ${Math.floor(38 + Math.random() * 12)}ms`;
+      }
+      setInterval(tick, 1000);
+      tick();
     </script>
-</body>
+  </body>
 </html>
