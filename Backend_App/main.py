@@ -5,7 +5,7 @@ RESPONSABLE DE INTEGRACIÓN: Ileana Lee
 
 ESTRUCTURA:
 1. Configuración y Dependencias
-2. Herramientas de Validación ML (Apoyo a Irving)
+2. Herramientas de Validación ML (Apoyo para Irving)
 3. Lógica de Negocio y Finanzas (Ana)
 4. Lógica de Visualización Geoespacial (Christian)
 5. Seguridad y Sesiones
@@ -23,14 +23,13 @@ from functools import wraps
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 
-# Importamos la base de datos y modelos (deben estar en la misma carpeta /backend)
+# Importamos la base de datos y modelos
 from database_models import db, User, Lead, Anomalia, get_cdmx_time
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 1. CONFIGURACIÓN DEL SISTEMA
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Usamos rutas relativas al archivo para evitar errores al mover carpetas
 base_dir = os.path.abspath(os.path.dirname(__file__))
 frontend_dir = os.path.abspath(os.path.join(base_dir, '..', 'Frontend'))
 
@@ -40,7 +39,6 @@ app = Flask(__name__,
 
 app.config['SECRET_KEY'] = 'pumascript_ultra_secret_2026'
 
-# Configuración de base de datos (ubicada en la raíz del proyecto)
 db_dir = os.path.abspath(os.path.join(base_dir, "..", "Backend_app", "database"))
 if not os.path.exists(db_dir):
     os.makedirs(db_dir)
@@ -51,7 +49,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 2. HERRAMIENTAS DE VALIDACIÓN ML (APOYO PARA IRVING)
+# 2. HERRAMIENTAS DE VALIDACIÓN ML ILEANA & IRVING
 # ─────────────────────────────────────────────────────────────────────────────
 
 def grafica_metodo_codo(X_scaled, max_k=10):
@@ -110,11 +108,16 @@ def reporte_desempeno_negocio(df):
 
 def calcular_impacto_economico_ana(m3_desviados):
     """Ana: Implementar tarifas de SACMEX aquí."""
+    # TODO: Investigar costo por m3 y retornar total
     return 0 
 
 def simular_ahorro_prescriptivo(m3_totales, capacidad_reparacion):
     """Ana: Implementar lógica de ROI aquí."""
+    # TODO: (m3_totales * tarifa) * capacidad_reparacion
     return 0
+
+# Demás funciones...
+
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 4. LÓGICA DE VISUALIZACIÓN GEOESPACIAL (CHRISTIAN)
@@ -124,10 +127,11 @@ def simular_ahorro_prescriptivo(m3_totales, capacidad_reparacion):
 def mapa_interactivo():
     """Sirve el mapa que Christian debe generar."""
     try:
-        # Buscamos en assets dentro del frontend
         return send_from_directory(os.path.join(frontend_dir, 'assets'), 'mapa_cdmx.html')
     except Exception:
         return "Mapa en construcción por Christian..."
+
+# Demás funciones....
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 5. SEGURIDAD Y SESIONES (ILEANA)
@@ -159,6 +163,21 @@ def login():
             return redirect(url_for('dashboard_admin'))
         flash('Acceso denegado. Intenta de nuevo.', 'error')
     return render_template('login.html')
+
+@app.route('/ejecutar-entrenamiento')
+@login_required
+def disparar_ml():
+    """
+    Ruta para que Irving pruebe su modelo.
+    Importa el script de modelos_ml y lo ejecuta.
+    """
+    try:
+        import modelos_ml
+        modelos_ml.ejecutar_pipeline_ml()
+        flash('Modelos entrenados y resultados actualizados.', 'success')
+    except Exception as e:
+        flash(f'Error al entrenar modelos: {e}', 'error')
+    return redirect(url_for('dashboard_admin'))
 
 @app.route('/dashboard-admin')
 @login_required
