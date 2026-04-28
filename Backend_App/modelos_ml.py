@@ -1,106 +1,122 @@
 """
 PROYECTO: HydroTrace AI - Ciencia de Datos UNAM
-DESCRIPCIÓN: Implementación de algoritmos para detección de anomalías y predicción.
+DESCRIPCIÓN: Implementación y validación de modelos predictivos y de detección.
 """
 
 import os
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import KMeans
 from sklearn.ensemble import IsolationForest
 from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_absolute_error, r2_score
+from sklearn.metrics import (
+    mean_absolute_error, r2_score, confusion_matrix, 
+    silhouette_score, classification_report
+)
+from ml_utils import grafica_metodo_codo, visualizar_clusters_2d, reporte_desempeno_negocio
 
 # Configuración de rutas
 DATA_PATH = os.path.join("data", "dataset_maestro.csv")
 OUTPUT_PATH = os.path.join("data", "resultados_anomalias.csv")
 
 def cargar_datos():
-    """Carga el dataset maestro generado por el ETL."""
     if not os.path.exists(DATA_PATH):
-        print(f"Error: No se encontró el archivo en {DATA_PATH}")
+        print(f"Error: No se encontró el dataset en {DATA_PATH}")
         return None
     return pd.read_csv(DATA_PATH)
 
 # =============================================================================
-# IRVING: IMPLEMENTAR LA LÓGICA MATEMÁTICA
+# BLOQUE 1: MODELADO (TRABAJO DE IRVING)
 # =============================================================================
 
 def aplicar_clustering(df):
-    """
-    TAREA 1: K-Means (Unidad 5 - Aprendizaje No Supervisado)
-    Objetivo: Agrupar alcaldías por perfiles de consumo y densidad.
-    """
-    print("[ML] Iniciando K-Means...")
+    """K-Means: Agrupamiento de alcaldías por perfil socio-hídrico."""
+    print("[ML] Entrenando K-Means...")
     
-    # TODO: Irving, selecciona las features adecuadas (ej: 'consumo_per_capita', 'densidad_poblacional')
-    # features = ...
+    # TODO: selecciona las columnas para el agrupamiento
+    features = ['consumo_per_capita', 'densidad_poblacional']
+    X = df[features]
     
-    # TODO: Escalar los datos con StandardScaler()
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X)
     
-    # TODO: Configurar y entrenar el modelo KMeans
-    # kmeans = KMeans(n_clusters=3, random_state=42)
+    # TODO: justifica el número de clusters (¿Por qué 3?)
+    kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
+    df['cluster_kmeans'] = kmeans.fit_predict(X_scaled)
     
-    # Retorna el dataframe con la columna 'cluster' agregada
-    return df
+    return df, X_scaled
 
 def detectar_anomalias(df):
-    """
-    TAREA 2: Isolation Forest (Detección de Outliers)
-    Objetivo: Identificar zonas con consumos 'extraños' o 'atípicos'.
-    """
-    print("[ML] Iniciando Isolation Forest...")
+    """Isolation Forest: Detección de posibles fugas o huachicol."""
+    print("[ML] Entrenando Isolation Forest...")
     
-    # TODO: Configurar Isolation Forest. 
-    # TIP: Ajusta el parámetro 'contamination' para controlar la sensibilidad.
-    # iso_forest = IsolationForest(contamination=0.2, random_state=42)
+    # TODO: justifica el parámetro 'contamination' basado en el análisis de Bolívar
+    iso = IsolationForest(contamination=0.2, random_state=42)
     
-    # TODO: Entrenar y predecir. Guarda los resultados en 'es_anomalia' y 'score_anomalia'.
-    
+    # -1 es anomalía, 1 es normal
+    df['es_anomalia'] = iso.fit_predict(df[['consumo_per_capita', 'total_reportes']])
     return df
 
-def predecir_consumo_esperado(df):
+# =============================================================================
+# BLOQUE 2: MARCO DE VALIDACIÓN (APOYO DE ILEANA)
+# =============================================================================
+
+def validar_modelo_academico(df, X_scaled):
     """
-    TAREA 3: Regresión Lineal (Unidad 4 - Modelos Supervisados)
-    Objetivo: Calcular cuánto DEBERÍA consumir una zona según su población.
+    FUNCIONES DE VALIDACIÓN: Esto es lo que pide el profe.
+    Irving debe interpretar estos resultados en el PDF.
     """
-    print("[ML] Iniciando Regresión Lineal...")
+    print("\n" + "="*30)
+    print(" REPORTE DE VALIDACIÓN TÉCNICA ")
+    print("="*30)
+
+    # 1. Validación de Clustering (Silhouette Score)
+    score_s = silhouette_score(X_scaled, df['cluster_kmeans'])
+    print(f"• Silhouette Score (K-Means): {score_s:.4f}")
+    # Nota para Irving: Cerca de 1 es perfecto, cerca de 0 es traslape.
+
+    # 2. Simulación de Matriz de Confusión
+    # Dado que es aprendizaje no supervisado, comparamos con un 'Ground Truth' 
+    # basado en reportes históricos para ver si la IA detecta lo que ya sabemos.
+    y_true = (df['total_reportes'] > df['total_reportes'].median()).astype(int)
+    y_pred = (df['es_anomalia'] == -1).astype(int)
     
-    # TODO: Definir X (independientes: poblacion, densidad) y y (dependiente: consumo_total)
+    cm = confusion_matrix(y_true, y_pred)
     
-    # TODO: Entrenar el modelo LinearRegression()
+    # Visualización de la Matriz (Para el documento)
+    plt.figure(figsize=(6, 4))
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', 
+                xticklabels=['Normal', 'Anomalía'], 
+                yticklabels=['Real Sano', 'Real Fuga'])
+    plt.title('Matriz de Confusión: Detección de Anomalías')
+    plt.savefig('graficas_reporte/matriz_confusion_ia.png')
+    print("• Matriz de Confusión generada en 'graficas_reporte/'")
     
-    # TODO: Calcular 'consumo_teorico_esperado' y la 'desviacion_consumo' (Real - Esperado)
-    
-    return df
+    print("\n• Reporte de Clasificación:")
+    print(classification_report(y_true, y_pred))
 
 def ejecutar_pipeline_ml():
-    """Director de orquesta del modelado."""
     df = cargar_datos()
     if df is None: return
 
-    # Ejecución secuencial de los modelos
-    df = aplicar_clustering(df)
+    # Correr modelos
+    df, X_scaled = aplicar_clustering(df)
     df = detectar_anomalias(df)
-    df = predecir_consumo_esperado(df)
-
-    # --- LÓGICA DE CLASIFICACIÓN DE RIESGO (ILEANA) ---
-    # Para que eldashboard funcione de una
-    def asignar_riesgo(row):
-        # Un ejemplo simple de lógica de decisión
-        if row.get('es_anomalia', 0) == -1 and row.get('desviacion_consumo', 0) > 0:
-            return "Alto"
-        elif row.get('es_anomalia', 0) == -1 or row.get('desviacion_consumo', 0) > 1000:
-            return "Medio"
-        return "Bajo"
-
-    if 'es_anomalia' in df.columns:
-        df['Riesgo'] = df.apply(asignar_riesgo, axis=1)
     
-    # Exportación final
+    # --- LÓGICA DE RIESGO ---
+    df['Riesgo'] = np.where(df['es_anomalia'] == -1, "Alto", "Bajo")
+
+    # Correr validaciones
+    validar_modelo_academico(df, X_scaled)
+
+    # Exportar
     df.to_csv(OUTPUT_PATH, index=False)
-    print(f"\n[ÉXITO] Resultados exportados a {OUTPUT_PATH}")
+    print(f"\n[OK] Resultados finales listos para Ileana en: {OUTPUT_PATH}")
 
 if __name__ == "__main__":
+    # Crear carpeta de gráficas si no existe
+    if not os.path.exists('graficas_reporte'): os.makedirs('graficas_reporte')
     ejecutar_pipeline_ml()
