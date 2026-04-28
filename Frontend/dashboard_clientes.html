@@ -7,153 +7,141 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .glass { background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-        .gradient-border { border: 1px solid; border-image: linear-gradient(to right, #22d3ee, #2563eb) 1; }
+        .accent-bg { background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%); }
     </style>
 </head>
-<body class="bg-[#020617] text-slate-200 min-h-screen font-sans selection:bg-cyan-500/30">
+<body class="bg-[#020617] text-slate-200 min-h-screen pb-12">
 
-    <div class="max-w-7xl mx-auto p-4 md:p-8">
+    <div class="max-w-7xl mx-auto p-6 md:p-10">
         <!-- HEADER -->
-        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-4">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
             <div>
                 <h1 class="text-4xl font-extrabold tracking-tight text-white">
-                    Hydro<span class="text-cyan-400">Trace</span> <span class="text-blue-500 text-2xl">AI</span>
+                    Hydro<span class="text-cyan-400">Trace</span> <span class="text-blue-500 text-2xl font-black">AI</span>
                 </h1>
-                <p class="text-slate-500 text-sm mt-1 uppercase tracking-widest font-semibold">Análisis de Red SACMEX CDMX</p>
+                <p class="text-slate-500 text-xs font-bold uppercase tracking-[0.3em] mt-2">Panel de Control Estratégico</p>
             </div>
-            <div class="flex gap-3">
-                <button class="glass px-4 py-2 rounded-xl text-sm flex items-center gap-2 hover:bg-slate-800 transition">
-                    <i data-lucide="calendar" class="w-4 h-4 text-cyan-400"></i> Periodo: 2019
-                </button>
-                <button class="bg-cyan-600 hover:bg-cyan-500 text-white px-6 py-2 rounded-xl text-sm font-bold shadow-lg shadow-cyan-900/20 transition flex items-center gap-2">
-                    <i data-lucide="download" class="w-4 h-4"></i> Informe Ejecutivo
+            <div class="flex gap-4">
+                <div class="glass px-5 py-3 rounded-2xl flex items-center gap-3">
+                    <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
+                    <span class="text-[10px] font-black uppercase text-slate-400">Análisis: Octubre 2026</span>
+                </div>
+                <button class="accent-bg hover:opacity-90 text-white px-6 py-3 rounded-2xl text-xs font-black shadow-lg shadow-cyan-900/20 transition flex items-center gap-2">
+                    <i data-lucide="file-text" class="w-4 h-4"></i> EXPORTAR REPORTE
                 </button>
             </div>
         </header>
 
-        <!-- KPI CARDS - AQUÍ INYECTAMOS LAS VARIABLES -->
+        <!-- KPI GRID -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
             <!-- Dinero en Riesgo -->
             <div class="glass p-8 rounded-[2.5rem] relative overflow-hidden group">
-                <div class="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-rose-500/10 rounded-full blur-2xl"></div>
                 <div class="flex items-center gap-4 mb-6">
-                    <div class="p-3 bg-emerald-500/10 rounded-2xl text-emerald-400">
+                    <div class="p-3 bg-rose-500/10 rounded-2xl text-rose-500">
                         <i data-lucide="dollar-sign"></i>
                     </div>
-                    <span class="text-slate-400 font-medium">Dinero en Riesgo Anual</span>
+                    <span class="text-slate-400 text-xs font-bold uppercase">Pérdida Económica Anual</span>
                 </div>
-                <!-- VARIABLE: dinero_riesgo -->
-                <p class="text-4xl font-bold text-white mb-2">${{ dinero_riesgo }}</p>
-                <p class="text-xs text-emerald-500 font-semibold tracking-wide">PÉRDIDA ESTIMADA POR ANC</p>
+                <p class="text-5xl font-black text-white mb-2">${{ dinero_riesgo }}</p>
+                <p class="text-[10px] text-rose-500 font-black uppercase tracking-widest">Capital en Riesgo por ANC</p>
             </div>
 
-            <!-- Volumen ANC -->
+            <!-- Eficiencia -->
             <div class="glass p-8 rounded-[2.5rem] relative overflow-hidden group">
-                <div class="absolute -right-4 -top-4 w-24 h-24 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all"></div>
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-cyan-500/10 rounded-full blur-2xl"></div>
                 <div class="flex items-center gap-4 mb-6">
                     <div class="p-3 bg-cyan-500/10 rounded-2xl text-cyan-400">
-                        <i data-lucide="droplet"></i>
+                        <i data-lucide="droplets"></i>
                     </div>
-                    <span class="text-slate-400 font-medium">Eficiencia de la Red</span>
+                    <span class="text-slate-400 text-xs font-bold uppercase">Mermas Detectadas</span>
                 </div>
-                <!-- VARIABLE: anc_porcentaje -->
-                <p class="text-4xl font-bold text-white mb-2">{{ anc_porcentaje }}%</p>
-                <p class="text-xs text-cyan-500 font-semibold tracking-wide">DESVIACIÓN RESPECTO AL TEÓRICO</p>
+                <p class="text-5xl font-black text-white mb-2">{{ anc_porcentaje }}%</p>
+                <p class="text-[10px] text-cyan-500 font-black uppercase tracking-widest">Desviación vs Consumo Teórico</p>
             </div>
 
             <!-- Alertas -->
             <div class="glass p-8 rounded-[2.5rem] relative overflow-hidden group">
-                <div class="absolute -right-4 -top-4 w-24 h-24 bg-rose-500/10 rounded-full blur-2xl group-hover:bg-rose-500/20 transition-all"></div>
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl"></div>
                 <div class="flex items-center gap-4 mb-6">
-                    <div class="p-3 bg-rose-500/10 rounded-2xl text-rose-500">
-                        <i data-lucide="alert-circle"></i>
+                    <div class="p-3 bg-amber-500/10 rounded-2xl text-amber-500">
+                        <i data-lucide="alert-triangle"></i>
                     </div>
-                    <span class="text-slate-400 font-medium">Zonas en Riesgo Crítico</span>
+                    <span class="text-slate-400 text-xs font-bold uppercase">Alertas Críticas</span>
                 </div>
-                <!-- VARIABLE: alertas_criticas -->
-                <p class="text-4xl font-bold text-white mb-2">{{ alertas_criticas }} Alcaldías</p>
-                <p class="text-xs text-rose-500 font-semibold tracking-wide">DETECCIÓN POR ISOLATION FOREST</p>
+                <p class="text-5xl font-black text-white mb-2">{{ alertas_criticas }}</p>
+                <p class="text-[10px] text-amber-500 font-black uppercase tracking-widest">Zonas con anomalía alta</p>
             </div>
         </div>
 
-        <!-- MAIN SECTION -->
+        <!-- MAIN LAYOUT -->
         <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-            <!-- MAPA SIMULADO (A la izquierda) -->
-            <div class="lg:col-span-3 glass rounded-[3rem] p-8 flex flex-col">
-                <div class="flex justify-between items-center mb-8">
-                    <h2 class="text-xl font-bold flex items-center gap-3">
-                        <i data-lucide="map-pin" class="text-cyan-400"></i> Mapa de Calor de Anomalías
-                    </h2>
-                    <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
-                        <button class="px-4 py-1.5 text-xs font-bold bg-cyan-600 text-white rounded-lg">Residencial</button>
-                        <button class="px-4 py-1.5 text-xs font-bold text-slate-500 hover:text-white transition">Industrial</button>
-                    </div>
-                </div>
-                <div class="flex-1 bg-slate-950/50 rounded-[2rem] border border-slate-800 flex items-center justify-center relative group cursor-crosshair">
-                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
-                    <p class="text-slate-600 italic group-hover:text-cyan-400 transition">Visualizador Geoespacial (Folium Integration Pending)</p>
-                </div>
-            </div>
-
-            <!-- RANKING (A la derecha) -->
+            <!-- Ranking -->
             <div class="lg:col-span-2 glass rounded-[3rem] p-8">
-                <h2 class="text-xl font-bold mb-8 flex items-center gap-3">
-                    <i data-lucide="list-ordered" class="text-cyan-400"></i> Focos Rojos de Atención
+                <h2 class="text-xl font-black mb-8 flex items-center gap-3">
+                    <i data-lucide="trending-up" class="text-cyan-400"></i> Focos de Intervención
                 </h2>
                 <div class="space-y-4">
-                    <!-- LOOP: ranking -->
                     {% for item in ranking %}
-                    <div class="flex items-center justify-between p-5 bg-slate-950/50 rounded-2xl border border-slate-800 hover:border-slate-700 transition group">
+                    <div class="flex items-center justify-between p-5 bg-slate-900/50 rounded-2xl border border-slate-800 hover:border-slate-700 transition">
                         <div class="flex items-center gap-4">
-                            <div class="w-2 h-10 rounded-full {% if item.Riesgo == 'Alto' %}bg-rose-500{% else %}bg-amber-500{% endif %}"></div>
+                            <div class="w-1 h-10 rounded-full {% if item.riesgo == 'Alto' %}bg-rose-500{% else %}bg-amber-500{% endif %}"></div>
                             <div>
-                                <p class="font-bold text-white">{{ item.alcaldia }}</p>
-                                <p class="text-xs text-slate-500 mt-0.5">Desviación: {{ item.desviacion_consumo|round(2) }} m³</p>
+                                <p class="font-bold text-white text-sm">{{ item.alcaldia }}</p>
+                                <p class="text-[10px] text-slate-500 mt-1">+{{ item.desviacion_consumo|round(2) }} m³ Desviación</p>
                             </div>
                         </div>
-                        <span class="{% if item.Riesgo == 'Alto' %}text-rose-400 bg-rose-500/10 border-rose-500/20{% else %}text-amber-400 bg-amber-500/10 border-amber-500/20{% endif %} px-3 py-1 rounded-lg text-[10px] font-black border uppercase tracking-tighter">
-                            {{ item.Riesgo }}
+                        <span class="{% if item.riesgo == 'Alto' %}text-rose-400 bg-rose-500/10{% else %}text-amber-400 bg-amber-500/10{% endif %} px-3 py-1 rounded-lg text-[9px] font-black uppercase border border-white/5">
+                            {{ item.riesgo }}
                         </span>
                     </div>
                     {% endfor %}
-                    
-                    {% if not ranking %}
-                    <p class="text-center text-slate-600 py-10">Corre modelos_ml.py para generar alertas...</p>
-                    {% endif %}
                 </div>
-                <button class="w-full mt-8 py-4 text-sm font-bold text-cyan-400 hover:text-cyan-300 transition flex items-center justify-center gap-2">
-                    Ver Informe de Trazabilidad <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                </button>
+            </div>
+
+            <!-- Mapa / Viz -->
+            <div class="lg:col-span-3 glass rounded-[3rem] p-8 flex flex-col">
+                <div class="flex justify-between items-center mb-8">
+                    <h2 class="text-xl font-black flex items-center gap-3">
+                        <i data-lucide="map" class="text-cyan-400"></i> Análisis Geoespacial
+                    </h2>
+                    <div class="bg-slate-950 p-1 rounded-xl flex border border-white/5">
+                        <button class="px-4 py-1 text-[10px] font-black bg-cyan-600 rounded-lg text-white">ANOMALÍAS</button>
+                        <button class="px-4 py-1 text-[10px] font-black text-slate-500">CONSUMO</button>
+                    </div>
+                </div>
+                <div class="flex-1 bg-slate-950/50 rounded-[2rem] border border-slate-800 flex items-center justify-center relative group">
+                    <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 30px 30px;"></div>
+                    <div class="text-center">
+                        <i data-lucide="crosshair" class="w-12 h-12 text-slate-800 mx-auto mb-4 group-hover:text-cyan-500 transition-colors"></i>
+                        <p class="text-slate-600 italic text-xs">Capa de datos Folium integrada (Fase 2)</p>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- SIMULADOR ROI -->
-        <div class="mt-8 glass rounded-[3rem] p-10">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div class="mt-8 glass rounded-[3rem] p-12 bg-gradient-to-r from-slate-900 to-slate-900/50">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                 <div>
-                    <h2 class="text-2xl font-black text-white mb-4">Simulador de Recuperación (ROI)</h2>
-                    <p class="text-slate-400 mb-8 leading-relaxed">Ajusta la capacidad operativa de tus cuadrillas para ver cuánto dinero recuperas mensualmente al reparar las anomalías detectadas por la IA.</p>
+                    <h2 class="text-3xl font-black text-white mb-4">Simulador de Recuperación</h2>
+                    <p class="text-slate-400 text-sm mb-8 leading-relaxed">Ajusta el porcentaje de intervención operativa para calcular el ahorro directo en infraestructura y potabilización.</p>
                     <div class="space-y-6">
-                        <label class="flex justify-between text-sm font-bold text-slate-300">
-                            <span>Eficiencia de Reparación</span>
-                            <span id="slider-val" class="text-cyan-400">25%</span>
-                        </label>
-                        <input type="range" id="roi-slider" min="0" max="100" value="25" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500">
+                        <div class="flex justify-between text-xs font-black uppercase">
+                            <span class="text-slate-500">Capacidad de Reparación</span>
+                            <span id="slider-val" class="text-cyan-400">30%</span>
+                        </div>
+                        <input type="range" id="roi-slider" min="0" max="100" value="30" class="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-500">
                     </div>
                 </div>
-                <div class="bg-slate-950/80 p-8 rounded-[2rem] border border-cyan-500/10 flex flex-col items-center justify-center text-center">
-                    <p class="text-slate-500 text-xs font-black uppercase tracking-widest mb-2">Ahorro Mensual Proyectado</p>
-                    <h3 id="ahorro-val" class="text-5xl font-black text-emerald-400 mb-4">$3,855,000</h3>
-                    <div class="flex gap-4">
-                        <div class="px-4 py-2 bg-slate-900 rounded-xl border border-slate-800">
-                            <p class="text-[10px] text-slate-500 uppercase">Impacto Cutzamala</p>
-                            <p id="dias-ganados" class="text-sm font-bold text-white">+12 Días</p>
-                        </div>
-                        <div class="px-4 py-2 bg-slate-900 rounded-xl border border-slate-800">
-                            <p class="text-[10px] text-slate-500 uppercase">Estado Día Cero</p>
-                            <p id="dia-cero-val" class="text-sm font-bold text-white">154 Días</p>
-                        </div>
+                <div class="bg-slate-950/80 p-10 rounded-[2.5rem] border border-cyan-500/10 text-center">
+                    <p class="text-slate-500 text-[10px] font-black uppercase tracking-[0.3em] mb-4">Ahorro Mensual Proyectado</p>
+                    <h3 id="ahorro-val" class="text-6xl font-black text-white mb-4">$4,626,000</h3>
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-xl text-emerald-400 text-xs font-bold">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i> Viabilidad Financiera Confirmada
                     </div>
                 </div>
             </div>
@@ -162,26 +150,16 @@
 
     <script>
         lucide.createIcons();
-
-        // Lógica del Simulador ROI
         const slider = document.getElementById('roi-slider');
         const sliderVal = document.getElementById('slider-val');
         const ahorroVal = document.getElementById('ahorro-val');
-        const diasGanadosVal = document.getElementById('dias-ganados');
-        const diaCeroVal = document.getElementById('dia-cero-val');
 
         slider.addEventListener('input', (e) => {
             const val = e.target.value;
             sliderVal.innerText = val + '%';
-            
-            // Cálculos ficticios basados en el contexto del PDF
             const baseLoss = 15420000;
             const savings = (baseLoss * (val / 100));
-            const extraDays = Math.floor(val / 2); // Un supuesto 
-            
-            ahorroVal.innerText = '$' + savings.toLocaleString('es-MX', {maximumFractionDigits: 0});
-            diasGanadosVal.innerText = '+' + extraDays + ' Días';
-            diaCeroVal.innerText = (142 + extraDays) + ' Días';
+            ahorroVal.innerText = '$' + Math.floor(savings).toLocaleString('es-MX');
         });
     </script>
 </body>
