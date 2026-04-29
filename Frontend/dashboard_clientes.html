@@ -20,91 +20,105 @@
 
     <style>
       /* ═══════════════════════════════════════════
-         HYDROTRACE AI — LIGHT MODE TECH PALETTE
-         Limpio · Profesional · Amigable al usuario
+         HYDROTRACE AI — PALETA TECH PREMIUM 2025
+         Inspiración: DeFi / Fintech / SaaS oscuro
+         ═══════════════════════════════════════════
+         --cyan:      #00E5FF  → acento principal tech
+         --violet:    #A78BFA  → morado suave / lila
+         --indigo:    #6366F1  → azul-morado profundo
+         --blue:      #38BDF8  → azul claro datos
+         --orange:    #FB923C  → naranja alerta/accent
+         --emerald:   #34D399  → verde éxito/ROI
+         --bg-deep:   #06080F  → fondo más oscuro
+         --bg-base:   #0D1117  → fondo base
+         --surface:   #141B2D  → tarjetas/paneles
+         --surface2:  #1A2338  → surface elevado
+         --border:    rgba(99,102,241,0.15) → bordes
       ═══════════════════════════════════════════ */
 
       :root {
-        --cyan:       #06B6D4;
-        --cyan-lt:    #ECFEFF;
-        --violet:     #7C3AED;
-        --violet-lt:  #F5F3FF;
-        --indigo:     #4F46E5;
-        --indigo-lt:  #EEF2FF;
-        --blue:       #0EA5E9;
-        --blue-lt:    #F0F9FF;
-        --orange:     #EA580C;
-        --orange-lt:  #FFF7ED;
-        --emerald:    #059669;
-        --emerald-lt: #ECFDF5;
-        --rose:       #E11D48;
-        --rose-lt:    #FFF1F2;
-        --bg-base:    #F1F5F9;
-        --bg-white:   #FFFFFF;
-        --surface:    #FFFFFF;
-        --surface2:   #F8FAFC;
-        --text-primary:   #0F172A;
-        --text-secondary: #475569;
-        --text-muted:     #94A3B8;
-        --border:  #E2E8F0;
-        --border2: rgba(6,182,212,0.25);
+        --cyan:    #00E5FF;
+        --violet:  #A78BFA;
+        --indigo:  #6366F1;
+        --blue:    #38BDF8;
+        --orange:  #FB923C;
+        --emerald: #34D399;
+        --fuchsia: #E879F9;
+        --bg-deep: #06080F;
+        --bg-base: #0D1117;
+        --surface: #141B2D;
+        --surface2:#1A2338;
+        --border:  rgba(99,102,241,0.18);
+        --border2: rgba(0,229,255,0.12);
+        --glow-cyan: rgba(0,229,255,0.15);
+        --glow-violet: rgba(167,139,250,0.15);
       }
 
-      * { box-sizing: border-box; margin: 0; padding: 0; }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
       body {
         font-family: "Plus Jakarta Sans", sans-serif;
         background-color: var(--bg-base);
-        color: var(--text-primary);
+        background-image:
+          radial-gradient(ellipse 80% 40% at 20% 0%, rgba(99,102,241,0.06) 0%, transparent 60%),
+          radial-gradient(ellipse 60% 30% at 80% 100%, rgba(0,229,255,0.04) 0%, transparent 60%);
+        color: #E2E8F0;
         min-height: 100vh;
       }
 
-      /* ── SIDEBAR ── */
       .sidebar {
         position: fixed;
-        left: 0; top: 0; bottom: 0;
+        left: 0;
+        top: 0;
+        bottom: 0;
         width: 260px;
-        background: var(--bg-white);
+        background: var(--bg-deep);
         z-index: 100;
         display: flex;
         flex-direction: column;
+        padding: 0;
         border-right: 1px solid var(--border);
-        box-shadow: 4px 0 16px rgba(15,23,42,0.05);
+        box-shadow: 4px 0 24px rgba(0,0,0,0.4);
       }
 
       .top-nav {
-        background: var(--bg-white);
+        background: var(--bg-deep);
         border-bottom: 1px solid var(--border);
-        padding: 13px 30px;
+        padding: 14px 30px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        box-shadow: 0 1px 4px rgba(15,23,42,0.04);
       }
 
       .sidebar-logo {
-        padding: 24px 20px 18px;
+        padding: 28px 20px 20px;
         border-bottom: 1px solid var(--border);
-        margin-bottom: 6px;
+        margin-bottom: 8px;
         display: flex;
         align-items: center;
         gap: 12px;
       }
 
       .logo-icon-box {
-        width: 38px; height: 38px;
-        background: linear-gradient(135deg, var(--cyan), var(--indigo));
+        width: 38px;
+        height: 38px;
+        background: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(99,102,241,0.15));
+        border: 1px solid rgba(0,229,255,0.25);
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 12px rgba(79,70,229,0.25);
+        box-shadow: 0 0 12px rgba(0,229,255,0.1), inset 0 1px 0 rgba(255,255,255,0.08);
       }
 
       .logo-text-block .name {
         font-size: 15px;
         font-weight: 800;
-        letter-spacing: 0.04em;
+        letter-spacing: 0.05em;
         line-height: 1.1;
         background: linear-gradient(90deg, var(--cyan), var(--violet));
         -webkit-background-clip: text;
@@ -114,10 +128,10 @@
 
       .logo-text-block .sub {
         font-size: 10px;
-        color: var(--text-muted);
+        opacity: 0.45;
         font-weight: 400;
         letter-spacing: 0.1em;
-        -webkit-text-fill-color: var(--text-muted);
+        -webkit-text-fill-color: #94A3B8;
       }
 
       .nav-section {
@@ -125,43 +139,52 @@
         font-weight: 700;
         letter-spacing: 0.2em;
         text-transform: uppercase;
-        color: var(--text-muted);
-        padding: 18px 20px 6px;
+        color: rgba(148,163,184,0.4);
+        padding: 18px 20px 8px;
       }
 
       .nav-link {
         display: flex;
         align-items: center;
         gap: 11px;
-        padding: 10px 20px;
+        padding: 11px 20px;
         font-size: 13px;
         font-weight: 500;
-        color: var(--text-secondary);
-        transition: all 0.2s ease;
+        color: rgba(148,163,184,0.55);
+        transition: all 0.25s ease;
         border-left: 2px solid transparent;
         position: relative;
-        text-decoration: none;
       }
 
       .nav-link:hover {
-        color: var(--indigo);
-        background: var(--indigo-lt);
-        border-left: 2px solid rgba(79,70,229,0.4);
+        color: var(--cyan);
+        background: linear-gradient(90deg, rgba(0,229,255,0.06), transparent);
+        border-left: 2px solid rgba(0,229,255,0.4);
       }
 
+      /* Estado activo */
       .nav-link.active {
-        color: var(--indigo);
-        background: var(--indigo-lt);
-        border-left: 2px solid var(--indigo);
-        font-weight: 700;
+        color: var(--cyan);
+        background: linear-gradient(90deg, rgba(0,229,255,0.08), transparent);
+        border-left: 2px solid var(--cyan);
+        font-weight: 600;
+        box-shadow: inset 0 0 20px rgba(0,229,255,0.03);
       }
 
-      .nav-link svg { flex-shrink: 0; }
+      .nav-link.active svg {
+        filter: drop-shadow(0 0 4px rgba(0,229,255,0.5));
+      }
+
+      .nav-link svg {
+        flex-shrink: 0;
+        opacity: 0.85;
+      }
 
       .sidebar-bottom {
         margin-top: auto;
         border-top: 1px solid var(--border);
-        padding: 12px 0 8px;
+        padding-top: 16px;
+        padding-bottom: 8px;
       }
 
       .user-chip {
@@ -175,25 +198,33 @@
         margin: 0 8px;
       }
 
-      .user-chip:hover { background: var(--indigo-lt); }
+      .user-chip:hover {
+        background: rgba(99,102,241,0.08);
+      }
 
       .avatar {
-        width: 36px; height: 36px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
-        border: 2px solid var(--cyan);
+        border: 1.5px solid rgba(0,229,255,0.35);
         overflow: hidden;
         flex-shrink: 0;
+        box-shadow: 0 0 8px rgba(0,229,255,0.12);
       }
 
       /* ── MAIN ── */
-      .main-wrap { margin-left: 260px; min-height: 100vh; }
+      .main-wrap {
+        margin-left: 260px;
+        min-height: 100vh;
+      }
 
       .breadcrumb-text {
         font-size: 12px;
-        color: var(--text-muted);
+        color: rgba(148,163,184,0.45);
       }
+
       .breadcrumb-text span {
-        color: var(--text-secondary);
+        color: rgba(226,232,240,0.8);
         font-weight: 600;
       }
 
@@ -203,33 +234,43 @@
         gap: 10px;
       }
 
-      .search-wrap { position: relative; }
+      .search-wrap {
+        position: relative;
+      }
+
       .search-wrap svg {
-        position: absolute; left: 10px; top: 50%;
-        transform: translateY(-50%); opacity: 0.4;
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.3;
       }
 
       .search-input {
-        background: var(--bg-base);
+        background: rgba(255,255,255,0.04);
         border: 1px solid var(--border);
         border-radius: 20px;
         padding: 7px 16px 7px 32px;
         font-size: 12px;
-        color: var(--text-primary);
+        color: #E2E8F0;
         outline: none;
         width: 180px;
         font-family: "Plus Jakarta Sans", sans-serif;
         transition: border-color 0.2s, box-shadow 0.2s;
       }
+
       .search-input:focus {
-        border-color: var(--cyan);
-        box-shadow: 0 0 0 3px rgba(6,182,212,0.1);
+        border-color: rgba(0,229,255,0.35);
+        box-shadow: 0 0 0 3px rgba(0,229,255,0.06);
       }
-      .search-input::placeholder { color: var(--text-muted); }
+      .search-input::placeholder {
+        color: rgba(148,163,184,0.3);
+      }
 
       .icon-btn {
-        width: 34px; height: 34px;
-        background: var(--bg-base);
+        width: 34px;
+        height: 34px;
+        background: rgba(255,255,255,0.04);
         border: 1px solid var(--border);
         border-radius: 50%;
         display: flex;
@@ -237,27 +278,34 @@
         justify-content: center;
         cursor: pointer;
         transition: all 0.2s;
-        color: var(--text-muted);
+        color: rgba(148,163,184,0.5);
       }
+
       .icon-btn:hover {
-        background: var(--indigo-lt);
-        border-color: var(--indigo);
-        color: var(--indigo);
+        background: rgba(99,102,241,0.1);
+        border-color: rgba(99,102,241,0.3);
+        color: var(--violet);
       }
 
       /* ── CONTENT ── */
-      .content { padding: 28px 30px; }
+      .content {
+        padding: 28px 30px;
+      }
 
-      .page-header { margin-bottom: 26px; }
+      .page-header {
+        margin-bottom: 28px;
+      }
+
       .page-header h1 {
         font-size: 20px;
-        font-weight: 800;
-        margin-bottom: 3px;
-        color: var(--text-primary);
+        font-weight: 700;
+        margin-bottom: 4px;
+        color: #F1F5F9;
       }
+
       .page-header p {
         font-size: 12px;
-        color: var(--text-muted);
+        color: rgba(148,163,184,0.5);
       }
 
       /* ── KPI CARDS ── */
@@ -273,25 +321,23 @@
         border-radius: 14px;
         padding: 20px 22px;
         border: 1px solid var(--border);
-        transition: transform 0.25s, box-shadow 0.25s;
+        transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 1px 4px rgba(15,23,42,0.04);
-      }
-      .kpi-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 12px 32px rgba(15,23,42,0.1) !important;
       }
 
-      /* Barra de color superior por card */
-      .kpi-card:nth-child(1)::before { background: var(--cyan); }
-      .kpi-card:nth-child(2)::before { background: var(--orange); }
-      .kpi-card:nth-child(3)::before { background: var(--emerald); }
       .kpi-card::before {
         content: '';
         position: absolute;
         top: 0; left: 0; right: 0;
-        height: 3px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(99,102,241,0.35), transparent);
+      }
+
+      .kpi-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(0,229,255,0.22) !important;
+        box-shadow: 0 16px 40px rgba(0,0,0,0.35), 0 0 24px rgba(0,229,255,0.06) !important;
       }
 
       .kpi-top {
@@ -302,7 +348,8 @@
       }
 
       .kpi-icon-wrap {
-        width: 42px; height: 42px;
+        width: 42px;
+        height: 42px;
         border-radius: 10px;
         display: flex;
         align-items: center;
@@ -314,8 +361,8 @@
         font-weight: 700;
         letter-spacing: 0.13em;
         text-transform: uppercase;
-        color: var(--text-muted);
-        margin-bottom: 4px;
+        color: rgba(148,163,184,0.5);
+        margin-bottom: 6px;
       }
 
       .kpi-value {
@@ -324,18 +371,22 @@
         line-height: 1;
         letter-spacing: -0.02em;
         margin-bottom: 6px;
-        color: var(--text-primary);
       }
 
       .kpi-footer {
         font-size: 11px;
-        color: var(--text-muted);
+        color: rgba(148,163,184,0.45);
         display: flex;
         align-items: center;
         gap: 5px;
       }
-      .kpi-footer .up   { color: var(--emerald); }
-      .kpi-footer .down { color: var(--rose); }
+
+      .kpi-footer .up {
+        color: var(--emerald);
+      }
+      .kpi-footer .down {
+        color: var(--orange);
+      }
 
       /* ── BADGE PILL ── */
       .pill {
@@ -363,12 +414,11 @@
         border-radius: 14px;
         border: 1px solid var(--border);
         overflow: hidden;
-        box-shadow: 0 1px 4px rgba(15,23,42,0.04);
       }
 
       .panel-header {
         padding: 16px 20px 12px;
-        border-bottom: 1px solid var(--border);
+        border-bottom: 1px solid rgba(99,102,241,0.1);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -380,18 +430,25 @@
         display: flex;
         align-items: center;
         gap: 8px;
-        color: var(--text-primary);
+        color: #E2E8F0;
       }
 
-      .panel-title-dot { width: 7px; height: 7px; border-radius: 50%; }
-      .panel-body { padding: 16px 20px; }
+      .panel-title-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+      }
+
+      .panel-body {
+        padding: 16px 20px;
+      }
 
       .panel,
       .kpi-card,
       .mini-stat {
         background: var(--surface) !important;
         border: 1px solid var(--border) !important;
-        box-shadow: 0 1px 6px rgba(15,23,42,0.05) !important;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.25) !important;
       }
 
       /* ── RANKING ── */
@@ -399,38 +456,54 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 10px 0;
-        border-bottom: 1px solid var(--border);
+        padding: 11px 0;
+        border-bottom: 1px solid rgba(99,102,241,0.08);
         transition: padding-left 0.2s;
       }
-      .rank-item:last-child { border-bottom: none; }
-      .rank-item:hover { padding-left: 4px; }
+
+      .rank-item:last-child {
+        border-bottom: none;
+      }
+      .rank-item:hover {
+        padding-left: 4px;
+      }
 
       .rank-num {
         font-size: 11px;
         font-weight: 700;
-        color: var(--text-muted);
+        color: rgba(148,163,184,0.3);
         width: 18px;
         flex-shrink: 0;
       }
 
-      .rank-info { flex: 1; }
+      .rank-info {
+        flex: 1;
+      }
+
       .rank-name {
         font-size: 13px;
         font-weight: 600;
         margin-bottom: 5px;
-        color: var(--text-primary);
+        color: #CBD5E1;
       }
 
       .rank-bar-track {
-        height: 4px;
-        background: var(--bg-base);
+        height: 3px;
+        background: rgba(255,255,255,0.06);
         border-radius: 2px;
         overflow: hidden;
       }
-      .rank-bar { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
 
-      .rank-right { text-align: right; flex-shrink: 0; }
+      .rank-bar {
+        height: 100%;
+        border-radius: 2px;
+        transition: width 0.8s ease;
+      }
+
+      .rank-right {
+        text-align: right;
+        flex-shrink: 0;
+      }
 
       .rank-badge {
         font-size: 9px;
@@ -445,12 +518,12 @@
 
       .rank-m3 {
         font-size: 10px;
-        color: var(--text-muted);
+        color: rgba(148,163,184,0.35);
       }
 
-      /* ── MAP ── */
+      /* ── MAP PLACEHOLDER ── */
       .map-box {
-        background: var(--surface2);
+        background: var(--bg-deep);
         border-radius: 10px;
         min-height: 280px;
         position: relative;
@@ -464,16 +537,32 @@
       }
 
       .map-dot-grid {
-        position: absolute; inset: 0;
-        background-image: radial-gradient(rgba(6,182,212,0.2) 1px, transparent 1px);
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(
+          rgba(56,189,248,0.1) 1px,
+          transparent 1px
+        );
         background-size: 22px 22px;
       }
 
-      .map-pin { position: absolute; cursor: pointer; transform: translate(-50%, -50%); }
-      .map-pin-circle { width: 12px; height: 12px; border-radius: 50%; position: relative; }
+      .map-pin {
+        position: absolute;
+        cursor: pointer;
+        transform: translate(-50%, -50%);
+      }
+
+      .map-pin-circle {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        position: relative;
+      }
+
       .map-pin-circle::after {
         content: "";
-        position: absolute; inset: -5px;
+        position: absolute;
+        inset: -5px;
         border-radius: 50%;
         border: 1.5px solid;
         animation: ripple 2.5s ease-out infinite;
@@ -481,33 +570,53 @@
       }
 
       @keyframes ripple {
-        0%   { transform: scale(0.6); opacity: 0.7; }
-        100% { transform: scale(2.2); opacity: 0; }
+        0% {
+          transform: scale(0.6);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(2.2);
+          opacity: 0;
+        }
       }
 
       .map-pin-label {
-        position: absolute; top: -22px;
-        left: 50%; transform: translateX(-50%);
-        font-size: 9px; font-weight: 700;
+        position: absolute;
+        top: -22px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 9px;
+        font-weight: 700;
         white-space: nowrap;
-        color: var(--text-secondary);
-        background: var(--bg-white);
+        color: rgba(226,232,240,0.7);
+        background: rgba(20,27,45,0.9);
         padding: 2px 6px;
         border-radius: 3px;
         border: 1px solid var(--border);
-        box-shadow: 0 2px 6px rgba(15,23,42,0.08);
       }
 
       .map-legend-row {
-        position: absolute; bottom: 14px; right: 14px;
-        display: flex; gap: 12px;
+        position: absolute;
+        bottom: 14px;
+        right: 14px;
+        display: flex;
+        gap: 12px;
       }
+
       .map-legend-item {
-        display: flex; align-items: center; gap: 5px;
-        font-size: 9px; font-weight: 600;
-        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 9px;
+        font-weight: 600;
+        color: rgba(148,163,184,0.5);
       }
-      .map-legend-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+      .map-legend-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+      }
 
       /* ── BOTTOM GRID ── */
       .bot-grid {
@@ -519,11 +628,11 @@
 
       /* ── ROI SIMULATOR ── */
       .roi-result {
-        background: var(--emerald-lt);
+        background: var(--bg-deep);
         border-radius: 10px;
         padding: 20px;
         text-align: center;
-        border: 1px solid rgba(5,150,105,0.15);
+        border: 1px solid rgba(52,211,153,0.12);
       }
 
       .roi-amount {
@@ -534,25 +643,28 @@
         margin: 6px 0 4px;
       }
 
+      /* Range slider */
       input[type="range"] {
         -webkit-appearance: none;
         width: 100%;
-        height: 5px;
+        height: 4px;
         border-radius: 3px;
         outline: none;
         cursor: pointer;
         background: linear-gradient(
           90deg,
           var(--emerald) var(--fill, 20%),
-          #E2E8F0 var(--fill, 20%)
+          rgba(255,255,255,0.08) var(--fill, 20%)
         );
       }
+
       input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none;
-        width: 17px; height: 17px;
+        width: 16px;
+        height: 16px;
         border-radius: 50%;
         background: var(--emerald);
-        box-shadow: 0 2px 8px rgba(5,150,105,0.35);
+        box-shadow: 0 0 12px rgba(52,211,153,0.5);
         cursor: pointer;
         border: 2px solid #fff;
       }
@@ -562,49 +674,66 @@
         display: flex;
         gap: 12px;
         padding: 11px 0;
-        border-bottom: 1px solid var(--border);
+        border-bottom: 1px solid rgba(99,102,241,0.08);
       }
-      .alert-row:last-child { border-bottom: none; }
+
+      .alert-row:last-child {
+        border-bottom: none;
+      }
 
       .alert-icon-wrap {
-        width: 34px; height: 34px;
+        width: 34px;
+        height: 34px;
         border-radius: 8px;
-        display: flex; align-items: center; justify-content: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         flex-shrink: 0;
       }
 
       .alert-time {
         font-size: 10px;
-        color: var(--text-muted);
+        color: rgba(148,163,184,0.35);
         margin-bottom: 2px;
       }
 
       .alert-text {
         font-size: 12px;
-        color: var(--text-secondary);
+        color: rgba(203,213,225,0.65);
         line-height: 1.4;
       }
+
       .alert-text strong {
-        color: var(--text-primary);
+        color: #E2E8F0;
         font-weight: 600;
       }
 
       /* ── TEAM TAGS ── */
       .team-tags {
-        display: flex; flex-wrap: wrap; gap: 6px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
         padding: 12px 20px;
-        border-top: 1px solid var(--border);
+        border-top: 1px solid rgba(99,102,241,0.08);
       }
 
       .team-tag {
-        display: inline-flex; align-items: center; gap: 5px;
-        padding: 4px 10px; border-radius: 6px;
-        font-size: 10px; font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 10px;
+        font-weight: 600;
       }
 
-      .team-tag-dot { width: 6px; height: 6px; border-radius: 50%; }
+      .team-tag-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+      }
 
-      /* ── MINI STATS ── */
+      /* ── MINI STATS BAR ── */
       .mini-stats {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -617,149 +746,239 @@
         border: 1px solid var(--border);
         border-radius: 12px;
         padding: 14px 16px;
-        display: flex; align-items: center; gap: 12px;
-        transition: box-shadow 0.2s, transform 0.2s;
-        box-shadow: 0 1px 4px rgba(15,23,42,0.04);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: border-color 0.2s;
       }
+
       .mini-stat:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(15,23,42,0.08) !important;
+        border-color: rgba(0,229,255,0.2);
       }
 
       .mini-stat-icon {
-        width: 36px; height: 36px;
+        width: 36px;
+        height: 36px;
         border-radius: 8px;
-        display: flex; align-items: center; justify-content: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         flex-shrink: 0;
       }
 
       .mini-stat-val {
-        font-size: 18px; font-weight: 800;
-        line-height: 1; margin-bottom: 2px;
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1;
+        margin-bottom: 2px;
       }
 
       .mini-stat-label {
         font-size: 10px;
-        color: var(--text-muted);
+        color: rgba(148,163,184,0.45);
       }
 
-      /* ── CHART ── */
+      /* ── CHART AREA ── */
       .chart-panel {
         background: var(--surface);
         border-radius: 14px;
         border: 1px solid var(--border);
         margin-bottom: 22px;
-        box-shadow: 0 1px 4px rgba(15,23,42,0.04);
       }
 
       .chart-header {
         padding: 16px 20px 12px;
-        border-bottom: 1px solid var(--border);
-        display: flex; justify-content: space-between; align-items: center;
+        border-bottom: 1px solid rgba(99,102,241,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
 
-      .chart-legend { display: flex; gap: 16px; align-items: center; }
+      .chart-legend {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+      }
 
       .legend-item {
-        display: flex; align-items: center; gap: 6px;
-        font-size: 11px; color: var(--text-muted);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: rgba(148,163,184,0.5);
       }
 
-      .legend-line { width: 18px; height: 3px; border-radius: 2px; }
-      .chart-body { padding: 16px 20px 14px; }
+      .legend-line {
+        width: 18px;
+        height: 3px;
+        border-radius: 2px;
+      }
+
+      .chart-body {
+        padding: 16px 20px 14px;
+      }
 
       /* ── FOOTER ── */
       .footer-bar {
-        padding: 13px 30px;
+        padding: 14px 30px;
         border-top: 1px solid var(--border);
-        display: flex; justify-content: space-between; align-items: center;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         font-size: 11px;
-        color: var(--text-muted);
-        background: var(--bg-white);
+        color: rgba(148,163,184,0.3);
+        background: var(--bg-deep);
       }
 
       /* ── RESPONSIVE ── */
       @media (max-width: 1024px) {
-        .sidebar { display: none; }
-        .main-wrap { margin-left: 0; }
-        .kpi-grid { grid-template-columns: 1fr; }
-        .mid-grid { grid-template-columns: 1fr; }
-        .bot-grid { grid-template-columns: 1fr; }
-        .mini-stats { grid-template-columns: repeat(2, 1fr); }
+        .sidebar {
+          display: none;
+        }
+        .main-wrap {
+          margin-left: 0;
+        }
+        .kpi-grid {
+          grid-template-columns: 1fr;
+        }
+        .mid-grid {
+          grid-template-columns: 1fr;
+        }
+        .bot-grid {
+          grid-template-columns: 1fr;
+        }
+        .mini-stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
       }
 
       /* ── LIVE DOT ── */
       .live-dot {
-        width: 7px; height: 7px; border-radius: 50%;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
         background: var(--emerald);
         display: inline-block;
         animation: blink 2s ease-in-out infinite;
+        box-shadow: 0 0 6px rgba(52,211,153,0.6);
       }
 
       @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.3; }
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
       }
 
-      /* ── BUTTONS ── */
+      /* ── BTN ── */
       .btn-blue {
-        background: linear-gradient(135deg, var(--indigo), #6366F1);
+        background: linear-gradient(135deg, var(--indigo), #4F46E5);
         color: #fff;
-        font-weight: 700; font-size: 11px;
-        letter-spacing: 0.06em; text-transform: uppercase;
-        padding: 8px 18px; border-radius: 6px; border: none;
+        font-weight: 700;
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 8px 18px;
+        border-radius: 6px;
+        border: none;
         cursor: pointer;
         font-family: "Plus Jakarta Sans", sans-serif;
         transition: opacity 0.2s, box-shadow 0.2s;
-        box-shadow: 0 4px 12px rgba(79,70,229,0.3);
+        box-shadow: 0 4px 14px rgba(99,102,241,0.35);
       }
+
       .btn-blue:hover {
-        opacity: 0.9;
-        box-shadow: 0 6px 18px rgba(79,70,229,0.4);
+        opacity: 0.88;
+        box-shadow: 0 4px 20px rgba(99,102,241,0.5);
       }
 
       .btn-ghost {
         background: transparent;
-        color: var(--text-secondary);
-        font-weight: 600; font-size: 11px;
-        letter-spacing: 0.06em; text-transform: uppercase;
-        padding: 8px 16px; border-radius: 6px;
+        color: rgba(148,163,184,0.6);
+        font-weight: 600;
+        font-size: 11px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        padding: 8px 16px;
+        border-radius: 6px;
         border: 1px solid var(--border);
         cursor: pointer;
         font-family: "Plus Jakarta Sans", sans-serif;
         transition: all 0.2s;
       }
+
       .btn-ghost:hover {
-        border-color: var(--indigo);
-        color: var(--indigo);
-        background: var(--indigo-lt);
+        border-color: rgba(167,139,250,0.3);
+        color: var(--violet);
       }
 
-      /* ── ACCENT OVERRIDES ── */
+      /* --- CRÍTICO (Naranja/Fuchsia) --- */
+      .critical-accent {
+        color: var(--orange) !important;
+      }
+      .bg-critical-soft {
+        background: rgba(251,146,60,0.1) !important;
+      }
 
-      /* KPI 1 → Cyan (ANC) */
-      .kpi-card:nth-child(1) .kpi-value { color: var(--cyan) !important; }
-      .kpi-card:nth-child(1) .kpi-icon-wrap { background: var(--cyan-lt) !important; }
-      .kpi-card:nth-child(1) svg { stroke: var(--cyan) !important; }
+      /* KPI card alertas → naranja */
+      .kpi-card:nth-child(2) .kpi-value {
+        color: var(--orange) !important;
+      }
+      .kpi-card:nth-child(2) .kpi-icon-wrap {
+        background: rgba(251,146,60,0.1) !important;
+      }
+      .kpi-card:nth-child(2) svg {
+        stroke: var(--orange) !important;
+      }
+      .pill-critical {
+        background: rgba(251,146,60,0.1);
+        color: var(--orange);
+      }
 
-      /* KPI 2 → Naranja (Alertas) */
-      .critical-accent { color: var(--orange) !important; }
-      .bg-critical-soft { background: var(--orange-lt) !important; }
-      .kpi-card:nth-child(2) .kpi-value { color: var(--orange) !important; }
-      .kpi-card:nth-child(2) .kpi-icon-wrap { background: var(--orange-lt) !important; }
-      .kpi-card:nth-child(2) svg { stroke: var(--orange) !important; }
-      .pill-critical { background: var(--orange-lt); color: var(--orange); }
+      /* --- DINERO (Emerald) --- */
+      .money-accent {
+        color: var(--emerald) !important;
+      }
+      #roi-display,
+      .roi-amount {
+        color: var(--emerald) !important;
+        text-shadow: 0 0 18px rgba(52,211,153,0.25);
+      }
 
-      /* KPI 3 → Esmeralda (ROI) */
-      .money-accent { color: var(--emerald) !important; }
-      #roi-display, .roi-amount { color: var(--emerald) !important; }
-      .kpi-card:nth-child(3) .kpi-value { color: var(--emerald) !important; }
-      .kpi-card:nth-child(3) .kpi-icon-wrap { background: var(--emerald-lt) !important; }
-      .kpi-card:nth-child(3) svg { stroke: var(--emerald) !important; }
+      /* KPI card ROI → emerald */
+      .kpi-card:nth-child(3) .kpi-value {
+        color: var(--emerald) !important;
+      }
+      .kpi-card:nth-child(3) .kpi-icon-wrap {
+        background: rgba(52,211,153,0.1) !important;
+      }
+      .kpi-card:nth-child(3) svg {
+        stroke: var(--emerald) !important;
+      }
 
-      /* Mini stats → Cyan */
-      .tech-accent { color: var(--cyan) !important; }
-      .mini-stat-val { color: var(--indigo) !important; }
+      /* Slider en emerald */
+      input[type="range"] {
+        background: linear-gradient(
+          90deg,
+          var(--emerald) var(--fill, 20%),
+          rgba(255,255,255,0.06) var(--fill, 20%)
+        );
+      }
+      input[type="range"]::-webkit-slider-thumb {
+        background: var(--emerald);
+        box-shadow: 0 0 14px rgba(52,211,153,0.5);
+      }
+
+      /* --- TECH / BIEN (Cyan) --- */
+      .tech-accent {
+        color: var(--cyan) !important;
+      }
+      .mini-stat-val {
+        color: var(--cyan) !important;
+      }
     </style>
   </head>
   <body>
@@ -919,13 +1138,13 @@
               border-color: #00E5FF;
             "
           >
-            <span style="color: #4F46E5; font-weight: 800; font-size: 14px"
+            <span style="color: #00E5FF; font-weight: 800; font-size: 14px"
               >CS</span
             >
           </div>
           <div>
             <div style="font-size: 13px; font-weight: 600">Carlos Saucedo</div>
-            <div style="font-size: 10px; color: #94A3B8">Ing. UNAM · SACMEX</div>
+            <div style="font-size: 10px; opacity: 0.5">Ing. UNAM · SACMEX</div>
           </div>
         </div>
       </div>
@@ -945,7 +1164,7 @@
               align-items: center;
               gap: 6px;
               font-size: 11px;
-              color: #94A3B8;
+              color: rgba(255, 255, 255, 0.4);
             "
           >
             <span class="live-dot"></span>
@@ -957,7 +1176,7 @@
               height="13"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#64748B"
+              stroke="white"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -1015,14 +1234,14 @@
           <div class="mini-stat">
             <div
               class="mini-stat-icon"
-              style="background: #EEF2FF"
+              style="background: rgba(99,102,241,0.12)"
             >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#06B6D4"
+                stroke="#38BDF8"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -1032,7 +1251,7 @@
               </svg>
             </div>
             <div>
-              <div class="mini-stat-val" style="color: #06B6D4">16</div>
+              <div class="mini-stat-val" style="color: #38BDF8">16</div>
               <div class="mini-stat-label">Alcaldías</div>
             </div>
           </div>
@@ -1046,7 +1265,7 @@
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#EA580C"
+                stroke="#FB923C"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -1058,7 +1277,7 @@
               </svg>
             </div>
             <div>
-              <div class="mini-stat-val" style="color: #EA580C">842</div>
+              <div class="mini-stat-val" style="color: #FB923C">842</div>
               <div class="mini-stat-label">Sensores activos</div>
             </div>
           </div>
@@ -1072,7 +1291,7 @@
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#059669"
+                stroke="#34D399"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -1082,7 +1301,7 @@
               </svg>
             </div>
             <div>
-              <div class="mini-stat-val" style="color: #059669">98.3%</div>
+              <div class="mini-stat-val" style="color: #34D399">98.3%</div>
               <div class="mini-stat-label">Uptime sistema</div>
             </div>
           </div>
@@ -1120,14 +1339,14 @@
             <div class="kpi-top">
               <div>
                 <div class="kpi-label">Mermas ANC · Bolívar</div>
-                <div class="kpi-value" style="color: #06B6D4">38.4%</div>
+                <div class="kpi-value" style="color: #38BDF8">38.4%</div>
                 <div class="kpi-footer">
                   <svg
                     width="12"
                     height="12"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#EA580C"
+                    stroke="#FB923C"
                     stroke-width="2.5"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -1140,14 +1359,14 @@
               </div>
               <div
                 class="kpi-icon-wrap"
-                style="background: #EEF2FF"
+                style="background: rgba(99,102,241,0.12)"
               >
                 <svg
                   width="20"
                   height="20"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#06B6D4"
+                  stroke="#38BDF8"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -1159,7 +1378,7 @@
             <div
               style="
                 height: 4px;
-                background: #F1F5F9;
+                background: rgba(255, 255, 255, 0.06);
                 border-radius: 2px;
                 margin-top: 14px;
                 overflow: hidden;
@@ -1181,14 +1400,14 @@
             <div class="kpi-top">
               <div>
                 <div class="kpi-label">Focos Críticos · Irving IA</div>
-                <div class="kpi-value" style="color: #EA580C">23</div>
+                <div class="kpi-value" style="color: #FB923C">23</div>
                 <div class="kpi-footer">
                   <svg
                     width="12"
                     height="12"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#EA580C"
+                    stroke="#FB923C"
                     stroke-width="2.5"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -1208,7 +1427,7 @@
                   height="20"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#EA580C"
+                  stroke="#FB923C"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -1224,7 +1443,7 @@
             <div
               style="
                 height: 4px;
-                background: #F1F5F9;
+                background: rgba(255, 255, 255, 0.06);
                 border-radius: 2px;
                 margin-top: 14px;
                 overflow: hidden;
@@ -1246,14 +1465,14 @@
             <div class="kpi-top">
               <div>
                 <div class="kpi-label">Impacto Económico · Ana</div>
-                <div class="kpi-value" style="color: #059669">$15.4M</div>
+                <div class="kpi-value" style="color: #34D399">$15.4M</div>
                 <div class="kpi-footer">
                   <svg
                     width="12"
                     height="12"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#059669"
+                    stroke="#34D399"
                     stroke-width="2.5"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -1273,7 +1492,7 @@
                   height="20"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#059669"
+                  stroke="#34D399"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -1286,7 +1505,7 @@
             <div
               style="
                 height: 4px;
-                background: #F1F5F9;
+                background: rgba(255, 255, 255, 0.06);
                 border-radius: 2px;
                 margin-top: 14px;
                 overflow: hidden;
@@ -1310,12 +1529,12 @@
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title">
-                <div class="panel-title-dot" style="background: #EA580C"></div>
+                <div class="panel-title-dot" style="background: #FB923C"></div>
                 Zonas Prioritarias
               </div>
               <span
                 class="pill"
-                style="background: rgba(255, 141, 114, 0.12); color: #EA580C"
+                style="background: rgba(255, 141, 114, 0.12); color: #FB923C"
                 >Irving IA</span
               >
             </div>
@@ -1330,7 +1549,7 @@
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title">
-                <div class="panel-title-dot" style="background: #4F46E5"></div>
+                <div class="panel-title-dot" style="background: #38BDF8"></div>
                 Localización Geoespacial · Christian
               </div>
               <div style="display: flex; gap: 6px">
@@ -1352,8 +1571,8 @@
                 <button
                   style="
                     background: transparent;
-                    border: 1px solid #E2E8F0;
-                    color: #94A3B8;
+                    border: 1px solid rgba(255, 255, 255, 0.08);
+                    color: rgba(255, 255, 255, 0.4);
                     font-size: 10px;
                     font-weight: 700;
                     padding: 4px 12px;
@@ -1376,7 +1595,7 @@
                   <div
                     class="map-pin-circle"
                     style="
-                      background: #EA580C;
+                      background: #FB923C;
                       box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.2);
                     "
                   >
@@ -1385,7 +1604,7 @@
                         position: absolute;
                         inset: -5px;
                         border-radius: 50%;
-                        border: 1.5px solid #EA580C;
+                        border: 1.5px solid #FB923C;
                         animation: ripple 2s ease-out infinite;
                         opacity: 0;
                       "
@@ -1397,7 +1616,7 @@
                   <div
                     class="map-pin-circle"
                     style="
-                      background: #EA580C;
+                      background: #FB923C;
                       box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.2);
                     "
                   >
@@ -1406,7 +1625,7 @@
                         position: absolute;
                         inset: -5px;
                         border-radius: 50%;
-                        border: 1.5px solid #EA580C;
+                        border: 1.5px solid #FB923C;
                         animation: ripple 2.5s ease-out 0.3s infinite;
                         opacity: 0;
                       "
@@ -1418,7 +1637,7 @@
                   <div
                     class="map-pin-circle"
                     style="
-                      background: #EA580C;
+                      background: #FB923C;
                       box-shadow: 0 0 0 3px rgba(255, 141, 114, 0.2);
                     "
                   >
@@ -1427,7 +1646,7 @@
                         position: absolute;
                         inset: -5px;
                         border-radius: 50%;
-                        border: 1.5px solid #EA580C;
+                        border: 1.5px solid #FB923C;
                         animation: ripple 2s ease-out 0.6s infinite;
                         opacity: 0;
                       "
@@ -1439,7 +1658,7 @@
                   <div
                     class="map-pin-circle"
                     style="
-                      background: #EA580C;
+                      background: #FB923C;
                       box-shadow: 0 0 0 3px rgba(255, 141, 114, 0.15);
                     "
                   >
@@ -1448,7 +1667,7 @@
                         position: absolute;
                         inset: -5px;
                         border-radius: 50%;
-                        border: 1.5px solid #EA580C;
+                        border: 1.5px solid #FB923C;
                         animation: ripple 2.5s ease-out 0.9s infinite;
                         opacity: 0;
                       "
@@ -1460,7 +1679,7 @@
                   <div
                     class="map-pin-circle"
                     style="
-                      background: #06B6D4;
+                      background: #38BDF8;
                       box-shadow: 0 0 0 3px rgba(29, 140, 248, 0.2);
                     "
                   >
@@ -1469,7 +1688,7 @@
                         position: absolute;
                         inset: -5px;
                         border-radius: 50%;
-                        border: 1.5px solid #06B6D4;
+                        border: 1.5px solid #38BDF8;
                         animation: ripple 2s ease-out 1.2s infinite;
                         opacity: 0;
                       "
@@ -1481,7 +1700,7 @@
                   <div
                     class="map-pin-circle"
                     style="
-                      background: #06B6D4;
+                      background: #38BDF8;
                       box-shadow: 0 0 0 3px rgba(29, 140, 248, 0.15);
                     "
                   >
@@ -1490,7 +1709,7 @@
                         position: absolute;
                         inset: -5px;
                         border-radius: 50%;
-                        border: 1.5px solid #06B6D4;
+                        border: 1.5px solid #38BDF8;
                         animation: ripple 2s ease-out 1.5s infinite;
                         opacity: 0;
                       "
@@ -1502,21 +1721,21 @@
                   <div class="map-legend-item">
                     <div
                       class="map-legend-dot"
-                      style="background: #EA580C"
+                      style="background: #FB923C"
                     ></div>
                     Alto
                   </div>
                   <div class="map-legend-item">
                     <div
                       class="map-legend-dot"
-                      style="background: #EA580C"
+                      style="background: #FB923C"
                     ></div>
                     Medio
                   </div>
                   <div class="map-legend-item">
                     <div
                       class="map-legend-dot"
-                      style="background: #4F46E5"
+                      style="background: #38BDF8"
                     ></div>
                     Bajo
                   </div>
@@ -1530,16 +1749,16 @@
         <div class="chart-panel">
           <div class="chart-header">
             <div class="panel-title">
-              <div class="panel-title-dot" style="background: #4F46E5"></div>
+              <div class="panel-title-dot" style="background: #38BDF8"></div>
               Evolución ANC Histórica · Bolívar — Últimos 12 meses
             </div>
             <div class="chart-legend">
               <div class="legend-item">
-                <div class="legend-line" style="background: #4F46E5"></div>
+                <div class="legend-line" style="background: #38BDF8"></div>
                 ANC %
               </div>
               <div class="legend-item">
-                <div class="legend-line" style="background: #EA580C"></div>
+                <div class="legend-line" style="background: #FB923C"></div>
                 Alertas
               </div>
             </div>
@@ -1555,12 +1774,12 @@
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title">
-                <div class="panel-title-dot" style="background: #059669"></div>
+                <div class="panel-title-dot" style="background: #34D399"></div>
                 Simulador de Recuperación · Ana
               </div>
               <span
                 class="pill"
-                style="background: #ECFDF5; color: #059669"
+                style="background: rgba(52,211,153,0.1); color: #34D399"
                 >ROI Estimado</span
               >
             </div>
@@ -1585,7 +1804,7 @@
                       <span
                         style="
                           font-size: 11px;
-                          color: #64748B;
+                          color: rgba(255, 255, 255, 0.45);
                           font-weight: 600;
                           text-transform: uppercase;
                           letter-spacing: 0.08em;
@@ -1621,8 +1840,8 @@
                   >
                     <div
                       style="
-                        background: #ECFDF5;
-                        border: 1px solid #E2E8F0;
+                        background: var(--bg-deep);
+                        border: 1px solid rgba(255, 255, 255, 0.05);
                         border-radius: 8px;
                         padding: 12px;
                       "
@@ -1632,7 +1851,7 @@
                           font-size: 9px;
                           text-transform: uppercase;
                           letter-spacing: 0.12em;
-                          color: #94A3B8;
+                          color: rgba(255, 255, 255, 0.3);
                           margin-bottom: 4px;
                         "
                       >
@@ -1642,7 +1861,7 @@
                         style="
                           font-size: 16px;
                           font-weight: 800;
-                          color: #475569;
+                          color: rgba(255, 255, 255, 0.6);
                         "
                       >
                         $15.4M
@@ -1650,8 +1869,8 @@
                     </div>
                     <div
                       style="
-                        background: #ECFDF5;
-                        border: 1px solid #E2E8F0;
+                        background: var(--bg-deep);
+                        border: 1px solid rgba(255, 255, 255, 0.05);
                         border-radius: 8px;
                         padding: 12px;
                       "
@@ -1661,7 +1880,7 @@
                           font-size: 9px;
                           text-transform: uppercase;
                           letter-spacing: 0.12em;
-                          color: #94A3B8;
+                          color: rgba(255, 255, 255, 0.3);
                           margin-bottom: 4px;
                         "
                       >
@@ -1671,7 +1890,7 @@
                         style="
                           font-size: 16px;
                           font-weight: 800;
-                          color: #475569;
+                          color: rgba(255, 255, 255, 0.6);
                         "
                       >
                         47,200
@@ -1703,7 +1922,7 @@
                       font-weight: 700;
                       letter-spacing: 0.15em;
                       text-transform: uppercase;
-                      color: #94A3B8;
+                      color: rgba(255, 255, 255, 0.3);
                       margin-bottom: 8px;
                     "
                   >
@@ -1711,7 +1930,7 @@
                   </div>
                   <div
                     class="roi-amount"
-                    style="color: #059669"
+                    style="color: #34D399"
                     id="roi-display"
                   >
                     $3,084,000
@@ -1719,7 +1938,7 @@
                   <div
                     style="
                       font-size: 10px;
-                      color: #94A3B8;
+                      color: rgba(255, 255, 255, 0.3);
                       margin-top: 4px;
                     "
                   >
@@ -1729,13 +1948,13 @@
                     style="
                       margin-top: 16px;
                       padding: 8px 12px;
-                      background: #ECFDF5;
+                      background: rgba(52,211,153,0.1);
                       border: 1px solid rgba(0, 214, 180, 0.2);
                       border-radius: 6px;
                     "
                   >
                     <div
-                      style="font-size: 10px; font-weight: 700; color: #059669"
+                      style="font-size: 10px; font-weight: 700; color: #34D399"
                     >
                       ✓ Viabilidad confirmada por IA
                     </div>
@@ -1752,7 +1971,7 @@
                 <div
                   class="panel-title-dot"
                   style="
-                    background: #EA580C;
+                    background: #FB923C;
                     box-shadow: 0 0 6px rgba(255, 141, 114, 0.5);
                     animation: blink 2s infinite;
                   "
@@ -1761,7 +1980,7 @@
               </div>
               <span
                 class="pill"
-                style="background: #FFF7ED; color: #EA580C"
+                style="background: rgba(251,146,60,0.1); color: #FB923C"
                 >Irving IA</span
               >
             </div>
@@ -1776,7 +1995,7 @@
                     height="14"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#EA580C"
+                    stroke="#FB923C"
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -1806,7 +2025,7 @@
                     height="14"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#EA580C"
+                    stroke="#FB923C"
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -1829,14 +2048,14 @@
               <div class="alert-row">
                 <div
                   class="alert-icon-wrap"
-                  style="background: #EEF2FF"
+                  style="background: rgba(99,102,241,0.12)"
                 >
                   <svg
                     width="14"
                     height="14"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#06B6D4"
+                    stroke="#38BDF8"
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -1857,14 +2076,14 @@
               <div class="alert-row">
                 <div
                   class="alert-icon-wrap"
-                  style="background: #EEF2FF"
+                  style="background: rgba(99,102,241,0.12)"
                 >
                   <svg
                     width="14"
                     height="14"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#06B6D4"
+                    stroke="#38BDF8"
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -1886,28 +2105,28 @@
             <div class="team-tags">
               <div
                 class="team-tag"
-                style="background: #ECFEFF; color: #06B6D4"
+                style="background: rgba(56,189,248,0.1); color: #38BDF8"
               >
-                <div class="team-tag-dot" style="background: #4F46E5"></div>
+                <div class="team-tag-dot" style="background: #38BDF8"></div>
                 Bolívar · Datos
               </div>
               <div
                 class="team-tag"
-                style="background: #FFF7ED; color: #EA580C"
+                style="background: rgba(251,146,60,0.1); color: #FB923C"
               >
-                <div class="team-tag-dot" style="background: #EA580C"></div>
+                <div class="team-tag-dot" style="background: #FB923C"></div>
                 Irving · IA
               </div>
               <div
                 class="team-tag"
-                style="background: #ECFDF5; color: #059669"
+                style="background: rgba(52,211,153,0.1); color: #34D399"
               >
-                <div class="team-tag-dot" style="background: #059669"></div>
+                <div class="team-tag-dot" style="background: #34D399"></div>
                 Ana · Negocio
               </div>
               <div
                 class="team-tag"
-                style="background: #EEF2FF; color: #A78BFA"
+                style="background: rgba(99,102,241,0.12); color: #A78BFA"
               >
                 <div class="team-tag-dot" style="background: #7b8ff8"></div>
                 Christian · Mapa
@@ -1955,11 +2174,11 @@
                 <div class="rank-info">
                     <div class="rank-name">${d.alcaldia}</div>
                     <div class="rank-bar-track">
-                        <div class="rank-bar" style="width:${d.pct}%;background:${isAlto ? "linear-gradient(90deg,#EA580C,#FB923C)" : "linear-gradient(90deg,#06B6D4,#4F46E5)"};"></div>
+                        <div class="rank-bar" style="width:${d.pct}%;background:${isAlto ? "linear-gradient(90deg,#FB923C,#FDBA74)" : "linear-gradient(90deg,#38BDF8,#6366F1)"};"></div>
                     </div>
                 </div>
                 <div class="rank-right">
-                    <span class="rank-badge" style="background:${isAlto ? "#FFF7ED" : "#ECFEFF"};color:${isAlto ? "#EA580C" : "#06B6D4"};">${d.riesgo}</span>
+                    <span class="rank-badge" style="background:${isAlto ? "rgba(251,146,60,0.1)" : "rgba(56,189,248,0.1)"};color:${isAlto ? "#FB923C" : "#38BDF8"};">${d.riesgo}</span>
                     <div class="rank-m3">${d.desviacion.toLocaleString("es-MX")} m³</div>
                 </div>
             </div>`;
@@ -2003,8 +2222,8 @@
       const alertVals = [18, 22, 19, 25, 21, 20, 23, 19, 22, 21, 20, 23];
 
       const gradBlue = ctx.createLinearGradient(0, 0, 0, 240);
-      gradBlue.addColorStop(0, "rgba(6,182,212,0.15)");
-      gradBlue.addColorStop(1, "rgba(6,182,212,0)");
+      gradBlue.addColorStop(0, "rgba(56,189,248,0.25)");
+      gradBlue.addColorStop(1, "rgba(56,189,248,0)");
 
       new Chart(ctx, {
         data: {
@@ -2014,11 +2233,11 @@
               type: "line",
               label: "ANC %",
               data: ancVals,
-              borderColor: "#06B6D4",
+              borderColor: "#38BDF8",
               backgroundColor: gradBlue,
               borderWidth: 2.5,
-              pointBackgroundColor: "#06B6D4",
-              pointBorderColor: "#FFFFFF",
+              pointBackgroundColor: "#38BDF8",
+              pointBorderColor: "#141B2D",
               pointBorderWidth: 2,
               pointRadius: 4,
               pointHoverRadius: 6,
@@ -2030,8 +2249,8 @@
               type: "bar",
               label: "Alertas",
               data: alertVals,
-              backgroundColor: "rgba(234,88,12,0.1)",
-              borderColor: "rgba(234,88,12,0.5)",
+              backgroundColor: "rgba(251,146,60,0.2)",
+              borderColor: "rgba(251,146,60,0.5)",
               borderWidth: 1,
               borderRadius: 4,
               yAxisID: "y1",
@@ -2044,11 +2263,11 @@
           plugins: {
             legend: { display: false },
             tooltip: {
-              backgroundColor: "#FFFFFF",
-              borderColor: "#E2E8F0",
+              backgroundColor: "#0D1117",
+              borderColor: "rgba(99,102,241,0.25)",
               borderWidth: 1,
-              titleColor: "#0F172A",
-              bodyColor: "#64748B",
+              titleColor: "rgba(226,232,240,0.9)",
+              bodyColor: "rgba(148,163,184,0.6)",
               padding: 12,
               titleFont: {
                 family: "Plus Jakarta Sans",
@@ -2060,17 +2279,17 @@
           },
           scales: {
             x: {
-              grid: { color: "#F1F5F9", drawBorder: false },
+              grid: { color: "rgba(99,102,241,0.06)", drawBorder: false },
               ticks: {
-                color: "#94A3B8",
+                color: "rgba(148,163,184,0.4)",
                 font: { family: "Plus Jakarta Sans", size: 11 },
               },
             },
             y: {
               position: "left",
-              grid: { color: "#F1F5F9", drawBorder: false },
+              grid: { color: "rgba(99,102,241,0.06)", drawBorder: false },
               ticks: {
-                color: "#06B6D4",
+                color: "#38BDF8",
                 font: { family: "Plus Jakarta Sans", size: 11 },
                 callback: (v) => v + "%",
               },
@@ -2079,7 +2298,7 @@
               position: "right",
               grid: { display: false },
               ticks: {
-                color: "#EA580C",
+                color: "#FB923C",
                 font: { family: "Plus Jakarta Sans", size: 11 },
               },
             },
