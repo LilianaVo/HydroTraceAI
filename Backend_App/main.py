@@ -18,8 +18,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory
-from werkzeug.security import generate_password_hash, check_password_hash
-from functools import wraps
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 
@@ -134,38 +132,15 @@ def mapa_interactivo():
 # Demás funciones....
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 5. SEGURIDAD Y SESIONES (ILEANA)
-# ─────────────────────────────────────────────────────────────────────────────
-
-def login_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not session.get('logged_in'):
-            return redirect(url_for('login'))
-        return f(*args, **kwargs)
-    return decorated_function
-
-# ─────────────────────────────────────────────────────────────────────────────
-# 6. RUTAS DE INTEGRACIÓN Y DASHBOARDS (ILEANA)
+# 5. RUTAS DE INTEGRACIÓN Y DASHBOARDS (ILEANA)
 # ─────────────────────────────────────────────────────────────────────────────
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        user = User.query.filter_by(username=request.form.get('username')).first()
-        if user and check_password_hash(user.password_hash, request.form.get('password')):
-            session['logged_in'] = True
-            session['username'] = user.username
-            return redirect(url_for('dashboard_admin'))
-        flash('Acceso denegado. Intenta de nuevo.', 'error')
-    return render_template('login.html')
 
 @app.route('/ejecutar-entrenamiento')
-@login_required
 def disparar_ml():
     """
     Ruta para que Irving pruebe su modelo.
@@ -180,16 +155,20 @@ def disparar_ml():
     return redirect(url_for('dashboard_admin'))
 
 @app.route('/dashboard-admin')
-@login_required
 def dashboard_admin():
-    anomalias = Anomalia.query.all()
-    leads = Lead.query.all()
+    # 1. Traemos las anomalías ordenadas por fecha (lo más reciente arriba)
+    anomalias = Anomalia.query.order_by(Anomalia.fecha_analisis.desc()).all()
     
+    # 2. Traemos los leads ordenados por fecha de registro (lo más nuevo arriba)
+    leads = Lead.query.order_by(Lead.fecha_registro.desc()).all()
+    
+    # 3. Ajustamos las métricas (OJO: corregí 'precision_ia' por 'precision_estimada' 
+    #    para que coincida con tu dashboard_admin.html)
     metricas = {
         "total_registros": len(anomalias),
         "anomalias_totales": len([a for a in anomalias if a.es_anomalia]),
         "leads_pendientes": len([l for l in leads if l.status == 'Nuevo']),
-        "precision_ia": "94.2%"
+        "precision_estimada": "94.2%" # Aquí corregí el nombre de la llave
     }
     
     return render_template('dashboard_admin.html', 
@@ -197,8 +176,20 @@ def dashboard_admin():
                            leads=leads, 
                            metricas=metricas)
 
-@app.route('/dashboard-clientes')
+@app.route('/dashboard-clientes', methods=['GET', 'POST']) # Agregamos POST
 def dashboard_clientes():
+    # Si vienes del formulario (POST), guardamos el "Lead"
+    if request.method == 'POST':
+        nuevo_lead = Lead(
+            nombre=request.form.get('nombre'),
+            email=request.form.get('email'),
+            empresa=request.form.get('empresa'),
+            interes=request.form.get('interes'),
+            mensaje=request.form.get('mensaje')
+        )
+        db.session.add(nuevo_lead)
+        db.session.commit()
+        return redirect(url_for('dashboard_clientes'))
     anomalias = Anomalia.query.all()
     m3_totales = sum([a.desviacion_consumo for a in anomalias])
     
@@ -210,6 +201,14 @@ def dashboard_clientes():
                            anc_porcentaje=40.2,
                            alertas_criticas=len([a for a in anomalias if a.riesgo == 'Alto']))
 
+@app.route('/actualizar-estatus/<int:lead_id>', methods=['POST'])
+def actualizar_estatus(lead_id):
+    lead = Lead.query.get_or_404(lead_id)
+    lead.status = request.form.get('nuevo_estatus')
+    db.session.commit()
+    return redirect(url_for('dashboard_admin'))
+
+
 @app.route('/logout')
 def logout():
     session.clear()
@@ -218,11 +217,4 @@ def logout():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-        if not User.query.filter_by(username='admin').first():
-            db.session.add(User(
-                username='admin', 
-                password_hash=generate_password_hash('pumascript2026')
-            ))
-            db.session.commit()
-            
     app.run(debug=True, port=5000)
