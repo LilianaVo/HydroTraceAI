@@ -4,185 +4,196 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HydroTrace AI | Dashboard Ejecutivo</title>
+    <!-- Icon principal -->
+    <link rel="icon" href="assets/logo/logo_carablanco.png" type="image/png" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+
     <style>
-      * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
+      /* ═══════════════════════════════════════════
+         HYDROTRACE AI — LIGHT MODE TECH PALETTE
+         Limpio · Profesional · Amigable al usuario
+      ═══════════════════════════════════════════ */
+
+      :root {
+        --cyan:       #06B6D4;
+        --cyan-lt:    #ECFEFF;
+        --violet:     #7C3AED;
+        --violet-lt:  #F5F3FF;
+        --indigo:     #4F46E5;
+        --indigo-lt:  #EEF2FF;
+        --blue:       #0EA5E9;
+        --blue-lt:    #F0F9FF;
+        --orange:     #EA580C;
+        --orange-lt:  #FFF7ED;
+        --emerald:    #059669;
+        --emerald-lt: #ECFDF5;
+        --rose:       #E11D48;
+        --rose-lt:    #FFF1F2;
+        --bg-base:    #F1F5F9;
+        --bg-white:   #FFFFFF;
+        --surface:    #FFFFFF;
+        --surface2:   #F8FAFC;
+        --text-primary:   #0F172A;
+        --text-secondary: #475569;
+        --text-muted:     #94A3B8;
+        --border:  #E2E8F0;
+        --border2: rgba(6,182,212,0.25);
       }
+
+      * { box-sizing: border-box; margin: 0; padding: 0; }
 
       body {
         font-family: "Plus Jakarta Sans", sans-serif;
-        background-color: #050a15; /* El fondo profundo de tu index */
-        color: #f8fafc;
+        background-color: var(--bg-base);
+        color: var(--text-primary);
         min-height: 100vh;
       }
 
+      /* ── SIDEBAR ── */
       .sidebar {
         position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
+        left: 0; top: 0; bottom: 0;
         width: 260px;
-        background: #080e1a; /* Un tono un pelín más claro que el fondo */
+        background: var(--bg-white);
         z-index: 100;
         display: flex;
         flex-direction: column;
-        padding: 0;
-        box-shadow: none;
-        border-right: 1px solid rgba(6, 182, 212, 0.1); /* Borde sutil en cyan */
+        border-right: 1px solid var(--border);
+        box-shadow: 4px 0 16px rgba(15,23,42,0.05);
       }
 
       .top-nav {
-        background: #0c162d; /* Superficie tipo card del index */
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        padding: 14px 30px;
+        background: var(--bg-white);
+        border-bottom: 1px solid var(--border);
+        padding: 13px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 1px 4px rgba(15,23,42,0.04);
       }
 
       .sidebar-logo {
-        padding: 28px 15px 20px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-        margin-bottom: 8px;
+        padding: 24px 20px 18px;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 6px;
         display: flex;
         align-items: center;
         gap: 12px;
       }
 
       .logo-icon-box {
-        width: 38px;
-        height: 38px;
-        background: rgba(0, 242, 255, 0.1);
-        border: 1px solid rgba(0, 242, 255, 0.2);
+        width: 38px; height: 38px;
+        background: linear-gradient(135deg, var(--cyan), var(--indigo));
         border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: none;
+        box-shadow: 0 4px 12px rgba(79,70,229,0.25);
       }
 
       .logo-text-block .name {
         font-size: 15px;
         font-weight: 800;
-        letter-spacing: 0.05em;
+        letter-spacing: 0.04em;
         line-height: 1.1;
+        background: linear-gradient(90deg, var(--cyan), var(--violet));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
       }
 
       .logo-text-block .sub {
         font-size: 10px;
-        opacity: 0.6;
+        color: var(--text-muted);
         font-weight: 400;
-        letter-spacing: 0.08em;
+        letter-spacing: 0.1em;
+        -webkit-text-fill-color: var(--text-muted);
       }
 
       .nav-section {
-        font-size: 10px;
+        font-size: 9.5px;
         font-weight: 700;
-        letter-spacing: 0.18em;
+        letter-spacing: 0.2em;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.45);
-        padding: 18px 15px 8px;
+        color: var(--text-muted);
+        padding: 18px 20px 6px;
       }
 
       .nav-link {
         display: flex;
         align-items: center;
-        gap: 12px;
-        padding: 14px 25px;
+        gap: 11px;
+        padding: 10px 20px;
         font-size: 13px;
         font-weight: 500;
-        color: rgba(255, 255, 255, 0.4);
-        transition: all 0.3s ease;
-        border-left: 3px solid transparent;
+        color: var(--text-secondary);
+        transition: all 0.2s ease;
+        border-left: 2px solid transparent;
+        position: relative;
+        text-decoration: none;
       }
 
       .nav-link:hover {
-        color: #06b6d4; /* Cyan del index */
-        background: rgba(6, 182, 212, 0.05);
-        border-left: 3px solid #06b6d4;
+        color: var(--indigo);
+        background: var(--indigo-lt);
+        border-left: 2px solid rgba(79,70,229,0.4);
       }
 
-      .nav-link:hover::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 3px;
-        background: #00f2ff;
-        box-shadow: 0 0 10px #00f2ff;
-      }
-
-      /* Estado activo */
       .nav-link.active {
-        color: #06b6d4;
-        background: rgba(6, 182, 212, 0.1);
-        border-left: 3px solid #06b6d4;
+        color: var(--indigo);
+        background: var(--indigo-lt);
+        border-left: 2px solid var(--indigo);
         font-weight: 700;
       }
 
-      .nav-link.active::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 3px;
-        background: #00f2ff;
-      }
-
-      .nav-link svg {
-        flex-shrink: 0;
-        opacity: 0.9;
-      }
+      .nav-link svg { flex-shrink: 0; }
 
       .sidebar-bottom {
         margin-top: auto;
-        border-top: 1px solid rgba(255, 255, 255, 0.12);
-        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        padding: 12px 0 8px;
       }
 
       .user-chip {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 10px 15px;
+        padding: 10px 16px;
         border-radius: 8px;
         cursor: pointer;
         transition: background 0.2s;
+        margin: 0 8px;
       }
 
-      .user-chip:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
+      .user-chip:hover { background: var(--indigo-lt); }
 
       .avatar {
-        width: 36px;
-        height: 36px;
+        width: 36px; height: 36px;
         border-radius: 50%;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        border: 2px solid var(--cyan);
         overflow: hidden;
         flex-shrink: 0;
       }
 
       /* ── MAIN ── */
-      .main-wrap {
-        margin-left: 260px;
-        min-height: 100vh;
-      }
+      .main-wrap { margin-left: 260px; min-height: 100vh; }
 
       .breadcrumb-text {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.4);
+        color: var(--text-muted);
       }
-
       .breadcrumb-text span {
-        color: rgba(255, 255, 255, 0.75);
+        color: var(--text-secondary);
         font-weight: 600;
       }
 
@@ -192,100 +203,95 @@
         gap: 10px;
       }
 
-      .search-wrap {
-        position: relative;
-      }
-
+      .search-wrap { position: relative; }
       .search-wrap svg {
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        opacity: 0.35;
+        position: absolute; left: 10px; top: 50%;
+        transform: translateY(-50%); opacity: 0.4;
       }
 
       .search-input {
-        background: rgba(255, 255, 255, 0.07);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: var(--bg-base);
+        border: 1px solid var(--border);
         border-radius: 20px;
         padding: 7px 16px 7px 32px;
         font-size: 12px;
-        color: #fff;
+        color: var(--text-primary);
         outline: none;
         width: 180px;
         font-family: "Plus Jakarta Sans", sans-serif;
-        transition: border-color 0.2s;
+        transition: border-color 0.2s, box-shadow 0.2s;
       }
-
       .search-input:focus {
-        border-color: rgba(29, 140, 248, 0.5);
+        border-color: var(--cyan);
+        box-shadow: 0 0 0 3px rgba(6,182,212,0.1);
       }
-      .search-input::placeholder {
-        color: rgba(255, 255, 255, 0.3);
-      }
+      .search-input::placeholder { color: var(--text-muted); }
 
       .icon-btn {
-        width: 36px;
-        height: 36px;
-        background: rgba(255, 255, 255, 0.07);
-        border: 1px solid rgba(255, 255, 255, 0.08);
+        width: 34px; height: 34px;
+        background: var(--bg-base);
+        border: 1px solid var(--border);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: background 0.2s;
-        color: rgba(255, 255, 255, 0.55);
+        transition: all 0.2s;
+        color: var(--text-muted);
       }
-
       .icon-btn:hover {
-        background: rgba(255, 255, 255, 0.12);
-        color: #fff;
+        background: var(--indigo-lt);
+        border-color: var(--indigo);
+        color: var(--indigo);
       }
 
       /* ── CONTENT ── */
-      .content {
-        padding: 30px;
-      }
+      .content { padding: 28px 30px; }
 
-      .page-header {
-        margin-bottom: 28px;
-      }
-
+      .page-header { margin-bottom: 26px; }
       .page-header h1 {
         font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 4px;
+        font-weight: 800;
+        margin-bottom: 3px;
+        color: var(--text-primary);
       }
-
       .page-header p {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.4);
+        color: var(--text-muted);
       }
 
       /* ── KPI CARDS ── */
       .kpi-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-        margin-bottom: 24px;
+        gap: 18px;
+        margin-bottom: 22px;
       }
 
       .kpi-card {
-        background: #27293d;
-        border-radius: 12px;
+        background: var(--surface);
+        border-radius: 14px;
         padding: 20px 22px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        transition:
-          transform 0.25s,
-          box-shadow 0.25s;
+        border: 1px solid var(--border);
+        transition: transform 0.25s, box-shadow 0.25s;
         position: relative;
         overflow: hidden;
+        box-shadow: 0 1px 4px rgba(15,23,42,0.04);
+      }
+      .kpi-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 32px rgba(15,23,42,0.1) !important;
       }
 
-      .kpi-card:hover {
-        transform: translateY(-5px);
-        border-color: rgba(6, 182, 212, 0.2) !important;
+      /* Barra de color superior por card */
+      .kpi-card:nth-child(1)::before { background: var(--cyan); }
+      .kpi-card:nth-child(2)::before { background: var(--orange); }
+      .kpi-card:nth-child(3)::before { background: var(--emerald); }
+      .kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
       }
 
       .kpi-top {
@@ -296,8 +302,7 @@
       }
 
       .kpi-icon-wrap {
-        width: 44px;
-        height: 44px;
+        width: 42px; height: 42px;
         border-radius: 10px;
         display: flex;
         align-items: center;
@@ -307,34 +312,30 @@
       .kpi-label {
         font-size: 10px;
         font-weight: 700;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.13em;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.45);
-        margin-bottom: 6px;
+        color: var(--text-muted);
+        margin-bottom: 4px;
       }
 
       .kpi-value {
-        font-size: 32px;
+        font-size: 30px;
         font-weight: 800;
         line-height: 1;
         letter-spacing: -0.02em;
         margin-bottom: 6px;
+        color: var(--text-primary);
       }
 
       .kpi-footer {
         font-size: 11px;
-        color: rgba(255, 255, 255, 0.4);
+        color: var(--text-muted);
         display: flex;
         align-items: center;
         gap: 5px;
       }
-
-      .kpi-footer .up {
-        color: #00d6b4;
-      }
-      .kpi-footer .down {
-        color: #ff8d72;
-      }
+      .kpi-footer .up   { color: var(--emerald); }
+      .kpi-footer .down { color: var(--rose); }
 
       /* ── BADGE PILL ── */
       .pill {
@@ -352,21 +353,22 @@
       .mid-grid {
         display: grid;
         grid-template-columns: 1fr 1.65fr;
-        gap: 20px;
-        margin-bottom: 24px;
+        gap: 18px;
+        margin-bottom: 22px;
       }
 
       /* ── PANEL ── */
       .panel {
-        background: #27293d;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
+        background: var(--surface);
+        border-radius: 14px;
+        border: 1px solid var(--border);
         overflow: hidden;
+        box-shadow: 0 1px 4px rgba(15,23,42,0.04);
       }
 
       .panel-header {
-        padding: 18px 22px 14px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 16px 20px 12px;
+        border-bottom: 1px solid var(--border);
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -378,24 +380,18 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        color: var(--text-primary);
       }
 
-      .panel-title-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-      }
-
-      .panel-body {
-        padding: 18px 22px;
-      }
+      .panel-title-dot { width: 7px; height: 7px; border-radius: 50%; }
+      .panel-body { padding: 16px 20px; }
 
       .panel,
       .kpi-card,
       .mini-stat {
-        background: #0c162d !important;
-        border: 1px solid rgba(255, 255, 255, 0.05) !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+        background: var(--surface) !important;
+        border: 1px solid var(--border) !important;
+        box-shadow: 0 1px 6px rgba(15,23,42,0.05) !important;
       }
 
       /* ── RANKING ── */
@@ -403,53 +399,38 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        padding: 11px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border);
         transition: padding-left 0.2s;
       }
-
-      .rank-item:last-child {
-        border-bottom: none;
-      }
-      .rank-item:hover {
-        padding-left: 4px;
-      }
+      .rank-item:last-child { border-bottom: none; }
+      .rank-item:hover { padding-left: 4px; }
 
       .rank-num {
         font-size: 11px;
         font-weight: 700;
-        color: rgba(255, 255, 255, 0.25);
+        color: var(--text-muted);
         width: 18px;
         flex-shrink: 0;
       }
 
-      .rank-info {
-        flex: 1;
-      }
-
+      .rank-info { flex: 1; }
       .rank-name {
         font-size: 13px;
         font-weight: 600;
         margin-bottom: 5px;
+        color: var(--text-primary);
       }
 
       .rank-bar-track {
         height: 4px;
-        background: rgba(255, 255, 255, 0.07);
+        background: var(--bg-base);
         border-radius: 2px;
         overflow: hidden;
       }
+      .rank-bar { height: 100%; border-radius: 2px; transition: width 0.8s ease; }
 
-      .rank-bar {
-        height: 100%;
-        border-radius: 2px;
-        transition: width 0.8s ease;
-      }
-
-      .rank-right {
-        text-align: right;
-        flex-shrink: 0;
-      }
+      .rank-right { text-align: right; flex-shrink: 0; }
 
       .rank-badge {
         font-size: 9px;
@@ -464,13 +445,13 @@
 
       .rank-m3 {
         font-size: 10px;
-        color: rgba(255, 255, 255, 0.3);
+        color: var(--text-muted);
       }
 
-      /* ── MAP PLACEHOLDER ── */
+      /* ── MAP ── */
       .map-box {
-        background: #1e1e2f;
-        border-radius: 8px;
+        background: var(--surface2);
+        border-radius: 10px;
         min-height: 280px;
         position: relative;
         overflow: hidden;
@@ -479,35 +460,20 @@
         justify-content: center;
         flex-direction: column;
         gap: 10px;
+        border: 1px solid var(--border);
       }
 
       .map-dot-grid {
-        position: absolute;
-        inset: 0;
-        background-image: radial-gradient(
-          rgba(29, 140, 248, 0.12) 1px,
-          transparent 1px
-        );
+        position: absolute; inset: 0;
+        background-image: radial-gradient(rgba(6,182,212,0.2) 1px, transparent 1px);
         background-size: 22px 22px;
       }
 
-      .map-pin {
-        position: absolute;
-        cursor: pointer;
-        transform: translate(-50%, -50%);
-      }
-
-      .map-pin-circle {
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        position: relative;
-      }
-
+      .map-pin { position: absolute; cursor: pointer; transform: translate(-50%, -50%); }
+      .map-pin-circle { width: 12px; height: 12px; border-radius: 50%; position: relative; }
       .map-pin-circle::after {
         content: "";
-        position: absolute;
-        inset: -5px;
+        position: absolute; inset: -5px;
         border-radius: 50%;
         border: 1.5px solid;
         animation: ripple 2.5s ease-out infinite;
@@ -515,79 +481,59 @@
       }
 
       @keyframes ripple {
-        0% {
-          transform: scale(0.6);
-          opacity: 0.7;
-        }
-        100% {
-          transform: scale(2.2);
-          opacity: 0;
-        }
+        0%   { transform: scale(0.6); opacity: 0.7; }
+        100% { transform: scale(2.2); opacity: 0; }
       }
 
       .map-pin-label {
-        position: absolute;
-        top: -22px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 9px;
-        font-weight: 700;
+        position: absolute; top: -22px;
+        left: 50%; transform: translateX(-50%);
+        font-size: 9px; font-weight: 700;
         white-space: nowrap;
-        color: rgba(255, 255, 255, 0.7);
-        background: rgba(30, 30, 47, 0.85);
+        color: var(--text-secondary);
+        background: var(--bg-white);
         padding: 2px 6px;
         border-radius: 3px;
+        border: 1px solid var(--border);
+        box-shadow: 0 2px 6px rgba(15,23,42,0.08);
       }
 
       .map-legend-row {
-        position: absolute;
-        bottom: 14px;
-        right: 14px;
-        display: flex;
-        gap: 12px;
+        position: absolute; bottom: 14px; right: 14px;
+        display: flex; gap: 12px;
       }
-
       .map-legend-item {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 9px;
-        font-weight: 600;
-        color: rgba(255, 255, 255, 0.45);
+        display: flex; align-items: center; gap: 5px;
+        font-size: 9px; font-weight: 600;
+        color: var(--text-secondary);
       }
-
-      .map-legend-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-      }
+      .map-legend-dot { width: 7px; height: 7px; border-radius: 50%; }
 
       /* ── BOTTOM GRID ── */
       .bot-grid {
         display: grid;
         grid-template-columns: 1.3fr 1fr;
-        gap: 20px;
-        margin-bottom: 24px;
+        gap: 18px;
+        margin-bottom: 22px;
       }
 
       /* ── ROI SIMULATOR ── */
       .roi-result {
-        background: #1e1e2f;
+        background: var(--emerald-lt);
         border-radius: 10px;
         padding: 20px;
         text-align: center;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(5,150,105,0.15);
       }
 
       .roi-amount {
-        font-size: 38px;
+        font-size: 36px;
         font-weight: 800;
         letter-spacing: -0.03em;
         line-height: 1;
         margin: 6px 0 4px;
       }
 
-      /* Range slider Creative Tim style */
       input[type="range"] {
         -webkit-appearance: none;
         width: 100%;
@@ -597,18 +543,16 @@
         cursor: pointer;
         background: linear-gradient(
           90deg,
-          #1d8cf8 var(--fill, 20%),
-          rgba(255, 255, 255, 0.1) var(--fill, 20%)
+          var(--emerald) var(--fill, 20%),
+          #E2E8F0 var(--fill, 20%)
         );
       }
-
       input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none;
-        width: 16px;
-        height: 16px;
+        width: 17px; height: 17px;
         border-radius: 50%;
-        background: #1d8cf8;
-        box-shadow: 0 2px 8px rgba(29, 140, 248, 0.5);
+        background: var(--emerald);
+        box-shadow: 0 2px 8px rgba(5,150,105,0.35);
         cursor: pointer;
         border: 2px solid #fff;
       }
@@ -618,303 +562,204 @@
         display: flex;
         gap: 12px;
         padding: 11px 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        border-bottom: 1px solid var(--border);
       }
-
-      .alert-row:last-child {
-        border-bottom: none;
-      }
+      .alert-row:last-child { border-bottom: none; }
 
       .alert-icon-wrap {
-        width: 36px;
-        height: 36px;
+        width: 34px; height: 34px;
         border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
       }
 
       .alert-time {
         font-size: 10px;
-        color: rgba(255, 255, 255, 0.3);
+        color: var(--text-muted);
         margin-bottom: 2px;
       }
 
       .alert-text {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.7);
+        color: var(--text-secondary);
         line-height: 1.4;
       }
-
       .alert-text strong {
-        color: #fff;
+        color: var(--text-primary);
         font-weight: 600;
       }
 
       /* ── TEAM TAGS ── */
       .team-tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 6px;
-        padding: 14px 22px;
-        border-top: 1px solid rgba(255, 255, 255, 0.04);
+        display: flex; flex-wrap: wrap; gap: 6px;
+        padding: 12px 20px;
+        border-top: 1px solid var(--border);
       }
 
       .team-tag {
-        display: inline-flex;
-        align-items: center;
-        gap: 5px;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 10px;
-        font-weight: 600;
+        display: inline-flex; align-items: center; gap: 5px;
+        padding: 4px 10px; border-radius: 6px;
+        font-size: 10px; font-weight: 600;
       }
 
-      .team-tag-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-      }
+      .team-tag-dot { width: 6px; height: 6px; border-radius: 50%; }
 
-      /* ── MINI STATS BAR ── */
+      /* ── MINI STATS ── */
       .mini-stats {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
-        gap: 16px;
-        margin-bottom: 24px;
+        gap: 14px;
+        margin-bottom: 22px;
       }
 
       .mini-stat {
-        background: #27293d;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        border-radius: 10px;
-        padding: 14px 18px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 14px 16px;
+        display: flex; align-items: center; gap: 12px;
+        transition: box-shadow 0.2s, transform 0.2s;
+        box-shadow: 0 1px 4px rgba(15,23,42,0.04);
+      }
+      .mini-stat:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(15,23,42,0.08) !important;
       }
 
       .mini-stat-icon {
-        width: 38px;
-        height: 38px;
+        width: 36px; height: 36px;
         border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        display: flex; align-items: center; justify-content: center;
         flex-shrink: 0;
       }
 
       .mini-stat-val {
-        font-size: 18px;
-        font-weight: 800;
-        line-height: 1;
-        margin-bottom: 2px;
+        font-size: 18px; font-weight: 800;
+        line-height: 1; margin-bottom: 2px;
       }
 
       .mini-stat-label {
         font-size: 10px;
-        color: rgba(255, 255, 255, 0.4);
+        color: var(--text-muted);
       }
 
-      /* ── CHART AREA ── */
+      /* ── CHART ── */
       .chart-panel {
-        background: #27293d;
-        border-radius: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.04);
-        margin-bottom: 24px;
+        background: var(--surface);
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        margin-bottom: 22px;
+        box-shadow: 0 1px 4px rgba(15,23,42,0.04);
       }
 
       .chart-header {
-        padding: 18px 22px 12px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        padding: 16px 20px 12px;
+        border-bottom: 1px solid var(--border);
+        display: flex; justify-content: space-between; align-items: center;
       }
 
-      .chart-legend {
-        display: flex;
-        gap: 16px;
-        align-items: center;
-      }
+      .chart-legend { display: flex; gap: 16px; align-items: center; }
 
       .legend-item {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 11px;
-        color: rgba(255, 255, 255, 0.45);
+        display: flex; align-items: center; gap: 6px;
+        font-size: 11px; color: var(--text-muted);
       }
 
-      .legend-line {
-        width: 18px;
-        height: 3px;
-        border-radius: 2px;
-      }
-
-      .chart-body {
-        padding: 18px 22px 16px;
-      }
+      .legend-line { width: 18px; height: 3px; border-radius: 2px; }
+      .chart-body { padding: 16px 20px 14px; }
 
       /* ── FOOTER ── */
       .footer-bar {
-        padding: 14px 30px;
-        border-top: 1px solid rgba(255, 255, 255, 0.05);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        padding: 13px 30px;
+        border-top: 1px solid var(--border);
+        display: flex; justify-content: space-between; align-items: center;
         font-size: 11px;
-        color: rgba(255, 255, 255, 0.25);
+        color: var(--text-muted);
+        background: var(--bg-white);
       }
 
       /* ── RESPONSIVE ── */
       @media (max-width: 1024px) {
-        .sidebar {
-          display: none;
-        }
-        .main-wrap {
-          margin-left: 0;
-        }
-        .kpi-grid {
-          grid-template-columns: 1fr;
-        }
-        .mid-grid {
-          grid-template-columns: 1fr;
-        }
-        .bot-grid {
-          grid-template-columns: 1fr;
-        }
-        .mini-stats {
-          grid-template-columns: repeat(2, 1fr);
-        }
+        .sidebar { display: none; }
+        .main-wrap { margin-left: 0; }
+        .kpi-grid { grid-template-columns: 1fr; }
+        .mid-grid { grid-template-columns: 1fr; }
+        .bot-grid { grid-template-columns: 1fr; }
+        .mini-stats { grid-template-columns: repeat(2, 1fr); }
       }
 
       /* ── LIVE DOT ── */
       .live-dot {
-        width: 7px;
-        height: 7px;
-        border-radius: 50%;
-        background: #00d6b4;
+        width: 7px; height: 7px; border-radius: 50%;
+        background: var(--emerald);
         display: inline-block;
         animation: blink 2s ease-in-out infinite;
       }
 
       @keyframes blink {
-        0%,
-        100% {
-          opacity: 1;
-        }
-        50% {
-          opacity: 0.3;
-        }
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
       }
 
-      /* ── BTN ── */
+      /* ── BUTTONS ── */
       .btn-blue {
-        background: linear-gradient(135deg, #1d8cf8, #3358f4);
+        background: linear-gradient(135deg, var(--indigo), #6366F1);
         color: #fff;
-        font-weight: 700;
-        font-size: 11px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        padding: 9px 20px;
-        border-radius: 6px;
-        border: none;
+        font-weight: 700; font-size: 11px;
+        letter-spacing: 0.06em; text-transform: uppercase;
+        padding: 8px 18px; border-radius: 6px; border: none;
         cursor: pointer;
         font-family: "Plus Jakarta Sans", sans-serif;
-        transition: opacity 0.2s;
-        box-shadow: 0 4px 14px rgba(29, 140, 248, 0.35);
+        transition: opacity 0.2s, box-shadow 0.2s;
+        box-shadow: 0 4px 12px rgba(79,70,229,0.3);
       }
-
       .btn-blue:hover {
-        opacity: 0.88;
+        opacity: 0.9;
+        box-shadow: 0 6px 18px rgba(79,70,229,0.4);
       }
 
       .btn-ghost {
         background: transparent;
-        color: rgba(255, 255, 255, 0.55);
-        font-weight: 600;
-        font-size: 11px;
-        letter-spacing: 0.06em;
-        text-transform: uppercase;
-        padding: 9px 18px;
-        border-radius: 6px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-secondary);
+        font-weight: 600; font-size: 11px;
+        letter-spacing: 0.06em; text-transform: uppercase;
+        padding: 8px 16px; border-radius: 6px;
+        border: 1px solid var(--border);
         cursor: pointer;
         font-family: "Plus Jakarta Sans", sans-serif;
         transition: all 0.2s;
       }
-
       .btn-ghost:hover {
-        border-color: rgba(255, 255, 255, 0.2);
-        color: #fff;
+        border-color: var(--indigo);
+        color: var(--indigo);
+        background: var(--indigo-lt);
       }
 
-      /* --- CRÍTICO (Fucsia Neón) --- */
-      .critical-accent {
-        color: #f026ff !important;
-      }
-      .bg-critical-soft {
-        background: rgba(240, 38, 255, 0.1) !important;
-      }
+      /* ── ACCENT OVERRIDES ── */
 
-      /* Aplicar a la tarjeta de alertas e Irving IA */
-      .kpi-card:nth-child(2) .kpi-value {
-        color: #f026ff !important;
-      }
-      .kpi-card:nth-child(2) .kpi-icon-wrap {
-        background: rgba(240, 38, 255, 0.1) !important;
-      }
-      .kpi-card:nth-child(2) svg {
-        stroke: #f026ff !important;
-      }
-      .pill-critical {
-        background: rgba(240, 38, 255, 0.1);
-        color: #f026ff;
-      }
+      /* KPI 1 → Cyan (ANC) */
+      .kpi-card:nth-child(1) .kpi-value { color: var(--cyan) !important; }
+      .kpi-card:nth-child(1) .kpi-icon-wrap { background: var(--cyan-lt) !important; }
+      .kpi-card:nth-child(1) svg { stroke: var(--cyan) !important; }
 
-      /* --- DINERO (Verde Money) --- */
-      .money-accent {
-        color: #00ffa3 !important;
-      }
-      #roi-display,
-      .roi-amount {
-        color: #00ffa3 !important;
-        text-shadow: 0 0 15px rgba(0, 255, 163, 0.3);
-      }
+      /* KPI 2 → Naranja (Alertas) */
+      .critical-accent { color: var(--orange) !important; }
+      .bg-critical-soft { background: var(--orange-lt) !important; }
+      .kpi-card:nth-child(2) .kpi-value { color: var(--orange) !important; }
+      .kpi-card:nth-child(2) .kpi-icon-wrap { background: var(--orange-lt) !important; }
+      .kpi-card:nth-child(2) svg { stroke: var(--orange) !important; }
+      .pill-critical { background: var(--orange-lt); color: var(--orange); }
 
-      /* Aplicar a la tarjeta de ROI */
-      .kpi-card:nth-child(3) .kpi-value {
-        color: #00ffa3 !important;
-      }
-      .kpi-card:nth-child(3) .kpi-icon-wrap {
-        background: rgba(0, 255, 163, 0.1) !important;
-      }
-      .kpi-card:nth-child(3) svg {
-        stroke: #00ffa3 !important;
-      }
+      /* KPI 3 → Esmeralda (ROI) */
+      .money-accent { color: var(--emerald) !important; }
+      #roi-display, .roi-amount { color: var(--emerald) !important; }
+      .kpi-card:nth-child(3) .kpi-value { color: var(--emerald) !important; }
+      .kpi-card:nth-child(3) .kpi-icon-wrap { background: var(--emerald-lt) !important; }
+      .kpi-card:nth-child(3) svg { stroke: var(--emerald) !important; }
 
-      /* Slider en verde money */
-      input[type="range"] {
-        background: linear-gradient(
-          90deg,
-          #00ffa3 var(--fill, 20%),
-          rgba(255, 255, 255, 0.05) var(--fill, 20%)
-        );
-      }
-      input[type="range"]::-webkit-slider-thumb {
-        background: #00ffa3;
-        box-shadow: 0 0 15px rgba(0, 255, 163, 0.5);
-      }
-
-      /* --- TECH / BIEN (Cyan) --- */
-      .tech-accent {
-        color: #06b6d4 !important;
-      }
-      .mini-stat-val {
-        color: #06b6d4 !important;
-      }
+      /* Mini stats → Cyan */
+      .tech-accent { color: var(--cyan) !important; }
+      .mini-stat-val { color: var(--indigo) !important; }
     </style>
   </head>
   <body>
@@ -1064,16 +909,23 @@
 
       <div class="sidebar-bottom">
         <div class="user-chip">
-          <div class="avatar">
-            <img
-              src="https://api.dicebear.com/7.x/avataaars/svg?seed=HydroTrace"
-              alt="User"
-              style="width: 100%; height: 100%; object-fit: cover"
-            />
+          <div
+            class="avatar"
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: var(--surface);
+              border-color: #00E5FF;
+            "
+          >
+            <span style="color: #4F46E5; font-weight: 800; font-size: 14px"
+              >CS</span
+            >
           </div>
           <div>
-            <div style="font-size: 13px; font-weight: 600">Ileana García</div>
-            <div style="font-size: 10px; opacity: 0.5">Ing. UNAM · SACMEX</div>
+            <div style="font-size: 13px; font-weight: 600">Carlos Saucedo</div>
+            <div style="font-size: 10px; color: #94A3B8">Ing. UNAM · SACMEX</div>
           </div>
         </div>
       </div>
@@ -1093,7 +945,7 @@
               align-items: center;
               gap: 6px;
               font-size: 11px;
-              color: rgba(255, 255, 255, 0.4);
+              color: #94A3B8;
             "
           >
             <span class="live-dot"></span>
@@ -1105,7 +957,7 @@
               height="13"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="white"
+              stroke="#64748B"
               stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -1163,14 +1015,14 @@
           <div class="mini-stat">
             <div
               class="mini-stat-icon"
-              style="background: rgba(29, 140, 248, 0.12)"
+              style="background: #EEF2FF"
             >
               <svg
                 width="16"
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#1d8cf8"
+                stroke="#06B6D4"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -1180,7 +1032,7 @@
               </svg>
             </div>
             <div>
-              <div class="mini-stat-val" style="color: #1d8cf8">16</div>
+              <div class="mini-stat-val" style="color: #06B6D4">16</div>
               <div class="mini-stat-label">Alcaldías</div>
             </div>
           </div>
@@ -1194,7 +1046,7 @@
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#ff8d72"
+                stroke="#EA580C"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -1206,7 +1058,7 @@
               </svg>
             </div>
             <div>
-              <div class="mini-stat-val" style="color: #ff8d72">842</div>
+              <div class="mini-stat-val" style="color: #EA580C">842</div>
               <div class="mini-stat-label">Sensores activos</div>
             </div>
           </div>
@@ -1220,7 +1072,7 @@
                 height="16"
                 viewBox="0 0 24 24"
                 fill="none"
-                stroke="#00d6b4"
+                stroke="#059669"
                 stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -1230,7 +1082,7 @@
               </svg>
             </div>
             <div>
-              <div class="mini-stat-val" style="color: #00d6b4">98.3%</div>
+              <div class="mini-stat-val" style="color: #059669">98.3%</div>
               <div class="mini-stat-label">Uptime sistema</div>
             </div>
           </div>
@@ -1268,14 +1120,14 @@
             <div class="kpi-top">
               <div>
                 <div class="kpi-label">Mermas ANC · Bolívar</div>
-                <div class="kpi-value" style="color: #1d8cf8">38.4%</div>
+                <div class="kpi-value" style="color: #06B6D4">38.4%</div>
                 <div class="kpi-footer">
                   <svg
                     width="12"
                     height="12"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#ff8d72"
+                    stroke="#EA580C"
                     stroke-width="2.5"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -1288,14 +1140,14 @@
               </div>
               <div
                 class="kpi-icon-wrap"
-                style="background: rgba(29, 140, 248, 0.12)"
+                style="background: #EEF2FF"
               >
                 <svg
                   width="20"
                   height="20"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#1d8cf8"
+                  stroke="#06B6D4"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -1307,7 +1159,7 @@
             <div
               style="
                 height: 4px;
-                background: rgba(255, 255, 255, 0.06);
+                background: #F1F5F9;
                 border-radius: 2px;
                 margin-top: 14px;
                 overflow: hidden;
@@ -1317,7 +1169,7 @@
                 style="
                   width: 38.4%;
                   height: 100%;
-                  background: linear-gradient(90deg, #1d8cf8, #3358f4);
+                  background: linear-gradient(90deg, #6366F1, #4F46E5);
                   border-radius: 2px;
                 "
               ></div>
@@ -1329,14 +1181,14 @@
             <div class="kpi-top">
               <div>
                 <div class="kpi-label">Focos Críticos · Irving IA</div>
-                <div class="kpi-value" style="color: #ff8d72">23</div>
+                <div class="kpi-value" style="color: #EA580C">23</div>
                 <div class="kpi-footer">
                   <svg
                     width="12"
                     height="12"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#ff8d72"
+                    stroke="#EA580C"
                     stroke-width="2.5"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -1356,7 +1208,7 @@
                   height="20"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#ff8d72"
+                  stroke="#EA580C"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -1372,7 +1224,7 @@
             <div
               style="
                 height: 4px;
-                background: rgba(255, 255, 255, 0.06);
+                background: #F1F5F9;
                 border-radius: 2px;
                 margin-top: 14px;
                 overflow: hidden;
@@ -1382,7 +1234,7 @@
                 style="
                   width: 72%;
                   height: 100%;
-                  background: linear-gradient(90deg, #ff8d72, #ff5722);
+                  background: linear-gradient(90deg, #FB923C, #F97316);
                   border-radius: 2px;
                 "
               ></div>
@@ -1394,14 +1246,14 @@
             <div class="kpi-top">
               <div>
                 <div class="kpi-label">Impacto Económico · Ana</div>
-                <div class="kpi-value" style="color: #00d6b4">$15.4M</div>
+                <div class="kpi-value" style="color: #059669">$15.4M</div>
                 <div class="kpi-footer">
                   <svg
                     width="12"
                     height="12"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#00d6b4"
+                    stroke="#059669"
                     stroke-width="2.5"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -1421,7 +1273,7 @@
                   height="20"
                   viewBox="0 0 24 24"
                   fill="none"
-                  stroke="#00d6b4"
+                  stroke="#059669"
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -1434,7 +1286,7 @@
             <div
               style="
                 height: 4px;
-                background: rgba(255, 255, 255, 0.06);
+                background: #F1F5F9;
                 border-radius: 2px;
                 margin-top: 14px;
                 overflow: hidden;
@@ -1444,7 +1296,7 @@
                 style="
                   width: 85%;
                   height: 100%;
-                  background: linear-gradient(90deg, #00d6b4, #00a896);
+                  background: linear-gradient(90deg, #34D399, #10B981);
                   border-radius: 2px;
                 "
               ></div>
@@ -1458,12 +1310,12 @@
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title">
-                <div class="panel-title-dot" style="background: #ff8d72"></div>
+                <div class="panel-title-dot" style="background: #EA580C"></div>
                 Zonas Prioritarias
               </div>
               <span
                 class="pill"
-                style="background: rgba(255, 141, 114, 0.12); color: #ff8d72"
+                style="background: rgba(255, 141, 114, 0.12); color: #EA580C"
                 >Irving IA</span
               >
             </div>
@@ -1478,7 +1330,7 @@
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title">
-                <div class="panel-title-dot" style="background: #1d8cf8"></div>
+                <div class="panel-title-dot" style="background: #4F46E5"></div>
                 Localización Geoespacial · Christian
               </div>
               <div style="display: flex; gap: 6px">
@@ -1486,7 +1338,7 @@
                   style="
                     background: rgba(29, 140, 248, 0.15);
                     border: 1px solid rgba(29, 140, 248, 0.3);
-                    color: #1d8cf8;
+                    color: #38BDF8;
                     font-size: 10px;
                     font-weight: 700;
                     padding: 4px 12px;
@@ -1500,8 +1352,8 @@
                 <button
                   style="
                     background: transparent;
-                    border: 1px solid rgba(255, 255, 255, 0.08);
-                    color: rgba(255, 255, 255, 0.4);
+                    border: 1px solid #E2E8F0;
+                    color: #94A3B8;
                     font-size: 10px;
                     font-weight: 700;
                     padding: 4px 12px;
@@ -1524,7 +1376,7 @@
                   <div
                     class="map-pin-circle"
                     style="
-                      background: #ff5252;
+                      background: #EA580C;
                       box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.2);
                     "
                   >
@@ -1533,7 +1385,7 @@
                         position: absolute;
                         inset: -5px;
                         border-radius: 50%;
-                        border: 1.5px solid #ff5252;
+                        border: 1.5px solid #EA580C;
                         animation: ripple 2s ease-out infinite;
                         opacity: 0;
                       "
@@ -1545,7 +1397,7 @@
                   <div
                     class="map-pin-circle"
                     style="
-                      background: #ff5252;
+                      background: #EA580C;
                       box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.2);
                     "
                   >
@@ -1554,7 +1406,7 @@
                         position: absolute;
                         inset: -5px;
                         border-radius: 50%;
-                        border: 1.5px solid #ff5252;
+                        border: 1.5px solid #EA580C;
                         animation: ripple 2.5s ease-out 0.3s infinite;
                         opacity: 0;
                       "
@@ -1566,7 +1418,7 @@
                   <div
                     class="map-pin-circle"
                     style="
-                      background: #ff8d72;
+                      background: #EA580C;
                       box-shadow: 0 0 0 3px rgba(255, 141, 114, 0.2);
                     "
                   >
@@ -1575,7 +1427,7 @@
                         position: absolute;
                         inset: -5px;
                         border-radius: 50%;
-                        border: 1.5px solid #ff8d72;
+                        border: 1.5px solid #EA580C;
                         animation: ripple 2s ease-out 0.6s infinite;
                         opacity: 0;
                       "
@@ -1587,7 +1439,7 @@
                   <div
                     class="map-pin-circle"
                     style="
-                      background: #ff8d72;
+                      background: #EA580C;
                       box-shadow: 0 0 0 3px rgba(255, 141, 114, 0.15);
                     "
                   >
@@ -1596,7 +1448,7 @@
                         position: absolute;
                         inset: -5px;
                         border-radius: 50%;
-                        border: 1.5px solid #ff8d72;
+                        border: 1.5px solid #EA580C;
                         animation: ripple 2.5s ease-out 0.9s infinite;
                         opacity: 0;
                       "
@@ -1608,7 +1460,7 @@
                   <div
                     class="map-pin-circle"
                     style="
-                      background: #1d8cf8;
+                      background: #06B6D4;
                       box-shadow: 0 0 0 3px rgba(29, 140, 248, 0.2);
                     "
                   >
@@ -1617,7 +1469,7 @@
                         position: absolute;
                         inset: -5px;
                         border-radius: 50%;
-                        border: 1.5px solid #1d8cf8;
+                        border: 1.5px solid #06B6D4;
                         animation: ripple 2s ease-out 1.2s infinite;
                         opacity: 0;
                       "
@@ -1629,7 +1481,7 @@
                   <div
                     class="map-pin-circle"
                     style="
-                      background: #1d8cf8;
+                      background: #06B6D4;
                       box-shadow: 0 0 0 3px rgba(29, 140, 248, 0.15);
                     "
                   >
@@ -1638,7 +1490,7 @@
                         position: absolute;
                         inset: -5px;
                         border-radius: 50%;
-                        border: 1.5px solid #1d8cf8;
+                        border: 1.5px solid #06B6D4;
                         animation: ripple 2s ease-out 1.5s infinite;
                         opacity: 0;
                       "
@@ -1650,21 +1502,21 @@
                   <div class="map-legend-item">
                     <div
                       class="map-legend-dot"
-                      style="background: #ff5252"
+                      style="background: #EA580C"
                     ></div>
                     Alto
                   </div>
                   <div class="map-legend-item">
                     <div
                       class="map-legend-dot"
-                      style="background: #ff8d72"
+                      style="background: #EA580C"
                     ></div>
                     Medio
                   </div>
                   <div class="map-legend-item">
                     <div
                       class="map-legend-dot"
-                      style="background: #1d8cf8"
+                      style="background: #4F46E5"
                     ></div>
                     Bajo
                   </div>
@@ -1678,16 +1530,16 @@
         <div class="chart-panel">
           <div class="chart-header">
             <div class="panel-title">
-              <div class="panel-title-dot" style="background: #1d8cf8"></div>
+              <div class="panel-title-dot" style="background: #4F46E5"></div>
               Evolución ANC Histórica · Bolívar — Últimos 12 meses
             </div>
             <div class="chart-legend">
               <div class="legend-item">
-                <div class="legend-line" style="background: #1d8cf8"></div>
+                <div class="legend-line" style="background: #4F46E5"></div>
                 ANC %
               </div>
               <div class="legend-item">
-                <div class="legend-line" style="background: #ff8d72"></div>
+                <div class="legend-line" style="background: #EA580C"></div>
                 Alertas
               </div>
             </div>
@@ -1703,12 +1555,12 @@
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title">
-                <div class="panel-title-dot" style="background: #00d6b4"></div>
+                <div class="panel-title-dot" style="background: #059669"></div>
                 Simulador de Recuperación · Ana
               </div>
               <span
                 class="pill"
-                style="background: rgba(0, 214, 180, 0.1); color: #00d6b4"
+                style="background: #ECFDF5; color: #059669"
                 >ROI Estimado</span
               >
             </div>
@@ -1733,7 +1585,7 @@
                       <span
                         style="
                           font-size: 11px;
-                          color: rgba(255, 255, 255, 0.45);
+                          color: #64748B;
                           font-weight: 600;
                           text-transform: uppercase;
                           letter-spacing: 0.08em;
@@ -1745,7 +1597,7 @@
                         style="
                           font-size: 13px;
                           font-weight: 800;
-                          color: #1d8cf8;
+                          color: #38BDF8;
                         "
                         >20%</span
                       >
@@ -1769,8 +1621,8 @@
                   >
                     <div
                       style="
-                        background: #1e1e2f;
-                        border: 1px solid rgba(255, 255, 255, 0.05);
+                        background: #ECFDF5;
+                        border: 1px solid #E2E8F0;
                         border-radius: 8px;
                         padding: 12px;
                       "
@@ -1780,7 +1632,7 @@
                           font-size: 9px;
                           text-transform: uppercase;
                           letter-spacing: 0.12em;
-                          color: rgba(255, 255, 255, 0.3);
+                          color: #94A3B8;
                           margin-bottom: 4px;
                         "
                       >
@@ -1790,7 +1642,7 @@
                         style="
                           font-size: 16px;
                           font-weight: 800;
-                          color: rgba(255, 255, 255, 0.6);
+                          color: #475569;
                         "
                       >
                         $15.4M
@@ -1798,8 +1650,8 @@
                     </div>
                     <div
                       style="
-                        background: #1e1e2f;
-                        border: 1px solid rgba(255, 255, 255, 0.05);
+                        background: #ECFDF5;
+                        border: 1px solid #E2E8F0;
                         border-radius: 8px;
                         padding: 12px;
                       "
@@ -1809,7 +1661,7 @@
                           font-size: 9px;
                           text-transform: uppercase;
                           letter-spacing: 0.12em;
-                          color: rgba(255, 255, 255, 0.3);
+                          color: #94A3B8;
                           margin-bottom: 4px;
                         "
                       >
@@ -1819,7 +1671,7 @@
                         style="
                           font-size: 16px;
                           font-weight: 800;
-                          color: rgba(255, 255, 255, 0.6);
+                          color: #475569;
                         "
                       >
                         47,200
@@ -1837,7 +1689,7 @@
                     "
                   >
                     <div
-                      style="font-size: 10px; color: #ff8d72; font-weight: 700"
+                      style="font-size: 10px; color: #FB923C; font-weight: 700"
                     >
                       IA sugiere intervención ≥ 35% para punto de equilibrio
                     </div>
@@ -1851,7 +1703,7 @@
                       font-weight: 700;
                       letter-spacing: 0.15em;
                       text-transform: uppercase;
-                      color: rgba(255, 255, 255, 0.3);
+                      color: #94A3B8;
                       margin-bottom: 8px;
                     "
                   >
@@ -1859,7 +1711,7 @@
                   </div>
                   <div
                     class="roi-amount"
-                    style="color: #00d6b4"
+                    style="color: #059669"
                     id="roi-display"
                   >
                     $3,084,000
@@ -1867,7 +1719,7 @@
                   <div
                     style="
                       font-size: 10px;
-                      color: rgba(255, 255, 255, 0.3);
+                      color: #94A3B8;
                       margin-top: 4px;
                     "
                   >
@@ -1877,13 +1729,13 @@
                     style="
                       margin-top: 16px;
                       padding: 8px 12px;
-                      background: rgba(0, 214, 180, 0.1);
+                      background: #ECFDF5;
                       border: 1px solid rgba(0, 214, 180, 0.2);
                       border-radius: 6px;
                     "
                   >
                     <div
-                      style="font-size: 10px; font-weight: 700; color: #00d6b4"
+                      style="font-size: 10px; font-weight: 700; color: #059669"
                     >
                       ✓ Viabilidad confirmada por IA
                     </div>
@@ -1900,7 +1752,7 @@
                 <div
                   class="panel-title-dot"
                   style="
-                    background: #ff8d72;
+                    background: #EA580C;
                     box-shadow: 0 0 6px rgba(255, 141, 114, 0.5);
                     animation: blink 2s infinite;
                   "
@@ -1909,7 +1761,7 @@
               </div>
               <span
                 class="pill"
-                style="background: rgba(255, 141, 114, 0.1); color: #ff8d72"
+                style="background: #FFF7ED; color: #EA580C"
                 >Irving IA</span
               >
             </div>
@@ -1924,7 +1776,7 @@
                     height="14"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#ff5252"
+                    stroke="#EA580C"
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -1954,7 +1806,7 @@
                     height="14"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#ff5252"
+                    stroke="#EA580C"
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -1977,14 +1829,14 @@
               <div class="alert-row">
                 <div
                   class="alert-icon-wrap"
-                  style="background: rgba(29, 140, 248, 0.12)"
+                  style="background: #EEF2FF"
                 >
                   <svg
                     width="14"
                     height="14"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#1d8cf8"
+                    stroke="#06B6D4"
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -2005,14 +1857,14 @@
               <div class="alert-row">
                 <div
                   class="alert-icon-wrap"
-                  style="background: rgba(29, 140, 248, 0.12)"
+                  style="background: #EEF2FF"
                 >
                   <svg
                     width="14"
                     height="14"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="#1d8cf8"
+                    stroke="#06B6D4"
                     stroke-width="2"
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -2034,28 +1886,28 @@
             <div class="team-tags">
               <div
                 class="team-tag"
-                style="background: rgba(29, 140, 248, 0.1); color: #1d8cf8"
+                style="background: #ECFEFF; color: #06B6D4"
               >
-                <div class="team-tag-dot" style="background: #1d8cf8"></div>
+                <div class="team-tag-dot" style="background: #4F46E5"></div>
                 Bolívar · Datos
               </div>
               <div
                 class="team-tag"
-                style="background: rgba(255, 141, 114, 0.1); color: #ff8d72"
+                style="background: #FFF7ED; color: #EA580C"
               >
-                <div class="team-tag-dot" style="background: #ff8d72"></div>
+                <div class="team-tag-dot" style="background: #EA580C"></div>
                 Irving · IA
               </div>
               <div
                 class="team-tag"
-                style="background: rgba(0, 214, 180, 0.1); color: #00d6b4"
+                style="background: #ECFDF5; color: #059669"
               >
-                <div class="team-tag-dot" style="background: #00d6b4"></div>
+                <div class="team-tag-dot" style="background: #059669"></div>
                 Ana · Negocio
               </div>
               <div
                 class="team-tag"
-                style="background: rgba(51, 88, 244, 0.12); color: #7b8ff8"
+                style="background: #EEF2FF; color: #A78BFA"
               >
                 <div class="team-tag-dot" style="background: #7b8ff8"></div>
                 Christian · Mapa
@@ -2103,11 +1955,11 @@
                 <div class="rank-info">
                     <div class="rank-name">${d.alcaldia}</div>
                     <div class="rank-bar-track">
-                        <div class="rank-bar" style="width:${d.pct}%;background:${isAlto ? "linear-gradient(90deg,#ff5252,#ff8d72)" : "linear-gradient(90deg,#1d8cf8,#3358f4)"};"></div>
+                        <div class="rank-bar" style="width:${d.pct}%;background:${isAlto ? "linear-gradient(90deg,#EA580C,#FB923C)" : "linear-gradient(90deg,#06B6D4,#4F46E5)"};"></div>
                     </div>
                 </div>
                 <div class="rank-right">
-                    <span class="rank-badge" style="background:${isAlto ? "rgba(255,82,82,0.1)" : "rgba(29,140,248,0.1)"};color:${isAlto ? "#ff5252" : "#1d8cf8"};">${d.riesgo}</span>
+                    <span class="rank-badge" style="background:${isAlto ? "#FFF7ED" : "#ECFEFF"};color:${isAlto ? "#EA580C" : "#06B6D4"};">${d.riesgo}</span>
                     <div class="rank-m3">${d.desviacion.toLocaleString("es-MX")} m³</div>
                 </div>
             </div>`;
@@ -2151,8 +2003,8 @@
       const alertVals = [18, 22, 19, 25, 21, 20, 23, 19, 22, 21, 20, 23];
 
       const gradBlue = ctx.createLinearGradient(0, 0, 0, 240);
-      gradBlue.addColorStop(0, "rgba(29,140,248,0.3)");
-      gradBlue.addColorStop(1, "rgba(29,140,248,0)");
+      gradBlue.addColorStop(0, "rgba(6,182,212,0.15)");
+      gradBlue.addColorStop(1, "rgba(6,182,212,0)");
 
       new Chart(ctx, {
         data: {
@@ -2162,11 +2014,11 @@
               type: "line",
               label: "ANC %",
               data: ancVals,
-              borderColor: "#1d8cf8",
+              borderColor: "#06B6D4",
               backgroundColor: gradBlue,
               borderWidth: 2.5,
-              pointBackgroundColor: "#1d8cf8",
-              pointBorderColor: "#27293d",
+              pointBackgroundColor: "#06B6D4",
+              pointBorderColor: "#FFFFFF",
               pointBorderWidth: 2,
               pointRadius: 4,
               pointHoverRadius: 6,
@@ -2178,8 +2030,8 @@
               type: "bar",
               label: "Alertas",
               data: alertVals,
-              backgroundColor: "rgba(255,141,114,0.25)",
-              borderColor: "rgba(255,141,114,0.55)",
+              backgroundColor: "rgba(234,88,12,0.1)",
+              borderColor: "rgba(234,88,12,0.5)",
               borderWidth: 1,
               borderRadius: 4,
               yAxisID: "y1",
@@ -2192,11 +2044,11 @@
           plugins: {
             legend: { display: false },
             tooltip: {
-              backgroundColor: "#1e1e2f",
-              borderColor: "rgba(255,255,255,0.08)",
+              backgroundColor: "#FFFFFF",
+              borderColor: "#E2E8F0",
               borderWidth: 1,
-              titleColor: "rgba(255,255,255,0.8)",
-              bodyColor: "rgba(255,255,255,0.5)",
+              titleColor: "#0F172A",
+              bodyColor: "#64748B",
               padding: 12,
               titleFont: {
                 family: "Plus Jakarta Sans",
@@ -2208,17 +2060,17 @@
           },
           scales: {
             x: {
-              grid: { color: "rgba(255,255,255,0.04)", drawBorder: false },
+              grid: { color: "#F1F5F9", drawBorder: false },
               ticks: {
-                color: "rgba(255,255,255,0.3)",
+                color: "#94A3B8",
                 font: { family: "Plus Jakarta Sans", size: 11 },
               },
             },
             y: {
               position: "left",
-              grid: { color: "rgba(255,255,255,0.04)", drawBorder: false },
+              grid: { color: "#F1F5F9", drawBorder: false },
               ticks: {
-                color: "#1d8cf8",
+                color: "#06B6D4",
                 font: { family: "Plus Jakarta Sans", size: 11 },
                 callback: (v) => v + "%",
               },
@@ -2227,7 +2079,7 @@
               position: "right",
               grid: { display: false },
               ticks: {
-                color: "#ff8d72",
+                color: "#EA580C",
                 font: { family: "Plus Jakarta Sans", size: 11 },
               },
             },
