@@ -19,22 +19,6 @@
     />
 
     <style>
-      /* ═══════════════════════════════════════════
-         HYDROTRACE AI — PALETA TECH PREMIUM 2025
-         Inspiración: DeFi / Fintech / SaaS oscuro
-         ═══════════════════════════════════════════
-         --cyan:      #00E5FF  → acento principal tech
-         --violet:    #A78BFA  → morado suave / lila
-         --indigo:    #6366F1  → azul-morado profundo
-         --blue:      #38BDF8  → azul claro datos
-         --orange:    #FB923C  → naranja alerta/accent
-         --emerald:   #34D399  → verde éxito/ROI
-         --bg-deep:   #06080F  → fondo más oscuro
-         --bg-base:   #0D1117  → fondo base
-         --surface:   #141B2D  → tarjetas/paneles
-         --surface2:  #1A2338  → surface elevado
-         --border:    rgba(99,102,241,0.15) → bordes
-      ═══════════════════════════════════════════ */
 
       :root {
         --cyan:    #00E5FF;
@@ -162,7 +146,6 @@
         border-left: 2px solid rgba(0,229,255,0.4);
       }
 
-      /* Estado activo */
       .nav-link.active {
         color: var(--cyan);
         background: linear-gradient(90deg, rgba(0,229,255,0.08), transparent);
@@ -212,7 +195,6 @@
         box-shadow: 0 0 8px rgba(0,229,255,0.12);
       }
 
-      /* ── MAIN ── */
       .main-wrap {
         margin-left: 260px;
         min-height: 100vh;
@@ -287,7 +269,6 @@
         color: var(--violet);
       }
 
-      /* ── CONTENT ── */
       .content {
         padding: 28px 30px;
       }
@@ -308,7 +289,6 @@
         color: rgba(148,163,184,0.5);
       }
 
-      /* ── KPI CARDS ── */
       .kpi-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -388,7 +368,6 @@
         color: var(--orange);
       }
 
-      /* ── BADGE PILL ── */
       .pill {
         display: inline-flex;
         align-items: center;
@@ -400,7 +379,6 @@
         letter-spacing: 0.05em;
       }
 
-      /* ── MAIN 2-col grid ── */
       .mid-grid {
         display: grid;
         grid-template-columns: 1fr 1.65fr;
@@ -408,7 +386,6 @@
         margin-bottom: 22px;
       }
 
-      /* ── PANEL ── */
       .panel {
         background: var(--surface);
         border-radius: 14px;
@@ -451,7 +428,6 @@
         box-shadow: 0 8px 24px rgba(0,0,0,0.25) !important;
       }
 
-      /* ── RANKING ── */
       .rank-item {
         display: flex;
         align-items: center;
@@ -521,7 +497,6 @@
         color: rgba(148,163,184,0.35);
       }
 
-      /* ── MAP PLACEHOLDER ── */
       .map-box {
         background: var(--bg-deep);
         border-radius: 10px;
@@ -618,7 +593,6 @@
         border-radius: 50%;
       }
 
-      /* ── BOTTOM GRID ── */
       .bot-grid {
         display: grid;
         grid-template-columns: 1.3fr 1fr;
@@ -626,7 +600,6 @@
         margin-bottom: 22px;
       }
 
-      /* ── ROI SIMULATOR ── */
       .roi-result {
         background: var(--bg-deep);
         border-radius: 10px;
@@ -643,9 +616,9 @@
         margin: 6px 0 4px;
       }
 
-      /* Range slider */
       input[type="range"] {
         -webkit-appearance: none;
+        appearance: none;
         width: 100%;
         height: 4px;
         border-radius: 3px;
@@ -660,6 +633,7 @@
 
       input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none;
+        appearance: none;
         width: 16px;
         height: 16px;
         border-radius: 50%;
@@ -669,7 +643,6 @@
         border: 2px solid #fff;
       }
 
-      /* ── ALERTS ── */
       .alert-row {
         display: flex;
         gap: 12px;
@@ -708,7 +681,6 @@
         font-weight: 600;
       }
 
-      /* ── TEAM TAGS ── */
       .team-tags {
         display: flex;
         flex-wrap: wrap;
@@ -733,7 +705,6 @@
         border-radius: 50%;
       }
 
-      /* ── MINI STATS BAR ── */
       .mini-stats {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
@@ -778,7 +749,6 @@
         color: rgba(148,163,184,0.45);
       }
 
-      /* ── CHART AREA ── */
       .chart-panel {
         background: var(--surface);
         border-radius: 14px;
@@ -818,7 +788,6 @@
         padding: 16px 20px 14px;
       }
 
-      /* ── FOOTER ── */
       .footer-bar {
         padding: 14px 30px;
         border-top: 1px solid var(--border);
@@ -830,7 +799,6 @@
         background: var(--bg-deep);
       }
 
-      /* ── RESPONSIVE ── */
       @media (max-width: 1024px) {
         .sidebar {
           display: none;
@@ -852,7 +820,8 @@
         }
       }
 
-      /* ── LIVE DOT ── */
+      .clock-sep { color: rgba(148,163,184,0.4); margin: 0 5px; }
+
       .live-dot {
         width: 7px;
         height: 7px;
@@ -873,7 +842,6 @@
         }
       }
 
-      /* ── BTN ── */
       .btn-blue {
         background: linear-gradient(135deg, var(--indigo), #4F46E5);
         color: #fff;
@@ -915,7 +883,6 @@
         color: var(--violet);
       }
 
-      /* --- CRÍTICO (Naranja/Fuchsia) --- */
       .critical-accent {
         color: var(--orange) !important;
       }
@@ -923,7 +890,6 @@
         background: rgba(251,146,60,0.1) !important;
       }
 
-      /* KPI card alertas → naranja */
       .kpi-card:nth-child(2) .kpi-value {
         color: var(--orange) !important;
       }
@@ -938,7 +904,6 @@
         color: var(--orange);
       }
 
-      /* --- DINERO (Emerald) --- */
       .money-accent {
         color: var(--emerald) !important;
       }
@@ -948,7 +913,6 @@
         text-shadow: 0 0 18px rgba(52,211,153,0.25);
       }
 
-      /* KPI card ROI → emerald */
       .kpi-card:nth-child(3) .kpi-value {
         color: var(--emerald) !important;
       }
@@ -959,7 +923,6 @@
         stroke: var(--emerald) !important;
       }
 
-      /* Slider en emerald */
       input[type="range"] {
         background: linear-gradient(
           90deg,
@@ -972,7 +935,6 @@
         box-shadow: 0 0 14px rgba(52,211,153,0.5);
       }
 
-      /* --- TECH / BIEN (Cyan) --- */
       .tech-accent {
         color: var(--cyan) !important;
       }
@@ -986,17 +948,8 @@
     <aside class="sidebar">
       <div class="sidebar-logo">
         <div class="logo-icon-box">
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#fff"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
           </svg>
         </div>
         <div class="logo-text-block">
@@ -1008,66 +961,30 @@
       <div class="nav-section">Principal</div>
 
       <a class="nav-link active" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <rect x="3" y="3" width="7" height="7" />
-          <rect x="14" y="3" width="7" height="7" />
-          <rect x="14" y="14" width="7" height="7" />
-          <rect x="3" y="14" width="7" height="7" />
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
         </svg>
         Dashboard
       </a>
       <a class="nav-link" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polygon points="3 11 22 2 13 21 11 13 3 11" />
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="3 11 22 2 13 21 11 13 3 11"/>
         </svg>
         Mapa de Riesgo
       </a>
       <a class="nav-link" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
         </svg>
         Análisis IA
       </a>
       <a class="nav-link" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <line x1="12" y1="1" x2="12" y2="23" />
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23"/>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
         </svg>
         Simulador ROI
       </a>
@@ -1075,53 +992,24 @@
       <div class="nav-section">Reportes</div>
 
       <a class="nav-link" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path
-            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-          />
-          <polyline points="14 2 14 8 20 8" />
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
         </svg>
         Reportes ANC
       </a>
       <a class="nav-link" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-          <circle cx="12" cy="10" r="3" />
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+          <circle cx="12" cy="10" r="3"/>
         </svg>
         Capa Geoespacial
       </a>
       <a class="nav-link" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <circle cx="12" cy="12" r="3" />
-          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
-          <path d="M4.93 4.93a10 10 0 0 0 0 14.14" />
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+          <path d="M4.93 4.93a10 10 0 0 0 0 14.14"/>
         </svg>
         Alertas en Vivo
       </a>
@@ -1144,7 +1032,7 @@
           </div>
           <div>
             <div style="font-size: 13px; font-weight: 600">Carlos Saucedo</div>
-            <div style="font-size: 10px; opacity: 0.5">Ing. UNAM · SACMEX</div>
+            <div style="font-size: 10px; opacity: 0.5">Ing. UNAM · Kyndryl</div>
           </div>
         </div>
       </div>
@@ -1169,53 +1057,28 @@
           >
             <span class="live-dot"></span>
             <span id="live-clock">14:37:00</span>
+            <span class="clock-sep">·</span>
+            <span id="live-date" style="font-size: 11px; color: rgba(148,163,184,0.65); font-weight: 500;"></span>
+            <span class="clock-sep">·</span>
+            <span style="font-size: 11px; color: rgba(0,229,255,0.75); font-weight: 600; letter-spacing: 0.02em;"> CDMX</span>
           </div>
           <div class="search-wrap">
-            <svg
-              width="13"
-              height="13"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="white"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
             </svg>
             <input class="search-input" placeholder="Buscar zona..." />
           </div>
           <div class="icon-btn">
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-              <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
             </svg>
           </div>
           <div class="icon-btn">
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <circle cx="12" cy="12" r="3" />
-              <path
-                d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"
-              />
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
             </svg>
           </div>
         </div>
@@ -1226,7 +1089,7 @@
         <!-- Page header -->
         <div class="page-header">
           <h1>Resumen de Operaciones</h1>
-          <p>Centro de Mando Ejecutivo · SACMEX · Ciudad de México</p>
+          <p>Centro de Mando Ejecutivo · PumaScript </p>
         </div>
 
         <!-- Mini stats -->
@@ -1236,18 +1099,9 @@
               class="mini-stat-icon"
               style="background: rgba(99,102,241,0.12)"
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#38BDF8"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                <polyline points="9 22 9 12 15 12 15 22" />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
               </svg>
             </div>
             <div>
@@ -1260,20 +1114,9 @@
               class="mini-stat-icon"
               style="background: rgba(255, 141, 114, 0.12)"
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#FB923C"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <circle cx="12" cy="12" r="2" />
-                <path
-                  d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"
-                />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FB923C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="2"/>
+                <path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/>
               </svg>
             </div>
             <div>
@@ -1286,18 +1129,9 @@
               class="mini-stat-icon"
               style="background: rgba(0, 214, 180, 0.12)"
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#34D399"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
-                <polyline points="16 7 22 7 22 13" />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                <polyline points="16 7 22 7 22 13"/>
               </svg>
             </div>
             <div>
@@ -1310,19 +1144,8 @@
               class="mini-stat-icon"
               style="background: rgba(253, 206, 90, 0.12)"
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#fdce5a"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polygon
-                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fdce5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
               </svg>
             </div>
             <div>
@@ -1341,17 +1164,8 @@
                 <div class="kpi-label">Mermas ANC · Bolívar</div>
                 <div class="kpi-value" style="color: #38BDF8">38.4%</div>
                 <div class="kpi-footer">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#FB923C"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="18 15 12 9 6 15" />
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FB923C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="18 15 12 9 6 15"/>
                   </svg>
                   <span class="up">+2.1%</span>
                   <span>vs. mes anterior · 47,200 m³/día</span>
@@ -1361,17 +1175,8 @@
                 class="kpi-icon-wrap"
                 style="background: rgba(99,102,241,0.12)"
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#38BDF8"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
                 </svg>
               </div>
             </div>
@@ -1402,17 +1207,8 @@
                 <div class="kpi-label">Focos Críticos · Irving IA</div>
                 <div class="kpi-value" style="color: #FB923C">23</div>
                 <div class="kpi-footer">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#FB923C"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="18 15 12 9 6 15" />
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FB923C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="18 15 12 9 6 15"/>
                   </svg>
                   <span class="down">5 nuevos hoy</span>
                   <span>· Modelo anomalías v3.2</span>
@@ -1422,21 +1218,10 @@
                 class="kpi-icon-wrap"
                 style="background: rgba(255, 141, 114, 0.12)"
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#FB923C"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <path
-                    d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
-                  />
-                  <line x1="12" y1="9" x2="12" y2="13" />
-                  <line x1="12" y1="17" x2="12.01" y2="17" />
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FB923C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                  <line x1="12" y1="9" x2="12" y2="13"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
                 </svg>
               </div>
             </div>
@@ -1467,17 +1252,8 @@
                 <div class="kpi-label">Impacto Económico · Ana</div>
                 <div class="kpi-value" style="color: #34D399">$15.4M</div>
                 <div class="kpi-footer">
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#34D399"
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <polyline points="18 15 12 9 6 15" />
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="18 15 12 9 6 15"/>
                   </svg>
                   <span class="up">Recuperable</span>
                   <span>MXN / mes</span>
@@ -1487,18 +1263,9 @@
                 class="kpi-icon-wrap"
                 style="background: rgba(0, 214, 180, 0.12)"
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#34D399"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                >
-                  <line x1="12" y1="1" x2="12" y2="23" />
-                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="1" x2="12" y2="23"/>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                 </svg>
               </div>
             </div>
@@ -1854,18 +1621,14 @@
                           color: rgba(255, 255, 255, 0.3);
                           margin-bottom: 4px;
                         "
-                      >
-                        Pérdida base
-                      </div>
+                      >Pérdida base</div>
                       <div
                         style="
                           font-size: 16px;
                           font-weight: 800;
                           color: rgba(255, 255, 255, 0.6);
                         "
-                      >
-                        $15.4M
-                      </div>
+                      >$15.4M</div>
                     </div>
                     <div
                       style="
@@ -1883,18 +1646,14 @@
                           color: rgba(255, 255, 255, 0.3);
                           margin-bottom: 4px;
                         "
-                      >
-                        m³ afectados
-                      </div>
+                      >m³ afectados</div>
                       <div
                         style="
                           font-size: 16px;
                           font-weight: 800;
                           color: rgba(255, 255, 255, 0.6);
                         "
-                      >
-                        47,200
-                      </div>
+                      >47,200</div>
                     </div>
                   </div>
 
@@ -1909,9 +1668,7 @@
                   >
                     <div
                       style="font-size: 10px; color: #FB923C; font-weight: 700"
-                    >
-                      IA sugiere intervención ≥ 35% para punto de equilibrio
-                    </div>
+                    >IA sugiere intervención ≥ 35% para punto de equilibrio</div>
                   </div>
                 </div>
 
@@ -1925,25 +1682,19 @@
                       color: rgba(255, 255, 255, 0.3);
                       margin-bottom: 8px;
                     "
-                  >
-                    Ahorro Mensual
-                  </div>
+                  >Ahorro Mensual</div>
                   <div
                     class="roi-amount"
                     style="color: #34D399"
                     id="roi-display"
-                  >
-                    $3,084,000
-                  </div>
+                  >$3,084,000</div>
                   <div
                     style="
                       font-size: 10px;
                       color: rgba(255, 255, 255, 0.3);
                       margin-top: 4px;
                     "
-                  >
-                    MXN / mes
-                  </div>
+                  >MXN / mes</div>
                   <div
                     style="
                       margin-top: 16px;
@@ -1955,9 +1706,7 @@
                   >
                     <div
                       style="font-size: 10px; font-weight: 700; color: #34D399"
-                    >
-                      ✓ Viabilidad confirmada por IA
-                    </div>
+                    >✓ Viabilidad confirmada por IA</div>
                   </div>
                 </div>
               </div>
@@ -1990,21 +1739,10 @@
                   class="alert-icon-wrap"
                   style="background: rgba(255, 82, 82, 0.12)"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#FB923C"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path
-                      d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
-                    />
-                    <line x1="12" y1="9" x2="12" y2="13" />
-                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FB923C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
                   </svg>
                 </div>
                 <div>
@@ -2020,21 +1758,10 @@
                   class="alert-icon-wrap"
                   style="background: rgba(255, 82, 82, 0.12)"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#FB923C"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path
-                      d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
-                    />
-                    <line x1="12" y1="9" x2="12" y2="13" />
-                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FB923C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
                   </svg>
                 </div>
                 <div>
@@ -2050,19 +1777,10 @@
                   class="alert-icon-wrap"
                   style="background: rgba(99,102,241,0.12)"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#38BDF8"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
                   </svg>
                 </div>
                 <div>
@@ -2078,19 +1796,10 @@
                   class="alert-icon-wrap"
                   style="background: rgba(99,102,241,0.12)"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#38BDF8"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
                   </svg>
                 </div>
                 <div>
@@ -2139,7 +1848,7 @@
 
       <!-- FOOTER -->
       <div class="footer-bar">
-        <div>HydroTrace AI · Ingeniería UNAM · SACMEX 2024</div>
+        <div>HydroTrace AI · Ingeniería UNAM · 2026</div>
         <div id="footer-clock">Actualización: 14:37:00 · Latencia: 42ms</div>
       </div>
     </div>
@@ -2309,11 +2018,28 @@
       // ── LIVE CLOCK ──
       function tick() {
         const now = new Date();
+
+        // Hora
         const hms = [now.getHours(), now.getMinutes(), now.getSeconds()]
           .map((n) => String(n).padStart(2, "0"))
           .join(":");
         const el = document.getElementById("live-clock");
         if (el) el.textContent = hms;
+
+        // Fecha larga en español — Ciudad de México
+        const dateEl = document.getElementById("live-date");
+        if (dateEl) {
+          const fecha = now.toLocaleDateString("es-MX", {
+            weekday: "short",
+            day:     "numeric",
+            month:   "short",
+            year:    "numeric",
+            timeZone: "America/Mexico_City",
+          });
+          dateEl.textContent = fecha.charAt(0).toUpperCase() + fecha.slice(1);
+        }
+
+        // Footer
         const ft = document.getElementById("footer-clock");
         if (ft)
           ft.textContent = `Actualización: ${hms} · Latencia: ${Math.floor(38 + Math.random() * 12)}ms`;
