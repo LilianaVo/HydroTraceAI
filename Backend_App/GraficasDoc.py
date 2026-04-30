@@ -70,18 +70,26 @@ def generar_grafica_tendencia():
     print(f"  -> Guardada: {path}")
 
 # =============================================================================
-# SECCIÓN 2: EFICIENCIA DE LA RED (AGUA NO CONTABILIZADA)
+# SECCIÓN 2: EFICIENCIA DE LA RED (ESTRUCTURA SEGIAGUA 2026)
 # =============================================================================
 def generar_grafica_eficiencia():
-    print("[2/2] Generando gráfica de eficiencia de red (Dona)...")
+    print("[2/2] Generando gráfica de eficiencia de red (Dona - Actualizada)...")
     
-    labels = ['Consumo Facturado\n(Uso Efectivo)', 'Agua No Contabilizada\n(Fugas y Robo)']
-    sizes = [60, 40]
+    # Valores basados en investigación: 40% Casa, 20% Industria, 40% Fuga/Robo
+    labels = [
+        'Uso Doméstico\n(40%)', 
+        'Uso No Doméstico\n(Industria/Servicios - 20%)', 
+        'Agua No Contabilizada\n(Fugas y Huachicol - 40%)'
+    ]
+    sizes = [40, 20, 40]
     
-    billed_color = "#A8D8EA"   
-    anc_color = "#D21F3C"     
-    colors = [billed_color, anc_color]
-    explode = (0.05, 0) 
+    # Paleta de colores profesional
+    domestic_color = "#3498db"   # Azul (Hogares)
+    industrial_color = "#2ecc71" # Verde (Industria - El filtro de Suelo)
+    anc_color = "#e74c3c"        # Rojo (Zona de intervención HydroTrace)
+    
+    colors = [domestic_color, industrial_color, anc_color]
+    explode = (0, 0, 0.1) # Resaltamos el 40% de pérdida (el objetivo del negocio)
 
     fig, ax = plt.subplots(figsize=(8, 8))
 
@@ -90,36 +98,38 @@ def generar_grafica_eficiencia():
         sizes, 
         labels=labels, 
         autopct='%1.1f%%', 
-        startangle=90, 
+        startangle=140, 
         colors=colors, 
         pctdistance=0.82, 
         explode=explode,
-        wedgeprops={'edgecolor': 'white', 'linewidth': 2}
+        wedgeprops={'edgecolor': 'white', 'linewidth': 3}
     )
 
-    # Estilo de etiquetas externas
+    # Estilo de etiquetas y porcentajes
     for text in texts:
-        text.set_fontsize(12)
+        text.set_fontsize(11)
         text.set_fontweight('bold')
-        text.set_color('#333333')
+        text.set_color('#2c3e50')
 
-    # Estilo de porcentajes internos
     for autotext in autotexts:
-        autotext.set_fontsize(14)
+        autotext.set_fontsize(13)
         autotext.set_fontweight('bold')
-        autotext.set_color('#102C57') 
+        autotext.set_color('white') 
 
-    # Círculo central para efecto dona
+    # Círculo central: Efecto dona y branding SEGIAGUA
     centre_circle = plt.Circle((0,0), 0.70, fc='white')
     fig.gca().add_artist(centre_circle)
+    
+    plt.text(0, 0, 'SEGIAGUA\n2026', horizontalalignment='center', verticalalignment='center', 
+             fontsize=16, fontweight='bold', color='#34495e')
 
-    # Títulos
-    plt.suptitle('EFICIENCIA DE LA RED DE DISTRIBUCIÓN CDMX', fontsize=16, fontweight='bold', y=0.98)
-    plt.title('Pérdidas estimadas por fugas y extracción irregular (ANC)', fontsize=12, color='#555555', pad=10)
+    # Títulos finales
+    plt.suptitle('ESTRUCTURA DE DISTRIBUCIÓN Y PÉRDIDAS HÍDRICAS', fontsize=16, fontweight='bold', y=0.98)
+    plt.title('Meta de intervención prioritaria de HydroTrace AI', fontsize=11, color='#555555', pad=10)
 
     plt.tight_layout()
 
-    path = os.path.join(output_folder, 'HydroTraceAI_Eficiencia_Red_Dona.png')
+    path = os.path.join(output_folder, 'HydroTraceAI_Eficiencia_Red_2026.png')
     plt.savefig(path, dpi=300, bbox_inches='tight')
     plt.close()
     print(f"  -> Guardada: {path}")
