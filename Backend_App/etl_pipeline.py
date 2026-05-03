@@ -80,24 +80,28 @@ def normalizar_texto(texto):
     # Si el nombre está en nuestro mapeo, lo cambiamos al corto
     return mapeo_alcaldias.get(texto, texto)
 
+def mapear_uso_suelo(vocacion):
+    """Asignación de pesos numéricos para evitar falsos positivos ."""
+    if not isinstance(vocacion, str): return 0
+    v = vocacion.upper()
+    if "INDUSTRIAL" in v: return 2
+    if any(x in v for x in ["COMERCIAL", "CORPORATIVO", "SERVICIOS"]): return 1
+    return 0
+
 def cargar_y_limpiar_consumo():
     #Carga y agrupa el consumo total por alcaldía
     print("[ETL] Procesando datos de consumo...")
     df = pd.read_csv(RUTAS["consumo"])
-    
     df['alcaldia'] = df['alcaldia'].apply(normalizar_texto)
     df_agrupado = df.groupby('alcaldia')['consumo_total'].sum().reset_index()
-  
     auditar_datos(df_agrupado, "Consumo 2019")
     return df_agrupado
 
 def cargar_y_limpiar_demograficos():
     #Carga datos poblacionales del INEGI
     print("[ETL] Procesando datos demográficos...")
-    df = pd.read_csv(RUTAS["demografico"])
-    
+    df = pd.read_csv(RUTAS["demografico"]) 
     df['alcaldia'] = df['alcaldia'].apply(normalizar_texto)
-    
     auditar_datos(df, "Demografía")
     return df
 
@@ -106,38 +110,40 @@ def cargar_y_limpiar_reportes():
     print("[ETL] Procesando datos de reportes de SACMEX...")
     df = pd.read_csv(RUTAS["reportes"])
     df['alcaldia'] = df['alcaldia'].apply(normalizar_texto)
-    
     # Filtrar solo por fallas relacionadas con el proyecto
     df_filtrado = df[df['tipo_de_falla'].str.contains('Fuga|Falta', case=False, na=False)]
     df_conteo = df_filtrado.groupby('alcaldia').size().reset_index(name='total_reportes')
     auditar_datos(df_conteo, "Reportes")
     return df_conteo
 
+# ---------------------------------------------
+# ORQUESTADOR DE INTEGRACIÓN
+# ---------------------------------------------
+
 def integrar_dataset_maestro():
-    #Realiza el merge multidimensional y calcula KPIs 
-    print("\n[ETL] Iniciando integración final (Merge)...")
+    print("\n[ETL] Orquestando integración final (Merge)...")
     
-    #1. Cargar superficie como base territorial
-    df_maestro = pd.read_csv(RUTAS["superficie"])
-    df_maestro['alcaldia'] = df_maestro['alcaldia'].apply(normalizar_texto)
+    # 1. Base territorial y Uso de Suelo
+    df_m = pd.read_csv(RUTAS["superficie"])
+    df_m['alcaldia'] = df_m['alcaldia'].apply(normalizar_texto)
+    df_m['uso_suelo_num'] = df_m['vocacion_principal'].apply(mapear_uso_suelo)
     
-    #2.  Unir todos los datasets usando 'alcaldia' como llave
-    df_maestro = df_maestro.merge(cargar_y_limpiar_consumo(), on='alcaldia', how='left')
-    df_maestro = df_maestro.merge(cargar_y_limpiar_demograficos(), on='alcaldia', how='left')
-    df_maestro = df_maestro.merge(cargar_y_limpiar_reportes(), on='alcaldia', how='left')
+    # 2. Integración de fuentes modulares
+    df_m = df_m.merge(cargar_y_limpiar_consumo(), on='alcaldia', how='left')
+    df_m = df_m.merge(cargar_y_limpiar_demograficos(), on='alcaldia', how='left')
+    df_m = df_m.merge(cargar_y_limpiar_reportes(), on='alcaldia', how='left')
     
-    #3. Manejo inicial de nulos (llenar con 0 donde no hubo registros)
-    df_maestro['total_reportes'] = df_maestro['total_reportes'].fillna(0)
-      
-    #4. Auditoría de Integración
-    # Vigilamos que tras el merge no existan ceros en columnas vitales
-    auditar_datos(df_maestro, "Dataset Maestro Final", columnas_criticas=['consumo_total', 'poblacion'])
+    # 3. Tratamiento de nulos e integridad
+    df_m = df_m.fillna(0)
+    auditar_datos(df_m, "Dataset Maestro Final", ['consumo_total', 'poblacion'])
     
-    # 5. Cálculo de KPIs 
-    print("[ETL] Calculando métricas de negocio...")
-    df_maestro['consumo_per_capita'] = df_maestro['consumo_total'] / df_maestro['poblacion']
-    df_maestro['densidad_poblacional'] = df_maestro['poblacion'] / df_maestro['superficie_km2']
-    return df_maestro
+    # 4. Cálculo de KPIs de Negocio
+    print("[ETL] Calculando métricas derivadas...")
+    df_m['consumo_per_capita'] = df_m['consumo_total'] / df_m['poblacion']
+    df_m['densidad_poblacional'] = df_m['poblacion'] / df_m['superficie_km2']
+    
+    # Limpieza final de divisiones por cero (NaN/Inf)
+    return df_m.replace([np.inf, -np.inf], np.nan).fillna(0)
 
 def ejecutar_pipeline():
     #Ejecuta todo el proceso de ingeniería de datos.
