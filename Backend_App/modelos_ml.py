@@ -45,7 +45,7 @@ OUTPUT_PATH = "resultados_finales_IA.csv"
 
 def cargar_y_preparar():
     if not os.path.exists(DATA_PATH):
-        print(f"❌ Error: No se encontró {DATA_PATH}. Ileana, ¿corriste el ETL?")
+        print(f"Error: No se encontró {DATA_PATH}. Ileana, ¿corriste el ETL?")
         return None, None
     
     df = pd.read_csv(DATA_PATH)
@@ -149,4 +149,4 @@ if __name__ == "__main__":
         df_final['diagnostico_final'] = df_final.apply(lambda r: clasificar_riesgo(r, u), axis=1)
         
         df_final.to_csv(OUTPUT_PATH, index=False)
-        print(f"🚀 Pipeline completado. Resultados en {OUTPUT_PATH}")
+        print(f"Pipeline completado. Resultados en {OUTPUT_PATH}")
