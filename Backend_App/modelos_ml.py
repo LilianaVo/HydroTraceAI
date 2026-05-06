@@ -2,7 +2,7 @@
 ================================================================================
 PROYECTO : HydroTrace AI - Ciencia de Datos UNAM
 MODULO   : modelos_ml.py
-AUTORES  : Ileana Lee (Lead Scientist) & Irving Morales
+AUTORES  : Irving Morales & Ileana Lee
 OBJETIVO : Segmentación, detección de anomalías y regresión para diagnóstico
            de fugas y huachicol de agua a nivel colonia en la CDMX.
 
