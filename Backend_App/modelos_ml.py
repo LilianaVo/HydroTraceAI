@@ -36,8 +36,8 @@ warnings.filterwarnings("ignore")
 # 0. CONFIGURACIÓN
 # ──────────────────────────────────────────────────────────────────────────────
 
-DATA_PATH = "dataset_maestro_colonia_final.csv"
-OUTPUT_PATH = "resultados_finales_IA.csv"
+DATA_PATH = "data/dataset_maestro_colonia_final.csv"
+OUTPUT_PATH = "data/resultados_finales_IA.csv"
 
 # ──────────────────────────────────────────────────────────────────────────────
 # 1. CARGA Y CALIBRACIÓN
@@ -75,8 +75,29 @@ def calibrar_umbrales(df):
 def ejecutar_clustering(df, X_scaled):
     print("\n[IA] Iniciando Clustering...")
     
-    # TODO @Irving: Implementar el 'Método del Codo' y guardar la gráfica 
-    # como 'metodo_codo.png'. Justifica el número de clusters.
+    ##TODO @Irving: Implementar el 'Método del Codo' y guardar la gráfica
+    ## como 'metodo_codo.png'. Justifica el número de clusters.
+    inercia = []
+
+    K_range = range(1, 11)
+
+    for k in K_range:
+        modelo = KMeans(n_clusters=k, random_state=42, n_init=10)
+        modelo.fit(X_scaled)
+        inercia.append(modelo.inertia_)
+
+    plt.figure(figsize=(8,5))
+    plt.plot(K_range, inercia, marker='o')
+    plt.xlabel('Número de clusters')
+    plt.ylabel('Inercia')
+    plt.title('Método del Codo')
+    plt.grid(True)
+
+    plt.savefig('graficas_reporte/metodo_codo.png')
+    plt.close()
+    
+    # Según el Método del Codo, K=4 representa el punto óptimo
+    # donde la reducción de inercia comienza a estabilizarse.
     
     kmeans = KMeans(n_clusters=4, random_state=42, n_init=10)
     df['cluster_perfil'] = kmeans.fit_predict(X_scaled)
@@ -94,7 +115,26 @@ def detectar_anomalias(df, X_scaled):
     iso_forest = IsolationForest(contamination=0.15, random_state=42)
     df['es_anomalia'] = iso_forest.fit_predict(X_scaled) 
     
+    anomalias = (df['es_anomalia'] == -1).sum()
+
+    print(f"Colonias anómalas detectadas: {anomalias}")
+    
     # TODO @Irving: Genera el scatter plot 'mapa_anomalias_analitico.png'.
+    
+    plt.figure(figsize=(10,6))
+
+    sns.scatterplot(
+        x=df['consumo_per_capita'],
+        y=df['total_reportes'],
+        hue=df['es_anomalia'],
+        palette={1:'blue', -1:'red'}
+    )
+    plt.title('Mapa Analítico de Anomalías')
+    plt.xlabel('Consumo Per Cápita')
+    plt.ylabel('Total de Reportes')
+
+    plt.savefig('graficas_reporte/mapa_anomalias_analitico.png')
+    plt.close()
     
     return df
 
@@ -113,6 +153,17 @@ def estimar_consumo_base(df):
     
     # TODO @Irving: Imprimir R2 y MAE. 
     # Analiza por qué el R2 es bajo (0.14) y si es aceptable para el proyecto.
+    predicciones = model.predict(X)
+
+    r2 = r2_score(y, predicciones)
+    mae = mean_absolute_error(y, predicciones)
+
+    print(f"R² del modelo: {r2:.4f}")
+    print(f"MAE del modelo: {mae:.2f}")
+    
+    # Un R² bajo no invalida el modelo, ya que el objetivo principal
+    # es detectar desviaciones anómalas y no predecir exactamente
+    # el consumo hídrico.
     
     return df
 
