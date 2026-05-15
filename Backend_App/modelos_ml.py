@@ -147,20 +147,57 @@ def detectar_anomalias(df, X_scaled):
     # y pérdidas comerciales). Se usa contamination=0.15 como criterio conservador
     # para aislar únicamente los eventos más atípicos, evitando sobredetección.
     
-    plt.figure(figsize=(10,6))
+    fig, ax = plt.subplots(figsize=(10, 6))
 
     sns.scatterplot(
         x=df['consumo_per_capita'],
         y=df['total_reportes'],
         hue=df['es_anomalia'],
-        palette={1:'blue', -1:'red'}
+        palette={1: 'blue', -1: 'red'},
+        alpha=0.75,
+        s=80,
+        ax=ax,
     )
-    plt.title('Mapa Analítico de Anomalías')
-    plt.xlabel('Consumo Per Cápita')
-    plt.ylabel('Total de Reportes')
 
-    plt.savefig(GRAFICAS_DIR / "mapa_anomalias_analitico.png")
-    plt.close()
+    # Recortar ambos ejes al percentil 95 para que el outlier no aplaste la vista.
+    x_lim = df['consumo_per_capita'].quantile(0.95)
+    y_lim = df['total_reportes'].quantile(0.95)
+    ax.set_xlim(0, x_lim)
+    ax.set_ylim(0, y_lim)
+
+    # Etiquetar las colonias anomalas mas relevantes dentro del area visible
+    anomalos_visibles = df[
+        (df['es_anomalia'] == -1) &
+        (df['consumo_per_capita'] <= x_lim) &
+        (df['total_reportes'] <= y_lim)
+    ].nlargest(6, 'consumo_per_capita')
+
+    for _, fila in anomalos_visibles.iterrows():
+        ax.annotate(
+            fila['colonia'],
+            xy=(fila['consumo_per_capita'], fila['total_reportes']),
+            xytext=(6, 4),
+            textcoords='offset points',
+            fontsize=7.5,
+            color='#8B0000',
+        )
+
+    ax.set_title('Mapa Analítico de Anomalías', fontsize=13, fontweight='bold')
+    ax.set_xlabel('Consumo Per Cápita (m3/hab)')
+    ax.set_ylabel('Total de Reportes Ciudadanos')
+
+    # Nota aclaratoria sobre puntos fuera del rango visible
+    n_fuera = ((df['consumo_per_capita'] > x_lim) | (df['total_reportes'] > y_lim)).sum()
+    if n_fuera > 0:
+        ax.annotate(
+            f'* {n_fuera} punto(s) fuera del rango visible (outliers extremos)',
+            xy=(0.01, 0.01), xycoords='axes fraction',
+            fontsize=8, color='gray', style='italic',
+        )
+
+    fig.tight_layout()
+    fig.savefig(GRAFICAS_DIR / "mapa_anomalias_analitico.png", dpi=150)
+    plt.close(fig)
 
     plt.figure(figsize=(10,6))
 
