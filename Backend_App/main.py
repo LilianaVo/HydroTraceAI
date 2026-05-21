@@ -236,6 +236,7 @@ def calcular_metricas_resumen(df: pd.DataFrame) -> dict:
 # Puedes cambiarlos aqui — el resto del codigo los usa automaticamente.
 _COLORES_RIESGO: dict[str, str] = {
     "CRITICO"    : "#E74C3C",   # Rojo
+    "CRÍTICO"    : "#E74C3C",   # Rojo (sin tilde por si acaso)
     "SOSPECHOSO" : "#E67E22",   # Naranja
     "DEFICIENCIA": "#F1C40F",   # Amarillo
     "NORMAL"     : "#3498DB",   # Azul
@@ -279,26 +280,58 @@ def preparar_datos_mapa(df: pd.DataFrame) -> list[dict]:
 
     Nota: antes de iterar, descarta filas sin coordenadas con dropna().
     """
-    # CHRISTIAN: quita las filas que no tienen latitud o longitud
-    df_geo = df  # <-- agrega el dropna correcto aqui
+    # quita las filas que no tienen latitud o longitud
+    df_geo = df.dropna(subset=["latitud", "longitud"]).copy()
 
     puntos: list[dict] = []
 
     for _, row in df_geo.iterrows():
-        # CHRISTIAN: calcula el costo en pesos de esta colonia
-        exceso_pesos = 0.0   # <-- formula aqui (tip: usa TARIFA_M3_PESOS del modulo Ana)
+        # Validamos que el exceso de consumo sea positivo
+        exceso_m3 = float(row["exceso_consumo"])
+        if exceso_m3 <= 0:
+            continue
 
-        # CHRISTIAN: obtener el color correcto para este diagnostico
-        color = ""   # <-- usa la funcion color_por_diagnostico()
+        # calcula el costo en pesos de esta colonia
+        exceso_pesos = exceso_m3 * TARIFA_M3_PESOS
 
-        # CHRISTIAN: construye el HTML que va a aparecer cuando el usuario
+        # obtener el color correcto para este diagnostico
+        diagnostico_texto = str(row["diagnostico_final"])
+        color = color_por_diagnostico(diagnostico_texto)
+
+        # construye el HTML que va a aparecer cuando el usuario
         # haga click en el punto del mapa. Minimo pon: nombre de colonia,
         # diagnostico, exceso en m3 y exceso en pesos.
-        popup_html = ""   # <-- arma el string HTML aqui
 
-        # CHRISTIAN: arma el dict del punto y appendealo a la lista
+        popup_html = (
+            f"<div style='font-family: sans-serif; min-width: 180px;'>"
+            f"<h4 style='margin: 0 0 8px 0; color: #1a2338; border-bottom: 1px solid #ddd; padding-bottom: 4px;'>{str(row['colonia']).title()}</h4>"
+            f"<p style='margin: 0; font-size: 12px; line-height: 1.5;'>"
+            f"<b>Alcaldía:</b> {str(row['alcaldia']).title()}<br>"
+            f"<b>Nivel:</b> <span style='color: {color}; font-weight: bold;'>{diagnostico_texto.split('(')[0].strip()}</span><br>"
+            f"<b>Exceso:</b> {exceso_m3:,.2f} m³<br>"
+            f"<b>Impacto:</b> ${exceso_pesos:,.2f} MXN<br>"
+            f"<b>Reportes:</b> {int(row['total_reportes'])}"
+            f"</p></div>"
+        )
+
+
+        # arma el dict del punto y appendealo a la lista
         # Recuerda usar los nombres de llaves exactos que describio el docstring
-        # ...tu codigo aqui...
+        punto = {
+            "lat": float(row["latitud"]),
+            "lon": float(row["longitud"]),
+            "colonia": str(row["colonia"]),
+            "alcaldia": str(row["alcaldia"]),
+            "diagnostico": diagnostico_texto,
+            "color": color,
+            "score": round(float(row["anomalia_score"]), 4),
+            "exceso_m3": round(exceso_m3, 2),
+            "exceso_pesos": round(exceso_pesos, 2),
+            "reportes": int(row["total_reportes"]) if pd.notna(row["total_reportes"]) else 0,
+            "popup_html": popup_html
+        }
+        
+        puntos.append(punto)
 
     log.info("Datos de mapa preparados: %d puntos.", len(puntos))
     return puntos

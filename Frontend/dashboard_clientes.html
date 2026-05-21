@@ -18,6 +18,9 @@
       rel="stylesheet"
     />
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <style>
       :root {
         --cyan: #00e5ff;
@@ -1657,7 +1660,9 @@
             </div>
             <div class="panel-body" style="padding-top: 14px">
               <div class="map-box">
-                <div class="map-dot-grid"></div>
+                <div class="panel-body" style="padding-top: 14px">
+                  <div id="map" style="background: var(--bg-deep); border-radius: 10px; min-height: 350px; width: 100%; border: 1px solid var(--border); z-index: 1;"></div>
+                </div>
 
                 <!-- Pins -->
                 <div class="map-pin" style="top: 30%; left: 50%">
@@ -2407,6 +2412,35 @@
       }
       setInterval(tick, 1000);
       tick();
+
+      // mapa centrado en la CDMX
+      const map = L.map('map').setView([19.35, -99.15], 10);
+
+      // capa de mapa oscuro de CartoDB 
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+          attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+          subdomains: 'abcd',
+          maxZoom: 19
+      }).addTo(map);
+
+      // dibujamos los puntos
+      fetch('/api/mapa-datos')
+        .then(r => r.json())
+        .then(puntos => {
+          puntos.forEach(p => {
+            // Creamos el marcador circular
+            L.circleMarker([p.lat, p.lon], { 
+                color: p.color,
+                fillColor: p.color,
+                fillOpacity: 0.6,
+                radius: 6,
+                weight: 2
+            })
+            .bindPopup(p.popup_html)
+            .addTo(map);
+          });
+        })
+        .catch(err => console.error("Error cargando los datos del mapa:", err));
     </script>
   </body>
 </html>

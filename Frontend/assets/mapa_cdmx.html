@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interactivo - HydroTrace AI</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #06080F; /* Fondo oscuro base */
+            font-family: sans-serif;
+        }
+        #map {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script>
+        // mapa centrado en la CDMX 
+        const map = L.map('map').setView([19.35, -99.15], 11);
+
+        
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(map);
+
+    
+        fetch('/api/mapa-datos')
+          .then(r => r.json())
+          .then(puntos => {
+            puntos.forEach(p => {
+              
+              L.circleMarker([p.lat, p.lon], { 
+                  color: p.color,
+                  fillColor: p.color,
+                  fillOpacity: 0.6,
+                  radius: 8, 
+                  weight: 2
+              })
+              .bindPopup(p.popup_html)
+              .addTo(map);
+            });
+          })
+          .catch(err => console.error("Error cargando los datos del mapa:", err));
+    </script>
+</body>
+</html>
