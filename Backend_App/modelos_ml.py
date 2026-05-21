@@ -36,7 +36,11 @@ warnings.filterwarnings("ignore")
 # 0. CONFIGURACIÓN
 # ──────────────────────────────────────────────────────────────────────────────
 DATA_DIR = Path("data")
-GRAFICAS_DIR = Path("graficas_reporte")
+BASE_DIR = Path(__file__).resolve().parent
+GRAFICAS_DIR = BASE_DIR / "graficas_reporte"
+
+# Le pedimos que cree la carpeta si no existe
+GRAFICAS_DIR.mkdir(parents=True, exist_ok=True)
 
 DATA_DIR.mkdir(exist_ok=True)
 GRAFICAS_DIR.mkdir(exist_ok=True)
