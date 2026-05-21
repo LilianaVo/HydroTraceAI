@@ -1535,7 +1535,7 @@
             <div class="kpi-top">
               <div>
                 <div class="kpi-label">Impacto Económico · Ana</div>
-                <div class="kpi-value" style="color: #34d399">$15.4M</div>
+                <div class="kpi-value" style="color: #34d399">{{dinero_riesgo}}</div>
                 <div class="kpi-footer">
                   <svg
                     width="12"
@@ -1549,7 +1549,7 @@
                   >
                     <polyline points="18 15 12 9 6 15" />
                   </svg>
-                  <span class="up">Recuperable</span>
+                  <span class="up">20% Recuperable</span>
                   <span>MXN / mes</span>
                 </div>
               </div>
@@ -1888,7 +1888,7 @@
                           font-weight: 800;
                           color: #38bdf8;
                         "
-                        >20%</span
+                        >50%</span
                       >
                     </div>
                     <input
@@ -1934,7 +1934,7 @@
                           color: rgba(255, 255, 255, 0.6);
                         "
                       >
-                        $15.4M
+                        {{dinero_riesgo}}
                       </div>
                     </div>
                     <div
@@ -1963,7 +1963,7 @@
                           color: rgba(255, 255, 255, 0.6);
                         "
                       >
-                        47,200
+                        {{m3_riesgo}}
                       </div>
                     </div>
                   </div>
@@ -2003,7 +2003,7 @@
                     style="color: #34d399"
                     id="roi-display"
                   >
-                    $3,084,000
+                    {{roi_proyectado}}
                   </div>
                   <div
                     style="
@@ -2258,7 +2258,7 @@
       const slider = document.getElementById("roi-slider");
       const pctLabel = document.getElementById("pct-label");
       const roiDisplay = document.getElementById("roi-display");
-      const perdidaBase = 15420000;
+      const perdidaBase = dinero_en_riesgo;
 
       function updateRoi(val) {
         slider.style.setProperty("--fill", val + "%");
