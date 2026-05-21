@@ -71,6 +71,7 @@ app = Flask(
 app.config["SECRET_KEY"]                  = "pumascript_ultra_secret_2026"
 app.config["SQLALCHEMY_DATABASE_URI"]     = f"sqlite:///{DB_DIR / 'hydrotrace.db'}"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["JSON_ENSURE_ASCII"] = False
 
 db.init_app(app)
 
@@ -89,7 +90,7 @@ def _cargar_resultados_cached() -> pd.DataFrame:
             f"No se encontro {CSV_RESULTADOS}. "
             "Ejecuta modelos_ml.py primero desde /ejecutar-entrenamiento."
         )
-    df = pd.read_csv(CSV_RESULTADOS)
+    df = pd.read_csv(CSV_RESULTADOS, encoding='utf-8')
     log.info("Dataset ML cargado: %d colonias, %d columnas.", *df.shape)
     return df
 
