@@ -113,10 +113,6 @@ def invalidar_cache_resultados() -> None:
 # 3. MODULO DE FINANZAS — ANA
 # ──────────────────────────────────────────────────────────────────────────────
 #
-# Tu mision: convertir los m3 de exceso que detecto la IA en pesos mexicanos
-# para que SEGUIAGUA entienda el impacto real del problema.
-#
-# Columnas que vas a usar del CSV:
 #   - exceso_consumo   : m3 que cada colonia consume de MAS segun el modelo
 #   - diagnostico_final: 'CRITICO', 'SOSPECHOSO', 'DEFICIENCIA', 'NORMAL'
 #   - alcaldia / colonia: para el desglose geografico
@@ -125,14 +121,8 @@ def invalidar_cache_resultados() -> None:
 #   Rango 0–30 m3    →  $6.50 / m3   (uso habitacional bajo)
 #   Rango 30–60 m3   → $11.20 / m3   (uso habitacional medio)
 #   Rango > 60 m3    → $18.40 / m3   (uso comercial / industrial)
-#
-# Con esa informacion, define abajo la tarifa que vas a aplicar y por que.
-# Pista: las anomalias detectadas son colonias con consumo muy por encima
-# de lo esperado, entonces que rango crees que aplica?
 
-# ANA: define aqui tu tarifa base y el porcentaje de recuperacion
-# NOTA: en la gaceta se toma como 123.79
-TARIFA_M3_PESOS: float      = 18.40   # <-- pon el valor correcto de SEGUIAGUA/SACMEX
+TARIFA_M3_PESOS: float      = 18.40   # <-- valor correcto de SEGUIAGUA/SACMEX
 CAPACIDAD_REPARACION: float = 0.20   # <-- que % de las perdidas es recuperable?
 
 
@@ -141,37 +131,32 @@ def calcular_impacto_economico(df: pd.DataFrame) -> dict:
     Calcula el impacto financiero de las anomalias detectadas por la IA.
 
     Entrada : DataFrame completo con los resultados del modelo.
-    Salida  : dict con las siguientes llaves (NO cambies los nombres,
-              el dashboard los usa directamente):
+    Salida  : dict con las siguientes llaves: 
                 - costo_perdida_total   float  total en pesos MXN
                 - roi_proyectado        float  ahorro esperado si se interviene
                 - m3_en_riesgo          float  total de m3 con exceso
                 - colonias_con_exceso   int    cuantas colonias tienen exceso > 0
                 - desglose_por_colonia  list   lista de dicts para la tabla
     """
-    # Paso 1: filtra solo las colonias que tienen exceso positivo
-    # (exceso_consumo > 0 significa que consumen MAS de lo que el modelo esperaba)
+    # Paso 1: filtrar solo las colonias que tienen exceso positivo
+    
     df_exceso = df[df["exceso_consumo"] > 0].copy()
 
-    # ANA: calcula el costo de cada colonia multiplicando su exceso por la tarifa
-    # Agrega una columna nueva llamada "costo_perdida" al dataframe df_exceso
-    # ...tu codigo aqui...
 
     # Columna costo_perdida se calcula multiplicando los metros cuadrados que exceden el consumo esperado
     # por la tarifa que aplica 
     df_exceso["costo_perdida"] = df_exceso["exceso_consumo"] * TARIFA_M3_PESOS
 
-    # ANA: suma todos los costos para obtener el costo total
+    # Sumamos todos los valores de costos  de pérdidas para obtener el costo total
     costo_total = float(df_exceso["costo_perdida"].sum())   # <-- Se suman todos los valores que se encuentran en el valor de exceso de consumo 
 
 
-    # ANA: el ROI proyectado es cuanto dinero se podria recuperar
-    # si se intervienen fisicamente las fugas, se calcula 
+    # ROI:  cuanto dinero se podria recuperar
+    # si se intervienen fisicamente las fugas
     roi_proyectado = costo_total * CAPACIDAD_REPARACION   
 
-    # Este bloque construye la tabla de desglose por colonia.
-    # Ya esta armado, pero necesita que df_exceso tenga la columna "costo_perdida"
-    # que calculaste arriba — si no la tienes, esto va a tronar.
+    # Construcción de la tabla de desglose por colonia.
+
     desglose = (
         df_exceso[[
             "alcaldia", "colonia", "exceso_consumo",
