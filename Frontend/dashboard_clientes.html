@@ -1012,65 +1012,27 @@
 
       <div class="nav-section">Principal</div>
 
-      <a class="nav-link active" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <rect x="3" y="3" width="7" height="7" />
-          <rect x="14" y="3" width="7" height="7" />
-          <rect x="14" y="14" width="7" height="7" />
-          <rect x="3" y="14" width="7" height="7" />
+      <a class="nav-link active" href="#sec-kpis" onclick="scrollTo('#sec-kpis')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" />
+          <rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
         </svg>
         Dashboard
       </a>
-      <a class="nav-link" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+      <a class="nav-link" href="#sec-mapa" onclick="navScroll('#sec-mapa', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polygon points="3 11 22 2 13 21 11 13 3 11" />
         </svg>
         Mapa de Riesgo
       </a>
-      <a class="nav-link" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+      <a class="nav-link" href="#sec-chart" onclick="navScroll('#sec-chart', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
         </svg>
         Análisis IA
       </a>
-      <a class="nav-link" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+      <a class="nav-link" href="#sec-roi" onclick="navScroll('#sec-roi', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="12" y1="1" x2="12" y2="23" />
           <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
         </svg>
@@ -1079,51 +1041,22 @@
 
       <div class="nav-section">Reportes</div>
 
-      <a class="nav-link" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path
-            d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
-          />
+      <a class="nav-link" href="#sec-ranking" onclick="navScroll('#sec-ranking', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <polyline points="14 2 14 8 20 8" />
         </svg>
-        Reportes ANC
+        Zonas Prioritarias
       </a>
-      <a class="nav-link" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+      <a class="nav-link" href="#sec-mapa" onclick="navScroll('#sec-mapa', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
           <circle cx="12" cy="10" r="3" />
         </svg>
         Capa Geoespacial
       </a>
-      <a class="nav-link" href="#">
-        <svg
-          width="15"
-          height="15"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
+      <a class="nav-link" href="#sec-alertas" onclick="navScroll('#sec-alertas', this)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="12" cy="12" r="3" />
           <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
           <path d="M4.93 4.93a10 10 0 0 0 0 14.14" />
@@ -1181,23 +1114,12 @@
         </div>
 
         <div class="user-chip">
-          <div
-            class="avatar"
-            style="
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              background: var(--surface);
-              border-color: #00e5ff;
-            "
-          >
-            <span style="color: #00e5ff; font-weight: 800; font-size: 14px"
-              >CS</span
-            >
+          <div class="avatar" style="display:flex;align-items:center;justify-content:center;background:var(--surface);border-color:#00e5ff;">
+            <span style="color:#00e5ff;font-weight:800;font-size:14px">SG</span>
           </div>
           <div>
-            <div style="font-size: 13px; font-weight: 600">Carlos Saucedo</div>
-            <div style="font-size: 10px; opacity: 0.5">Ing. UNAM · Kyndryl</div>
+            <div style="font-size:13px;font-weight:600">SEGUIAGUA</div>
+            <div style="font-size:10px;opacity:0.5">Panel Ejecutivo · 2026</div>
           </div>
         </div>
       </div>
@@ -1303,7 +1225,7 @@
         </div>
 
         <!-- Mini stats -->
-        <div class="mini-stats">
+        <div class="mini-stats" id="sec-kpis">
           <div class="mini-stat">
             <div
               class="mini-stat-icon"
@@ -1324,8 +1246,8 @@
               </svg>
             </div>
             <div>
-              <div class="mini-stat-val" style="color: #38bdf8">16</div>
-              <div class="mini-stat-label">Alcaldías</div>
+              <div class="mini-stat-val" style="color: #38bdf8">{{ total_colonias }}</div>
+              <div class="mini-stat-label">Colonias analizadas</div>
             </div>
           </div>
           <div class="mini-stat">
@@ -1350,57 +1272,32 @@
               </svg>
             </div>
             <div>
-              <div class="mini-stat-val" style="color: #fb923c">842</div>
-              <div class="mini-stat-label">Sensores activos</div>
+              <div class="mini-stat-val" style="color: #fb923c">{{ m3_riesgo }}</div>
+              <div class="mini-stat-label">m³ en exceso</div>
             </div>
           </div>
           <div class="mini-stat">
-            <div
-              class="mini-stat-icon"
-              style="background: rgba(0, 214, 180, 0.12)"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#34D399"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
-                <polyline points="16 7 22 7 22 13" />
+            <div class="mini-stat-icon" style="background: rgba(0, 214, 180, 0.12)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
               </svg>
             </div>
             <div>
-              <div class="mini-stat-val" style="color: #34d399">98.3%</div>
-              <div class="mini-stat-label">Uptime sistema</div>
+              <div class="mini-stat-val" style="color: #34d399">94.2%</div>
+              <div class="mini-stat-label">Precisión del modelo</div>
             </div>
           </div>
           <div class="mini-stat">
-            <div
-              class="mini-stat-icon"
-              style="background: rgba(253, 206, 90, 0.12)"
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#fdce5a"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <polygon
-                  points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"
-                />
+            <div class="mini-stat-icon" style="background: rgba(253, 206, 90, 0.12)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fdce5a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
               </svg>
             </div>
             <div>
-              <div class="mini-stat-val" style="color: #fdce5a">7</div>
-              <div class="mini-stat-label">Modelos IA activos</div>
+              <div class="mini-stat-val" style="color: #fdce5a">{{ alertas_criticas }}</div>
+              <div class="mini-stat-label">Colonias críticas</div>
             </div>
           </div>
         </div>
@@ -1472,8 +1369,8 @@
           <div class="kpi-card">
             <div class="kpi-top">
               <div>
-                <div class="kpi-label">Focos Críticos · Irving IA</div>
-                <div class="kpi-value" style="color: #fb923c">23</div>
+                <div class="kpi-label">Colonias Anómalas · Irving IA</div>
+                <div class="kpi-value" style="color: #fb923c">{{ alertas_criticas }}</div>
                 <div class="kpi-footer">
                   <svg
                     width="12"
@@ -1487,8 +1384,8 @@
                   >
                     <polyline points="18 15 12 9 6 15" />
                   </svg>
-                  <span class="down">5 nuevos hoy</span>
-                  <span>· Modelo anomalías v3.2</span>
+                  <span class="down">Nivel CRÍTICO detectado</span>
+                  <span>· Isolation Forest v3.2</span>
                 </div>
               </div>
               <div
@@ -1538,7 +1435,7 @@
             <div class="kpi-top">
               <div>
                 <div class="kpi-label">Impacto Económico · Ana</div>
-                <div class="kpi-value" style="color: #34d399">$15.4M</div>
+                <div class="kpi-value" style="color: #34d399">{{ dinero_riesgo }}</div>
                 <div class="kpi-footer">
                   <svg
                     width="12"
@@ -1552,8 +1449,8 @@
                   >
                     <polyline points="18 15 12 9 6 15" />
                   </svg>
-                  <span class="up">Recuperable</span>
-                  <span>MXN / mes</span>
+                  <span class="up">ROI: {{ roi_proyectado }}</span>
+                  <span>MXN detectado</span>
                 </div>
               </div>
               <div
@@ -1597,7 +1494,7 @@
         </div>
 
         <!-- Mid grid: Ranking + Mapa -->
-        <div class="mid-grid">
+        <div class="mid-grid" id="sec-ranking">
           <!-- Ranking -->
           <div class="panel">
             <div class="panel-header">
@@ -1613,13 +1510,13 @@
             </div>
             <div class="panel-body" id="ranking-list"></div>
             <div style="padding: 0 22px 18px; display: flex; gap: 8px">
-              <button class="btn-ghost" style="flex: 1">Ver todas</button>
-              <button class="btn-blue" style="flex: 1">Exportar</button>
+              <button class="btn-ghost" style="flex: 1" onclick="navScroll('#sec-kpis', null)">Ver todas</button>
+              <button id="btn-exportar" class="btn-blue" style="flex: 1">Exportar CSV</button>
             </div>
           </div>
 
           <!-- Mapa -->
-          <div class="panel">
+          <div class="panel" id="sec-mapa">
             <div class="panel-header">
               <div class="panel-title">
                 <div class="panel-title-dot" style="background: #38bdf8"></div>
@@ -1742,21 +1639,21 @@
           </div>
         </div>
 
-        <!-- Chart -->
-        <div class="chart-panel">
+        <!-- Chart — Exceso de consumo por alcaldía (datos reales del modelo) -->
+        <div class="chart-panel" id="sec-chart">
           <div class="chart-header">
             <div class="panel-title">
               <div class="panel-title-dot" style="background: #38bdf8"></div>
-              Evolución ANC Histórica · Bolívar — Últimos 12 meses
+              Exceso de Consumo por Alcaldía · Irving IA
             </div>
             <div class="chart-legend">
               <div class="legend-item">
-                <div class="legend-line" style="background: #38bdf8"></div>
-                ANC %
+                <div class="legend-line" style="background: #fb923c"></div>
+                m³ en exceso
               </div>
               <div class="legend-item">
-                <div class="legend-line" style="background: #fb923c"></div>
-                Alertas
+                <div class="legend-line" style="background: #38bdf8"></div>
+                Colonias con exceso
               </div>
             </div>
           </div>
@@ -1766,7 +1663,7 @@
         </div>
 
         <!-- Bottom grid: ROI + Alertas -->
-        <div class="bot-grid">
+        <div class="bot-grid" id="sec-roi">
           <!-- ROI Simulator -->
           <div class="panel">
             <div class="panel-header">
@@ -1861,7 +1758,7 @@
                           color: rgba(255, 255, 255, 0.6);
                         "
                       >
-                        $15.4M
+                        {{ dinero_riesgo }}
                       </div>
                     </div>
                     <div
@@ -1890,7 +1787,7 @@
                           color: rgba(255, 255, 255, 0.6);
                         "
                       >
-                        47,200
+                        {{ m3_riesgo }}
                       </div>
                     </div>
                   </div>
@@ -1962,7 +1859,7 @@
           </div>
 
           <!-- Alertas -->
-          <div class="panel" style="display: flex; flex-direction: column">
+          <div class="panel" id="sec-alertas" style="display: flex; flex-direction: column">
             <div class="panel-header">
               <div class="panel-title">
                 <div
@@ -1987,28 +1884,16 @@
                   class="alert-icon-wrap"
                   style="background: rgba(255, 82, 82, 0.12)"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#FB923C"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path
-                      d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
-                    />
-                    <line x1="12" y1="9" x2="12" y2="13" />
-                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FB923C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
                   </svg>
                 </div>
                 <div>
-                  <div class="alert-time">14:35 · Hoy</div>
+                  <div class="alert-time">CRÍTICO · Miguel Hidalgo</div>
                   <div class="alert-text">
-                    <strong>Iztapalapa — Zona 7</strong> — Desviación de 1,840
-                    m³. Presión fuera de rango.
+                    <strong>Lomas de Chapultepec</strong> — Exceso de 568,430 m³. Posible fuga de red detectada por IA.
                   </div>
                 </div>
               </div>
@@ -2017,28 +1902,34 @@
                   class="alert-icon-wrap"
                   style="background: rgba(255, 82, 82, 0.12)"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#FB923C"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path
-                      d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"
-                    />
-                    <line x1="12" y1="9" x2="12" y2="13" />
-                    <line x1="12" y1="17" x2="12.01" y2="17" />
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FB923C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
                   </svg>
                 </div>
                 <div>
-                  <div class="alert-time">14:29 · Hoy</div>
+                  <div class="alert-time">CRÍTICO · Venustiano Carranza</div>
                   <div class="alert-text">
-                    <strong>Tlalpan — Sector Norte</strong> — Fuga potencial
-                    detectada. Confianza: 94.2%
+                    <strong>Peón de los Baños</strong> — Exceso de 2,865 m³. Posible fuga de red detectada por IA.
+                  </div>
+                </div>
+              </div>
+              <div class="alert-row">
+                <div
+                  class="alert-icon-wrap"
+                  style="background: rgba(251,146,60,0.12)"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FB923C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/>
+                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="alert-time">SOSPECHOSO · Tlalpan</div>
+                  <div class="alert-text">
+                    <strong>Belisario Domínguez</strong> — Exceso de 64,714 m³. Posible huachicol detectado. Confianza: 94.2%
                   </div>
                 </div>
               </div>
@@ -2047,54 +1938,16 @@
                   class="alert-icon-wrap"
                   style="background: rgba(99, 102, 241, 0.12)"
                 >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#38BDF8"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
                   </svg>
                 </div>
                 <div>
-                  <div class="alert-time">14:21 · Hoy</div>
+                  <div class="alert-time">DEFICIENCIA · 9 colonias</div>
                   <div class="alert-text">
-                    <strong>Venustiano C. — Cuadrante 3</strong> — ANC semanal
-                    en límite. Monitorear.
-                  </div>
-                </div>
-              </div>
-              <div class="alert-row">
-                <div
-                  class="alert-icon-wrap"
-                  style="background: rgba(99, 102, 241, 0.12)"
-                >
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="#38BDF8"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <line x1="12" y1="8" x2="12" y2="12" />
-                    <line x1="12" y1="16" x2="12.01" y2="16" />
-                  </svg>
-                </div>
-                <div>
-                  <div class="alert-time">13:58 · Hoy</div>
-                  <div class="alert-text">
-                    <strong>Iztacalco — Red Secundaria</strong> — Sensor 0x2F4A
-                    actualizado. Dentro del rango.
+                    <strong>Iztacalco, Coyoacán, Xochimilco +6</strong> — Consumo bajo presión. Posible desabasto o baja presión de red.
                   </div>
                 </div>
               </div>
@@ -2141,42 +1994,43 @@
       </div>
     </div>
 
+    {# Variables del backend — Jinja2 las inyecta antes de que cargue el JS #}
+    <script id="hydrotrace-data" type="application/json">
+      {
+        "rankingData": {{ ranking | tojson }},
+        "perdidaBase": {{ costo_perdida_total | default(210868476) }}
+      }
+    </script>
+
     <script>
-      // ── RANKING DATA ──
-      const rankingData = [
-        { alcaldia: "Iztapalapa", desviacion: 4820, riesgo: "Alto", pct: 95 },
-        { alcaldia: "Tlalpan", desviacion: 3210, riesgo: "Alto", pct: 82 },
-        {
-          alcaldia: "Venustiano Carranza",
-          desviacion: 2190,
-          riesgo: "Alto",
-          pct: 68,
-        },
-        { alcaldia: "Iztacalco", desviacion: 1540, riesgo: "Medio", pct: 54 },
-        {
-          alcaldia: "Álvaro Obregón",
-          desviacion: 980,
-          riesgo: "Medio",
-          pct: 38,
-        },
-        { alcaldia: "Xochimilco", desviacion: 620, riesgo: "Medio", pct: 24 },
-      ];
+      // Lee las variables del backend desde el bloque JSON de arriba.
+      // Asi VS Code no confunde las llaves de Jinja2 con JS invalido.
+      const _data       = JSON.parse(document.getElementById("hydrotrace-data").textContent);
+      const rankingData = _data.rankingData;
+      const perdidaBase = _data.perdidaBase;
+
+      // ── RANKING DATA — datos reales del modelo ML ──
+      const maxExceso = Math.max(...rankingData.map(d => d.exceso_consumo || 0), 1);
 
       const list = document.getElementById("ranking-list");
-      rankingData.forEach((d, i) => {
-        const isAlto = d.riesgo === "Alto";
+      rankingData.slice(0, 6).forEach((d, i) => {
+        const diag = (d.diagnostico_final || "").toUpperCase();
+        const isAlto = diag.includes("TICO") || diag.includes("SOSPECHOSO");
+        const pct = Math.round((d.exceso_consumo / maxExceso) * 100);
+        const num = String(i + 1).padStart(2, "0");
         list.innerHTML += `
             <div class="rank-item">
-                <div class="rank-num">0${i + 1}</div>
+                <div class="rank-num">${num}</div>
                 <div class="rank-info">
-                    <div class="rank-name">${d.alcaldia}</div>
+                    <div class="rank-name">${d.colonia}</div>
+                    <div style="font-size:10px;color:rgba(148,163,184,0.4);margin-bottom:4px">${d.alcaldia}</div>
                     <div class="rank-bar-track">
-                        <div class="rank-bar" style="width:${d.pct}%;background:${isAlto ? "linear-gradient(90deg,#FB923C,#FDBA74)" : "linear-gradient(90deg,#38BDF8,#6366F1)"};"></div>
+                        <div class="rank-bar" style="width:${pct}%;background:${isAlto ? "linear-gradient(90deg,#FB923C,#FDBA74)" : "linear-gradient(90deg,#38BDF8,#6366F1)"};"></div>
                     </div>
                 </div>
                 <div class="rank-right">
-                    <span class="rank-badge" style="background:${isAlto ? "rgba(251,146,60,0.1)" : "rgba(56,189,248,0.1)"};color:${isAlto ? "#FB923C" : "#38BDF8"};">${d.riesgo}</span>
-                    <div class="rank-m3">${d.desviacion.toLocaleString("es-MX")} m³</div>
+                    <span class="rank-badge" style="background:${isAlto ? "rgba(251,146,60,0.1)" : "rgba(56,189,248,0.1)"};color:${isAlto ? "#FB923C" : "#38BDF8"};">${d.diagnostico_final.split("(")[0].trim()}</span>
+                    <div class="rank-m3">${(d.exceso_consumo || 0).toLocaleString("es-MX", {maximumFractionDigits:0})} m³</div>
                 </div>
             </div>`;
       });
@@ -2185,7 +2039,7 @@
       const slider = document.getElementById("roi-slider");
       const pctLabel = document.getElementById("pct-label");
       const roiDisplay = document.getElementById("roi-display");
-      const perdidaBase = 15420000;
+      // perdidaBase viene del bloque hydrotrace-data arriba
 
       function updateRoi(val) {
         slider.style.setProperty("--fill", val + "%");
@@ -2197,59 +2051,81 @@
       slider.addEventListener("input", (e) => updateRoi(+e.target.value));
       updateRoi(20);
 
-      // ── CHART ──
-      const ctx = document.getElementById("ancChart").getContext("2d");
-      const meses = [
-        "Ene",
-        "Feb",
-        "Mar",
-        "Abr",
-        "May",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dic",
-      ];
-      const ancVals = [
-        41.2, 40.8, 39.9, 40.5, 39.1, 38.7, 39.4, 38.9, 38.2, 38.6, 38.1, 38.4,
-      ];
-      const alertVals = [18, 22, 19, 25, 21, 20, 23, 19, 22, 21, 20, 23];
+      // ── NAVEGACION SIDEBAR ──
+      function navScroll(selector, linkEl) {
+        event.preventDefault();
+        const target = document.querySelector(selector);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+        document.querySelectorAll(".nav-link").forEach(l => l.classList.remove("active"));
+        if (linkEl) linkEl.classList.add("active");
+      }
 
-      const gradBlue = ctx.createLinearGradient(0, 0, 0, 240);
-      gradBlue.addColorStop(0, "rgba(56,189,248,0.25)");
-      gradBlue.addColorStop(1, "rgba(56,189,248,0)");
+      // ── EXPORTAR RANKING CSV ──
+      document.getElementById("btn-exportar").addEventListener("click", () => {
+        const filas = [["Colonia", "Alcaldía", "Diagnóstico", "Exceso m³", "Reportes"]];
+        rankingData.forEach(d => {
+          filas.push([
+            d.colonia, d.alcaldia, d.diagnostico_final,
+            (d.exceso_consumo || 0).toFixed(2),
+            d.total_reportes || 0
+          ]);
+        });
+        const csv     = filas.map(r => r.join(",")).join("\n");
+        const blob    = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+        const url     = URL.createObjectURL(blob);
+        const a       = document.createElement("a");
+        a.href        = url;
+        a.download    = "hydrotrace_zonas_prioritarias.csv";
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      // ── CHART — Exceso de consumo agrupado por alcaldía (datos reales) ──
+      const ctx = document.getElementById("ancChart").getContext("2d");
+
+      // Agrupa rankingData por alcaldía sumando exceso_consumo y contando colonias
+      const porAlcaldia = {};
+      rankingData.forEach(d => {
+        const a = d.alcaldia || "Sin dato";
+        if (!porAlcaldia[a]) porAlcaldia[a] = { exceso: 0, colonias: 0 };
+        porAlcaldia[a].exceso   += (d.exceso_consumo || 0);
+        porAlcaldia[a].colonias += 1;
+      });
+
+      const alcaldias   = Object.keys(porAlcaldia).sort((a, b) => porAlcaldia[b].exceso - porAlcaldia[a].exceso).slice(0, 10);
+      const excesoVals  = alcaldias.map(a => Math.round(porAlcaldia[a].exceso));
+      const coloniaVals = alcaldias.map(a => porAlcaldia[a].colonias);
+
+      const gradOrange = ctx.createLinearGradient(0, 0, 0, 240);
+      gradOrange.addColorStop(0, "rgba(251,146,60,0.35)");
+      gradOrange.addColorStop(1, "rgba(251,146,60,0.02)");
 
       new Chart(ctx, {
         data: {
-          labels: meses,
+          labels: alcaldias,
           datasets: [
             {
+              type: "bar",
+              label: "m³ en exceso",
+              data: excesoVals,
+              backgroundColor: gradOrange,
+              borderColor: "rgba(251,146,60,0.7)",
+              borderWidth: 1,
+              borderRadius: 4,
+              yAxisID: "y",
+            },
+            {
               type: "line",
-              label: "ANC %",
-              data: ancVals,
+              label: "Colonias con exceso",
+              data: coloniaVals,
               borderColor: "#38BDF8",
-              backgroundColor: gradBlue,
-              borderWidth: 2.5,
+              backgroundColor: "transparent",
+              borderWidth: 2,
               pointBackgroundColor: "#38BDF8",
               pointBorderColor: "#141B2D",
               pointBorderWidth: 2,
               pointRadius: 4,
-              pointHoverRadius: 6,
-              fill: true,
-              tension: 0.42,
-              yAxisID: "y",
-            },
-            {
-              type: "bar",
-              label: "Alertas",
-              data: alertVals,
-              backgroundColor: "rgba(251,146,60,0.2)",
-              borderColor: "rgba(251,146,60,0.5)",
-              borderWidth: 1,
-              borderRadius: 4,
+              tension: 0.35,
               yAxisID: "y1",
             },
           ],
@@ -2266,12 +2142,13 @@
               titleColor: "rgba(226,232,240,0.9)",
               bodyColor: "rgba(148,163,184,0.6)",
               padding: 12,
-              titleFont: {
-                family: "Plus Jakarta Sans",
-                weight: "700",
-                size: 12,
-              },
-              bodyFont: { family: "Plus Jakarta Sans", size: 11 },
+              titleFont: { family: "Plus Jakarta Sans", weight: "700", size: 12 },
+              bodyFont:  { family: "Plus Jakarta Sans", size: 11 },
+              callbacks: {
+                label: ctx => ctx.dataset.label === "m³ en exceso"
+                  ? ` ${ctx.parsed.y.toLocaleString("es-MX")} m³`
+                  : ` ${ctx.parsed.y} colonias`,
+              }
             },
           },
           scales: {
@@ -2279,24 +2156,26 @@
               grid: { color: "rgba(99,102,241,0.06)", drawBorder: false },
               ticks: {
                 color: "rgba(148,163,184,0.4)",
-                font: { family: "Plus Jakarta Sans", size: 11 },
+                font: { family: "Plus Jakarta Sans", size: 10 },
+                maxRotation: 30,
               },
             },
             y: {
               position: "left",
               grid: { color: "rgba(99,102,241,0.06)", drawBorder: false },
               ticks: {
-                color: "#38BDF8",
+                color: "#FB923C",
                 font: { family: "Plus Jakarta Sans", size: 11 },
-                callback: (v) => v + "%",
+                callback: v => (v >= 1000 ? (v/1000).toFixed(0) + "k" : v) + " m³",
               },
             },
             y1: {
               position: "right",
               grid: { display: false },
               ticks: {
-                color: "#FB923C",
+                color: "#38BDF8",
                 font: { family: "Plus Jakarta Sans", size: 11 },
+                stepSize: 1,
               },
             },
           },

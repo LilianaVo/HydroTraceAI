@@ -280,7 +280,8 @@ def preparar_datos_mapa(df: pd.DataFrame) -> list[dict]:
     for _, row in df_geo.iterrows():
         # Validamos que el exceso de consumo sea positivo
         exceso_m3 = float(row["exceso_consumo"])
-        if exceso_m3 <= 0:
+        diag = str(row["diagnostico_final"]).upper()
+        if exceso_m3 <= 0 and "DEFICIENCIA" not in diag and "SOSPECHOSO" not in diag and "TICO" not in diag:
             continue
 
         # calcula el costo en pesos de esta colonia
@@ -479,12 +480,14 @@ def dashboard_clientes():
     if df is None:
         return render_template(
             "dashboard_clientes.html",
-            ranking          = [],
-            dinero_riesgo    = "N/D",
-            roi_proyectado   = "N/D",
-            m3_riesgo        = "N/D",
-            alertas_criticas = 0,
-            mapa_json        = "[]",
+            ranking             = [],
+            dinero_riesgo       = "N/D",
+            roi_proyectado      = "N/D",
+            m3_riesgo           = "N/D",
+            alertas_criticas    = 0,
+            mapa_json           = "[]",
+            total_colonias      = 0,
+            costo_perdida_total = 0,
         )
 
     impacto = calcular_impacto_economico(df)
@@ -495,18 +498,21 @@ def dashboard_clientes():
     ]].to_dict(orient="records")
 
     mapa_json        = json.dumps(preparar_datos_mapa(df), ensure_ascii=False)
+    # Busqueda flexible: captura 'CRÍTICO' con tilde y texto extra del CSV
     alertas_criticas = int(
-        df["diagnostico_final"].str.contains("CRITICO", case=False, na=False).sum()
+        df["diagnostico_final"].str.contains("TICO", case=False, na=False).sum()
     )
 
     return render_template(
         "dashboard_clientes.html",
-        ranking          = ranking,
-        dinero_riesgo    = f"${impacto['costo_perdida_total']:,.2f}",
-        roi_proyectado   = f"${impacto['roi_proyectado']:,.2f}",
-        m3_riesgo        = f"{impacto['m3_en_riesgo']:,.0f}",
-        alertas_criticas = alertas_criticas,
-        mapa_json        = mapa_json,
+        ranking             = ranking,
+        dinero_riesgo       = f"${impacto['costo_perdida_total']:,.2f}",
+        roi_proyectado      = f"${impacto['roi_proyectado']:,.2f}",
+        m3_riesgo           = f"{impacto['m3_en_riesgo']:,.0f}",
+        alertas_criticas    = alertas_criticas,
+        mapa_json           = mapa_json,
+        total_colonias      = len(df),
+        costo_perdida_total = impacto["costo_perdida_total"],
     )
 
 

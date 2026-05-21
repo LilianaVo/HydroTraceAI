@@ -283,6 +283,12 @@ def clasificar_riesgo(row, umbrales):
     ):
         return "DEFICIENCIA (Posible Baja Presión o Desabasto)"
 
+    # Anomalía confirmada por el modelo con exceso positivo pero reportes intermedios
+    # (no llega al p75 para CRÍTICO ni baja del p10 para SOSPECHOSO)
+    # Sin este caso, colonias reales como Chapultepec Polanco (+361k m³) quedaban en NORMAL
+    if row['es_anomalia'] == -1 and exceso > 0:
+        return "SOSPECHOSO (Exceso Detectado por IA)"
+
     return "NORMAL"
 
 # ──────────────────────────────────────────────────────────────────────────────
