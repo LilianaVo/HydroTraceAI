@@ -18,6 +18,9 @@
       rel="stylesheet"
     />
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <style>
       :root {
         --cyan: #00e5ff;
@@ -1535,7 +1538,7 @@
             <div class="kpi-top">
               <div>
                 <div class="kpi-label">Impacto Económico · Ana</div>
-                <div class="kpi-value" style="color: #34d399">{{dinero_riesgo}}</div>
+                <div class="kpi-value" style="color: #34d399">$15.4M</div>
                 <div class="kpi-footer">
                   <svg
                     width="12"
@@ -1549,7 +1552,7 @@
                   >
                     <polyline points="18 15 12 9 6 15" />
                   </svg>
-                  <span class="up">20% Recuperable</span>
+                  <span class="up">Recuperable</span>
                   <span>MXN / mes</span>
                 </div>
               </div>
@@ -1655,159 +1658,83 @@
                 </button>
               </div>
             </div>
-            <div class="panel-body" style="padding-top: 14px">
-              <div class="map-box">
-                <div class="map-dot-grid"></div>
+            <!-- Buscador de colonias -->
+            <div style="padding: 10px 16px 0; position: relative;">
+              <div style="position: relative;">
+                <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:0.35;pointer-events:none;"
+                     width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"
+                     stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input
+                  id="map-search"
+                  type="text"
+                  placeholder="Buscar colonia..."
+                  autocomplete="off"
+                  style="
+                    width: 100%;
+                    background: rgba(255,255,255,0.04);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    padding: 8px 12px 8px 32px;
+                    font-size: 12px;
+                    color: #e2e8f0;
+                    outline: none;
+                    font-family: 'Plus Jakarta Sans', sans-serif;
+                    transition: border-color 0.2s, box-shadow 0.2s;
+                  "
+                  onfocus="this.style.borderColor='rgba(0,229,255,0.4)';this.style.boxShadow='0 0 0 3px rgba(0,229,255,0.07)'"
+                  onblur="setTimeout(()=>{this.style.borderColor='var(--border)';this.style.boxShadow='none';},200)"
+                />
+                <div id="map-search-results" style="
+                  display: none;
+                  position: absolute;
+                  top: calc(100% + 4px);
+                  left: 0; right: 0;
+                  background: #141b2d;
+                  border: 1px solid rgba(99,102,241,0.25);
+                  border-radius: 8px;
+                  overflow-y: auto;
+                  z-index: 9999;
+                  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+                  max-height: 200px;
+                "></div>
+              </div>
+            </div>
 
-                <!-- Pins -->
-                <div class="map-pin" style="top: 30%; left: 50%">
-                  <div class="map-pin-label">Iztapalapa</div>
-                  <div
-                    class="map-pin-circle"
-                    style="
-                      background: #fb923c;
-                      box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.2);
-                    "
-                  >
-                    <div
-                      style="
-                        position: absolute;
-                        inset: -5px;
-                        border-radius: 50%;
-                        border: 1.5px solid #fb923c;
-                        animation: ripple 2s ease-out infinite;
-                        opacity: 0;
-                      "
-                    ></div>
-                  </div>
-                </div>
-                <div class="map-pin" style="top: 58%; left: 32%">
-                  <div class="map-pin-label">Tlalpan</div>
-                  <div
-                    class="map-pin-circle"
-                    style="
-                      background: #fb923c;
-                      box-shadow: 0 0 0 3px rgba(255, 82, 82, 0.2);
-                    "
-                  >
-                    <div
-                      style="
-                        position: absolute;
-                        inset: -5px;
-                        border-radius: 50%;
-                        border: 1.5px solid #fb923c;
-                        animation: ripple 2.5s ease-out 0.3s infinite;
-                        opacity: 0;
-                      "
-                    ></div>
-                  </div>
-                </div>
-                <div class="map-pin" style="top: 22%; left: 63%">
-                  <div class="map-pin-label">Venustiano C.</div>
-                  <div
-                    class="map-pin-circle"
-                    style="
-                      background: #fb923c;
-                      box-shadow: 0 0 0 3px rgba(255, 141, 114, 0.2);
-                    "
-                  >
-                    <div
-                      style="
-                        position: absolute;
-                        inset: -5px;
-                        border-radius: 50%;
-                        border: 1.5px solid #fb923c;
-                        animation: ripple 2s ease-out 0.6s infinite;
-                        opacity: 0;
-                      "
-                    ></div>
-                  </div>
-                </div>
-                <div class="map-pin" style="top: 42%; left: 58%">
-                  <div class="map-pin-label">Iztacalco</div>
-                  <div
-                    class="map-pin-circle"
-                    style="
-                      background: #fb923c;
-                      box-shadow: 0 0 0 3px rgba(255, 141, 114, 0.15);
-                    "
-                  >
-                    <div
-                      style="
-                        position: absolute;
-                        inset: -5px;
-                        border-radius: 50%;
-                        border: 1.5px solid #fb923c;
-                        animation: ripple 2.5s ease-out 0.9s infinite;
-                        opacity: 0;
-                      "
-                    ></div>
-                  </div>
-                </div>
-                <div class="map-pin" style="top: 65%; left: 52%">
-                  <div class="map-pin-label">Xochimilco</div>
-                  <div
-                    class="map-pin-circle"
-                    style="
-                      background: #38bdf8;
-                      box-shadow: 0 0 0 3px rgba(29, 140, 248, 0.2);
-                    "
-                  >
-                    <div
-                      style="
-                        position: absolute;
-                        inset: -5px;
-                        border-radius: 50%;
-                        border: 1.5px solid #38bdf8;
-                        animation: ripple 2s ease-out 1.2s infinite;
-                        opacity: 0;
-                      "
-                    ></div>
-                  </div>
-                </div>
-                <div class="map-pin" style="top: 37%; left: 26%">
-                  <div class="map-pin-label">Álvaro Obregón</div>
-                  <div
-                    class="map-pin-circle"
-                    style="
-                      background: #38bdf8;
-                      box-shadow: 0 0 0 3px rgba(29, 140, 248, 0.15);
-                    "
-                  >
-                    <div
-                      style="
-                        position: absolute;
-                        inset: -5px;
-                        border-radius: 50%;
-                        border: 1.5px solid #38bdf8;
-                        animation: ripple 2s ease-out 1.5s infinite;
-                        opacity: 0;
-                      "
-                    ></div>
-                  </div>
-                </div>
+            <div class="panel-body" style="padding: 10px 16px 16px; position: relative;">
+              <div id="map" style="height: 360px; width: 100%; border-radius: 10px; border: 1px solid var(--border); z-index: 1;"></div>
 
-                <div class="map-legend-row">
-                  <div class="map-legend-item">
-                    <div
-                      class="map-legend-dot"
-                      style="background: #fb923c"
-                    ></div>
-                    Alto
+              <!-- Leyenda flotante -->
+              <div style="
+                position: absolute;
+                bottom: 28px; right: 28px;
+                background: rgba(13,17,23,0.88);
+                backdrop-filter: blur(8px);
+                border: 1px solid rgba(99,102,241,0.2);
+                border-radius: 8px;
+                padding: 10px 14px;
+                z-index: 1000;
+                pointer-events: none;
+              ">
+                <div style="font-size:9px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;
+                            color:rgba(148,163,184,0.45);margin-bottom:8px;">Nivel de riesgo</div>
+                <div style="display:flex;flex-direction:column;gap:5px;">
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <span style="width:10px;height:10px;border-radius:50%;background:#E74C3C;box-shadow:0 0 6px rgba(231,76,60,0.5);display:inline-block;flex-shrink:0;"></span>
+                    <span style="font-size:11px;color:rgba(226,232,240,0.7);">Crítico</span>
                   </div>
-                  <div class="map-legend-item">
-                    <div
-                      class="map-legend-dot"
-                      style="background: #fb923c"
-                    ></div>
-                    Medio
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <span style="width:10px;height:10px;border-radius:50%;background:#E67E22;box-shadow:0 0 6px rgba(230,126,34,0.5);display:inline-block;flex-shrink:0;"></span>
+                    <span style="font-size:11px;color:rgba(226,232,240,0.7);">Sospechoso</span>
                   </div>
-                  <div class="map-legend-item">
-                    <div
-                      class="map-legend-dot"
-                      style="background: #38bdf8"
-                    ></div>
-                    Bajo
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <span style="width:10px;height:10px;border-radius:50%;background:#F1C40F;box-shadow:0 0 6px rgba(241,196,15,0.4);display:inline-block;flex-shrink:0;"></span>
+                    <span style="font-size:11px;color:rgba(226,232,240,0.7);">Deficiencia</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:7px;">
+                    <span style="width:10px;height:10px;border-radius:50%;background:#3498DB;box-shadow:0 0 6px rgba(52,152,219,0.4);display:inline-block;flex-shrink:0;"></span>
+                    <span style="font-size:11px;color:rgba(226,232,240,0.7);">Normal</span>
                   </div>
                 </div>
               </div>
@@ -1934,7 +1861,7 @@
                           color: rgba(255, 255, 255, 0.6);
                         "
                       >
-                        {{dinero_riesgo}}
+                        $15.4M
                       </div>
                     </div>
                     <div
@@ -1963,7 +1890,7 @@
                           color: rgba(255, 255, 255, 0.6);
                         "
                       >
-                        {{m3_riesgo}}
+                        47,200
                       </div>
                     </div>
                   </div>
@@ -2003,7 +1930,7 @@
                     style="color: #34d399"
                     id="roi-display"
                   >
-                    {{roi_proyectado}}
+                    $3,084,000
                   </div>
                   <div
                     style="
@@ -2258,8 +2185,7 @@
       const slider = document.getElementById("roi-slider");
       const pctLabel = document.getElementById("pct-label");
       const roiDisplay = document.getElementById("roi-display");
-      const stringTotal = "{{ dinero_riesgo }}";
-      const perdidaBase = parseFloat(stringTotal.replace(/[\$,]/g, ''));
+      const perdidaBase = 15420000;
 
       function updateRoi(val) {
         slider.style.setProperty("--fill", val + "%");
@@ -2408,6 +2334,145 @@
       }
       setInterval(tick, 1000);
       tick();
+
+      // ── MAPA LEAFLET ──
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+
+          const map = L.map('map', { zoomControl: true }).setView([19.35, -99.15], 10);
+
+          L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+            subdomains: 'abcd',
+            maxZoom: 19
+          }).addTo(map);
+
+          map.invalidateSize();
+
+          // índice de colonias para el autocomplete { nombre, lat, lon, marker }
+          const indiceColonias = [];
+
+          fetch('/api/mapa-datos')
+            .then(r => r.json())
+            .then(puntos => {
+              puntos.forEach(p => {
+                const marker = L.circleMarker([p.lat, p.lon], {
+                  color: p.color,
+                  fillColor: p.color,
+                  fillOpacity: 0.6,
+                  radius: 6,
+                  weight: 2
+                })
+                .bindPopup(p.popup_html)
+                .addTo(map);
+
+                // guardar en el índice para búsqueda
+                indiceColonias.push({
+                  nombre: p.colonia,
+                  alcaldia: p.alcaldia,
+                  lat: p.lat,
+                  lon: p.lon,
+                  color: p.color,
+                  marker: marker
+                });
+              });
+            })
+            .catch(err => console.error("Error cargando los datos del mapa:", err));
+
+          // ── AUTOCOMPLETE ──
+          const searchInput   = document.getElementById('map-search');
+          const searchResults = document.getElementById('map-search-results');
+
+          // resaltado activo para el marcador seleccionado
+          let markerActivo = null;
+
+          function normalizarTexto(str) {
+            return str.toLowerCase()
+              .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+          }
+
+          function mostrarSugerencias(query) {
+            const q = normalizarTexto(query.trim());
+            if (q.length < 2) { searchResults.style.display = 'none'; return; }
+
+            const matches = indiceColonias
+              .filter(c => normalizarTexto(c.nombre).includes(q) || normalizarTexto(c.alcaldia).includes(q))
+              .slice(0, 8);
+
+            if (matches.length === 0) { searchResults.style.display = 'none'; return; }
+
+            searchResults.innerHTML = matches.map((c, i) => `
+              <div
+                data-idx="${i}"
+                data-lat="${c.lat}"
+                data-lon="${c.lon}"
+                data-nombre="${c.nombre}"
+                data-color="${c.color}"
+                style="
+                  display: flex; align-items: center; gap: 10px;
+                  padding: 9px 14px; cursor: pointer;
+                  border-bottom: 1px solid rgba(99,102,241,0.08);
+                  transition: background 0.15s;
+                "
+                onmouseenter="this.style.background='rgba(99,102,241,0.1)'"
+                onmouseleave="this.style.background='transparent'"
+              >
+                <span style="width:8px;height:8px;border-radius:50%;background:${c.color};flex-shrink:0;
+                             box-shadow:0 0 5px ${c.color}88;display:inline-block;"></span>
+                <div>
+                  <div style="font-size:12px;font-weight:600;color:#e2e8f0;">${c.nombre}</div>
+                  <div style="font-size:10px;color:rgba(148,163,184,0.45);">${c.alcaldia}</div>
+                </div>
+              </div>
+            `).join('');
+
+            searchResults.style.display = 'block';
+
+            // click en resultado
+            searchResults.querySelectorAll('[data-lat]').forEach(el => {
+              el.addEventListener('mousedown', () => {
+                const lat    = parseFloat(el.dataset.lat);
+                const lon    = parseFloat(el.dataset.lon);
+                const nombre = el.dataset.nombre;
+
+                // cerrar dropdown
+                searchResults.style.display = 'none';
+                searchInput.value = nombre;
+
+                // zoom con animación
+                map.flyTo([lat, lon], 15, { animate: true, duration: 1.2 });
+
+                // resaltar el marcador encontrado
+                const found = indiceColonias.find(c => c.lat === lat && c.lon === lon);
+                if (found) {
+                  if (markerActivo) markerActivo.setRadius(6);
+                  found.marker.setRadius(14);
+                  found.marker.openPopup();
+                  markerActivo = found.marker;
+                }
+              });
+            });
+          }
+
+          searchInput.addEventListener('input', e => mostrarSugerencias(e.target.value));
+
+          // cerrar dropdown si se hace click fuera
+          document.addEventListener('click', e => {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+              searchResults.style.display = 'none';
+            }
+          });
+
+          // tecla Escape cierra el dropdown
+          searchInput.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+              searchResults.style.display = 'none';
+              searchInput.blur();
+            }
+          });
+
+        });
+      });
     </script>
   </body>
 </html>
