@@ -1888,7 +1888,7 @@
                           font-weight: 800;
                           color: #38bdf8;
                         "
-                        >50%</span
+                        >20%</span
                       >
                     </div>
                     <input
@@ -2258,7 +2258,8 @@
       const slider = document.getElementById("roi-slider");
       const pctLabel = document.getElementById("pct-label");
       const roiDisplay = document.getElementById("roi-display");
-      const perdidaBase = dinero_en_riesgo;
+      const stringTotal = "{{ dinero_riesgo }}";
+      const perdidaBase = parseFloat(stringTotal.replace(/[\$,]/g, ''));
 
       function updateRoi(val) {
         slider.style.setProperty("--fill", val + "%");
