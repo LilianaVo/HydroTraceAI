@@ -131,8 +131,9 @@ def invalidar_cache_resultados() -> None:
 # de lo esperado, entonces que rango crees que aplica?
 
 # ANA: define aqui tu tarifa base y el porcentaje de recuperacion
-TARIFA_M3_PESOS: float      = 0.0   # <-- pon el valor correcto de SEGUIAGUA/SACMEX
-CAPACIDAD_REPARACION: float = 0.0   # <-- que % de las perdidas es recuperable?
+# NOTA: en la gaceta se toma como 123.79
+TARIFA_M3_PESOS: float      = 18.40   # <-- pon el valor correcto de SEGUIAGUA/SACMEX
+CAPACIDAD_REPARACION: float = 0.20   # <-- que % de las perdidas es recuperable?
 
 
 def calcular_impacto_economico(df: pd.DataFrame) -> dict:
@@ -156,12 +157,17 @@ def calcular_impacto_economico(df: pd.DataFrame) -> dict:
     # Agrega una columna nueva llamada "costo_perdida" al dataframe df_exceso
     # ...tu codigo aqui...
 
+    # Columna costo_perdida se calcula multiplicando los metros cuadrados que exceden el consumo esperado
+    # por la tarifa que aplica 
+    df_exceso["costo_perdida"] = df_exceso["exceso_consumo"] * TARIFA_M3_PESOS
+
     # ANA: suma todos los costos para obtener el costo total
-    costo_total = 0.0   # <-- calcula el total real
+    costo_total = float(df_exceso["costo_perdida"].sum())   # <-- Se suman todos los valores que se encuentran en el valor de exceso de consumo 
+
 
     # ANA: el ROI proyectado es cuanto dinero se podria recuperar
-    # si se intervienen fisicamente las fugas (usa CAPACIDAD_REPARACION)
-    roi_proyectado = 0.0   # <-- calcula el ROI real
+    # si se intervienen fisicamente las fugas, se calcula 
+    roi_proyectado = costo_total * CAPACIDAD_REPARACION   
 
     # Este bloque construye la tabla de desglose por colonia.
     # Ya esta armado, pero necesita que df_exceso tenga la columna "costo_perdida"
