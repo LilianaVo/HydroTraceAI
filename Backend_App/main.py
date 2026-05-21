@@ -290,8 +290,7 @@ def preparar_datos_mapa(df: pd.DataFrame) -> list[dict]:
         color = color_por_diagnostico(diagnostico_texto)
 
         # construye el HTML que va a aparecer cuando el usuario
-        # haga click en el punto del mapa. Minimo pon: nombre de colonia,
-        # diagnostico, exceso en m3 y exceso en pesos.
+        # haga click en el punto del mapa. 
 
         popup_html = (
             f"<div style='font-family: sans-serif; min-width: 180px;'>"
@@ -307,7 +306,6 @@ def preparar_datos_mapa(df: pd.DataFrame) -> list[dict]:
 
 
         # arma el dict del punto y appendealo a la lista
-        # Recuerda usar los nombres de llaves exactos que describio el docstring
         punto = {
             "lat": float(row["latitud"]),
             "lon": float(row["longitud"]),
