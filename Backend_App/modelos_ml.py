@@ -299,36 +299,41 @@ def clasificar_riesgo(row, umbrales):
 # 6. EJECUCIÓN
 # ──────────────────────────────────────────────────────────────────────────────
 
-if __name__ == "__main__":
+def ejecutar_pipeline():
     df_final, X_s = cargar_y_preparar()
-    if df_final is not None:
-        u = calibrar_umbrales(df_final)
-        df_final = ejecutar_clustering(df_final, X_s)
-        df_final = detectar_anomalias(df_final, X_s)
-        df_final = estimar_consumo_base(df_final)
+    if df_final is None:
+        print("Pipeline cancelado: no se encontró el dataset.")
+        return
 
-        print("Generando etiquetas de diagnóstico...")
-        df_final['diagnostico_final'] = df_final.apply(lambda r: clasificar_riesgo(r, u), axis=1)
-        df_final['diagnostico_final'] = df_final['diagnostico_final'].astype(str).str.strip()
+    u = calibrar_umbrales(df_final)
+    df_final = ejecutar_clustering(df_final, X_s)
+    df_final = detectar_anomalias(df_final, X_s)
+    df_final = estimar_consumo_base(df_final)
 
-        print("\n[VALIDACIÓN] Diagnósticos generados:")
-        print(df_final['diagnostico_final'].value_counts())
+    print("Generando etiquetas de diagnóstico...")
+    df_final['diagnostico_final'] = df_final.apply(lambda r: clasificar_riesgo(r, u), axis=1)
+    df_final['diagnostico_final'] = df_final['diagnostico_final'].astype(str).str.strip()
 
-        nulos = df_final['diagnostico_final'].isnull().sum()
-        print(f"Valores nulos en diagnostico_final: {nulos}")
+    print("\n[VALIDACIÓN] Diagnósticos generados:")
+    print(df_final['diagnostico_final'].value_counts())
 
-        # Ordenar por severidad para que el CSV sea directamente legible en Excel.
-        # Dentro de cada nivel, las colonias de mayor consumo aparecen primero.
-        orden_severidad = {
-            "CRÍTICO (Posible Fuga de Red)"                 : 0,
-            "SOSPECHOSO (Posible Huachicol)"                : 1,
-            "DEFICIENCIA (Posible Baja Presión o Desabasto)": 2,
-            "NORMAL"                                        : 3,
-        }
-        df_final['_orden'] = df_final['diagnostico_final'].map(orden_severidad)
-        df_final = df_final.sort_values(
-            ['_orden', 'consumo_total'], ascending=[True, False]
-        ).drop(columns='_orden')
+    nulos = df_final['diagnostico_final'].isnull().sum()
+    print(f"Valores nulos en diagnostico_final: {nulos}")
 
-        df_final.to_csv(OUTPUT_PATH, index=False)
-        print(f"Pipeline completado. Resultados en {OUTPUT_PATH}")
+    orden_severidad = {
+        "CRÍTICO (Posible Fuga de Red)"                 : 0,
+        "SOSPECHOSO (Posible Huachicol)"                : 1,
+        "DEFICIENCIA (Posible Baja Presión o Desabasto)": 2,
+        "NORMAL"                                        : 3,
+    }
+    df_final['_orden'] = df_final['diagnostico_final'].map(orden_severidad)
+    df_final = df_final.sort_values(
+        ['_orden', 'consumo_total'], ascending=[True, False]
+    ).drop(columns='_orden')
+
+    df_final.to_csv(OUTPUT_PATH, index=False)
+    print(f"Pipeline completado. Resultados en {OUTPUT_PATH}")
+
+
+if __name__ == "__main__":
+    ejecutar_pipeline()

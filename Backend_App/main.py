@@ -227,11 +227,11 @@ def calcular_metricas_resumen(df: pd.DataFrame) -> dict:
 # CHRISTIAN: estos son los colores por nivel de riesgo para Leaflet.
 # Puedes cambiarlos aqui — el resto del codigo los usa automaticamente.
 _COLORES_RIESGO: dict[str, str] = {
-    "CRITICO"    : "#E74C3C",   # Rojo
-    "CRÍTICO"    : "#E74C3C",   # Rojo (sin tilde por si acaso)
-    "SOSPECHOSO" : "#E67E22",   # Naranja
-    "DEFICIENCIA": "#F1C40F",   # Amarillo
-    "NORMAL"     : "#3498DB",   # Azul
+    "CRITICO"    : "#FF2D55",   # Rojo neón
+    "CRÍTICO"    : "#FF2D55",
+    "SOSPECHOSO" : "#FF9F0A",   # Naranja neón
+    "DEFICIENCIA": "#30D158",   # Verde neón
+    "NORMAL"     : "#0A84FF",   # Azul neón
 }
 
 
@@ -246,7 +246,7 @@ def color_por_diagnostico(diagnostico: str) -> str:
     for clave, color in _COLORES_RIESGO.items():
         if clave in d:
             return color
-    return "#95A5A6"   # Gris para cualquier otro valor
+    return "#98989D"
 
 
 def preparar_datos_mapa(df: pd.DataFrame) -> list[dict]:
@@ -456,9 +456,9 @@ def dashboard_admin():
     # 4. KPIs Económicos Reales (Punto 2 - ¡Conectando el jale de Ana!)
     kpis_reales = calcular_impacto_economico(df)
     kpis = {
-        "dinero_riesgo": kpis_reales.get("dinero_riesgo", "$210.87M"),
-        "ahorro_proyectado": kpis_reales.get("ahorro_proyectado", "$42.17M"),
-        "m3_perdidos": kpis_reales.get("m3_perdidos", "11.46M m³")
+    "dinero_riesgo"    : f"${kpis_reales.get('costo_perdida_total', 210868476):,.2f}",
+    "ahorro_proyectado": f"${kpis_reales.get('roi_proyectado', 42173695):,.2f}",
+    "m3_perdidos"      : f"{kpis_reales.get('m3_en_riesgo', 11460000):,.0f} m³",
     }
 
     # 5. Preservamos toda tu lógica analítica original (Métricas, Tabla y Mapa)
@@ -521,9 +521,9 @@ def dashboard_clientes():
         return render_template(
             "dashboard_clientes.html",
             ranking             = [],
-            dinero_riesgo       = "N/D",
-            roi_proyectado      = "N/D",
-            m3_riesgo           = "N/D",
+            dinero_riesgo       = "Sin datos",
+            roi_proyectado      = "Sin datos",
+            m3_riesgo           = "—",
             alertas_criticas    = 0,
             mapa_json           = "[]",
             total_colonias      = 0,
