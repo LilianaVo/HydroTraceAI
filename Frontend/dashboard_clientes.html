@@ -914,7 +914,7 @@
   padding:16px 14px 12px;
   position:relative;overflow:hidden;
 ">
-  <div class="deco-label">Perfiles Urbanos · KMeans K=4</div>
+  <div class="deco-label">Perfiles Urbanos </div>
 
   <!-- Fila cluster 1 -->
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
@@ -1025,7 +1025,6 @@
     </div>
     <div class="geo-text">
       <strong>Modelo activo</strong>
-      Isolation Forest · contam. 15%
     </div>
   </div>
 
@@ -1107,7 +1106,7 @@
           Inteligencia Hídrica · CDMX 2026
         </div>
         <h1 class="hero-title">HydroTrace <em>AI</em></h1>
-        <p class="hero-subtitle">Sistema de detección de anomalías en la red hídrica de la Ciudad de México. Identifica zonas prioritarias de intervención para reducir pérdidas no contabilizadas.</p>
+        <p class="hero-subtitle">Detecta fugas, localiza tomas clandestinas y prioriza a tus cuadrillas basándote en el impacto económico. Deja de operar a ciegas.</p>
         <div class="hero-stats">
           <div class="hero-stat">
             <span class="hero-stat-val">160</span>
@@ -1149,8 +1148,6 @@
           <rect x="25" y="105" width="12" height="36" rx="3.5" fill="rgba(167,139,250,0.42)"/>
           <rect x="42" y="96" width="12" height="45" rx="3.5" fill="rgba(109,63,200,0.30)"/>
           <rect x="59" y="108" width="12" height="33" rx="3.5" fill="rgba(196,181,253,0.28)"/>
-          <rect x="198" y="14" width="76" height="26" rx="8" fill="rgba(255,255,255,0.55)" stroke="rgba(167,139,250,0.28)" stroke-width="1"/>
-          <text x="236" y="30" text-anchor="middle" font-size="10" font-family="Figtree,sans-serif" font-weight="700" fill="rgba(109,63,200,0.78)">Irving IA</text>
           <path d="M252 35 C252 35 246 27 246 23 C246 19.1 248.7 16 252 16 C255.3 16 258 19.1 258 23 C258 27 252 35 252 35Z" fill="rgba(167,139,250,0.4)" stroke="rgba(109,63,200,0.32)" stroke-width="1"/>
           <path d="M270 52 C270 52 265 44 265 40.5 C265 37.8 267.2 36 270 36 C272.8 36 275 37.8 275 40.5 C275 44 270 52 270 52Z" fill="rgba(147,197,253,0.45)" stroke="rgba(59,130,246,0.28)" stroke-width="0.8"/>
         </svg>
@@ -1185,7 +1182,7 @@
     </div>
     <div>
       <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px;">Detección Automática</div>
-      <div style="font-size:11.5px;color:var(--text2);line-height:1.6;font-weight:500;">Isolation Forest analiza patrones de consumo en 160 colonias e identifica desviaciones con base estadística, sin umbrales fijos.</div>
+      <div style="font-size:11.5px;color:var(--text2);line-height:1.6;font-weight:500;">El modelo analiza el historial de consumo para ubicar desviaciones significativas de forma temprana.</div>
     </div>
   </div>
 
@@ -1200,8 +1197,8 @@
       </svg>
     </div>
     <div>
-      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px;">Clasificación por Riesgo</div>
-      <div style="font-size:11.5px;color:var(--text2);line-height:1.6;font-weight:500;">Cada anomalía se etiqueta como CRÍTICO, SOSPECHOSO o DEFICIENCIA cruzando exceso de consumo, reportes ciudadanos e índice de desarrollo social.</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px;">Clasificación de Riesgo</div>
+      <div style="font-size:11.5px;color:var(--text2);line-height:1.6;font-weight:500;">Cruzamos los niveles de exceso con datos sociodemográficos para etiquetar la prioridad: NORMAL, DEFICIENCIA, SOSPECHOSO o CRÍTICO.</div>
     </div>
   </div>
 
@@ -1215,8 +1212,8 @@
       </svg>
     </div>
     <div>
-      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px;">Reporte Geoespacial</div>
-      <div style="font-size:11.5px;color:var(--text2);line-height:1.6;font-weight:500;">El equipo técnico recibe un ranking de colonias ordenadas por impacto económico estimado, con base estadística para el despliegue de cuadrillas de inspección.</div>
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px;">Priorización Operativa</div>
+      <div style="font-size:11.5px;color:var(--text2);line-height:1.6;font-weight:500;">Tus equipos técnicos reciben un ranking de colonias ordenadas por impacto económico estimado, con base estadística para el despliegue de cuadrillas de inspección.</div>
     </div>
   </div>
 
@@ -1235,7 +1232,7 @@
         </div>
         <div>
           <div class="mini-val">{{ total_colonias }}</div>
-          <div class="mini-label">Colonias analizadas</div>
+          <div class="mini-label">Colonias Monitoreadas</div>
         </div>
       </div>
 
@@ -1249,23 +1246,23 @@
         </div>
         <div>
           <div class="mini-val">{{ m3_riesgo }}</div>
-          <div class="mini-label">m³ en exceso</div>
+          <div class="mini-label">Volumen Irregular Detectado en m³</div>
         </div>
       </div>
 
       <!-- Precisión: verde vibrante -->
       <div class="mini-card vivid v-green">
-        <div class="mini-icon">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-            <polyline points="22 4 12 14.01 9 11.01"/>
-          </svg>
-        </div>
-        <div>
-          <div class="mini-val">94.2%</div>
-          <div class="mini-label">Precisión del modelo</div>
-        </div>
-      </div>
+  <div class="mini-icon">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+      <polyline points="22 4 12 14.01 9 11.01"/>
+    </svg>
+  </div>
+  <div>
+    <div class="mini-val">{{ 100 - tasa_confianza }}%</div>
+    <div class="mini-label">Detecciones Silenciosas</div>
+  </div>
+</div>
 
       <!-- Colonias críticas: violeta vibrante -->
       <div class="mini-card vivid v-violet">
@@ -1277,7 +1274,7 @@
         </div>
         <div>
           <div class="mini-val">{{ alertas_criticas }}</div>
-          <div class="mini-label">Colonias críticas</div>
+          <div class="mini-label">Colonias en Estado Crítico</div>
         </div>
       </div>
 
@@ -1291,12 +1288,11 @@
         <div class="kpi-accent-line" style="background:linear-gradient(90deg, var(--lavender), var(--purple-soft));"></div>
         <div class="kpi-top">
           <div>
-            <div class="kpi-label">Zonas de riesgo detectadas</div>
+            <div class="kpi-label">Focos Rojos Geolocalizados</div>
             <div class="kpi-val" style="color:var(--purple);">{{ alertas_criticas }}</div>
             <div class="kpi-foot">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-              <span style="color:var(--purple);font-weight:700;">Detección activa</span>
-              <span style="color:var(--text2)"> Irving IA</span>
+              <span style="color:var(--purple);font-weight:700;">Requieren inspección en campo</span>
             </div>
           </div>
           <div class="kpi-icon" style="background:var(--lavender-pale)">
@@ -1316,7 +1312,7 @@
         <div class="kpi-accent-line" style="background:linear-gradient(90deg, var(--rose), var(--mauve));"></div>
         <div class="kpi-top">
           <div>
-            <div class="kpi-label">Pérdida económica estimada</div>
+            <div class="kpi-label">Fuga de Capital Estimada</div>
             <div class="kpi-val" style="color:var(--rose);">{{ dinero_riesgo }}</div>
             <div class="kpi-foot">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
@@ -1324,7 +1320,7 @@
               <span style="color:var(--text2)"> MXN detectado</span>
             </div>
             <div style="margin-top:8px;font-size:10px;color:var(--text3);font-weight:500;line-height:1.5;">
-              Equivale al abastecimiento mensual estimado de <strong style="color:var(--text2);">~180,000 personas</strong> si se recuperara el 20% de las pérdidas detectadas.
+              Equivale al abastecimiento de <strong style="color:var(--text2);">~180,000 habitantes</strong>. Impacto directo en la red hídrica.
             </div>
           </div>
           <div class="kpi-icon" style="background:var(--rose-pale)">
@@ -1344,12 +1340,10 @@
         <div class="kpi-accent-line" style="background:linear-gradient(90deg, var(--sage), #A8D5C2);"></div>
         <div class="kpi-top">
           <div>
-            <div class="kpi-label">Ahorro recuperable con intervención</div>
+            <div class="kpi-label">Proyección de Recuperación (ROI)</div>
             <div class="kpi-val" style="color:var(--sage);">{{ roi_proyectado }}</div>
             <div class="kpi-foot">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--sage)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-              <span style="color:var(--sage);font-weight:700;">ROI: {{ roi_proyectado }}</span>
-              <span style="color:var(--text2)"> MXN recuperable</span>
+              <span style="color:var(--text2)">Escenario conservador: Mitigando solo el 20% del volumen anómalo detectado.</span>
             </div>
           </div>
           <div class="kpi-icon" style="background:var(--sage-pale)">
@@ -1410,7 +1404,7 @@
             <div class="panel-dot" style="background:var(--amber);"></div>
             Zonas Prioritarias
           </div>
-          <span class="tag" style="background:var(--amber-pale);color:var(--amber);">Irving IA</span>
+          <span class="tag" style="background:var(--amber-pale);color:var(--amber);">{{ ranking|length }} Colonias</span>
         </div>
         <div class="panel-bd" id="ranking-list" style="padding-top:2px;padding-bottom:2px;"></div>
         <div style="
@@ -1425,10 +1419,11 @@
             <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
           <div style="font-size:11px;color:var(--amber);font-weight:600;line-height:1.6;">
-            <strong>CRÍTICO</strong> → Desplegar cuadrilla en los próximos 7 días. &nbsp;
-            <strong>SOSPECHOSO</strong> → Validar con reportes ciudadanos antes de intervenir.
+            <strong>CRÍTICO</strong> → Fuga mayor probable. Inspección física inmediata.<br>
+            <strong>SOSPECHOSO</strong> → Extracción irregular (Huachicol). Sugiere auditoría comercial.<br>
+            <strong>DEFICIENCIA</strong> → Caída de presión severa. Revisar válvulas de distribución.
           </div>
-        </div>
+</div>
         <div class="btn-row">
           <button class="btn-ghost" onclick="navScroll('#sec-kpis',null)">Ver todas</button>
           <button id="btn-exportar" class="btn-primary">Exportar CSV</button>
@@ -1454,8 +1449,10 @@
           </div>
         </div>
         <div class="chart-bd">
-          <canvas id="ancChart" height="110"></canvas>
-        </div>
+  <canvas id="ancChart" height="110"></canvas>
+  
+  <div id="grafica-insight"></div>
+</div>
       </div>
 
     </div>
@@ -1534,7 +1531,7 @@
             <div class="panel-dot" style="background:var(--rose);animation:pulse-dot 2s infinite;"></div>
             Alertas en Tiempo Real
           </div>
-          <span class="tag" style="background:var(--rose-pale);color:var(--rose);">Irving IA</span>
+          <span class="tag" style="background:var(--rose-pale);color:var(--rose);">COLONIAS CRÍTICAS</span>
         </div>
 
         <div class="panel-bd" style="flex:1;padding-top:4px;padding-bottom:2px;">
@@ -1578,24 +1575,6 @@
   </div>
 </div>
 
-
-        <div class="team-tags">
-          <div class="team-tag" style="background:var(--lavender-pale);color:var(--purple);">
-            <div class="team-dot" style="background:var(--purple);"></div> Ileana · PM
-          </div>
-          <div class="team-tag" style="background:var(--sky-pale);color:#6BA3D4;">
-            <div class="team-dot" style="background:var(--sky);"></div> Bolívar · Datos
-          </div>
-          <div class="team-tag" style="background:var(--rose-pale);color:var(--rose);">
-            <div class="team-dot" style="background:var(--rose);"></div> Irving · IA
-          </div>
-          <div class="team-tag" style="background:var(--sage-pale);color:var(--sage);">
-            <div class="team-dot" style="background:var(--sage);"></div> Ana · Negocio
-          </div>
-          <div class="team-tag" style="background:var(--mauve-pale);color:var(--mauve);">
-            <div class="team-dot" style="background:var(--mauve);"></div> Christian · Mapa
-          </div>
-        </div>
       </div>
 
     </div>
@@ -2007,10 +1986,12 @@ renderCalendario();
   return { color: "#0A84FF", colorHex: "#0A84FF", bg: "rgba(10,132,255,0.10)" };
 }
   // ── RANKING ──
+  // ── RANKING ──
   const maxExceso = Math.max(...rankingData.map(d => d.exceso_consumo || 0), 1);
   const list = document.getElementById("ranking-list");
 
   if (rankingData.length > 0) {
+    list.innerHTML = ""; // Limpia el contenedor antes de inyectar
     rankingData.slice(0, 6).forEach((d, i) => {
       const { colorHex, bg } = colorPorDiag(d.diagnostico_final);
       const pct = Math.round((d.exceso_consumo / maxExceso) * 100);
@@ -2025,16 +2006,17 @@ renderCalendario();
               <div class="rank-bar" style="width:${pct}%;background:linear-gradient(90deg,${colorHex},${colorHex}88);"></div>
             </div>
           </div>
-          <div class="rank-right">
-            <span class="rank-badge" style="background:${bg};color:${colorHex};cursor:default;"
-  title="${
-    d.diagnostico_final.includes('TICO')       ? 'Exceso superior al 100% del consumo esperado. Prioridad inmediata de inspección.' :
-    d.diagnostico_final.includes('SOSPECHOSO') ? 'Patrón atípico confirmado por reportes ciudadanos. Requiere validación en campo.' :
-    d.diagnostico_final.includes('DEFICIENCIA')? 'Consumo menor al esperado. Posible baja presión o desabasto en la red.' :
-    'Consumo dentro del rango estadístico normal.'
-  }"
->${d.diagnostico_final.split("(")[0].trim()}</span>
-            <div class="rank-m3">${(d.exceso_consumo || 0).toLocaleString("es-MX", {maximumFractionDigits:0})} m³</div>
+          <div class="rank-right" style="display: flex; flex-direction: column; align-items: flex-end; justify-content: center;">
+            <span class="rank-badge" style="background:${bg};color:${colorHex};cursor:default; margin-bottom: 4px;"
+              title="${
+                d.diagnostico_final.includes('TICO')       ? 'Fuga mayor probable. Prioridad de inspección física inmediata.' :
+                d.diagnostico_final.includes('SOSPECHOSO') ? 'Extracción irregular o anomalía comercial. Se sugiere auditoría a tomas.' :
+                d.diagnostico_final.includes('DEFICIENCIA')? 'Consumo menor al esperado. Posible baja presión o desabasto en la red.' :
+                'Consumo dentro del rango estadístico normal.'
+              }"
+            >${d.diagnostico_final.split("(")[0].trim()}</span>
+            <span style="font-size: 9px; color: #A8B2C1; font-weight: 400; text-align: right; line-height: 1; margin-bottom: 2px;">Desviación:</span>
+            <div class="rank-m3" style="line-height: 1;">${(d.exceso_consumo || 0).toLocaleString("es-MX", {maximumFractionDigits:0})} m³</div>
           </div>
         </div>`;
     });
@@ -2083,106 +2065,141 @@ setScenario(document.querySelectorAll("#roi-scenarios button")[1], 30);
   });
 
   // ── CHART — paleta pastel cohesionada ──
-  const ctx = document.getElementById("ancChart").getContext("2d");
+const ctx = document.getElementById("ancChart").getContext("2d");
 
-  const porAlcaldia = {};
-  rankingData.forEach(d => {
-    const a = d.alcaldia || "Sin dato";
-    if (!porAlcaldia[a]) porAlcaldia[a] = { exceso: 0, colonias: 0 };
-    porAlcaldia[a].exceso   += (d.exceso_consumo || 0);
-    porAlcaldia[a].colonias += 1;
-  });
+// Preparamos los datos sumando por alcaldía
+const porAlcaldia = {};
+rankingData.forEach(d => {
+  const a = d.alcaldia || "Sin dato";
+  if (!porAlcaldia[a]) porAlcaldia[a] = { exceso: 0, colonias: 0 };
+  porAlcaldia[a].exceso   += (d.exceso_consumo || 0);
+  porAlcaldia[a].colonias += 1;
+});
 
-  const alcaldias   = Object.keys(porAlcaldia).sort((a,b) => porAlcaldia[b].exceso - porAlcaldia[a].exceso).slice(0,10);
-  const excesoVals  = alcaldias.map(a => Math.round(porAlcaldia[a].exceso));
-  const coloniaVals = alcaldias.map(a => porAlcaldia[a].colonias);
+const alcaldias   = Object.keys(porAlcaldia).sort((a,b) => porAlcaldia[b].exceso - porAlcaldia[a].exceso).slice(0,10);
+const excesoVals  = alcaldias.map(a => Math.round(porAlcaldia[a].exceso));
+const coloniaVals = alcaldias.map(a => porAlcaldia[a].colonias);
 
-  const demoLabels  = ["Miguel Hidalgo","Tlalpan","Iztapalapa","Coyoacán","Benito Juárez","Cuauhtémoc","Gustavo A. Madero","Álvaro Obregón","Xochimilco","Azcapotzalco"];
-  const demoExceso  = [568430, 145200, 98400, 76300, 62100, 54800, 48200, 38700, 29400, 18900];
-  const demoColonias= [8, 12, 15, 9, 7, 11, 14, 6, 8, 5];
+// Fallbacks por si no hay datos (excelente práctica, por cierto)
+const demoLabels  = ["Miguel Hidalgo","Tlalpan","Iztapalapa","Coyoacán","Benito Juárez","Cuauhtémoc","Gustavo A. Madero","Álvaro Obregón","Xochimilco","Azcapotzalco"];
+const demoExceso  = [568430, 145200, 98400, 76300, 62100, 54800, 48200, 38700, 29400, 18900];
+const demoColonias= [8, 12, 15, 9, 7, 11, 14, 6, 8, 5];
 
-  const labels_ = alcaldias.length  ? alcaldias   : demoLabels;
-  const excesoF = excesoVals.length ? excesoVals  : demoExceso;
-  const coloniaF= coloniaVals.length? coloniaVals : demoColonias;
+const labels_ = alcaldias.length  ? alcaldias   : demoLabels;
+const excesoF = excesoVals.length ? excesoVals  : demoExceso;
+const coloniaF= coloniaVals.length? coloniaVals : demoColonias;
 
-  const gradBar = ctx.createLinearGradient(0, 0, 0, 220);
-  gradBar.addColorStop(0, "rgba(124,110,245,0.32)");
-  gradBar.addColorStop(1, "rgba(124,110,245,0.04)");
+// 1. Colores dinámicos pero con tu transparencia original
+const coloresBarras = excesoF.map((val, index) => {
+  // Top 2: Tu morado original pero con un poco de presencia (40% de opacidad)
+  if (index < 2) return 'rgba(124, 110, 245, 0.4)'; 
+  // Resto de las barras: Casi invisibles, muy sutiles (10% de opacidad)
+  return 'rgba(124, 110, 245, 0.1)'; 
+});
 
-  new Chart(ctx, {
-    data: {
-      labels: labels_,
-      datasets: [
-        {
-          type: "bar",
-          label: "m³ en exceso",
-          data: excesoF,
-          backgroundColor: gradBar,
-          borderColor: "rgba(124,110,245,0.50)",
-          borderWidth: 1,
-          borderRadius: 6,
-          yAxisID: "y",
-        },
-        {
-          type: "line",
-          label: "Colonias con exceso",
-          data: coloniaF,
-          borderColor: "#5A9FD4",
-          backgroundColor: "rgba(90,159,212,0.07)",
-          borderWidth: 2.5,
-          pointBackgroundColor: "#5A9FD4",
-          pointBorderColor: "#fff",
-          pointBorderWidth: 2,
-          pointRadius: 4,
-          tension: 0.45,
-          yAxisID: "y1",
-          fill: true,
-        },
-      ],
-    },
+// 2. Gráfica con corrección de capas (order)
+new Chart(ctx, {
+  data: {
+    labels: labels_,
+    datasets: [
+      {
+        type: "bar",
+        label: "Desviación Detectada",
+        data: excesoF,
+        backgroundColor: coloresBarras,
+        borderColor: "rgba(124,110,245,0.5)", 
+        borderWidth: 1,
+        borderRadius: 6,
+        yAxisID: "y",
+        order: 2 
+      },
+      {
+        type: "line",
+        label: "Zonas con anomalías",
+        data: coloniaF,
+        borderColor: "#5A9FD4",
+        backgroundColor: "rgba(90,159,212,0.1)",
+        borderWidth: 2.5,
+        pointBackgroundColor: "#5A9FD4",
+        pointBorderColor: "#fff",
+        pointBorderWidth: 2,
+        pointRadius: 4,
+        tension: 0.45,
+        yAxisID: "y1",
+        fill: true,
+        order: 1
+      },
+    ],
+  },
     options: {
-      responsive: true,
-      interaction: { mode: "index", intersect: false },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: "rgba(255,255,255,0.97)",
-          borderColor: "rgba(167,139,250,0.16)",
-          borderWidth: 1,
-          titleColor: "#2D2657",
-          bodyColor: "#6B7280",
-          padding: 12,
-          cornerRadius: 10,
-          titleFont: { family: "Figtree", weight: "700", size: 12 },
-          bodyFont:  { family: "Figtree", size: 11 },
-          callbacks: {
-            label: ctx => ctx.dataset.label === "m³ en exceso"
-              ? ` ${ctx.parsed.y.toLocaleString("es-MX")} m³`
-              : ` ${ctx.parsed.y} colonias`,
-          },
-        },
-      },
-      scales: {
-        x: {
-          grid: { color: "rgba(167,139,250,0.06)", drawBorder: false },
-          ticks: { color: "#7A8698", font: { family: "Figtree", size: 10 }, maxRotation: 30 },
-        },
-        y: {
-          position: "left",
-          grid: { color: "rgba(167,139,250,0.06)", drawBorder: false },
-          ticks: {
-            color: "rgba(124,110,245,0.90)", font: { family: "Figtree", size: 10 },
-            callback: v => (v >= 1000 ? (v/1000).toFixed(0) + "k" : v) + " m³",
-          },
-        },
-        y1: {
-          position: "right",
-          grid: { display: false },
-          ticks: { color: "rgba(90,159,212,0.90)", font: { family: "Figtree", size: 10 }, stepSize: 1 },
+    responsive: true,
+    interaction: { mode: "index", intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: "rgba(255,255,255,0.97)",
+        borderColor: "rgba(167,139,250,0.16)",
+        borderWidth: 1,
+        titleColor: "#2D2657",
+        bodyColor: "#6B7280",
+        padding: 12,
+        cornerRadius: 10,
+        titleFont: { family: "Figtree", weight: "700", size: 12 },
+        bodyFont:  { family: "Figtree", size: 11 },
+        callbacks: {
+          label: ctx => ctx.dataset.label.includes("Desviación")
+            ? ` ${ctx.parsed.y.toLocaleString("es-MX")} m³`
+            : ` ${ctx.parsed.y} colonias`,
         },
       },
     },
+    scales: {
+      x: {
+        grid: { color: "rgba(167,139,250,0.06)", drawBorder: false },
+        ticks: { color: "#7A8698", font: { family: "Figtree", size: 10 }, maxRotation: 30 },
+      },
+      y: {
+        position: "left",
+        grid: { color: "rgba(167,139,250,0.06)", drawBorder: false },
+        ticks: {
+          color: "rgba(124,110,245,0.90)", font: { family: "Figtree", size: 10 },
+          callback: v => (v >= 1000 ? (v/1000).toFixed(0) + "k" : v) + " m³",
+        },
+      },
+      y1: {
+        position: "right",
+        grid: { display: false },
+        ticks: { color: "rgba(90,159,212,0.90)", font: { family: "Figtree", size: 10 }, stepSize: 1 },
+      },
+    },
+  },
   });
+
+// 3. Insight Ejecutivo Estructurado y Directo
+const totalExceso = excesoF.reduce((a, b) => a + b, 0);
+if (totalExceso > 0 && excesoF.length >= 2) {
+    const pctTop2 = Math.round(((excesoF[0] + excesoF[1]) / totalExceso) * 100);
+    const top1Nombre = labels_[0].toUpperCase();
+    const top2Nombre = labels_[1].toUpperCase();
+
+    const insightContainer = document.getElementById("grafica-insight");
+    if (insightContainer) {
+        insightContainer.innerHTML = `
+            <div style="margin-top: 15px; padding: 16px; background: rgba(124,110,245,0.05); border-left: 4px solid rgba(124,110,245,0.5); border-radius: 8px; text-align: left;">
+                <div style="font-size: 12px; font-weight: 800; color: #2D2657; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2D2657" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1.45.62 2.84 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/>
+                    </svg>
+                    Foco Operativo Crítico
+                </div>
+                <ul style="font-size: 12px; color: #5C5288; line-height: 1.6; font-weight: 500; margin: 0; padding-left: 20px;">
+                    <li style="margin-bottom: 4px;"><strong>${top1Nombre}</strong> y <strong>${top2Nombre}</strong> concentran el <strong>${pctTop2}%</strong> de la desviación hídrica total.</li>
+                    <li>Representan los puntos de mayor impacto operativo potencial.</li>
+                </ul>
+            </div>
+        `;
+    }
+}
 
   // ── LIVE CLOCK ──
   function tick() {

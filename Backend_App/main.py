@@ -487,19 +487,20 @@ def dashboard_admin():
 @app.route("/dashboard-clientes", methods=["GET", "POST"])
 def dashboard_clientes():
     """
-    Dashboard publico para SEGUIAGUA.
+    Dashboard público para SEGUIAGUA.
     GET  → muestra el dashboard con datos reales (o fallback si no hay CSV).
     POST → guarda un Lead en la base de datos (formulario de contacto).
 
     Variables que se pasan al template dashboard_clientes.html:
-        ranking          — lista de dicts con las colonias anomalas
+        ranking          — lista de dicts con las colonias anómalas
                            llaves: alcaldia, colonia, diagnostico_final,
                                    exceso_consumo, total_reportes
-        dinero_riesgo    — string formateado ej. "$1,234,567.00"  (Ana)
-        roi_proyectado   — string formateado ej. "$925,925.25"    (Ana)
-        m3_riesgo        — string formateado ej. "47,200"         (Ana)
-        alertas_criticas — int con el conteo de colonias CRITICAS (Ileana)
-        mapa_json        — JSON string con la lista de puntos     (Christian)
+        dinero_riesgo    — string formateado ej. "$1,234,567.00"
+        roi_proyectado   — string formateado ej. "$925,925.25"
+        m3_riesgo        — string formateado ej. "47,200"
+        alertas_criticas — int con el conteo de colonias CRÍTICAS
+        tasa_confianza   — float con el % de coincidencia real del modelo
+        mapa_json        — JSON string con la lista de puntos
     """
     if request.method == "POST":
         db.session.add(Lead(
@@ -510,13 +511,12 @@ def dashboard_clientes():
             mensaje = request.form.get("mensaje"),
         ))
         db.session.commit()
-        flash("Gracias por tu interes. El equipo HydroTrace se pondra en contacto.", "success")
+        flash("Gracias por tu interés. El equipo HydroTrace se pondrá en contacto.", "success")
         return redirect(url_for("dashboard_clientes"))
 
     df = cargar_resultados()
 
-    # Fallback: si el CSV no existe, el dashboard igual carga con datos en cero
-    # para que la presentacion no se rompa.
+    # Fallback: si el CSV no existe, el dashboard carga en ceros de forma segura
     if df is None:
         return render_template(
             "dashboard_clientes.html",
@@ -525,24 +525,33 @@ def dashboard_clientes():
             roi_proyectado      = "Sin datos",
             m3_riesgo           = "—",
             alertas_criticas    = 0,
+            tasa_confianza      = 0,
             mapa_json           = "[]",
             total_colonias      = 0,
             costo_perdida_total = 0,
         )
 
+    # 1. Cálculos financieros e impacto operativo
     impacto = calcular_impacto_economico(df)
+    
+    # 2. Cálculo real de la tasa de coincidencia/confianza analítica
+    tasa_confianza = reporte_desempeno_negocio(df)
 
+    # 3. Filtrado de zonas para la tabla de visualización (ranking)
     ranking = df[df["diagnostico_final"] != "NORMAL"][[
         "alcaldia", "colonia", "diagnostico_final",
         "exceso_consumo", "total_reportes",
     ]].to_dict(orient="records")
 
-    mapa_json        = json.dumps(preparar_datos_mapa(df), ensure_ascii=False)
-    # Busqueda flexible: captura 'CRÍTICO' con tilde y texto extra del CSV
+    # 4. Formateo de datos geográficos para Leaflet.js
+    mapa_json = json.dumps(preparar_datos_mapa(df), ensure_ascii=False)
+    
+    # Conteo flexible de alertas críticas (soporta tildes o variaciones del string)
     alertas_criticas = int(
         df["diagnostico_final"].str.contains("TICO", case=False, na=False).sum()
     )
 
+    # 5. Renderizado final con inyección de datos dinámicos al HTML
     return render_template(
         "dashboard_clientes.html",
         ranking             = ranking,
@@ -550,6 +559,7 @@ def dashboard_clientes():
         roi_proyectado      = f"${impacto['roi_proyectado']:,.2f}",
         m3_riesgo           = f"{impacto['m3_en_riesgo']:,.0f}",
         alertas_criticas    = alertas_criticas,
+        tasa_confianza      = tasa_confianza,
         mapa_json           = mapa_json,
         total_colonias      = len(df),
         costo_perdida_total = impacto["costo_perdida_total"],
