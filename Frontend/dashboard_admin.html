@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -8,159 +9,872 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
   <style>
     :root {
-      --cyan:#00e5ff;--violet:#a78bfa;--indigo:#6366f1;--blue:#38bdf8;
-      --orange:#fb923c;--emerald:#34d399;--fuchsia:#e879f9;--rose:#fb7185;
-      --amber:#fbbf24;--bg-deep:#06080f;--bg-base:#0d1117;--surface:#141b2d;
-      --surface2:#1a2338;--border:rgba(99,102,241,0.18);--border2:rgba(0,229,255,0.12);
-      --glow-cyan:rgba(0,229,255,0.15);--glow-orange:rgba(251,146,60,0.15);
+      /* Paleta Tako One */
+      --lavender:    #b4a7f5;
+      --violet:      #8b7cf8;
+      --violet-deep: #6d5ce8;
+      --ice:         #a8d8f0;
+      --ice-bright:  #7ec8e3;
+      --neon-purple: #c77dff;
+      --neon-cyan:   #64dfdf;
+      --emerald:     #4cc9a0;
+      --rose:        #f87171;
+      --amber:       #fbbf24;
+      --orange:      #fb923c;
+
+        /* Semántica Tako · Tailwind-inspired */
+  --critico:        #fb7185;   /* rose-400 */
+  --critico-bg:     rgba(244,63,94,0.10);
+  --critico-border: rgba(244,63,94,0.50);
+  --critico-glow:   rgba(244,63,94,0.12);
+
+  --sospechoso:        #fbbf24;  /* amber-400 */
+  --sospechoso-bg:     rgba(245,158,11,0.10);
+  --sospechoso-border: rgba(245,158,11,0.50);
+  --sospechoso-glow:   rgba(245,158,11,0.10);
+
+  --deficiencia:        #fde047;  /* yellow-300 */
+  --deficiencia-bg:     rgba(234,179,8,0.10);
+  --deficiencia-border: rgba(234,179,8,0.50);
+  --deficiencia-glow:   rgba(234,179,8,0.10);
+
+  --dinero:        #34d399;   /* emerald-400 */
+  --dinero-bg:     rgba(16,185,129,0.10);
+  --dinero-border: rgba(16,185,129,0.50);
+  --dinero-glow:   rgba(16,185,129,0.12);
+
+  --agua:        #22d3ee;   /* cyan-400 */
+  --agua-bg:     rgba(6,182,212,0.10);
+  --agua-border: rgba(6,182,212,0.50);
+  --agua-glow:   rgba(6,182,212,0.12);
+
+  --normal:        #a78bfa;   /* violet-400 */
+  --normal-bg:     rgba(139,92,246,0.10);
+  --normal-border: rgba(139,92,246,0.50);
+  --normal-glow:   rgba(139,92,246,0.12);
+
+      /* Fondos */
+ --bg-deep:  #020617;   /* slate-950 */
+  --bg-base:  #0f172a;   /* slate-900 */
+  --surface:  rgba(15,23,42,0.40);   /* slate-900/40 glass */
+  --surface2: rgba(30,41,59,0.50);   /* slate-800/50 */
+  --glass:    rgba(15,23,42,0.40);
+  --glass-h:  rgba(30,41,59,0.55);
+
+      /* Bordes */
+  --border:   rgba(148,163,184,0.10);  /* slate-400/10 */
+      --border2:  rgba(126,200,227,0.10);
+        --border-h: rgba(148,163,184,0.22);
+      /* Glows */
+      --glow-v:   rgba(139,124,248,0.18);
+      --glow-i:   rgba(100,223,223,0.14);
+      --glow-p:   rgba(199,125,255,0.16);
+
+      /* Typography */
+        --font-sans: "DM Sans", system-ui, sans-serif;
+      --font-mono: "DM Mono", "Fira Code", monospace;
+
+      /* Radii */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
     }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:"Plus Jakarta Sans",sans-serif;background-color:var(--bg-base);
-      background-image:radial-gradient(ellipse 80% 40% at 20% 0%,rgba(251,146,60,0.05) 0%,transparent 60%),
-        radial-gradient(ellipse 60% 30% at 80% 100%,rgba(0,229,255,0.04) 0%,transparent 60%);
-      color:#e2e8f0;min-height:100vh}
-    .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;background:var(--bg-deep);z-index:100;
-      display:flex;flex-direction:column;border-right:1px solid var(--border);box-shadow:4px 0 24px rgba(0,0,0,0.4)}
-    .sidebar-logo{padding:28px 20px 20px;border-bottom:1px solid var(--border);margin-bottom:8px;display:flex;align-items:center;gap:12px}
-    .logo-icon-box{width:38px;height:38px;background:linear-gradient(135deg,rgba(251,146,60,0.2),rgba(251,191,36,0.1));
-      border:1px solid rgba(251,146,60,0.3);border-radius:10px;display:flex;align-items:center;justify-content:center;
-      box-shadow:0 0 12px rgba(251,146,60,0.12),inset 0 1px 0 rgba(255,255,255,0.08)}
-    .logo-text-block .name{font-size:15px;font-weight:800;letter-spacing:.05em;line-height:1.1;
-      background:linear-gradient(90deg,var(--orange),var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .logo-text-block .sub{font-size:10px;opacity:.45;font-weight:400;letter-spacing:.1em;-webkit-text-fill-color:#94a3b8}
-    .nav-section{font-size:9.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(148,163,184,0.4);padding:18px 20px 8px}
-    .nav-link{display:flex;align-items:center;gap:11px;padding:11px 20px;font-size:13px;font-weight:500;
-      color:rgba(148,163,184,0.55);transition:all .25s;border-left:2px solid transparent;position:relative;cursor:pointer;text-decoration:none}
-    .nav-link:hover{color:var(--orange);background:linear-gradient(90deg,rgba(251,146,60,0.06),transparent);border-left:2px solid rgba(251,146,60,0.4)}
-    .nav-link.active{color:var(--orange);background:linear-gradient(90deg,rgba(251,146,60,0.08),transparent);border-left:2px solid var(--orange);font-weight:600}
-    .sidebar-bottom{margin-top:auto;border-top:1px solid var(--border);padding:16px 12px 20px}
-    .user-chip{display:flex;align-items:center;gap:10px;padding:10px 8px;border-radius:8px;cursor:pointer;transition:background .2s}
-    .user-chip:hover{background:rgba(251,146,60,0.06)}
-    .avatar{width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(251,146,60,0.4);display:flex;align-items:center;justify-content:center;
-      background:var(--surface);flex-shrink:0;box-shadow:0 0 8px rgba(251,146,60,0.12);font-weight:800;font-size:13px;color:var(--orange)}
-    .main-wrap{margin-left:260px;min-height:100vh}
-    .top-nav{background:var(--bg-deep);border-bottom:1px solid var(--border);padding:14px 30px;
-      display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:50}
-    .breadcrumb-text{font-size:12px;color:rgba(148,163,184,0.45)}
-    .breadcrumb-text span{color:rgba(226,232,240,0.8);font-weight:600}
-    .top-nav-actions{display:flex;align-items:center;gap:10px}
-    .live-dot{width:7px;height:7px;border-radius:50%;background:var(--orange);display:inline-block;animation:blink 2s ease-in-out infinite;box-shadow:0 0 6px rgba(251,146,60,0.6)}
-    @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-    .btn-orange{background:linear-gradient(135deg,rgba(251,146,60,0.9),rgba(251,191,36,0.8));color:#000;font-weight:800;font-size:11px;
-      letter-spacing:.06em;text-transform:uppercase;padding:8px 18px;border-radius:6px;border:none;cursor:pointer;
-      font-family:"Plus Jakarta Sans",sans-serif;transition:opacity .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:6px;
-      box-shadow:0 4px 14px rgba(251,146,60,0.3)}
-    .btn-orange:hover{opacity:.88;box-shadow:0 4px 20px rgba(251,146,60,0.5)}
-    .btn-ghost{background:transparent;color:rgba(148,163,184,0.6);font-weight:600;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
-      padding:8px 16px;border-radius:6px;border:1px solid var(--border);cursor:pointer;font-family:"Plus Jakarta Sans",sans-serif;
-      transition:all .2s;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
-    .btn-ghost:hover{border-color:rgba(251,146,60,0.3);color:var(--orange)}
-    .btn-dl{background:rgba(52,211,153,0.1);color:var(--emerald);font-weight:700;font-size:11px;
-      padding:7px 14px;border-radius:6px;border:1px solid rgba(52,211,153,0.3);cursor:pointer;
-      font-family:"Plus Jakarta Sans",sans-serif;display:inline-flex;align-items:center;gap:6px;transition:all .2s;text-decoration:none}
-    .btn-dl:hover{background:rgba(52,211,153,0.2);box-shadow:0 0 12px rgba(52,211,153,0.2)}
-    .content{padding:28px 30px}
-    .page-header{margin-bottom:28px}
-    .page-header h1{font-size:20px;font-weight:700;margin-bottom:4px;color:#f1f5f9}
-    .page-header p{font-size:12px;color:rgba(148,163,184,0.5)}
-    .kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:22px}
-    .kpi-card{background:var(--surface);border-radius:14px;padding:20px 22px;border:1px solid var(--border);transition:transform .25s,box-shadow .25s,border-color .25s;position:relative;overflow:hidden}
-    .kpi-card::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(251,146,60,0.35),transparent)}
-    .kpi-card:hover{transform:translateY(-4px);border-color:rgba(251,146,60,0.22)!important;box-shadow:0 16px 40px rgba(0,0,0,0.35),0 0 24px rgba(251,146,60,0.06)!important}
-    .kpi-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
-    .kpi-icon-wrap{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center}
-    .kpi-label{font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(148,163,184,0.5);margin-bottom:6px}
-    .kpi-value{font-size:28px;font-weight:800;line-height:1;letter-spacing:-.02em;margin-bottom:6px}
-    .kpi-footer{font-size:11px;color:rgba(148,163,184,0.45);display:flex;align-items:center;gap:5px}
-    .kpi-footer .up{color:var(--emerald)}
-    .kpi-footer .warn{color:var(--orange)}
-    .mini-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px}
-    .mini-stat{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px;transition:border-color .2s}
-    .mini-stat:hover{border-color:rgba(251,146,60,0.2)}
-    .mini-stat-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .mini-stat-val{font-size:18px;font-weight:800;line-height:1;margin-bottom:2px}
-    .mini-stat-label{font-size:10px;color:rgba(148,163,184,0.45)}
-    .panel{background:var(--surface);border-radius:14px;border:1px solid var(--border);overflow:hidden}
-    .panel-header{padding:16px 20px 12px;border-bottom:1px solid rgba(99,102,241,0.1);display:flex;align-items:center;justify-content:space-between}
-    .panel-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;color:#e2e8f0}
-    .panel-body{padding:16px 20px}
-    .panel-title-dot{width:7px;height:7px;border-radius:50%}
-    .mid-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;margin-bottom:22px}
-    .bot-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:22px}
-    .mono{font-family:"Fira Code",monospace}
-    .data-table{width:100%;border-collapse:collapse}
-    .data-table thead tr{background:rgba(0,0,0,0.25)}
-    .data-table th{padding:10px 16px;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(148,163,184,0.4);text-align:left;white-space:nowrap}
-    .data-table tbody tr{border-top:1px solid rgba(255,255,255,0.03);transition:background .2s}
-    .data-table tbody tr:hover{background:rgba(251,146,60,0.03)}
-    .data-table td{padding:10px 16px;font-size:12px}
-    .pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:.05em}
-    .pill-critico{background:rgba(251,113,133,0.12);color:#fb7185;border:1px solid rgba(251,113,133,0.25)}
-    .pill-sospechoso{background:rgba(251,146,60,0.12);color:var(--orange);border:1px solid rgba(251,146,60,0.25)}
-    .pill-deficiencia{background:rgba(251,191,36,0.12);color:var(--amber);border:1px solid rgba(251,191,36,0.25)}
-    .pill-normal{background:rgba(52,211,153,0.10);color:var(--emerald);border:1px solid rgba(52,211,153,0.2)}
-    .log-console{background:var(--bg-deep);border:1px solid rgba(251,146,60,0.12);border-radius:10px;padding:14px 16px;
-      font-family:"Fira Code",monospace;font-size:11px;max-height:210px;overflow-y:auto;line-height:1.7}
-    .log-console::-webkit-scrollbar{width:3px}
-    .log-console::-webkit-scrollbar-thumb{background:#1e293b;border-radius:10px}
-    .log-ok{color:var(--emerald)}.log-warn{color:var(--amber)}.log-info{color:rgba(148,163,184,0.5)}.log-ts{color:rgba(148,163,184,0.3);margin-right:8px}
-    .pipeline-step{display:flex;align-items:flex-start;gap:14px;padding:12px 0;border-bottom:1px solid rgba(99,102,241,0.08)}
-    .pipeline-step:last-child{border-bottom:none}
-    .step-num{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;font-family:"Fira Code",monospace}
-    .step-title{font-size:13px;font-weight:600;color:#e2e8f0;margin-bottom:3px}
-    .step-detail{font-size:11px;color:rgba(148,163,184,0.45);font-family:"Fira Code",monospace}
-    .chart-panel{background:var(--surface);border-radius:14px;border:1px solid var(--border);margin-bottom:0;overflow:hidden}
-    .chart-header{padding:16px 20px 12px;border-bottom:1px solid rgba(99,102,241,0.1);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-    .chart-body{padding:16px 20px 14px}
-    .metric-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.04)}
-    .metric-row:last-child{border-bottom:none}
-    .metric-label{font-size:11px;color:rgba(148,163,184,0.55)}
-    .metric-val{font-size:13px;font-weight:700;font-family:"Fira Code",monospace}
-    .metric-bar-wrap{display:flex;align-items:center;gap:8px}
-    .metric-bar{height:4px;border-radius:4px;background:rgba(255,255,255,0.06);width:80px;overflow:hidden}
-    .metric-bar-fill{height:100%;border-radius:4px}
-    .table-search{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:7px 12px;
-      font-family:"Plus Jakarta Sans",sans-serif;font-size:11px;color:#e2e8f0;outline:none;width:180px;transition:border-color .2s}
-    .table-search:focus{border-color:rgba(251,146,60,0.35)}
-    .table-search::placeholder{color:rgba(148,163,184,0.3)}
-    .filter-btn{padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;border:1px solid var(--border);cursor:pointer;
-      transition:all .2s;background:transparent;color:rgba(148,163,184,0.5);letter-spacing:.04em}
-    .filter-btn.active{background:rgba(251,146,60,0.1);border-color:rgba(251,146,60,0.35);color:var(--orange)}
-    .filter-btn:hover{border-color:rgba(251,146,60,0.25);color:var(--orange)}
-    /* MAP */
-    #mapContainer{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center}
-    #mapContainer.open{display:flex}
-    #mapWrapper{background:var(--bg-deep);border:1px solid rgba(251,146,60,0.3);border-radius:16px;width:90vw;height:88vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.7)}
-    #mapHeader{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-    #leafletMap{flex:1;width:100%;min-height:300px;border-radius:0 0 16px 16px}
-    .map-legend{position:absolute;bottom:20px;right:12px;background:rgba(6,8,15,0.9);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;z-index:1000;font-size:11px}
-    .map-legend-item{display:flex;align-items:center;gap:8px;margin-bottom:5px;color:#e2e8f0}
-    .map-legend-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-    /* API MODAL */
-    .api-modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:210;display:none;align-items:center;justify-content:center}
-    .api-modal-overlay.open{display:flex}
-    .api-modal{background:var(--bg-deep);border:1px solid rgba(251,146,60,0.25);border-radius:16px;width:700px;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 24px 80px rgba(0,0,0,0.6)}
-    .api-modal-header{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,0.06);display:flex;align-items:center;justify-content:space-between}
-    .api-modal-body{flex:1;overflow-y:auto;padding:16px 20px}
-    .api-modal-body::-webkit-scrollbar{width:3px}
-    .api-modal-body::-webkit-scrollbar-thumb{background:#1e293b}
-    .api-url-bar{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;
-      font-family:"Fira Code",monospace;font-size:12px;color:var(--cyan);margin-bottom:14px;display:flex;align-items:center;gap:10px}
-    .api-json{background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:14px 16px;
-      font-family:"Fira Code",monospace;font-size:11px;line-height:1.7;overflow-x:auto;white-space:pre}
-    .json-key{color:#a78bfa}.json-str{color:#34d399}.json-num{color:#fb923c}.json-bool{color:#38bdf8}.json-null{color:rgba(148,163,184,0.4)}.json-punct{color:rgba(148,163,184,0.3)}
-    .custom-scroll::-webkit-scrollbar{width:3px}
-    .custom-scroll::-webkit-scrollbar-thumb{background:#1e293b;border-radius:10px}
-    .footer-bar{padding:14px 30px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:11px;color:rgba(148,163,184,0.3);background:var(--bg-deep)}
-    /* DOWNLOAD PANEL */
-    .dl-card{background:var(--bg-deep);border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;transition:border-color .2s}
-    .dl-card:hover{border-color:rgba(52,211,153,0.3)}
-    .dl-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    @media(max-width:1024px){.sidebar{display:none}.main-wrap{margin-left:0}.kpi-grid,.mini-stats,.mid-grid,.bot-grid{grid-template-columns:1fr}}
+
+    /* ── Reset ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Body & Background ─────────────────────── */
+    body {
+      font-family: var(--font-sans);
+      background-color: var(--bg-base);
+      background-image:
+        radial-gradient(ellipse 70% 50% at 15% -10%, rgba(139,124,248,0.09) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 85% 110%, rgba(100,223,223,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 30% at 50% 50%,  rgba(199,125,255,0.03) 0%, transparent 70%);
+      color: #dde1f0;
+      min-height: 100vh;
+    }
+
+    /* ── Grain overlay (Tako signature texture) ── */
+    body::before {
+      content: "";
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 128px 128px;
+      opacity: .5;
+    }
+    .sidebar, .main-wrap { position: relative; z-index: 1; }
+
+    /* ── Sidebar ──────────────────────────────── */
+    .sidebar {
+      position: fixed; left: 0; top: 0; bottom: 0; width: 248px;
+      background: rgba(7,8,15,0.85);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border-right: 1px solid var(--border);
+      box-shadow: 4px 0 32px rgba(0,0,0,0.5), inset -1px 0 0 rgba(180,167,245,0.06);
+      display: flex; flex-direction: column; z-index: 100;
+    }
+
+    /* Logo */
+    .sidebar-logo {
+      padding: 26px 18px 18px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 8px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .logo-icon-box {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, rgba(139,124,248,0.25), rgba(100,223,223,0.12));
+      border: 1px solid rgba(139,124,248,0.35);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 16px rgba(139,124,248,0.2), inset 0 1px 0 rgba(255,255,255,0.1);
+    }
+    .logo-icon-box svg { stroke: var(--lavender) !important; }
+    .logo-text-block .name {
+      font-size: 14px; font-weight: 700; letter-spacing: .02em; line-height: 1.1;
+      background: linear-gradient(100deg, var(--lavender), var(--ice-bright));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .logo-text-block .sub {
+      font-size: 10px; font-weight: 400; letter-spacing: .12em;
+      color: rgba(180,167,245,0.35) !important;
+      -webkit-text-fill-color: rgba(180,167,245,0.35);
+    }
+
+    /* Nav */
+.nav-link {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 18px; font-size: 12.5px; font-weight: 500;
+  color: rgba(148,163,184,0.45);
+  border-left: 2px solid transparent;
+  transition: all .22s; cursor: pointer; text-decoration: none;
+  position: relative;
+}
+.nav-link:hover {
+  color: #a78bfa;
+  background: rgba(139,92,246,0.06);
+  border-left-color: rgba(139,92,246,0.40);
+}
+.nav-link.active {
+  color: #a78bfa;
+  background: rgba(139,92,246,0.09);
+  border-left-color: #7c3aed;
+  font-weight: 600;
+}
+.nav-link:hover svg,
+.nav-link.active svg {
+  stroke: #a78bfa;
+}
+
+    /* Sidebar bottom */
+    .sidebar-bottom {
+      margin-top: auto; border-top: 1px solid var(--border);
+      padding: 14px 10px 18px;
+    }
+.user-chip {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 8px; border-radius: var(--r-sm);
+  cursor: pointer; transition: background .2s;
+}
+.user-chip:hover {
+  background: rgba(139,92,246,0.07);
+}
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1.5px solid rgba(139,92,246,0.35);
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(139,92,246,0.10); flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(139,92,246,0.15);
+  font-weight: 700; font-size: 12px; color: #a78bfa;
+}
+    /* ── Top Nav ──────────────────────────────── */
+    .main-wrap { margin-left: 248px; min-height: 100vh; }
+    .top-nav {
+      background: rgba(7,8,15,0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 13px 28px;
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 50;
+    }
+    .breadcrumb-text { font-size: 11.5px; color: rgba(180,167,245,0.35); }
+    .breadcrumb-text span { color: rgba(221,225,240,0.75); font-weight: 600; }
+    .top-nav-actions { display: flex; align-items: center; gap: 9px; }
+
+    /* Live dot — violet pulse */
+.live-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #34d399;
+  display: inline-block;
+  animation: blink 2.2s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(52,211,153,0.70);
+}
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
+    /* ── Buttons ──────────────────────────────── */
+.btn-orange {
+  background: linear-gradient(135deg, rgba(139,92,246,0.85), rgba(109,60,232,0.80));
+  color: #fff;
+  font-weight: 700; font-size: 11px;
+  letter-spacing: .05em; text-transform: uppercase;
+  padding: 8px 18px; border-radius: var(--r-sm);
+  border: 1px solid rgba(139,92,246,0.40);
+  cursor: pointer; font-family: var(--font-sans);
+  display: inline-flex; align-items: center; gap: 6px;
+  box-shadow: 0 0 18px rgba(139,92,246,0.25),
+              inset 0 1px 0 rgba(255,255,255,0.12);
+  transition: opacity .2s, box-shadow .2s;
+}
+.btn-orange:hover {
+  opacity: .88;
+  box-shadow: 0 0 28px rgba(139,92,246,0.40);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: rgba(148,163,184,0.55);
+  font-weight: 600; font-size: 11px;
+  letter-spacing: .05em; text-transform: uppercase;
+  padding: 8px 16px; border-radius: var(--r-sm);
+  border: 1px solid rgba(148,163,184,0.12);
+  cursor: pointer; font-family: var(--font-sans);
+  display: inline-flex; align-items: center; gap: 6px;
+  text-decoration: none; transition: all .2s;
+}
+.btn-ghost:hover {
+  border-color: rgba(148,163,184,0.28);
+  color: #e2e8f0;
+}
+
+.btn-dl {
+  background: rgba(16,185,129,0.10);
+  color: #34d399;
+  font-weight: 700; font-size: 11px;
+  padding: 7px 14px; border-radius: var(--r-sm);
+  border: 1px solid rgba(16,185,129,0.30);
+  cursor: pointer; font-family: var(--font-sans);
+  display: inline-flex; align-items: center; gap: 6px;
+  text-decoration: none; transition: all .2s;
+}
+.btn-dl:hover {
+  background: rgba(16,185,129,0.18);
+  box-shadow: 0 0 16px rgba(16,185,129,0.15);
+}
+
+    /* ── Content & Layout ─────────────────────── */
+    .content { padding: 26px 28px; }
+    .page-header { margin-bottom: 26px; }
+    .page-header h1 { font-size: 19px; font-weight: 700; margin-bottom: 4px; color: #eef0f8; }
+    .page-header p  { font-size: 11.5px; color: rgba(180,167,245,0.38); }
+
+    /* ── KPI Grid ─────────────────────────────── */
+    .kpi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-bottom: 20px; }
+    .kpi-card {
+      background: var(--glass);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--r-md); padding: 20px 22px;
+      border: 1px solid var(--border);
+      transition: transform .28s cubic-bezier(.22,.68,0,1.2), box-shadow .28s, border-color .28s;
+      position: relative; overflow: hidden;
+    }
+    /* Shimmer top line */
+    .kpi-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(180,167,245,0.4), transparent);
+    }
+    /* Subtle glow corner */
+    .kpi-card::after {
+      content: ""; position: absolute; top: -30px; right: -30px;
+      width: 100px; height: 100px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(139,124,248,0.08), transparent 70%);
+      pointer-events: none;
+    }
+    .kpi-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(180,167,245,0.28) !important;
+      box-shadow: 0 20px 48px rgba(0,0,0,0.4), 0 0 30px rgba(139,124,248,0.1) !important;
+    }
+
+/* ── KPI Cards ──────────────────────────────────────────
+   Glass base · border sutil · glow semántico al hover
+──────────────────────────────────────────────────────── */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.kpi-card {
+  background: rgba(15,23,42,0.40);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--r-md);
+  padding: 20px 22px;
+  border: 1px solid rgba(148,163,184,0.10);
+  position: relative;
+  overflow: hidden;
+  transition: transform .28s cubic-bezier(.22,.68,0,1.2),
+              box-shadow .28s,
+              border-color .28s;
+}
+
+/* Línea shimmer superior — neutra por defecto */
+.kpi-card::before {
+  content: "";
+  position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(148,163,184,0.18),
+    transparent);
+}
+
+.kpi-card:hover {
+  transform: translateY(-4px);
+}
+
+/* ── Variantes semánticas por tipo de KPI ── */
+
+/* Pérdida económica → rose */
+.kpi-card--critico {
+  border-color: rgba(244,63,94,0.22);
+}
+.kpi-card--critico::before {
+  background: linear-gradient(90deg, transparent, rgba(244,63,94,0.35), transparent);
+}
+.kpi-card--critico:hover {
+  border-color: rgba(244,63,94,0.40);
+  box-shadow: 0 0 28px rgba(244,63,94,0.10),
+              0 16px 40px rgba(0,0,0,0.35);
+}
+
+/* ROI / Dinero → emerald */
+.kpi-card--dinero {
+  border-color: rgba(16,185,129,0.22);
+}
+.kpi-card--dinero::before {
+  background: linear-gradient(90deg, transparent, rgba(16,185,129,0.35), transparent);
+}
+.kpi-card--dinero:hover {
+  border-color: rgba(16,185,129,0.40);
+  box-shadow: 0 0 28px rgba(16,185,129,0.10),
+              0 16px 40px rgba(0,0,0,0.35);
+}
+
+/* Agua / m³ → cyan */
+.kpi-card--agua {
+  border-color: rgba(6,182,212,0.22);
+}
+.kpi-card--agua::before {
+  background: linear-gradient(90deg, transparent, rgba(6,182,212,0.35), transparent);
+}
+.kpi-card--agua:hover {
+  border-color: rgba(6,182,212,0.40);
+  box-shadow: 0 0 28px rgba(6,182,212,0.10),
+              0 16px 40px rgba(0,0,0,0.35);
+}
+
+/* ── Partes internas ── */
+.kpi-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.kpi-icon-wrap {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Variantes de ícono */
+.kpi-icon-wrap--critico {
+  background: rgba(244,63,94,0.10);
+  border: 1px solid rgba(244,63,94,0.25);
+  box-shadow: 0 0 12px rgba(244,63,94,0.10);
+}
+.kpi-icon-wrap--dinero {
+  background: rgba(16,185,129,0.10);
+  border: 1px solid rgba(16,185,129,0.25);
+  box-shadow: 0 0 12px rgba(16,185,129,0.10);
+}
+.kpi-icon-wrap--agua {
+  background: rgba(6,182,212,0.10);
+  border: 1px solid rgba(6,182,212,0.25);
+  box-shadow: 0 0 12px rgba(6,182,212,0.10);
+}
+
+.kpi-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: rgba(148,163,184,0.45);
+  margin-bottom: 6px;
+}
+
+.kpi-value {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -.03em;
+  margin-bottom: 6px;
+}
+
+.kpi-footer {
+  font-size: 11px;
+  color: rgba(148,163,184,0.38);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.kpi-footer .up   { color: #34d399; }  /* emerald-400 */
+.kpi-footer .warn { color: #fbbf24; }  /* amber-400   */
+
+    /* ── Mini Stats ──────────────────────────── */
+.mini-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.mini-stat {
+  background: rgba(15,23,42,0.40);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(148,163,184,0.10);
+  border-radius: var(--r-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: border-color .22s, box-shadow .22s;
+}
+
+/* Variantes de glow por tipo semántico */
+.mini-stat--critico:hover {
+  border-color: rgba(244,63,94,0.30);
+  box-shadow: 0 0 18px rgba(244,63,94,0.09);
+}
+.mini-stat--dinero:hover {
+  border-color: rgba(16,185,129,0.30);
+  box-shadow: 0 0 18px rgba(16,185,129,0.09);
+}
+.mini-stat--agua:hover {
+  border-color: rgba(6,182,212,0.30);
+  box-shadow: 0 0 18px rgba(6,182,212,0.09);
+}
+.mini-stat--normal:hover {
+  border-color: rgba(139,92,246,0.30);
+  box-shadow: 0 0 18px rgba(139,92,246,0.09);
+}
+
+.mini-stat-icon {
+  width: 34px; height: 34px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Variantes de ícono */
+.mini-stat-icon--critico {
+  background: rgba(244,63,94,0.10);
+  border: 1px solid rgba(244,63,94,0.22);
+}
+.mini-stat-icon--dinero {
+  background: rgba(16,185,129,0.10);
+  border: 1px solid rgba(16,185,129,0.22);
+}
+.mini-stat-icon--agua {
+  background: rgba(6,182,212,0.10);
+  border: 1px solid rgba(6,182,212,0.22);
+}
+.mini-stat-icon--normal {
+  background: rgba(139,92,246,0.10);
+  border: 1px solid rgba(139,92,246,0.22);
+}
+
+.mini-stat-val {
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+.mini-stat-label {
+  font-size: 10px;
+  color: rgba(148,163,184,0.42);
+}
+
+    .mini-stat:hover { border-color: rgba(180,167,245,0.25); }
+
+/* Base compartida para panel y chart-panel */
+.panel,
+.chart-panel {
+  background: rgba(15,23,42,0.40);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--r-md);
+  border: 1px solid rgba(148,163,184,0.10);
+  overflow: hidden;
+  transition: border-color .25s, box-shadow .25s;
+}
+.panel:hover,
+.chart-panel:hover {
+  border-color: rgba(148,163,184,0.18);
+}
+
+/* Headers */
+.panel-header,
+.chart-header {
+  padding: 15px 20px 12px;
+  border-bottom: 1px solid rgba(148,163,184,0.07);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e2e8f0;  /* slate-200 */
+}
+
+.panel-body,
+.chart-body {
+  padding: 16px 20px;
+}
+
+/* Dot indicador — ahora usa colores semánticos inline */
+.panel-title-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+
+    /* ── Grid layouts ─────────────────────────── */
+    .mid-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 16px; margin-bottom: 20px; }
+    .bot-grid { display: grid; grid-template-columns: 1fr 1fr;   gap: 16px; margin-bottom: 20px; }
+
+    /* ── Mono / Chart Panels ──────────────────── */
+    .mono { font-family: var(--font-mono); }
+    .chart-panel {
+      background: var(--glass);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--r-md); border: 1px solid var(--border); overflow: hidden;
+    }
+    .chart-header {
+      padding: 15px 20px 11px;
+      border-bottom: 1px solid rgba(180,167,245,0.07);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+    }
+    .chart-body { padding: 16px 20px 14px; }
+
+    /* ── Table ────────────────────────────────── */
+    .data-table { width: 100%; border-collapse: collapse; }
+    .data-table thead tr { background: rgba(0,0,0,0.22); }
+    .data-table th {
+      padding: 10px 16px; font-size: 9px; font-weight: 700;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: rgba(180,167,245,0.35); text-align: left; white-space: nowrap;
+    }
+    .data-table tbody tr { border-top: 1px solid rgba(255,255,255,0.03); transition: background .2s; }
+    .data-table tbody tr:hover { background: rgba(139,124,248,0.05); }
+    .data-table td { padding: 10px 16px; font-size: 12px; }
+
+
+/* ── Pills ─────────────────────────────────────────────
+   Semántica: rose · amber · yellow · violet
+   Cada una tiene bg sutil, borde coloreado y glow suave
+──────────────────────────────────────────────────────── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.pill-critico {
+  color: #fb7185;                          /* rose-400 */
+  background: rgba(244,63,94,0.10);
+  border: 1px solid rgba(244,63,94,0.45);
+  box-shadow: 0 0 10px rgba(244,63,94,0.10);
+}
+
+.pill-sospechoso {
+  color: #fbbf24;                          /* amber-400 */
+  background: rgba(245,158,11,0.10);
+  border: 1px solid rgba(245,158,11,0.45);
+  box-shadow: 0 0 10px rgba(245,158,11,0.10);
+}
+
+.pill-deficiencia {
+  color: #fde047;                          /* yellow-300 */
+  background: rgba(234,179,8,0.10);
+  border: 1px solid rgba(234,179,8,0.45);
+  box-shadow: 0 0 10px rgba(234,179,8,0.10);
+}
+
+.pill-normal {
+  color: #a78bfa;                          /* violet-400 */
+  background: rgba(139,92,246,0.10);
+  border: 1px solid rgba(139,92,246,0.45);
+  box-shadow: 0 0 10px rgba(139,92,246,0.10);
+}
+/* ── Log Console ────────────────────────────────────── */
+.log-console {
+  background: rgba(2,6,23,0.60);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(148,163,184,0.08);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  max-height: 210px;
+  overflow-y: auto;
+  line-height: 1.75;
+}
+.log-console::-webkit-scrollbar { width: 3px; }
+.log-console::-webkit-scrollbar-thumb {
+  background: rgba(148,163,184,0.12);
+  border-radius: 10px;
+}
+
+/* Colores semánticos del log */
+.log-ok   { color: #34d399; }  /* emerald-400 */
+.log-warn { color: #fbbf24; }  /* amber-400   */
+.log-info { color: rgba(148,163,184,0.45); }
+.log-ts   { color: rgba(148,163,184,0.25); margin-right: 8px; }
+
+/* ── Pipeline steps ─────────────────────────────────── */
+.pipeline-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(148,163,184,0.06);
+}
+.pipeline-step:last-child { border-bottom: none; }
+
+.step-num {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  font-family: var(--font-mono);
+}
+.step-title {
+  font-size: 13px; font-weight: 600;
+  color: #e2e8f0;
+  margin-bottom: 3px;
+}
+.step-detail {
+  font-size: 11px;
+  color: rgba(148,163,184,0.40);
+  font-family: var(--font-mono);
+}
+
+/* ── Arquitectura nodes ─────────────────────────────── */
+.arch-node {
+  background: rgba(2,6,23,0.50);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 10px;
+  padding: 10px 14px;
+  text-align: center;
+  font-size: 11px;
+  transition: border-color .2s, box-shadow .2s;
+}
+.arch-node-label {
+  font-size: 9px;
+  color: rgba(148,163,184,0.38);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  margin-bottom: 4px;
+}
+.arch-node-val {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* ── Metric rows (dentro de ML Metrics panel) ────────── */
+.metric-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(148,163,184,0.06);
+}
+.metric-row:last-child { border-bottom: none; }
+
+.metric-label {
+  font-size: 11px;
+  color: rgba(148,163,184,0.50);
+}
+.metric-val {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+.metric-bar-wrap {
+  display: flex; align-items: center; gap: 8px;
+}
+.metric-bar {
+  height: 3px;
+  border-radius: 4px;
+  background: rgba(148,163,184,0.08);
+  width: 80px;
+  overflow: hidden;
+}
+.metric-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+}
+
+    /* ── Inputs ───────────────────────────────── */
+    .table-search {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(180,167,245,0.12);
+      border-radius: var(--r-sm); padding: 7px 12px;
+      font-family: var(--font-sans); font-size: 11px; color: #dde1f0;
+      outline: none; width: 180px; transition: border-color .2s;
+    }
+    .table-search:focus         { border-color: rgba(139,124,248,0.45); }
+    .table-search::placeholder  { color: rgba(180,167,245,0.25); }
+
+    .filter-btn {
+      padding: 6px 12px; border-radius: 6px; font-size: 10px; font-weight: 700;
+      border: 1px solid var(--border); cursor: pointer; transition: all .2s;
+      background: transparent; color: rgba(180,167,245,0.45); letter-spacing: .04em;
+    }
+    .filter-btn.active { background: rgba(139,124,248,0.12); border-color: rgba(139,124,248,0.4); color: var(--lavender); }
+    .filter-btn:hover  { border-color: rgba(139,124,248,0.3); color: var(--lavender); }
+
+    /* ── Map Modal ────────────────────────────── */
+    #mapContainer { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.82); backdrop-filter: blur(8px); z-index: 200; align-items: center; justify-content: center; }
+    #mapContainer.open { display: flex; }
+    #mapWrapper {
+      background: rgba(7,8,15,0.95);
+      border: 1px solid rgba(139,124,248,0.3); border-radius: var(--r-xl);
+      width: 90vw; height: 88vh; display: flex; flex-direction: column; overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.7), 0 0 60px rgba(139,124,248,0.08);
+    }
+    #mapHeader { padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    #leafletMap { flex: 1; width: 100%; min-height: 300px; border-radius: 0 0 var(--r-xl) var(--r-xl); }
+    .map-legend { position: absolute; bottom: 20px; right: 12px; background: rgba(7,8,15,0.92); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; z-index: 1000; font-size: 11px; }
+    .map-legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; color: #dde1f0; }
+    .map-legend-dot  { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* ── API Modal ────────────────────────────── */
+    .api-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.78); backdrop-filter: blur(8px); z-index: 210; display: none; align-items: center; justify-content: center; }
+    .api-modal-overlay.open { display: flex; }
+    .api-modal {
+      background: rgba(7,8,15,0.97);
+      border: 1px solid rgba(139,124,248,0.25); border-radius: var(--r-lg);
+      width: 700px; max-height: 80vh; display: flex; flex-direction: column;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 50px rgba(139,124,248,0.07);
+    }
+    .api-modal-header { padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; }
+    .api-modal-body   { flex: 1; overflow-y: auto; padding: 16px 20px; }
+    .api-modal-body::-webkit-scrollbar { width: 3px; }
+    .api-modal-body::-webkit-scrollbar-thumb { background: rgba(139,124,248,0.2); }
+
+    .api-url-bar {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--r-sm); padding: 10px 14px;
+      font-family: var(--font-mono); font-size: 12px; color: var(--neon-cyan);
+      margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+    }
+    .api-json {
+      background: rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 10px; padding: 14px 16px;
+      font-family: var(--font-mono); font-size: 11px; line-height: 1.7;
+      overflow-x: auto; white-space: pre;
+    }
+    .json-key  { color: var(--lavender); }
+    .json-str  { color: var(--neon-cyan); }
+    .json-num  { color: var(--amber); }
+    .json-bool { color: var(--ice-bright); }
+    .json-null { color: rgba(180,167,245,0.35); }
+    .json-punct{ color: rgba(180,167,245,0.28); }
+
+/* ── Scrollbar global ───────────────────────────────── */
+.custom-scroll::-webkit-scrollbar { width: 3px; }
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(148,163,184,0.12);
+  border-radius: 10px;
+}
+
+/* ── Footer ─────────────────────────────────────────── */
+.footer-bar {
+  padding: 13px 28px;
+  border-top: 1px solid rgba(148,163,184,0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: rgba(148,163,184,0.25);
+  background: rgba(2,6,23,0.50);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* ── Download cards ─────────────────────────────────── */
+.dl-card {
+  background: rgba(15,23,42,0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(148,163,184,0.10);
+  border-radius: var(--r-sm);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: border-color .22s, box-shadow .22s;
+}
+.dl-card:hover {
+  border-color: rgba(16,185,129,0.30);
+  box-shadow: 0 0 18px rgba(16,185,129,0.08);
+}
+
+.dl-icon {
+  width: 36px; height: 36px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+    /* ── Responsive ───────────────────────────── */
+    @media (max-width: 1024px) {
+      .sidebar { display: none; }
+      .main-wrap { margin-left: 0; }
+      .kpi-grid, .mini-stats, .mid-grid, .bot-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -170,18 +884,18 @@
   <div id="mapWrapper">
     <div id="mapHeader">
       <div style="display:flex;align-items:center;gap:12px">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange);animation:blink 2s infinite"></div>
-        <span style="font-size:14px;font-weight:700;color:#f1f5f9">Mapa Geoespacial · CDMX · 159 colonias</span>
-        <span style="font-family:'Fira Code',monospace;font-size:10px;color:rgba(148,163,184,0.4)">EPSG:4326 · Leaflet.js</span>
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--neon-cyan);box-shadow:0 0 10px rgba(100,223,223,0.8);animation:blink 2.2s infinite"></div>
+        <span style="font-size:14px;font-weight:700;color:#eef0f8">Mapa Geoespacial · CDMX · 159 colonias</span>
+        <span style="font-family:var(--font-mono);font-size:10px;color:rgba(180,167,245,0.3)">EPSG:4326 · Leaflet.js</span>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
         <div style="display:flex;gap:6px;font-size:10px">
-          <span style="background:rgba(231,76,60,0.15);border:1px solid rgba(231,76,60,0.4);color:#E74C3C;padding:3px 8px;border-radius:4px;font-weight:700">● 2 Crítico</span>
-          <span style="background:rgba(230,126,34,0.15);border:1px solid rgba(230,126,34,0.4);color:#E67E22;padding:3px 8px;border-radius:4px;font-weight:700">● 11 Sospechoso</span>
-          <span style="background:rgba(241,196,15,0.15);border:1px solid rgba(241,196,15,0.4);color:#F1C40F;padding:3px 8px;border-radius:4px;font-weight:700">● 9 Deficiencia</span>
-          <span style="background:rgba(52,152,219,0.15);border:1px solid rgba(52,152,219,0.4);color:#3498DB;padding:3px 8px;border-radius:4px;font-weight:700">● 137 Normal</span>
+          <span style="background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.35);color:#f87171;padding:3px 9px;border-radius:5px;font-weight:700">● 2 Crítico</span>
+          <span style="background:rgba(251,146,60,0.12);border:1px solid rgba(251,146,60,0.35);color:var(--orange);padding:3px 9px;border-radius:5px;font-weight:700">● 11 Sospechoso</span>
+          <span style="background:rgba(251,191,36,0.12);border:1px solid rgba(251,191,36,0.35);color:var(--amber);padding:3px 9px;border-radius:5px;font-weight:700">● 9 Deficiencia</span>
+          <span style="background:rgba(126,200,227,0.1);border:1px solid rgba(126,200,227,0.3);color:var(--ice-bright);padding:3px 9px;border-radius:5px;font-weight:700">● 137 Normal</span>
         </div>
-        <button onclick="closeMap()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:rgba(148,163,184,0.7);padding:7px 14px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">✕ Cerrar</button>
+        <button onclick="closeMap()" style="background:rgba(180,167,245,0.06);border:1px solid var(--border);color:rgba(180,167,245,0.55);padding:7px 14px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans);transition:all .2s" onmouseover="this.style.borderColor='var(--border-h)';this.style.color='var(--lavender)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='rgba(180,167,245,0.55)'">✕ Cerrar</button>
       </div>
     </div>
     <div style="position:relative;flex:1;overflow:hidden;min-height:0">
@@ -195,20 +909,20 @@
   <div class="api-modal">
     <div class="api-modal-header">
       <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--emerald);box-shadow:0 0 8px var(--emerald);animation:blink 2s infinite"></div>
-        <span style="font-size:13px;font-weight:700;color:#f1f5f9" id="modal-title">API Endpoint</span>
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--neon-cyan);box-shadow:0 0 8px rgba(100,223,223,0.7);animation:blink 2.2s infinite"></div>
+        <span style="font-size:13px;font-weight:700;color:#eef0f8" id="modal-title">API Endpoint</span>
       </div>
       <div style="display:flex;gap:8px">
-        <button onclick="copyApiJson()" style="background:rgba(0,229,255,0.08);border:1px solid rgba(0,229,255,0.2);color:var(--cyan);padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">⎘ Copiar JSON</button>
-        <button onclick="closeModal()" style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);color:rgba(148,163,184,0.6);padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">✕ Cerrar</button>
+        <button onclick="copyApiJson()" style="background:rgba(100,223,223,0.08);border:1px solid rgba(100,223,223,0.22);color:var(--neon-cyan);padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans)">⎘ Copiar JSON</button>
+        <button onclick="closeModal()" style="background:rgba(180,167,245,0.05);border:1px solid var(--border);color:rgba(180,167,245,0.45);padding:6px 12px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans)">✕ Cerrar</button>
       </div>
     </div>
     <div class="api-modal-body">
       <div class="api-url-bar">
-        <span style="background:rgba(52,211,153,0.12);border:1px solid rgba(52,211,153,0.25);color:var(--emerald);padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700">GET</span>
+        <span style="background:rgba(76,201,160,0.1);border:1px solid rgba(76,201,160,0.28);color:var(--emerald);padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700">GET</span>
         <span id="modal-url">http://localhost:5000/api/endpoint</span>
       </div>
-      <div style="font-size:10px;color:rgba(148,163,184,0.4);margin-bottom:10px" id="modal-desc"></div>
+      <div style="font-size:10px;color:rgba(180,167,245,0.35);margin-bottom:10px" id="modal-desc"></div>
       <div class="api-json" id="modal-json"></div>
     </div>
   </div>
@@ -218,13 +932,14 @@
 <aside class="sidebar">
   <div class="sidebar-logo">
     <div class="logo-icon-box">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--lavender)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
     </div>
     <div class="logo-text-block">
       <div class="name">HydroTrace AI</div>
       <div class="sub">Administración</div>
     </div>
   </div>
+
   <div class="nav-section">Sistema</div>
   <a class="nav-link active" href="#" onclick="showSection('dashboard');return false">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -242,6 +957,7 @@
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
     Gestión Prospectos
   </a>
+
   <div class="nav-section">API</div>
   <a class="nav-link" onclick="openApiModal('impacto')" style="cursor:pointer">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
@@ -251,12 +967,13 @@
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
     /api/mapa-datos
   </a>
+
   <div class="sidebar-bottom">
     <div class="user-chip">
       <div class="avatar">PS</div>
       <div>
-        <div style="font-size:13px;font-weight:600">PumaScript Solutions</div>
-        <div style="font-size:10px;opacity:0.5">Panel Ejecutivo · UNAM</div>
+        <div style="font-size:13px;font-weight:600;color:#dde1f0">PumaScript Solutions</div>
+        <div style="font-size:10px;color:rgba(180,167,245,0.35)">Panel Ejecutivo · UNAM</div>
       </div>
     </div>
   </div>
@@ -267,13 +984,13 @@
   <div class="top-nav">
     <div class="breadcrumb-text">Admin Console / <span id="breadcrumb-label">Centro de Mando</span></div>
     <div class="top-nav-actions">
-      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,0.4)">
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(180,167,245,0.35)">
         <span class="live-dot"></span>
-        <span id="live-clock">00:00:00</span>
-        <span style="color:rgba(148,163,184,0.3);margin:0 4px">·</span>
-        <span id="live-date" style="font-size:11px;color:rgba(148,163,184,0.65);font-weight:500"></span>
-        <span style="color:rgba(148,163,184,0.3);margin:0 4px">·</span>
-        <span style="font-size:11px;color:rgba(251,146,60,0.8);font-weight:600;letter-spacing:.02em">CDMX</span>
+        <span id="live-clock" style="font-family:var(--font-mono)">00:00:00</span>
+        <span style="color:rgba(180,167,245,0.2);margin:0 4px">·</span>
+        <span id="live-date" style="font-size:11px;color:rgba(180,167,245,0.55);font-weight:500"></span>
+        <span style="color:rgba(180,167,245,0.2);margin:0 4px">·</span>
+        <span style="font-size:11px;color:rgba(180,167,245,0.7);font-weight:600;letter-spacing:.04em">CDMX</span>
       </div>
       <button class="btn-orange" onclick="openMap()">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
@@ -284,115 +1001,130 @@
 
   <div class="content">
 
-    <!-- SECTION: DASHBOARD -->
+ <!-- SECTION: DASHBOARD -->
     <div id="section-dashboard">
       <div class="page-header">
         <h1>Centro de Mando Técnico</h1>
         <p>Pipeline ETL · Modelos ML · Auditoría de Anomalías · PumaScript Solutions · UNAM 2025 · <span style="color:var(--emerald)">Datos reales del CSV (160 colonias)</span></p>
       </div>
 
-      <!-- MINI STATS -->
-       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-  
-  <div class="admin-glass p-4 rounded-xl flex flex-col justify-between">
-    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Universo de Estudio</span>
-    <div class="flex items-baseline gap-1 mt-1">
-      <h4 class="text-xl font-bold text-white mono">{{ stats.total_colonias|default(160) }}</h4>
-      <span class="text-[9px] text-slate-400">colonias</span>
+<!-- MINI STATS -->
+
+<div class="mini-stats">
+
+  <div class="mini-stat mini-stat--normal">
+    <div class="mini-stat-icon mini-stat-icon--normal">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <div>
+      <div class="mini-stat-val" style="color:#a78bfa">{{ stats.total_colonias|default(160) }}</div>
+      <div class="mini-stat-label">Universo · colonias</div>
     </div>
   </div>
 
-  <div class="admin-glass p-4 rounded-xl flex flex-col justify-between">
-    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Interés Comercial</span>
-    <div class="flex items-baseline gap-1 mt-1">
-      <h4 class="text-xl font-bold text-cyan-400 mono">{{ stats.total_leads|default(2) }}</h4>
-      <span class="text-[9px] text-cyan-500/70">leads activos</span>
+  <div class="mini-stat mini-stat--agua">
+    <div class="mini-stat-icon mini-stat-icon--agua">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+    </div>
+    <div>
+      <div class="mini-stat-val" style="color:#22d3ee">{{ stats.total_leads|default(2) }}</div>
+      <div class="mini-stat-label">Leads activos</div>
     </div>
   </div>
 
-  <div class="admin-glass p-4 rounded-xl flex flex-col justify-between">
-    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Fiabilidad Global</span>
-    <div class="flex items-baseline gap-1 mt-1">
-      <h4 class="text-xl font-bold text-violet-400 mono">{{ stats.cobertura|default('94.2%') }}</h4>
-      <span class="text-[9px] text-violet-400/70">precisión</span>
+  <div class="mini-stat mini-stat--dinero">
+    <div class="mini-stat-icon mini-stat-icon--dinero">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 2 17"/><polyline points="17 6 23 6 23 12"/></svg>
+    </div>
+    <div>
+      <div class="mini-stat-val" style="color:#34d399">{{ stats.cobertura|default('94.2%') }}</div>
+      <div class="mini-stat-label">Precisión global</div>
     </div>
   </div>
 
-  <div class="admin-glass p-4 rounded-xl flex flex-col justify-between">
-    <span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Población Muestreada</span>
-    <div class="flex items-baseline gap-1 mt-1">
-      <h4 class="text-xl font-bold text-emerald-400 mono">{{ stats.poblacion_total|default('51,581') }}</h4>
-      <span class="text-[9px] text-emerald-400/70">hab</span>
+  <div class="mini-stat mini-stat--critico">
+    <div class="mini-stat-icon mini-stat-icon--critico">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+    </div>
+    <div>
+      <div class="mini-stat-val" style="color:#fb7185">{{ stats.poblacion_total|default('51,581') }}</div>
+      <div class="mini-stat-label">Población muestreada</div>
     </div>
   </div>
 
 </div>
 
-      <!-- KPI CARDS -->
-       <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
-        <span style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.3);color:var(--amber);font-size:9px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase"> Datos del último run de modelos_ml.py</span>
-        <span style="font-size:10px;color:rgba(52,211,153,0.8);font-family:'Fira Code',monospace">✓ Conectado en tiempo real al backend</span>
-      </div>
-      
-      <div class="kpi-grid" style="margin-bottom:22px">
-        <div class="kpi-card">
-          <div class="kpi-top">
-            <div>
-              <div class="kpi-label">Pérdida Económica Total</div>
-              <div class="kpi-value" style="color:var(--rose);font-size:22px">{{ kpis.dinero_riesgo|default('$210.87M MXN') }}</div>
-            </div>
-            <div class="kpi-icon-wrap" style="background:rgba(251,113,133,0.1)">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-            </div>
-          </div>
-          <div class="kpi-footer"><span class="warn">⚠</span> Calculado desde pipeline ML · Colonias con exceso positivo</div>
-        </div>
-        
-        <div class="kpi-card">
-          <div class="kpi-top">
-            <div>
-              <div class="kpi-label">ROI Proyectado (20%)</div>
-              <div class="kpi-value" style="color:var(--emerald);font-size:22px">{{ kpis.ahorro_proyectado|default('$42.17M MXN') }}</div>
-            </div>
-            <div class="kpi-icon-wrap" style="background:rgba(52,211,153,0.1)">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 2 17"/><polyline points="17 6 23 6 23 12"/></svg>
-            </div>
-          </div>
-          <div class="kpi-footer"><span class="up">↑</span> 20% de pérdida recuperable con intervención física</div>
-        </div>
-        
-        <div class="kpi-card">
-          <div class="kpi-top">
-            <div>
-              <div class="kpi-label">m³ en Riesgo Total</div>
-              <div class="kpi-value" style="color:var(--cyan);font-size:22px">{{ kpis.m3_perdidos|default('11.46M m³') }}</div>
-            </div>
-            <div class="kpi-icon-wrap" style="background:rgba(0,229,255,0.08)">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
-            </div>
-          </div>
-          <div class="kpi-footer">exceso_consumo = consumo_total - consumo_esperado (regresión)</div>
-        </div>
+<!-- KPI CARDS -->
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+        <span style="background:rgba(180,167,245,0.08);border:1px solid rgba(180,167,245,0.22);color:var(--lavender);font-size:9px;font-weight:700;padding:3px 10px;border-radius:20px;letter-spacing:.06em;text-transform:uppercase">Datos del último run de modelos_ml.py</span>
+        <span style="font-size:10px;color:rgba(76,201,160,0.8);font-family:var(--font-mono)">✓ Conectado en tiempo real al backend</span>
       </div>
 
-      <!-- MID GRID -->
+      <div class="kpi-grid" style="margin-bottom:22px">
+
+  <!-- Pérdida Económica → rose/critico -->
+  <div class="kpi-card kpi-card--critico">
+    <div class="kpi-top">
+      <div>
+        <div class="kpi-label">Pérdida Económica Total</div>
+        <div class="kpi-value" style="color:#fb7185">{{ kpis.dinero_riesgo|default('$210.87M MXN') }}</div>
+      </div>
+      <div class="kpi-icon-wrap kpi-icon-wrap--critico">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fb7185" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+      </div>
+    </div>
+    <div class="kpi-footer"><span class="warn">⚠</span> Calculado desde pipeline ML · Colonias con exceso positivo</div>
+  </div>
+
+  <!-- ROI → emerald/dinero -->
+  <div class="kpi-card kpi-card--dinero">
+    <div class="kpi-top">
+      <div>
+        <div class="kpi-label">ROI Proyectado (20%)</div>
+        <div class="kpi-value" style="color:#34d399">{{ kpis.ahorro_proyectado|default('$42.17M MXN') }}</div>
+      </div>
+      <div class="kpi-icon-wrap kpi-icon-wrap--dinero">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 2 17"/><polyline points="17 6 23 6 23 12"/></svg>
+      </div>
+    </div>
+    <div class="kpi-footer"><span class="up">↑</span> 20% de pérdida recuperable con intervención física</div>
+  </div>
+
+  <!-- m³ → cyan/agua -->
+  <div class="kpi-card kpi-card--agua">
+    <div class="kpi-top">
+      <div>
+        <div class="kpi-label">m³ en Riesgo Total</div>
+        <div class="kpi-value" style="color:#22d3ee">{{ kpis.m3_perdidos|default('11.46M m³') }}</div>
+      </div>
+      <div class="kpi-icon-wrap kpi-icon-wrap--agua">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+      </div>
+    </div>
+    <div class="kpi-footer" style="font-family:var(--font-mono)">exceso_consumo = consumo_total − consumo_esperado (regresión)</div>
+  </div>
+
+</div>
+
+<!-- MID GRID -->
       <div class="mid-grid">
-        <!-- TABLE -->
+
+        <!-- TABLE PANEL -->
         <div class="chart-panel">
           <div class="chart-header">
             <div class="panel-title">
-              <div class="panel-title-dot" style="background:var(--orange);box-shadow:0 0 6px var(--orange)"></div>
+              <div class="panel-title-dot" style="background:var(--violet);box-shadow:0 0 7px var(--violet)"></div>
               Auditoría · Datos Reales del Modelo
             </div>
-            <span class="mono" style="font-size:9px;color:rgba(148,163,184,0.35)">resultados_finales_IA.csv · 160 filas · 24 cols</span>
+            <span style="font-family:var(--font-mono);font-size:9px;color:rgba(180,167,245,0.3)">resultados_finales_IA.csv · 160 filas · 24 cols</span>
           </div>
-          <div style="padding:10px 16px;border-bottom:1px solid rgba(99,102,241,0.08);display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <div style="padding:10px 16px;border-bottom:1px solid rgba(180,167,245,0.07);display:flex;gap:8px;align-items:center;flex-wrap:wrap">
             <input class="table-search" id="tableSearch" placeholder="🔍 Buscar colonia..." oninput="filterTable()"/>
             <button class="filter-btn active" onclick="setFilter('all',this)">Todas</button>
-            <button class="filter-btn" onclick="setFilter('CRITICO',this)" style="color:#fb7185;border-color:rgba(251,113,133,0.3)">● Crítico</button>
+            <button class="filter-btn" onclick="setFilter('CRITICO',this)" style="color:#f87171;border-color:rgba(248,113,113,0.25)">● Crítico</button>
             <button class="filter-btn" onclick="setFilter('SOSPECHOSO',this)" style="color:var(--orange)">● Sospechoso</button>
             <button class="filter-btn" onclick="setFilter('DEFICIENCIA',this)" style="color:var(--amber)">● Deficiencia</button>
-            <span id="row-count" class="mono" style="font-size:9px;color:rgba(148,163,184,0.35);margin-left:auto">160 colonias</span>
+            <span id="row-count" style="font-family:var(--font-mono);font-size:9px;color:rgba(180,167,245,0.3);margin-left:auto">160 colonias</span>
           </div>
           <div style="overflow-x:auto;max-height:380px" class="custom-scroll">
             <table class="data-table" id="mainTable">
@@ -407,28 +1139,27 @@
         </div>
 
         <!-- PIPELINE + LOG -->
-         <!-- PIPELINE + LOG -->
         <div style="display:flex;flex-direction:column;gap:16px">
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title">
-                <div class="panel-title-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan)"></div>
+                <div class="panel-title-dot" style="background:var(--neon-cyan);box-shadow:0 0 6px var(--neon-cyan)"></div>
                 Pipeline ETL · Flujo de Procesamiento
               </div>
             </div>
             <div class="panel-body">
-              <div class="pipeline-step"><div class="step-num" style="background:rgba(0,229,255,0.1);color:var(--cyan);border:1px solid rgba(0,229,255,0.2)">01</div><div><div class="step-title">Extracción de Fuentes</div><div class="step-detail">consumo_agua_2019.csv · ids_ut.xlsx · coloniascdmx.csv · reportes.csv</div></div></div>
-              <div class="pipeline-step"><div class="step-num" style="background:rgba(167,139,250,0.1);color:var(--violet);border:1px solid rgba(167,139,250,0.2)">02</div><div><div class="step-title">Normalización & Geometría</div><div class="step-detail">NFD strip · EPSG:4326 → 6372 · shapely + pyproj · 4 geoms inválidas → mediana</div></div></div>
-              <div class="pipeline-step"><div class="step-num" style="background:rgba(251,146,60,0.1);color:var(--orange);border:1px solid rgba(251,146,60,0.2)">03</div><div><div class="step-title">Merge e Imputación</div><div class="step-detail">LEFT JOIN · mediana por alcaldía · shape final (160, 18)</div></div></div>
-              <div class="pipeline-step"><div class="step-num" style="background:rgba(52,211,153,0.1);color:var(--emerald);border:1px solid rgba(52,211,153,0.2)">04</div><div><div class="step-title">KPIs Derivados</div><div class="step-detail">consumo_per_capita · densidad_poblacional · exceso_consumo</div></div></div>
-              <div class="pipeline-step"><div class="step-num" style="background:rgba(251,191,36,0.1);color:var(--amber);border:1px solid rgba(251,191,36,0.2)">05</div><div><div class="step-title">Modelos ML</div><div class="step-detail">K-Means K=4 · IsolationForest 15% · LinearRegression R²=0.14</div></div></div>
-              <div class="pipeline-step"><div class="step-num" style="background:rgba(99,102,241,0.1);color:var(--indigo);border:1px solid rgba(99,102,241,0.2)">06</div><div><div class="step-title">Exportación</div><div class="step-detail">resultados_finales_IA.csv · (160, 24) · Flask API · Leaflet.js</div></div></div>
+              <div class="pipeline-step"><div class="step-num" style="background:rgba(100,223,223,0.1);color:var(--neon-cyan);border:1px solid rgba(100,223,223,0.22)">01</div><div><div class="step-title">Extracción de Fuentes</div><div class="step-detail">consumo_agua_2019.csv · ids_ut.xlsx · coloniascdmx.csv · reportes.csv</div></div></div>
+              <div class="pipeline-step"><div class="step-num" style="background:rgba(180,167,245,0.1);color:var(--lavender);border:1px solid rgba(180,167,245,0.22)">02</div><div><div class="step-title">Normalización & Geometría</div><div class="step-detail">NFD strip · EPSG:4326 → 6372 · shapely + pyproj · 4 geoms inválidas → mediana</div></div></div>
+              <div class="pipeline-step"><div class="step-num" style="background:rgba(251,146,60,0.1);color:var(--orange);border:1px solid rgba(251,146,60,0.22)">03</div><div><div class="step-title">Merge e Imputación</div><div class="step-detail">LEFT JOIN · mediana por alcaldía · shape final (160, 18)</div></div></div>
+              <div class="pipeline-step"><div class="step-num" style="background:rgba(76,201,160,0.1);color:var(--emerald);border:1px solid rgba(76,201,160,0.22)">04</div><div><div class="step-title">KPIs Derivados</div><div class="step-detail">consumo_per_capita · densidad_poblacional · exceso_consumo</div></div></div>
+              <div class="pipeline-step"><div class="step-num" style="background:rgba(251,191,36,0.1);color:var(--amber);border:1px solid rgba(251,191,36,0.22)">05</div><div><div class="step-title">Modelos ML</div><div class="step-detail">K-Means K=4 · IsolationForest 15% · LinearRegression R²=0.14</div></div></div>
+              <div class="pipeline-step"><div class="step-num" style="background:rgba(139,124,248,0.1);color:var(--violet);border:1px solid rgba(139,124,248,0.22)">06</div><div><div class="step-title">Exportación</div><div class="step-detail">resultados_finales_IA.csv · (160, 24) · Flask API · Leaflet.js</div></div></div>
             </div>
           </div>
           <div class="panel">
             <div class="panel-header">
               <div class="panel-title"><div class="panel-title-dot" style="background:var(--emerald);box-shadow:0 0 6px var(--emerald)"></div>System Log</div>
-              <span class="mono" style="font-size:9px;color:rgba(148,163,184,0.35)">último run</span>
+              <span style="font-family:var(--font-mono);font-size:9px;color:rgba(180,167,245,0.3)">último run</span>
             </div>
             <div class="panel-body" style="padding:12px 16px">
               <div class="log-console" id="log-console">
@@ -448,14 +1179,14 @@
         </div>
       </div>
 
-      <!-- BOT GRID: CHARTS + ML METRICS -->
+<!-- BOT GRID: CHARTS + ML METRICS -->
       <div class="bot-grid">
         <div style="display:flex;flex-direction:column;gap:16px">
           <div class="chart-panel">
             <div class="chart-header">
-              <div class="panel-title"><div class="panel-title-dot" style="background:var(--violet);box-shadow:0 0 6px var(--violet)"></div>Distribución de Diagnósticos</div>
+              <div class="panel-title"><div class="panel-title-dot" style="background:var(--neon-purple);box-shadow:0 0 6px var(--neon-purple)"></div>Distribución de Diagnósticos</div>
               <div style="display:flex;gap:6px;flex-wrap:wrap">
-                <span style="background:rgba(251,113,133,0.1);border:1px solid rgba(251,113,133,0.25);color:#fb7185;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px">2 Crítico</span>
+                <span style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.25);color:#f87171;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px">2 Crítico</span>
                 <span style="background:rgba(251,146,60,0.1);border:1px solid rgba(251,146,60,0.25);color:var(--orange);font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px">11 Sospechoso</span>
                 <span style="background:rgba(251,191,36,0.1);border:1px solid rgba(251,191,36,0.25);color:var(--amber);font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px">9 Deficiencia</span>
               </div>
@@ -471,9 +1202,9 @@
         <div style="display:flex;flex-direction:column;gap:16px">
           <!-- ML METRICS -->
           <div class="chart-panel">
-            <div class="chart-header"><div class="panel-title"><div class="panel-title-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan)"></div>Métricas de Modelos ML</div></div>
+            <div class="chart-header"><div class="panel-title"><div class="panel-title-dot" style="background:var(--neon-cyan);box-shadow:0 0 6px var(--neon-cyan)"></div>Métricas de Modelos ML</div></div>
             <div class="panel-body" style="padding:12px 20px">
-              <div class="metric-row"><span class="metric-label">K-Means · K elegido</span><div class="metric-bar-wrap"><span class="metric-val" style="color:var(--violet)">4 clusters</span></div></div>
+              <div class="metric-row"><span class="metric-label">K-Means · K elegido</span><div class="metric-bar-wrap"><span class="metric-val" style="color:var(--lavender)">4 clusters</span></div></div>
               <div class="metric-row"><span class="metric-label">K-Means · Inercia</span><div class="metric-bar-wrap"><span class="metric-val" style="color:var(--amber)">148.2</span></div></div>
               <div class="metric-row"><span class="metric-label">IsolationForest · Contamination</span><div class="metric-bar-wrap"><div class="metric-bar"><div class="metric-bar-fill" style="width:15%;background:var(--rose)"></div></div><span class="metric-val" style="color:var(--rose)">15.0%</span></div></div>
               <div class="metric-row"><span class="metric-label">IsolationForest · Anomalías</span><div class="metric-bar-wrap"><span class="metric-val" style="color:var(--orange)">24 / 160</span></div></div>
@@ -481,30 +1212,30 @@
               <div class="metric-row"><span class="metric-label">Regresión · R²</span><div class="metric-bar-wrap"><div class="metric-bar"><div class="metric-bar-fill" style="width:14%;background:var(--amber)"></div></div><span class="metric-val" style="color:var(--amber)">0.14</span></div></div>
               <div class="metric-row"><span class="metric-label">Regresión · MAE</span><div class="metric-bar-wrap"><span class="metric-val" style="color:var(--orange)">143,253 m³</span></div></div>
               <div class="metric-row"><span class="metric-label">Score mín. anomalía</span><div class="metric-bar-wrap"><span class="metric-val" style="color:var(--rose)">-0.2487</span></div></div>
-              <div class="metric-row"><span class="metric-label">Consumo total analizado</span><div class="metric-bar-wrap"><span class="metric-val" style="color:var(--cyan)">43.03M m³</span></div></div>
+              <div class="metric-row"><span class="metric-label">Consumo total analizado</span><div class="metric-bar-wrap"><span class="metric-val" style="color:var(--neon-cyan)">43.03M m³</span></div></div>
             </div>
           </div>
 
           <!-- K-MEANS CLUSTERS -->
           <div class="chart-panel">
-            <div class="chart-header"><div class="panel-title"><div class="panel-title-dot" style="background:var(--indigo);box-shadow:0 0 6px var(--indigo)"></div>K-Means · Perfiles de Cluster (K=4)</div></div>
+            <div class="chart-header"><div class="panel-title"><div class="panel-title-dot" style="background:var(--violet);box-shadow:0 0 6px var(--violet)"></div>K-Means · Perfiles de Cluster (K=4)</div></div>
             <div class="panel-body" style="padding:12px 20px">
               <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="background:rgba(251,113,133,0.05);border:1px solid rgba(251,113,133,0.15);border-radius:10px;padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:12px;font-weight:700;color:#fb7185">Cluster 0 · Alto Riesgo</span><span class="mono" style="font-size:10px;color:rgba(148,163,184,0.4)">4 colonias</span></div><div style="font-size:10px;color:rgba(148,163,184,0.5)">Lomas de Chapultepec · Peón de los Baños · Niño Jesús · Jardines en la Montaña</div></div>
-                <div style="background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.15);border-radius:10px;padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:12px;font-weight:700;color:var(--amber)">Cluster 1 · Urbano Denso</span><span class="mono" style="font-size:10px;color:rgba(148,163,184,0.4)">106 colonias</span></div><div style="font-size:10px;color:rgba(148,163,184,0.5)">Mayor grupo · zonas con alta densidad poblacional y consumo mixto</div></div>
-                <div style="background:rgba(52,211,153,0.05);border:1px solid rgba(52,211,153,0.15);border-radius:10px;padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:12px;font-weight:700;color:var(--emerald)">Cluster 2 · Periférico/Rural</span><span class="mono" style="font-size:10px;color:rgba(148,163,184,0.4)">49 colonias</span></div><div style="font-size:10px;color:rgba(148,163,184,0.5)">Xochimilco · Tlalpan · Magdalena Contreras · Milpa Alta</div></div>
-                <div style="background:rgba(167,139,250,0.05);border:1px solid rgba(167,139,250,0.15);border-radius:10px;padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:12px;font-weight:700;color:var(--violet)">Cluster 3 · Outlier Industrial</span><span class="mono" style="font-size:10px;color:rgba(148,163,184,0.4)">1 colonia</span></div><div style="font-size:10px;color:rgba(148,163,184,0.5)">Industrial Vallejo (U Hab) · per cápita 1,157.6 m³ — caso único extremo</div></div>
+                <div style="background:rgba(248,113,113,0.05);border:1px solid rgba(248,113,113,0.15);border-radius:10px;padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:12px;font-weight:700;color:#f87171">Cluster 0 · Alto Riesgo</span><span style="font-family:var(--font-mono);font-size:10px;color:rgba(180,167,245,0.35)">4 colonias</span></div><div style="font-size:10px;color:rgba(180,167,245,0.45)">Lomas de Chapultepec · Peón de los Baños · Niño Jesús · Jardines en la Montaña</div></div>
+                <div style="background:rgba(251,191,36,0.05);border:1px solid rgba(251,191,36,0.15);border-radius:10px;padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:12px;font-weight:700;color:var(--amber)">Cluster 1 · Urbano Denso</span><span style="font-family:var(--font-mono);font-size:10px;color:rgba(180,167,245,0.35)">106 colonias</span></div><div style="font-size:10px;color:rgba(180,167,245,0.45)">Mayor grupo · zonas con alta densidad poblacional y consumo mixto</div></div>
+                <div style="background:rgba(76,201,160,0.05);border:1px solid rgba(76,201,160,0.15);border-radius:10px;padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:12px;font-weight:700;color:var(--emerald)">Cluster 2 · Periférico/Rural</span><span style="font-family:var(--font-mono);font-size:10px;color:rgba(180,167,245,0.35)">49 colonias</span></div><div style="font-size:10px;color:rgba(180,167,245,0.45)">Xochimilco · Tlalpan · Magdalena Contreras · Milpa Alta</div></div>
+                <div style="background:rgba(139,124,248,0.05);border:1px solid rgba(139,124,248,0.15);border-radius:10px;padding:10px 14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px"><span style="font-size:12px;font-weight:700;color:var(--lavender)">Cluster 3 · Outlier Industrial</span><span style="font-family:var(--font-mono);font-size:10px;color:rgba(180,167,245,0.35)">1 colonia</span></div><div style="font-size:10px;color:rgba(180,167,245,0.45)">Industrial Vallejo (U Hab) · per cápita 1,157.6 m³ — caso único extremo</div></div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- PER CAPITA -->
+<!-- PER CAPITA -->
       <div class="chart-panel" style="margin-bottom:22px">
         <div class="chart-header">
-          <div class="panel-title"><div class="panel-title-dot" style="background:var(--fuchsia);box-shadow:0 0 6px var(--fuchsia)"></div>Top 10 · Consumo Per Cápita (m³/hab) · excl. Industrial Vallejo 1,157.6</div>
-          <span class="mono" style="font-size:9px;color:rgba(148,163,184,0.35)">consumo_per_capita = consumo_total / pob</span>
+          <div class="panel-title"><div class="panel-title-dot" style="background:var(--neon-purple);box-shadow:0 0 6px var(--neon-purple)"></div>Top 10 · Consumo Per Cápita (m³/hab) · excl. Industrial Vallejo 1,157.6</div>
+          <span style="font-family:var(--font-mono);font-size:9px;color:rgba(180,167,245,0.3)">consumo_per_capita = consumo_total / pob</span>
         </div>
         <div class="chart-body"><div style="position:relative;height:160px"><canvas id="perCapitaChart"></canvas></div></div>
       </div>
@@ -513,27 +1244,27 @@
       <div class="chart-panel" style="margin-bottom:22px">
         <div class="chart-header">
           <div class="panel-title"><div class="panel-title-dot" style="background:var(--amber);box-shadow:0 0 6px var(--amber)"></div>Arquitectura del Sistema · HydroTrace AI</div>
-          <span class="mono" style="font-size:9px;color:rgba(148,163,184,0.35)">PumaScript Solutions · UNAM 2025</span>
+          <span style="font-family:var(--font-mono);font-size:9px;color:rgba(180,167,245,0.3)">PumaScript Solutions · UNAM 2025</span>
         </div>
         <div style="padding:20px 24px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center">
-          <div style="background:var(--bg-deep);border:1px solid rgba(0,229,255,0.2);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(148,163,184,0.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Fuentes</div><div style="font-weight:700;font-size:12px;color:var(--cyan)">5 CSV / XLSX</div></div>
-          <div style="color:rgba(148,163,184,0.2);font-size:18px;display:flex;align-items:center">→</div>
-          <div style="background:var(--bg-deep);border:1px solid rgba(167,139,250,0.2);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(148,163,184,0.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">ETL</div><div style="font-weight:700;font-size:12px;color:var(--violet)">etl_pipeline.py</div></div>
-          <div style="color:rgba(148,163,184,0.2);font-size:18px;display:flex;align-items:center">→</div>
-          <div style="background:var(--bg-deep);border:1px solid rgba(251,191,36,0.2);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(148,163,184,0.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Dataset</div><div style="font-weight:700;font-size:12px;color:var(--amber)">dataset_maestro.csv</div></div>
-          <div style="color:rgba(148,163,184,0.2);font-size:18px;display:flex;align-items:center">→</div>
-          <div style="background:var(--bg-deep);border:1px solid rgba(251,146,60,0.2);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(148,163,184,0.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Modelos ML</div><div style="font-weight:700;font-size:12px;color:var(--orange)">modelos_ml.py</div></div>
-          <div style="color:rgba(148,163,184,0.2);font-size:18px;display:flex;align-items:center">→</div>
-          <div style="background:var(--bg-deep);border:1px solid rgba(52,211,153,0.2);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(148,163,184,0.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Resultados</div><div style="font-weight:700;font-size:12px;color:var(--emerald)">resultados_IA.csv</div></div>
-          <div style="color:rgba(148,163,184,0.2);font-size:18px;display:flex;align-items:center">→</div>
-          <div style="background:var(--bg-deep);border:1px solid rgba(99,102,241,0.25);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(148,163,184,0.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Backend</div><div style="font-weight:700;font-size:12px;color:var(--indigo)">Flask · main.py</div></div>
-          <div style="color:rgba(148,163,184,0.2);font-size:18px;display:flex;align-items:center">→</div>
-          <div style="background:rgba(251,146,60,0.05);border:1px solid rgba(251,146,60,0.3);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(148,163,184,0.4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Frontend</div><div style="font-weight:700;font-size:12px;color:var(--orange)">Dashboards · Leaflet</div></div>
+          <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(100,223,223,0.2);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(180,167,245,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Fuentes</div><div style="font-weight:700;font-size:12px;color:var(--neon-cyan)">5 CSV / XLSX</div></div>
+          <div style="color:rgba(180,167,245,0.18);font-size:18px;display:flex;align-items:center">→</div>
+          <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(180,167,245,0.2);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(180,167,245,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">ETL</div><div style="font-weight:700;font-size:12px;color:var(--lavender)">etl_pipeline.py</div></div>
+          <div style="color:rgba(180,167,245,0.18);font-size:18px;display:flex;align-items:center">→</div>
+          <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(251,191,36,0.2);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(180,167,245,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Dataset</div><div style="font-weight:700;font-size:12px;color:var(--amber)">dataset_maestro.csv</div></div>
+          <div style="color:rgba(180,167,245,0.18);font-size:18px;display:flex;align-items:center">→</div>
+          <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(251,146,60,0.2);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(180,167,245,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Modelos ML</div><div style="font-weight:700;font-size:12px;color:var(--orange)">modelos_ml.py</div></div>
+          <div style="color:rgba(180,167,245,0.18);font-size:18px;display:flex;align-items:center">→</div>
+          <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(76,201,160,0.2);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(180,167,245,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Resultados</div><div style="font-weight:700;font-size:12px;color:var(--emerald)">resultados_IA.csv</div></div>
+          <div style="color:rgba(180,167,245,0.18);font-size:18px;display:flex;align-items:center">→</div>
+          <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(139,124,248,0.25);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(180,167,245,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Backend</div><div style="font-weight:700;font-size:12px;color:var(--violet)">Flask · main.py</div></div>
+          <div style="color:rgba(180,167,245,0.18);font-size:18px;display:flex;align-items:center">→</div>
+          <div style="background:rgba(139,124,248,0.06);border:1px solid rgba(139,124,248,0.28);border-radius:10px;padding:10px 14px;text-align:center;font-size:11px"><div style="font-size:9px;color:rgba(180,167,245,0.35);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Frontend</div><div style="font-weight:700;font-size:12px;color:var(--lavender)">Dashboards · Leaflet</div></div>
         </div>
       </div>
     </div>
 
-    <!-- SECTION: DESCARGAS -->
+<!-- SECTION: DESCARGAS -->
     <div id="section-descargas" style="display:none">
       <div class="page-header">
         <h1>Descargas · Datos del Proyecto</h1>
@@ -548,8 +1279,8 @@
           <div class="panel-body" style="display:flex;flex-direction:column;gap:12px">
             <div class="dl-card">
               <div style="display:flex;align-items:center;gap:12px">
-                <div class="dl-icon" style="background:rgba(52,211,153,0.1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-                <div><div style="font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:3px">resultados_finales_IA.csv</div><div style="font-size:11px;color:rgba(148,163,184,0.5)">(160, 24) · Salida final modelos ML · diagnósticos + scores + excesos</div></div>
+                <div class="dl-icon" style="background:rgba(76,201,160,0.1);border:1px solid rgba(76,201,160,0.2)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--emerald)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+                <div><div style="font-size:13px;font-weight:700;color:#eef0f8;margin-bottom:3px">resultados_finales_IA.csv</div><div style="font-size:11px;color:rgba(180,167,245,0.4)">(160, 24) · Salida final modelos ML · diagnósticos + scores + excesos</div></div>
               </div>
               <a id="dl-resultados" download="resultados_finales_IA.csv" class="btn-dl">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -558,8 +1289,8 @@
             </div>
             <div class="dl-card">
               <div style="display:flex;align-items:center;gap:12px">
-                <div class="dl-icon" style="background:rgba(0,229,255,0.1)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-                <div><div style="font-size:13px;font-weight:700;color:#f1f5f9;margin-bottom:3px">dataset_maestro_colonia_final.csv</div><div style="font-size:11px;color:rgba(148,163,184,0.5)">(160, 18) · Dataset post-ETL · input de los modelos ML</div></div>
+                <div class="dl-icon" style="background:rgba(100,223,223,0.08);border:1px solid rgba(100,223,223,0.18)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--neon-cyan)" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+                <div><div style="font-size:13px;font-weight:700;color:#eef0f8;margin-bottom:3px">dataset_maestro_colonia_final.csv</div><div style="font-size:11px;color:rgba(180,167,245,0.4)">(160, 18) · Dataset post-ETL · input de los modelos ML</div></div>
               </div>
               <a id="dl-maestro" download="dataset_maestro_colonia_final.csv" class="btn-dl">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -570,99 +1301,94 @@
         </div>
       </div>
 
+      <!-- GRÁFICAS GENERADAS -->
       <div class="panel">
         <div class="panel-header">
-          <div class="panel-title"><div class="panel-title-dot" style="background:var(--violet);box-shadow:0 0 6px var(--violet)"></div>Gráficas Generadas · modelos_ml.py</div>
-          <span style="background:rgba(52,211,153,0.1);color:var(--emerald);font-weight:700;font-size:10px;padding:6px 12px;border-radius:6px;border:1px solid rgba(52,211,153,0.3);display:inline-flex;align-items:center;gap:5px;">
+          <div class="panel-title"><div class="panel-title-dot" style="background:var(--lavender);box-shadow:0 0 6px var(--lavender)"></div>Gráficas Generadas · modelos_ml.py</div>
+          <span style="background:rgba(76,201,160,0.08);color:var(--emerald);font-weight:700;font-size:10px;padding:6px 12px;border-radius:6px;border:1px solid rgba(76,201,160,0.28);display:inline-flex;align-items:center;gap:5px;">
             <i class="fa-solid fa-cloud-arrow-down"></i> Sincronización Automática
           </span>
         </div>
+        <div class="panel-body" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;padding:16px">
 
-        <div class="panel-body" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:20px; padding:16px;">
-          
-          <div style="background:var(--bg-deep); border:1px solid var(--border); border-radius:12px; overflow:hidden; display:flex; flex-direction:column;">
-            <div style="padding:12px 14px; border-bottom:1px solid rgba(99,102,241,0.05)">
-              <div style="font-size:12px;font-weight:700;color:#f1f5f9;margin-bottom:2px">📊 metodo_codo.png</div>
-              <div style="font-size:10px;color:rgba(148,163,184,0.5)">Optimización K-Means · Selección de K=4</div>
+          <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column">
+            <div style="padding:12px 14px;border-bottom:1px solid rgba(180,167,245,0.06)">
+              <div style="font-size:12px;font-weight:700;color:#eef0f8;margin-bottom:2px">📊 metodo_codo.png</div>
+              <div style="font-size:10px;color:rgba(180,167,245,0.4)">Optimización K-Means · Selección de K=4</div>
             </div>
-            <div style="background:#000; height:240px; padding:10px; display:flex; align-items:center; justify-content:center;">
-              <img id="img-codo" src="/graficas/metodo_codo.png" alt="metodo_codo" style="max-width:100%; max-height:100%; object-fit:contain; cursor:zoom-in" onclick="openImgModal(this.src,'📊 metodo_codo.png')" onerror="this.style.display='none'; document.getElementById('placeholder-codo').style.display='block';"/>
-              <div id="placeholder-codo" style="display:none; text-align:center;"><span style="font-size:11px;color:rgba(148,163,184,0.3);font-family:'Fira Code',monospace">⚠️ Archivo no detectado</span></div>
+            <div style="background:#000;height:240px;padding:10px;display:flex;align-items:center;justify-content:center">
+              <img id="img-codo" src="/graficas/metodo_codo.png" alt="metodo_codo" style="max-width:100%;max-height:100%;object-fit:contain;cursor:zoom-in" onclick="openImgModal(this.src,'📊 metodo_codo.png')" onerror="this.style.display='none';document.getElementById('placeholder-codo').style.display='block';"/>
+              <div id="placeholder-codo" style="display:none;text-align:center"><span style="font-size:11px;color:rgba(180,167,245,0.25);font-family:var(--font-mono)">⚠️ Archivo no detectado</span></div>
             </div>
           </div>
 
-          <div style="background:var(--bg-deep); border:1px solid var(--border); border-radius:12px; overflow:hidden; display:flex; flex-direction:column;">
-            <div style="padding:12px 14px; border-bottom:1px solid rgba(99,102,241,0.05)">
-              <div style="font-size:12px;font-weight:700;color:#f1f5f9;margin-bottom:2px">📈 mapa_anomalias_analitico.png</div>
-              <div style="font-size:10px;color:rgba(148,163,184,0.5)">Análisis de Dispersión · Fugas vs Desabasto</div>
+          <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column">
+            <div style="padding:12px 14px;border-bottom:1px solid rgba(180,167,245,0.06)">
+              <div style="font-size:12px;font-weight:700;color:#eef0f8;margin-bottom:2px">📈 mapa_anomalias_analitico.png</div>
+              <div style="font-size:10px;color:rgba(180,167,245,0.4)">Análisis de Dispersión · Fugas vs Desabasto</div>
             </div>
-            <div style="background:#000; height:240px; padding:10px; display:flex; align-items:center; justify-content:center;">
-              <img id="img-anomalias" src="/graficas/mapa_anomalias_analitico.png" alt="mapa_anomalias" style="max-width:100%; max-height:100%; object-fit:contain; cursor:zoom-in" onclick="openImgModal(this.src,'📈 mapa_anomalias_analitico.png')" onerror="this.style.display='none'; document.getElementById('placeholder-anomalias').style.display='block';"/>
-              <div id="placeholder-anomalias" style="display:none; text-align:center;"><span style="font-size:11px;color:rgba(148,163,184,0.3);font-family:'Fira Code',monospace">⚠️ Archivo no detectado</span></div>
+            <div style="background:#000;height:240px;padding:10px;display:flex;align-items:center;justify-content:center">
+              <img id="img-anomalias" src="/graficas/mapa_anomalias_analitico.png" alt="mapa_anomalias" style="max-width:100%;max-height:100%;object-fit:contain;cursor:zoom-in" onclick="openImgModal(this.src,'📈 mapa_anomalias_analitico.png')" onerror="this.style.display='none';document.getElementById('placeholder-anomalias').style.display='block';"/>
+              <div id="placeholder-anomalias" style="display:none;text-align:center"><span style="font-size:11px;color:rgba(180,167,245,0.25);font-family:var(--font-mono)">⚠️ Archivo no detectado</span></div>
             </div>
           </div>
 
-          <div style="background:var(--bg-deep); border:1px solid var(--border); border-radius:12px; overflow:hidden; display:flex; flex-direction:column;">
-            <div style="padding:12px 14px; border-bottom:1px solid rgba(99,102,241,0.05)">
-              <div style="font-size:12px;font-weight:700;color:#f1f5f9;margin-bottom:2px">🔵 scatter_consumo_densidad.png</div>
-              <div style="font-size:10px;color:rgba(148,163,184,0.5)">Densidad Poblacional vs Consumo per Cápita</div>
+          <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column">
+            <div style="padding:12px 14px;border-bottom:1px solid rgba(180,167,245,0.06)">
+              <div style="font-size:12px;font-weight:700;color:#eef0f8;margin-bottom:2px">🔵 scatter_consumo_densidad.png</div>
+              <div style="font-size:10px;color:rgba(180,167,245,0.4)">Densidad Poblacional vs Consumo per Cápita</div>
             </div>
-            <div style="background:#000; height:240px; padding:10px; display:flex; align-items:center; justify-content:center;">
-              <img id="img-scatter" src="/graficas/scatter_consumo_densidad.png" alt="scatter_consumo_densidad" style="max-width:100%; max-height:100%; object-fit:contain; cursor:zoom-in" onclick="openImgModal(this.src,'🔵 scatter_consumo_densidad.png')" onerror="this.style.display='none'; document.getElementById('placeholder-scatter').style.display='block';"/>
-              <div id="placeholder-scatter" style="display:none; text-align:center;"><span style="font-size:11px;color:rgba(148,163,184,0.3);font-family:'Fira Code',monospace">⚠️ Archivo no detectado</span></div>
+            <div style="background:#000;height:240px;padding:10px;display:flex;align-items:center;justify-content:center">
+              <img id="img-scatter" src="/graficas/scatter_consumo_densidad.png" alt="scatter_consumo_densidad" style="max-width:100%;max-height:100%;object-fit:contain;cursor:zoom-in" onclick="openImgModal(this.src,'🔵 scatter_consumo_densidad.png')" onerror="this.style.display='none';document.getElementById('placeholder-scatter').style.display='block';"/>
+              <div id="placeholder-scatter" style="display:none;text-align:center"><span style="font-size:11px;color:rgba(180,167,245,0.25);font-family:var(--font-mono)">⚠️ Archivo no detectado</span></div>
             </div>
           </div>
 
         </div>
       </div>
 
-      <div id="imgModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:300;align-items:center;justify-content:center;flex-direction:column;gap:14px" onclick="closeImgModal()">
+      <!-- IMG MODAL -->
+      <div id="imgModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:300;align-items:center;justify-content:center;flex-direction:column;gap:14px" onclick="closeImgModal()">
         <div style="display:flex;align-items:center;justify-content:space-between;width:90vw;max-width:1200px;flex-shrink:0">
-          <span id="imgModalTitle" style="font-size:13px;font-weight:700;color:#f1f5f9"></span>
-          <button onclick="closeImgModal()" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(148,163,184,0.7);padding:6px 14px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">✕ Cerrar</button>
+          <span id="imgModalTitle" style="font-size:13px;font-weight:700;color:#eef0f8"></span>
+          <button onclick="closeImgModal()" style="background:rgba(180,167,245,0.06);border:1px solid var(--border);color:rgba(180,167,245,0.5);padding:6px 14px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:var(--font-sans)">✕ Cerrar</button>
         </div>
-        <img id="imgModalSrc" src="" style="max-width:90vw;max-height:82vh;object-fit:contain;border-radius:8px;border:1px solid rgba(255,255,255,0.08)"/>
+        <img id="imgModalSrc" src="" style="max-width:90vw;max-height:82vh;object-fit:contain;border-radius:10px;border:1px solid rgba(180,167,245,0.12)"/>
       </div>
 
-      <div class="chart-panel" style="margin-top:22px; margin-bottom:22px">
+      <!-- PREVIEW TABLE -->
+      <div class="chart-panel" style="margin-top:22px;margin-bottom:22px">
         <div class="chart-header">
           <div class="panel-title"><div class="panel-title-dot" style="background:var(--orange);box-shadow:0 0 6px var(--orange)"></div>Preview · resultados_finales_IA.csv · Primeras 10 filas</div>
-          <span class="mono" style="font-size:9px;color:rgba(148,163,184,0.35)">Top 10 Anomalías · Conectado al Backend</span>
+          <span style="font-family:var(--font-mono);font-size:9px;color:rgba(180,167,245,0.3)">Top 10 Anomalías · Conectado al Backend</span>
         </div>
         <div style="overflow-x:auto;max-height:400px" class="custom-scroll">
-          <table class="data-table" style="width:100%; text-align:left; border-collapse:collapse;">
+          <table class="data-table" style="width:100%;text-align:left;border-collapse:collapse">
             <thead>
-              <tr style="border-bottom: 1px solid rgba(255,255,255,0.1); color:rgba(148,163,184,0.8); font-size:11px;">
-                <th style="padding:12px;">Alcaldía</th>
-                <th style="padding:12px;">Colonia</th>
-                <th style="padding:12px;">Reportes</th>
-                <th style="padding:12px;">Score IF</th>
-                <th style="padding:12px;">Exceso m³</th>
-                <th style="padding:12px;">Diagnóstico</th>
+              <tr>
+                <th>Alcaldía</th><th>Colonia</th><th>Reportes</th><th>Score IF</th><th>Exceso m³</th><th>Diagnóstico</th>
               </tr>
             </thead>
             <tbody>
               {% for row in tabla_completa[:10] %}
-              <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition:background 0.2s;">
-                <td style="padding:12px; font-size:11px; color:#f1f5f9;">{{ row.alcaldia }}</td>
-                <td style="padding:12px; font-size:12px; font-weight:bold; color:var(--cyan);">{{ row.colonia }}</td>
-                <td style="padding:12px; font-size:12px; font-family:'Fira Code'; color:#94a3b8;">{{ row.total_reportes|default(0) }}</td>
-                <td style="padding:12px; font-size:12px; font-family:'Fira Code'; color:var(--rose);">{{ "%.3f"|format(row.anomalia_score|default(0)) }}</td>
-                <td style="padding:12px; font-size:12px; font-family:'Fira Code'; color:var(--emerald);">+{{ "{:,.1f}".format(row.exceso_consumo|default(0)) }}</td>
-                <td style="padding:12px;">
+              <tr>
+                <td style="font-size:11px;color:#eef0f8">{{ row.alcaldia }}</td>
+                <td style="font-size:12px;font-weight:700;color:var(--neon-cyan)">{{ row.colonia }}</td>
+                <td style="font-family:var(--font-mono);font-size:12px;color:rgba(180,167,245,0.5)">{{ row.total_reportes|default(0) }}</td>
+                <td style="font-family:var(--font-mono);font-size:12px;color:var(--rose)">{{ "%.3f"|format(row.anomalia_score|default(0)) }}</td>
+                <td style="font-family:var(--font-mono);font-size:12px;color:var(--emerald)">+{{ "{:,.1f}".format(row.exceso_consumo|default(0)) }}</td>
+                <td>
                   {% if 'CRÍTICO' in row.diagnostico_final|upper %}
-                    <span style="background:var(--rose); color:#fff; font-size:9px; font-weight:bold; padding:2px 6px; border-radius:4px;">CRÍTICO</span>
+                    <span class="pill pill-critico">CRÍTICO</span>
                   {% elif 'SOSPECHOSO' in row.diagnostico_final|upper %}
-                    <span style="background:var(--orange); color:#fff; font-size:9px; font-weight:bold; padding:2px 6px; border-radius:4px;">SOSPECHOSO</span>
+                    <span class="pill pill-sospechoso">SOSPECHOSO</span>
                   {% else %}
-                    <span style="background:var(--amber); color:#000; font-size:9px; font-weight:bold; padding:2px 6px; border-radius:4px;">DEFICIENCIA</span>
+                    <span class="pill pill-deficiencia">DEFICIENCIA</span>
                   {% endif %}
                 </td>
               </tr>
               {% else %}
-              <tr>
-                <td colspan="6" style="text-align:center; padding:20px; color:rgba(255,255,255,0.4); font-size:12px;">⚠️ No hay datos procesados disponibles.</td>
-              </tr>
+              <tr><td colspan="6" style="text-align:center;padding:20px;color:rgba(180,167,245,0.3);font-size:12px">⚠️ No hay datos procesados disponibles.</td></tr>
               {% endfor %}
             </tbody>
           </table>
@@ -670,65 +1396,61 @@
       </div>
     </div>
 
-    <!-- SECTION: CRM -->
+<!-- SECTION: CRM -->
     <div id="section-crm" style="display:none">
       <div class="page-header">
         <h1>Gestión de Prospectos</h1>
         <p>Base de datos de leads · Actualización en tiempo real · HydroTrace AI CRM</p>
       </div>
       <div style="display:grid;grid-template-columns:1fr;gap:18px">
-        <div class="panel" style="border-left:3px solid var(--cyan)">
+        <div class="panel" style="border-left:2px solid var(--neon-cyan)">
           <div class="panel-header">
             <div class="panel-title">
-              <div class="panel-title-dot" style="background:var(--cyan);box-shadow:0 0 6px var(--cyan)"></div>
+              <div class="panel-title-dot" style="background:var(--neon-cyan);box-shadow:0 0 6px var(--neon-cyan)"></div>
               Solicitudes de Contacto
             </div>
-            <span class="mono" style="font-size:9px;color:rgba(148,163,184,0.4)">DB · leads</span>
+            <span style="font-family:var(--font-mono);font-size:9px;color:rgba(180,167,245,0.35)">DB · leads</span>
           </div>
           <div style="max-height:600px;overflow-y:auto" class="custom-scroll">
             {% if leads %}
               {% for lead in leads %}
-              <div style="padding:18px 20px;border-bottom:1px solid rgba(99,102,241,0.08);transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
+              <div style="padding:18px 20px;border-bottom:1px solid rgba(180,167,245,0.06);transition:background .2s" onmouseover="this.style.background='rgba(139,124,248,0.04)'" onmouseout="this.style.background='transparent'">
                 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">
                   <div style="display:flex;align-items:center;gap:10px">
-                    <div style="width:32px;height:32px;border-radius:50%;background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.25);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:var(--cyan);flex-shrink:0">
+                    <div style="width:32px;height:32px;border-radius:50%;background:rgba(100,223,223,0.08);border:1px solid rgba(100,223,223,0.22);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:var(--neon-cyan);flex-shrink:0">
                       {{ lead.nombre[0].upper() if lead.nombre else '?' }}
                     </div>
                     <div>
-                      <div style="font-size:13px;font-weight:700;color:#f1f5f9">{{ lead.nombre }}</div>
-                      <div style="font-family:'Fira Code',monospace;font-size:10px;color:rgba(148,163,184,0.5)">{{ lead.email }}</div>
+                      <div style="font-size:13px;font-weight:700;color:#eef0f8">{{ lead.nombre }}</div>
+                      <div style="font-family:var(--font-mono);font-size:10px;color:rgba(180,167,245,0.4)">{{ lead.email }}</div>
                     </div>
                   </div>
                   <div style="display:flex;align-items:center;gap:8px">
-                    <span style="font-family:'Fira Code',monospace;font-size:9px;color:rgba(148,163,184,0.35)">
+                    <span style="font-family:var(--font-mono);font-size:9px;color:rgba(180,167,245,0.3)">
                       {{ lead.fecha_registro.strftime('%d/%m/%Y %H:%M') if lead.fecha_registro else 'Sin fecha' }}
                     </span>
-                    <span class="
-                      {% if lead.status == 'Nuevo' %}pill pill-critico
-                      {% elif lead.status == 'En Seguimiento' %}pill pill-sospechoso
-                      {% else %}pill pill-normal{% endif %}"
-                      style="font-size:8px;text-transform:uppercase;letter-spacing:.06em">
+                    <span class="{% if lead.status == 'Nuevo' %}pill pill-critico{% elif lead.status == 'En Seguimiento' %}pill pill-sospechoso{% else %}pill pill-normal{% endif %}" style="font-size:8px;text-transform:uppercase;letter-spacing:.06em">
                       {{ lead.status }}
                     </span>
                   </div>
                 </div>
-                <div style="background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.04);border-radius:8px;padding:10px 14px;font-size:11px;color:rgba(148,163,184,0.6);font-style:italic;margin-bottom:12px;line-height:1.5">
+                <div style="background:rgba(0,0,0,0.25);border:1px solid rgba(180,167,245,0.07);border-radius:8px;padding:10px 14px;font-size:11px;color:rgba(180,167,245,0.5);font-style:italic;margin-bottom:12px;line-height:1.5">
                   "{{ lead.mensaje }}"
                 </div>
                 <form action="/actualizar-estatus/{{ lead.id }}" method="POST" style="display:flex;gap:8px;align-items:center">
-                  <select name="nuevo_estatus" style="flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:6px 10px;font-size:10px;font-family:'Plus Jakarta Sans',sans-serif;color:#e2e8f0;outline:none;cursor:pointer">
+                  <select name="nuevo_estatus" style="flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:7px;padding:6px 10px;font-size:10px;font-family:var(--font-sans);color:#dde1f0;outline:none;cursor:pointer">
                     <option value="Nuevo" {% if lead.status == "Nuevo" %}selected{% endif %}>Nuevo</option>
                     <option value="En Seguimiento" {% if lead.status == "En Seguimiento" %}selected{% endif %}>En Seguimiento</option>
                     <option value="Atendido" {% if lead.status == "Atendido" %}selected{% endif %}>Atendido</option>
                   </select>
-                  <button type="submit" style="background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.25);color:var(--emerald);padding:6px 14px;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .2s;white-space:nowrap" onmouseover="this.style.background='rgba(52,211,153,0.2)'" onmouseout="this.style.background='rgba(52,211,153,0.1)'">
+                  <button type="submit" style="background:rgba(76,201,160,0.09);border:1px solid rgba(76,201,160,0.25);color:var(--emerald);padding:6px 14px;border-radius:7px;font-size:10px;font-weight:700;cursor:pointer;font-family:var(--font-sans);transition:all .2s;white-space:nowrap" onmouseover="this.style.background='rgba(76,201,160,0.18)'" onmouseout="this.style.background='rgba(76,201,160,0.09)'">
                     ✓ Actualizar
                   </button>
                 </form>
               </div>
               {% endfor %}
             {% else %}
-              <div style="padding:48px;text-align:center;color:rgba(148,163,184,0.35);font-size:13px;font-style:italic">
+              <div style="padding:48px;text-align:center;color:rgba(180,167,245,0.3);font-size:13px;font-style:italic">
                 No hay solicitudes registradas aún.
               </div>
             {% endif %}
@@ -737,15 +1459,35 @@
       </div>
     </div>
 
-  </div><!-- /content -->
-
-  <div class="footer-bar">
-    <span>HydroTrace AI · PumaScript Solutions · UNAM 2025</span>
-    <span class="mono">ETL → ML → API → UI · Datos reales · 160 colonias CDMX</span>
   </div>
-</div>
+  
+<div class="footer-bar">
+    <span>HydroTrace AI · PumaScript Solutions · UNAM 2025</span>
+    <span style="font-family:var(--font-mono)">ETL → ML → API → UI · Datos reales · 160 colonias CDMX</span>
+  </div>
+</div><!-- /main-wrap -->
 
 <script>
+
+  // ── Paleta semántica compartida ──
+const C = {
+  critico:      'rgba(251,113,133,0.80)', 
+  criticoB:     '#fb7185',
+  sospechoso:   'rgba(251,191,36,0.80)',    
+  sospechosaB:  '#fbbf24', 
+  deficiencia:  'rgba(253,224,71,0.80)',    
+  deficienciaB: '#fde047',
+  normal:       'rgba(167,139,250,0.55)',   
+  normalB:      '#a78bfa',
+  agua:         'rgba(34,211,238,0.75)',    
+  aguaB:        '#22d3ee',
+  dinero:       'rgba(52,211,153,0.75)',    
+  dineroB:      '#34d399',
+  gridLine:     'rgba(148,163,184,0.06)',
+  tick:         'rgba(148,163,184,0.40)'
+};
+
+
 // ── CLOCK ──
 function updateClock() {
   const now = new Date(), opts = {timeZone:'America/Mexico_City'};
@@ -772,11 +1514,14 @@ const MAP_POINTS = [{"lat": 19.425775219, "lon": -99.2200196863, "colonia": "LOM
 // ── TABLE RENDER ──
 let currentFilter = 'all', currentSearch = '';
 function diagPill(d) {
-  const du = d.toUpperCase();
-  if(du.includes('TICO')) return `<span class="pill pill-critico">● CRÍTICO</span>`;
-  if(du.includes('SOSPECHOSO')) return `<span class="pill pill-sospechoso">● SOSPECHOSO</span>`;
-  if(du.includes('DEFICIENCIA')) return `<span class="pill pill-deficiencia">● DEFICIENCIA</span>`;
-  return `<span class="pill pill-normal">● NORMAL</span>`;
+  d = (d || '').toUpperCase();
+  if (d.includes('CRÍTICO') || d.includes('CRITICO'))
+    return `<span class="pill pill-critico">● Crítico</span>`;
+  if (d.includes('SOSPECHOSO'))
+    return `<span class="pill pill-sospechoso">● Sospechoso</span>`;
+  if (d.includes('DEFICIENCIA'))
+    return `<span class="pill pill-deficiencia">● Deficiencia</span>`;
+  return `<span class="pill pill-normal">● Normal</span>`;
 }
 function renderTable() {
   let rows = TABLE_DATA;
@@ -809,12 +1554,21 @@ function setFilter(f, btn) {
 renderTable();
 
 // ── CHARTS ──
-function colorDiag(d) {
-  d = (d||'').toUpperCase();
-  if(d.includes('TICO')) return 'rgba(251,113,133,0.8)';
-  if(d.includes('SOSPECHOSO')) return 'rgba(251,146,60,0.85)';
-  if(d.includes('DEFICIENCIA')) return 'rgba(251,191,36,0.8)';
-  return 'rgba(52,211,153,0.6)';
+function colorDiag(diag) {
+  // Normalizamos a mayúsculas para evitar errores de escritura
+  const d = (diag || '').toUpperCase();
+
+  // Aquí buscamos la palabra completa, es más seguro y profesional
+  if (d.includes('CRÍTICO'))    return C.critico;
+  if (d.includes('SOSPECHOSO')) return C.sospechoso;
+  if (d.includes('DEFICIENCIA'))return C.deficiencia;
+  
+  // Agregamos las que te faltaban según tu plan original
+  if (d.includes('DINERO'))     return C.dinero;
+  if (d.includes('AGUA'))       return C.agua; 
+
+  // Si no cae en ninguna de las anteriores, regresa 'normal' por defecto
+  return C.normal;
 }
 
 // 3. CÁLCULO DINÁMICO DE DONA (DESDE TABLE_DATA) ──
@@ -848,10 +1602,10 @@ new Chart(document.getElementById('doughnutChart'), {
     datasets: [{
       // Datos alimentados por nuestro cálculo de JS
       data: [countCritico, countSospechoso, countDeficiencia, countNormal],
-      backgroundColor: ['rgba(251,113,133,0.8)','rgba(251,146,60,0.8)','rgba(251,191,36,0.8)','rgba(52,211,153,0.5)'],
-      borderColor: ['#fb7185','#fb923c','#fbbf24','#34d399'],
-      borderWidth: 1.5,
-      hoverOffset: 8
+backgroundColor: [C.critico, C.sospechoso, C.deficiencia, C.normal],
+borderColor:     [C.criticoB, C.sospechosaB, C.deficienciaB, C.normalB],
+borderWidth: 1.5,
+hoverOffset: 8,
     }]
   },
   options: {
@@ -860,14 +1614,13 @@ new Chart(document.getElementById('doughnutChart'), {
     cutout: '65%',
     plugins: {
       legend: {
-        position: 'right',
-        labels: {
-          color: 'rgba(148,163,184,0.7)',
-          font: { size: 11, family: "'Plus Jakarta Sans'" },
-          padding: 14,
-          boxWidth: 10
-        }
-      },
+  position: 'right',
+  labels: {
+    color: 'rgba(148,163,184,0.65)',
+    font: { size: 11, family: "'DM Sans'" },
+    padding: 14, boxWidth: 10
+  }
+},
       tooltip: {
         callbacks: {
           // El porcentaje ahora se calcula dinámicamente con el totalUniverso
@@ -881,22 +1634,26 @@ new Chart(document.getElementById('doughnutChart'), {
 // Bar top exceso (real data from CSV)
 const topExceso = [{"colonia": "JUAREZ", "exceso_consumo": 773022.9365140706, "diagnostico_final": "NORMAL"}, {"colonia": "CENTRO IV", "exceso_consumo": 583774.1657909577, "diagnostico_final": "NORMAL"}, {"colonia": "LOMAS DE CHAPULTEPEC", "exceso_consumo": 568429.889232483, "diagnostico_final": "CRÍTICO (Posible Fuga de Red)"}, {"colonia": "SAN JERONIMO ACULCO - LIDICE (PBLO)", "exceso_consumo": 520441.0596219881, "diagnostico_final": "NORMAL"}, {"colonia": "DOCTORES IV", "exceso_consumo": 488722.4009244373, "diagnostico_final": "NORMAL"}, {"colonia": "CUAUHTEMOC", "exceso_consumo": 473703.0906586217, "diagnostico_final": "NORMAL"}, {"colonia": "NAPOLES", "exceso_consumo": 428319.2552733305, "diagnostico_final": "NORMAL"}, {"colonia": "CENTRO VIII", "exceso_consumo": 424522.8527516624, "diagnostico_final": "NORMAL"}];
 new Chart(document.getElementById('barChart'), {
-  type:'bar',
-  data:{
-    labels: topExceso.map(r => r.colonia.length>18 ? r.colonia.slice(0,18)+'…' : r.colonia),
-    datasets:[{
-      label:'Exceso m³',
+  type: 'bar',
+  data: {
+    labels: topExceso.map(r => r.colonia.length > 18 ? r.colonia.slice(0, 18) + '…' : r.colonia),
+    datasets: [{
+      label: 'Exceso m³',
       data: topExceso.map(r => r.exceso_consumo),
       backgroundColor: topExceso.map(r => colorDiag(r.diagnostico_final)),
-      borderRadius:5, borderSkipped:false
+      borderRadius: 5, 
+      borderSkipped: false
     }]
   },
-  options:{
-    responsive:true, maintainAspectRatio:false, indexAxis:'y',
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.x.toLocaleString('es-MX')} m³`}}},
-    scales:{
-      x:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'rgba(148,163,184,0.4)',font:{size:10}}},
-      y:{grid:{display:false},ticks:{color:'rgba(148,163,184,0.65)',font:{size:10,family:"'Fira Code'"}}}
+  options: {
+    responsive: true, maintainAspectRatio: false, indexAxis: 'y',
+    plugins: { 
+      legend: { display: false }, 
+      tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.x.toLocaleString('es-MX')} m³` } } 
+    },
+    scales: {
+      x: { grid: { color: C.gridLine }, ticks: { color: C.tick, font: { size: 10 } } },
+      y: { grid: { display: false }, ticks: { color: C.tick, font: { size: 10, family: "'DM Mono'" } } }
     }
   }
 });
@@ -904,22 +1661,26 @@ new Chart(document.getElementById('barChart'), {
 // Per capita (real data from CSV)
 const perCapitaData = [{"colonia": "BELISARIO DOMINGUEZ", "consumo_per_capita": 276.710205811138, "diagnostico_final": "SOSPECHOSO (Posible Huachicol)"}, {"colonia": "LOMAS DE CHAPULTEPEC", "consumo_per_capita": 247.71691330674932, "diagnostico_final": "CRÍTICO (Posible Fuga de Red)"}, {"colonia": "CHAPULTEPEC POLANCO (POLANCO)", "consumo_per_capita": 206.40658440276405, "diagnostico_final": "SOSPECHOSO (Exceso Detectado por IA)"}, {"colonia": "SAN ANGEL", "consumo_per_capita": 203.89649591280656, "diagnostico_final": "SOSPECHOSO (Exceso Detectado por IA)"}, {"colonia": "LOMAS DE SANTA FE II", "consumo_per_capita": 142.3749688385269, "diagnostico_final": "SOSPECHOSO (Exceso Detectado por IA)"}, {"colonia": "MAGDALENA DE LAS SALINAS", "consumo_per_capita": 134.43828301311376, "diagnostico_final": "SOSPECHOSO (Exceso Detectado por IA)"}, {"colonia": "JUAREZ", "consumo_per_capita": 133.13591603053436, "diagnostico_final": "NORMAL"}, {"colonia": "CENTRO IV", "consumo_per_capita": 128.66577767749698, "diagnostico_final": "NORMAL"}, {"colonia": "JARDINES EN LA MONTAA", "consumo_per_capita": 98.74890570934257, "diagnostico_final": "SOSPECHOSO (Exceso Detectado por IA)"}, {"colonia": "ANZURES", "consumo_per_capita": 95.871140836996, "diagnostico_final": "NORMAL"}];
 new Chart(document.getElementById('perCapitaChart'), {
-  type:'bar',
-  data:{
-    labels: perCapitaData.map(r => r.colonia.length>16 ? r.colonia.slice(0,16)+'…' : r.colonia),
-    datasets:[{
-      label:'m³/hab',
+  type: 'bar',
+  data: {
+    labels: perCapitaData.map(r => r.colonia.length > 16 ? r.colonia.slice(0, 16) + '…' : r.colonia),
+    datasets: [{
+      label: 'm³/hab',
       data: perCapitaData.map(r => r.consumo_per_capita),
       backgroundColor: perCapitaData.map(r => colorDiag(r.diagnostico_final)),
-      borderRadius:4, borderSkipped:false
+      borderRadius: 4, 
+      borderSkipped: false
     }]
   },
-  options:{
-    responsive:true, maintainAspectRatio:false,
-    plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.parsed.y.toFixed(2)} m³/hab`}}},
-    scales:{
-      x:{grid:{display:false},ticks:{color:'rgba(148,163,184,0.5)',font:{size:9},maxRotation:30}},
-      y:{grid:{color:'rgba(255,255,255,0.04)'},ticks:{color:'rgba(148,163,184,0.4)',font:{size:10}}}
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { 
+      legend: { display: false }, 
+      tooltip: { callbacks: { label: ctx => ` ${ctx.parsed.y.toFixed(2)} m³/hab` } } 
+    },
+    scales: {
+      x: { grid: { color: C.gridLine }, ticks: { color: C.tick, font: { size: 10 } } },
+      y: { grid: { color: C.gridLine }, ticks: { color: C.tick, font: { size: 10 } } }
     }
   }
 });

@@ -1,2095 +1,1694 @@
 <!doctype html>
 <html lang="es" class="scroll-smooth">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HydroTrace AI | Plataforma de inteligencia hídrica</title>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HydroTrace AI | Plataforma de inteligencia hídrica</title>
 
-    <!-- Icon principal -->
-    <link rel="icon" href="assets/logo/logo_carablanco.png" type="image/png" />
+  <link rel="icon" href="assets/logo/logo_carablanco.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/logo/logo_carablanco.png" />
 
-    <link rel="apple-touch-icon" href="assets/logo/logo_carablanco.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-      rel="stylesheet"
-    />
-    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
-
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&family=Fira+Code:wght@400&family=Montserrat:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <style>
-      /* --- 1. VARIABLES GLOBALES --- */
-      :root {
-        --bg-deep: #050a15;
-        --bg-surface: #001b48;
-        --accent-blue: #3b82f6;
-        --accent-cyan: #06b6d4;
-        --safety-orange: #ff8c00;
-        --bg-app: #f8fafc;
-
-        --text-main: #1e293b;
-        --text-muted: #64748b;
-      }
-
-      /* --- 2. BASE GLOBAL --- */
-      body {
-        font-family: "Inter", sans-serif;
-        background-color: #ffffff;
-        color: var(--text-main);
-        line-height: 1.6;
-        overflow-x: hidden;
-      }
-
-      /* Títulos */
-      h1,
-      h2,
-      h3,
-      h4 {
-        font-family: "Plus Jakarta Sans", sans-serif;
-        letter-spacing: -0.02em;
-      }
-
-      .logo-font {
-        font-family: "Orbitron", sans-serif;
-      }
-
-      /* --- ACTUALIZACIÓN DE REVEAL ANIMATIONS --- */
-      .reveal,
-      .reveal-left,
-      .reveal-right {
-        opacity: 0;
-        filter: blur(10px);
-        will-change: transform, opacity, filter;
-        transition:
-          opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
-          transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
-          filter 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
-      }
-      .reveal {
-        transform: translateY(50px) scale(0.98);
-      }
-
-      .reveal-left {
-        transform: translateX(-60px);
-      }
-
-      .reveal-right {
-        transform: translateX(60px);
-      }
-
-      .reveal.active,
-      .reveal-left.active,
-      .reveal-right.active {
-        opacity: 1;
-        transform: translate(0) scale(1);
-        filter: blur(0);
-      }
-
-      .delay-100 {
-        transition-delay: 100ms;
-      }
-      .delay-200 {
-        transition-delay: 200ms;
-      }
-      .delay-300 {
-        transition-delay: 300ms;
-      }
-      .delay-500 {
-        transition-delay: 500ms;
-      }
-
-      /* --- 4. TARJETAS CLARAS --- */
-      .card-light {
-        background: white;
-        border: 1px solid #e2e8f0;
-        border-radius: 1.5rem;
-        transition: all 0.3s ease;
-      }
-
-      .card-light:hover {
-        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
-        transform: translateY(-5px);
-      }
-
-      /* --- 5. TARJETAS GLASS --- */
-      .card-glass {
-        background: linear-gradient(
-          135deg,
-          rgba(255, 255, 255, 0.1),
-          rgba(255, 255, 255, 0.02)
-        );
-        backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 2rem;
-      }
-
-      /* --- 6. VIDEO --- */
-      .video-container {
-        position: relative;
-        border-radius: 2rem;
-        overflow: hidden;
-      }
-
-      .video-blend {
-        mix-blend-mode: screen;
-        filter: brightness(1.2) contrast(1.1);
-      }
-
-      /* --- 7. BOTONES --- */
-      .btn-primary {
-        background: var(--accent-blue);
-        color: white;
-        border-radius: 999px;
-        font-weight: bold;
-        transition: 0.3s;
-      }
-
-      .btn-primary:hover {
-        background: #2563eb;
-      }
-
-      /* --- 8. MARQUEE --- */
-      .marquee-container {
-        background: #f8fafc;
-        border-top: 1px solid #e2e8f0;
-        border-bottom: 1px solid #e2e8f0;
-      }
-
-      .marquee-text-dark {
-        color: #334155;
-      }
-
-      .marquee-text-accent {
-        color: var(--accent-cyan);
-      }
-
-      /* --- 9. FORM INPUT --- */
-      .form-input-pro {
-        width: 100%;
-        padding: 0.875rem 1.25rem;
-        background: #ffffff;
-        border: 1px solid #e2e8f0;
-        border-radius: 0.75rem;
-        color: #1e293b;
-      }
-
-      .form-input-pro:focus {
-        border-color: var(--accent-blue);
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-      }
-
-      /* --- 10. SCROLLBAR --- */
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      ::-webkit-scrollbar-track {
-        background: #f1f5f9;
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background: #cbd5f5;
-        border-radius: 10px;
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background: var(--accent-blue);
-      }
-
-      /* --- ANIMACIONES MARQUEE --- */
-      @keyframes marquee {
-        0% {
-          transform: translateX(0%);
-        }
-        100% {
-          transform: translateX(-100%);
+  <!-- ✅ NUEVA: Tailwind Config del Remasterizado -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            lilac: {
+              DEFAULT: '#A855F7',
+              glow: '#C084FC',
+              soft: '#F3E8FF'
+            },
+            cyan: {
+              DEFAULT: '#56D7FD',
+              soft: '#BAF3FF'
+            },
+            navy: {
+              DEFAULT: '#071326'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Plus Jakarta Sans', 'sans-serif'],
+          }
         }
       }
+    }
+  </script>
 
-      @keyframes marquee2 {
-        0% {
-          transform: translateX(100%);
-        }
-        100% {
-          transform: translateX(0%);
-        }
-      }
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+  <link
+  href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700&display=swap"
+  rel="stylesheet"
+/>
 
-      .animate-marquee {
-        animation: marquee 25s linear infinite;
-      }
+  <style>
+    /* --- 1. VARIABLES GLOBALES --- */
+    :root {
+      --bg-deep: #050a15;
+      --bg-surface: #071326;
+      --accent-lilac: #A855F7;
+      --accent-cyan: #56D7FD;
+      --safety-orange: #ff8c00;
+      --bg-app: #F8FAFC;
+      --text-main: #0F172A;
+      --text-muted: #64748b;
+    }
 
-      .animate-marquee2 {
-        animation: marquee2 25s linear infinite;
-      }
+    /* --- 2. BASE GLOBAL --- */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #F8FAFC;
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-      .animate-marquee:hover,
-      .animate-marquee2:hover {
-        animation-play-state: paused;
-      }
+    h1, h2, h3, h4 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: -0.02em;
+    }
 
-      @keyframes floatSlow {
-        0% {
-          transform: translateY(0px);
-        }
-        50% {
-          transform: translateY(100px);
-        }
-        100% {
-          transform: translateY(0px);
-        }
-      }
+    .logo-font {
+      font-family: 'Orbitron', sans-serif;
+    }
 
-      .line-anim {
-        animation: floatSlow 12s ease-in-out infinite;
-      }
+    /* --- SCROLLBAR LILA --- */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #F8FAFC; }
+    ::-webkit-scrollbar-thumb { background: #C084FC; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: #A855F7; }
 
-      .glass-panel {
-        background: rgba(255, 255, 255, 0.7);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(226, 232, 240, 0.8);
-      }
+    /* --- 3. REVEAL ANIMATIONS (INTOCABLES) --- */
+    .reveal,
+    .reveal-left,
+    .reveal-right {
+      opacity: 0;
+      filter: blur(10px);
+      will-change: transform, opacity, filter;
+      transition:
+        opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+        transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+        filter 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .reveal { transform: translateY(50px) scale(0.98); }
+    .reveal-left { transform: translateX(-60px); }
+    .reveal-right { transform: translateX(60px); }
+    .reveal.active,
+    .reveal-left.active,
+    .reveal-right.active {
+      opacity: 1;
+      transform: translate(0) scale(1);
+      filter: blur(0);
+    }
+    .delay-100 { transition-delay: 100ms; }
+    .delay-200 { transition-delay: 200ms; }
+    .delay-300 { transition-delay: 300ms; }
+    .delay-400 { transition-delay: 400ms; }
+    .delay-500 { transition-delay: 500ms; }
 
-      /* Gráfica animada simulada */
-      @keyframes dash {
-        to {
-          stroke-dashoffset: 0;
-        }
-      }
-      .path-anim {
-        stroke-dasharray: 1000;
-        stroke-dashoffset: 1000;
-        animation: dash 3s ease-in-out forwards;
-      }
+    /* --- 4. GLASSMORPHISM NAV --- */
+    .glass-nav {
+      background: rgba(255, 255, 255, 0.80);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(168, 85, 247, 0.12);
+    }
 
-      /* --- 11. CONSULTAS TECNICAS --- */
+    /* --- 5. TARJETAS GLASS --- */
+    .card-glass {
+      background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(255,255,255,0.4));
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(168, 85, 247, 0.12);
+      border-radius: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    .card-glass:hover {
+      box-shadow: 0 20px 50px -10px rgba(168, 85, 247, 0.15);
+      transform: translateY(-5px);
+      border-color: rgba(168, 85, 247, 0.25);
+    }
 
-      .card-tech {
-        background: linear-gradient(135deg, #ffffff, #f1f5f9);
-        border: 1px solid rgba(0, 0, 0, 0.08);
-        padding: 2rem;
-        border-radius: 1.5rem;
-        transition: all 0.35s ease;
-        position: relative;
-        overflow: hidden;
-        cursor: pointer;
-      }
+    /* --- 6. TARJETAS LIGHT (versión lila) --- */
+    .card-light {
+      background: white;
+      border: 1px solid rgba(168, 85, 247, 0.1);
+      border-radius: 1.5rem;
+      transition: all 0.3s ease;
+    }
+    .card-light:hover {
+      box-shadow: 0 20px 40px -10px rgba(168, 85, 247, 0.12);
+      transform: translateY(-5px);
+    }
 
-      .card-tech:hover {
-        transform: translateY(-12px) scale(1.05);
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
-      }
+    /* --- 7. BOTONES PREMIUM (del remasterizado) --- */
+    .btn-primary {
+      background: linear-gradient(135deg, #C084FC 0%, #A855F7 100%);
+      color: white;
+      border-radius: 999px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(168, 85, 247, 0.45);
+    }
 
-      .card-tech::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(
-          circle at var(--x, 50%) var(--y, 50%),
-          rgba(6, 182, 212, 0.6),
-          transparent 50%
-        );
-        opacity: 0;
-        transition: 0.2s;
-      }
+    .btn-outline {
+      border: 1.5px solid rgba(168, 85, 247, 0.3);
+      color: #A855F7;
+      border-radius: 999px;
+      transition: all 0.3s ease;
+    }
+    .btn-outline:hover {
+      border-color: #A855F7;
+      background: rgba(168, 85, 247, 0.05);
+    }
 
-      .card-tech:hover::before {
-        opacity: 1;
-      }
+    /* --- 8. MARQUEE --- */
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
+    }
+    @keyframes marquee2 {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(0%); }
+    }
+    .animate-marquee { animation: marquee 25s linear infinite; }
+    .animate-marquee2 { animation: marquee2 25s linear infinite; }
+    .animate-marquee:hover,
+    .animate-marquee2:hover { animation-play-state: paused; }
 
-      .card-tech::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 1.5rem;
-        border: 2px solid transparent;
-        background: linear-gradient(120deg, #06b6d4, #3b82f6, #06b6d4)
-          border-box;
-        -webkit-mask:
-          linear-gradient(#fff 0 0) padding-box,
-          linear-gradient(#fff 0 0);
-        mask:
-          linear-gradient(#fff 0 0) padding-box,
-          linear-gradient(#fff 0 0);
+    /* --- 9. LINE ANIM --- */
+    @keyframes floatSlow {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(100px); }
+      100% { transform: translateY(0px); }
+    }
+    .line-anim { animation: floatSlow 12s ease-in-out infinite; }
 
-        -webkit-mask-composite: destination-out;
-        mask-composite: exclude;
+    /* --- 10. GRÁFICA PATH ANIMATION --- */
+    @keyframes dash {
+      to { stroke-dashoffset: 0; }
+    }
+    .path-anim {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: dash 3s ease-in-out forwards;
+    }
 
-        opacity: 0;
-        transition: 0.3s;
-      }
+    /* --- 11. TARJETAS TÉCNICAS (card-tech con aura lila) --- */
+    .card-tech {
+      background: linear-gradient(135deg, #ffffff, #faf5ff);
+      border: 1px solid rgba(168, 85, 247, 0.1);
+      padding: 2rem;
+      border-radius: 1.5rem;
+      transition: all 0.35s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .card-tech:hover {
+      transform: translateY(-12px) scale(1.05);
+      box-shadow: 0 25px 60px rgba(168, 85, 247, 0.18);
+    }
+    .card-tech::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(
+        circle at var(--x, 50%) var(--y, 50%),
+        rgba(168, 85, 247, 0.5),
+        transparent 50%
+      );
+      opacity: 0;
+      transition: 0.2s;
+    }
+    .card-tech:hover::before { opacity: 1; }
+    .card-tech::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 1.5rem;
+      border: 2px solid transparent;
+      background: linear-gradient(120deg, #A855F7, #56D7FD, #A855F7) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: destination-out;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: 0.3s;
+    }
+    .card-tech:hover::after { opacity: 1; }
 
-      .card-tech:hover::after {
-        opacity: 1;
-      }
+    /* --- 12. FORM --- */
+    .form-pro {
+      width: 100%;
+      padding: 0.9rem 1.2rem;
+      border-radius: 0.75rem;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      transition: all 0.25s ease;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+    }
+    .form-pro:focus {
+      border-color: #A855F7;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12);
+    }
 
-      /* --- FONDO ONDAS SUAVE --- */
-      #bg-waves {
-        position: absolute;
-        inset: 0;
-        z-index: 0;
-        overflow: hidden;
-      }
+    .btn-contacto {
+      width: 100%;
+      background: linear-gradient(135deg, #C084FC, #A855F7);
+      color: white;
+      font-weight: bold;
+      padding: 0.9rem;
+      border-radius: 0.75rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
+    }
+    .btn-contacto:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(168, 85, 247, 0.35);
+    }
+    .btn-contacto:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
 
-      /* capas */
-      #bg-waves::before,
-      #bg-waves::after {
-        content: "";
-        position: absolute;
-        width: 150%;
-        height: 150%;
-        top: -25%;
-        left: -25%;
-        border-radius: 50%;
-        filter: blur(60px);
-      }
+    /* --- 13. FOOTER --- */
+    .footer-title {
+      font-size: 0.7rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 1.5rem;
+      color: #56D7FD;
+      border-bottom: 1px solid rgba(86, 215, 253, 0.2);
+      width: fit-content;
+      padding-bottom: 4px;
+    }
+    .footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-size: 0.875rem;
+      color: #94a3b8;
+    }
+    .footer-links a,
+    .footer-links span { transition: 0.3s; cursor: pointer; }
+    .footer-links a:hover,
+    .footer-links span:hover {
+      color: #A855F7;
+      transform: translateX(5px);
+      display: inline-block;
+    }
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      transition: all 0.3s ease;
+    }
+    .social-icon:hover {
+      background: rgba(168, 85, 247, 0.15);
+      border-color: #A855F7;
+      color: #A855F7;
+      transform: translateY(-3px);
+    }
 
-      /* onda 1 */
-      #bg-waves::before {
-        background: radial-gradient(
-          circle,
-          rgba(6, 182, 212, 0.35),
-          transparent 60%
-        );
-        animation: waveFloat 10s ease-in-out infinite;
-      }
+    /* --- 14. FONDO ONDAS (colores lila) --- */
+    #bg-waves::before {
+      background: radial-gradient(circle, rgba(168, 85, 247, 0.25), transparent 60%);
+      animation: waveFloat 10s ease-in-out infinite;
+    }
+    #bg-waves::after {
+      background: radial-gradient(circle, rgba(86, 215, 253, 0.2), transparent 60%);
+      animation: waveFloatReverse 14s ease-in-out infinite;
+    }
+    #bg-waves {
+      position: absolute; inset: 0; z-index: 0; overflow: hidden;
+    }
+    #bg-waves::before, #bg-waves::after {
+      content: "";
+      position: absolute;
+      width: 150%; height: 150%;
+      top: -25%; left: -25%;
+      border-radius: 50%;
+      filter: blur(60px);
+    }
+    @keyframes waveFloat {
+      0% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(40px, 60px) scale(1.2); }
+      100% { transform: translate(0px, 0px) scale(1); }
+    }
+    @keyframes waveFloatReverse {
+      0% { transform: translate(0px, 0px) scale(1); }
+      50% { transform: translate(-50px, -40px) scale(1.3); }
+      100% { transform: translate(0px, 0px) scale(1); }
+    }
 
-      /* onda 2 */
-      #bg-waves::after {
-        background: radial-gradient(
-          circle,
-          rgba(59, 130, 246, 0.3),
-          transparent 60%
-        );
-        animation: waveFloatReverse 14s ease-in-out infinite;
-      }
-
-      /* animaciones suaves */
-      @keyframes waveFloat {
-        0% {
-          transform: translate(0px, 0px) scale(1);
-        }
-        50% {
-          transform: translate(40px, 60px) scale(1.2);
-        }
-        100% {
-          transform: translate(0px, 0px) scale(1);
-        }
-      }
-
-      @keyframes waveFloatReverse {
-        0% {
-          transform: translate(0px, 0px) scale(1);
-        }
-        50% {
-          transform: translate(-50px, -40px) scale(1.3);
-        }
-        100% {
-          transform: translate(0px, 0px) scale(1);
-        }
-      }
-
-      /* --- FOOTER --- */
-
-      .footer-title {
-        font-size: 0.75rem;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 0.2em;
-        margin-bottom: 2rem;
-        border-bottom: 2px solid #06b6d4;
-        width: fit-content;
-        padding-bottom: 4px;
-      }
-
-      .footer-links {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        font-size: 0.9rem;
-        color: #94a3b8;
-      }
-
-      .footer-links a,
-      .footer-links span {
-        transition: 0.3s;
-        cursor: pointer;
-      }
-
-      .footer-links a:hover,
-      .footer-links span:hover {
-        color: #22d3ee;
-        transform: translateX(5px);
-      }
-
-      /* iconos sociales */
-      .social-icon {
-        width: 40px;
-        height: 40px;
-        background: #0f172a;
-        border: 1px solid #1e293b;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #94a3b8;
-        transition: all 0.3s ease;
-      }
-
-      .social-icon:hover {
-        background: #06b6d4;
-        border-color: #06b6d4;
-        color: white;
-        transform: translateY(-3px);
-      }
-      .form-pro {
-        width: 100%;
-        padding: 0.9rem 1.2rem;
-        border-radius: 0.75rem;
-        border: 1px solid #e2e8f0;
-        background: #f8fafc;
-        transition: all 0.25s ease;
-        outline: none;
-      }
-
-      .btn-contacto {
-        width: 100%;
-        background: linear-gradient(135deg, #06b6d4, #3b82f6);
-        color: white;
-        font-weight: bold;
-        padding: 0.9rem;
-        border-radius: 0.75rem;
-        transition: 0.3s;
-      }
-
-      .btn-contacto:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-      }
-
-      .form-pro:focus {
-        border-color: #06b6d4;
-        background: white;
-        box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
-      }
-
-      .btn-contacto {
-        width: 100%;
-        background: linear-gradient(135deg, #06b6d4, #3b82f6);
-        color: white;
-        font-weight: bold;
-        padding: 0.9rem;
-        border-radius: 0.75rem;
-        transition: all 0.3s ease;
-      }
-
-      .btn-contacto:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(6, 182, 212, 0.3);
-      }
-
-      /* === EFECTO MAQUINA DE ESCRIBIR === */
-
-      .hero-typewriter-container {
-        display: table;
-        line-height: 1.2;
-        margin-bottom: 0.4rem;
-      }
-
+    /* --- 15. TYPEWRITER HERO (intocable) --- */
+    .hero-typewriter-container {
+      display: table;
+      line-height: 1.2;
+      margin-bottom: 0.4rem;
+    }
+    .hero-typewriter {
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 4px solid transparent;
+      width: 0;
+      opacity: 0;
+      vertical-align: bottom;
+      padding-bottom: 0.15em;
+      margin-bottom: -0.15em;
+    }
+    .active .line-1 {
+      opacity: 1;
+      border-right-color: #A855F7;
+      animation:
+        typing-hero 1.2s steps(20, end) forwards,
+        blink-hero 0.7s step-end 3,
+        hide-cursor 0s linear forwards;
+      animation-delay: 0.2s, 0.2s, 1.4s;
+    }
+    .active .line-2 {
+      opacity: 1;
+      animation:
+        typing-hero 1.2s steps(20, end) forwards,
+        show-cursor-lilac 0s linear forwards,
+        blink-hero 0.7s step-end 5,
+        hide-cursor 0s linear forwards;
+      animation-delay: 1.5s, 1.5s, 1.5s, 4.5s;
+    }
+    .delay-reveal-final { transition-delay: 3s !important; }
+    @keyframes show-cursor-lilac { to { border-right-color: #A855F7; } }
+    @keyframes typing-hero { from { width: 0; } to { width: 100%; } }
+    @keyframes blink-hero {
+      from, to { border-color: transparent; }
+      50% { border-color: #A855F7; }
+    }
+    @keyframes hide-cursor { to { border-right-color: transparent; } }
+    @media (max-width: 768px) {
       .hero-typewriter {
-        display: inline-block;
-        overflow: hidden;
-        white-space: nowrap;
-        border-right: 4px solid transparent;
-        width: 0;
-        opacity: 0;
-        vertical-align: bottom;
-        padding-bottom: 0.15em;
-        margin-bottom: -0.15em;
-      }
-
-      .active .line-1 {
+        white-space: normal;
+        border-right: none;
+        width: auto;
         opacity: 1;
-        border-right-color: #3b82f6;
-        animation:
-          typing-hero 1.2s steps(20, end) forwards,
-          blink-hero 0.7s step-end 3,
-          hide-cursor 0s linear forwards;
-        animation-delay: 0.2s, 0.2s, 1.4s;
+        display: block;
+        animation: none !important;
       }
+    }
 
-      .active .line-2 {
-        opacity: 1;
-        animation:
-          typing-hero 1.2s steps(20, end) forwards,
-          show-cursor-blue 0s linear forwards,
-          blink-hero 0.7s step-end 5,
-          hide-cursor 0s linear forwards;
-        animation-delay: 1.5s, 1.5s, 1.5s, 4.5s;
-      }
+    /* --- 16. GLASS PANEL --- */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(168, 85, 247, 0.1);
+    }
+  </style>
+</head>
 
-      .delay-reveal-final {
-        transition-delay: 3s !important;
-      }
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
-      @keyframes show-cursor-blue {
-        to {
-          border-right-color: #3b82f6;
-        }
-      }
+<body class="overflow-x-hidden">
 
-      @keyframes typing-hero {
-        from {
-          width: 0;
-        }
-        to {
-          width: 100%;
-        }
-      }
+<!-- BARRA DE NAVEGACIÓN -->
 
-      @keyframes blink-hero {
-        from,
-        to {
-          border-color: transparent;
-        }
-        50% {
-          border-color: #3b82f6;
-        }
-      }
+<nav
+  id="navbar"
+  class="fixed w-full z-50 glass-nav transition-all duration-500 will-change-transform"
+>
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex justify-between items-center h-16">
 
-      @keyframes hide-cursor {
-        to {
-          border-right-color: transparent;
-        }
-      }
-      /* Ajuste para móviles: quitamos el efecto para que no se rompa el texto */
-      @media (max-width: 768px) {
-        .hero-typewriter {
-          white-space: normal;
-          border-right: none;
-          width: auto;
-          opacity: 1;
-          display: block;
-          animation: none !important;
-        }
-      }
-    </style>
-  </head>
+      <!-- LOGO -->
+      <a class="flex items-center gap-2 group" href="index.html">
+        <img
+          src="assets/logo/logo_cara.png"
+          class="h-9 w-auto object-contain"
+          alt="HydroTrace Logo"
+        />
+        <img
+          src="assets/logo/logo_letras.png"
+          class="h-6 w-auto object-contain"
+          alt="HydroTrace"
+        />
+      </a>
 
-  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+      <!-- NAV LINKS -->
+      <div class="hidden md:flex items-center space-x-8 text-[11px] font-display font-semibold uppercase tracking-wider text-slate-600">
 
-  <body class="overflow-x-hidden">
-    <!-- BARRA DE NAVEGACIÓN -->
+        <a href="#problematica" class="hover:text-lilac transition-colors duration-300">
+          Reto
+        </a>
 
-    <nav
-      id="navbar"
-      class="fixed w-full z-50 backdrop-blur-md border-b border-gray-200 bg-white transition-all duration-700 ease-[cubic-bezier(0.2,0.8,0.2,1)] will-change-transform"
-    >
-      <div class="max-w-7xl mx-auto px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-          <!-- LOGO MÁS COMPACTO -->
-          <a class="flex items-center gap-2 group" href="index.html">
-            <img
-              src="assets/logo/logo_cara.png"
-              class="h-9 w-auto object-contain"
-            />
-            <img
-              src="assets/logo/logo_letras.png"
-              class="h-6 w-auto object-contain"
-            />
+        <a href="#tecnologia" class="hover:text-lilac transition-colors duration-300">
+          Tecnología
+        </a>
+
+        <a href="#dashboard" class="hover:text-lilac transition-colors duration-300">
+          Demo
+        </a>
+
+        <a href="#negocio" class="hover:text-lilac transition-colors duration-300">
+          Negocio
+        </a>
+
+        <a href="#contacto" class="hover:text-lilac transition-colors duration-300">
+          Contacto
+        </a>
+
+        <!-- BOTONES -->
+        <div class="flex gap-3 border-l border-slate-200 pl-6">
+
+          <a
+            href="/dashboard-clientes"
+            target="_blank"
+            class="px-4 py-1.5 rounded-full btn-outline text-[11px] font-display font-bold tracking-wide"
+          >
+            Portal
           </a>
 
-          <!-- NAV -->
-          <div
-            class="hidden md:flex items-center space-x-8 text-[10px] font-bold uppercase tracking-[0.12em]"
+          <a
+            href="/dashboard-admin"
+            class="px-5 py-1.5 rounded-full btn-primary text-[11px] font-display font-bold tracking-wide"
           >
-            <a
-              href="#problematica"
-              class="text-gray-700 hover:text-blue-700 transition-colors duration-300"
-              >Reto</a
-            >
-            <a
-              href="#tecnologia"
-              class="text-gray-700 hover:text-blue-700 transition-colors duration-300"
-              >Tecnología</a
-            >
-            <a
-              href="#negocio"
-              class="text-gray-700 hover:text-blue-700 transition-colors duration-300"
-              >Negocio</a
-            >
-            <a
-              href="#blog"
-              class="text-gray-700 hover:text-blue-700 transition-colors duration-300"
-              >Noticias</a
-            >
-            <a
-              href="#nosotros"
-              class="text-gray-700 hover:text-blue-700 transition-colors duration-300"
-              >Nosotros</a
-            >
+            Admin
+          </a>
 
-            <div class="flex gap-3 border-l border-gray-200 pl-6">
-              <a
-                href="/dashboard-clientes"
-                target="_blank"
-                class="px-3 py-1.5 rounded-full border border-blue-600 text-blue-600 hover:bg-blue-50 transition-all text-[10px]"
-              >
-                Portal
-              </a>
-
-              <a
-                href="/dashboard-admin"
-                class="px-4 py-1.5 rounded-full bg-[#FF8C00] text-white hover:bg-orange-600 transition-all duration-300 font-bold text-[10px] shadow-md"
-              >
-                Admin
-              </a>
-            </div>
-          </div>
         </div>
       </div>
-    </nav>
 
-    <!-- INICIO-->
+    </div>
+  </div>
+</nav>
 
-    <section
-      id="inicio"
-      class="relative min-h-screen flex items-center justify-center overflow-hidden bg-white"
+<!-- INICIO -->
+
+<section
+  id="inicio"
+  class="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#F8FAFC]"
+>
+  <!-- Destellos de fondo -->
+<div class="absolute inset-0 z-0">
+
+  <!-- Burbuja lila -->
+  <div
+    class="absolute top-[-15%] left-[-10%] w-[75%] h-[75%] bg-[#D9D4FF]/40 rounded-full blur-[140px] animate-pulse"
+  ></div>
+
+  <!-- Burbuja cálida -->
+  <div
+    class="absolute bottom-[-15%] right-[-10%] w-[70%] h-[70%] bg-[#FFF0D4]/60 rounded-full blur-[140px] animate-pulse"
+    style="animation-delay: 2s"
+  ></div>
+
+  <!-- Burbuja cyan -->
+  <div
+    class="absolute top-[30%] right-[10%] w-[45%] h-[45%] bg-[#B3E5FC]/45 rounded-full blur-[120px] animate-pulse"
+    style="animation-delay: 4s"
+  ></div>
+
+  <!-- Grid sutil -->
+  <div
+    class="absolute inset-0 opacity-[0.045]"
+    style="
+      background-image: radial-gradient(#94a3b8 0.8px, transparent 0.8px);
+      background-size: 40px 40px;
+    "
+  ></div>
+
+</div>
+
+  <div class="max-w-7xl mx-auto px-6 relative z-10 w-full pt-16">
+    <div class="grid lg:grid-cols-2 gap-12 items-center">
+
+      <!-- Lado Izquierdo -->
+      <div class="text-left">
+        <p
+          class="text-[#2F6BFF] drop-shadow-[0_0_10px_rgba(47,107,255,0.35)] font-display font-bold tracking-[0.25em] uppercase mb-4 text-xs reveal-left delay-100"
+        >
+          Desarrollado por PumaScript Solutions
+        </p>
+
+        <h1
+          class="text-5xl md:text-7xl font-bold mb-6 leading-[1.1] text-slate-900 reveal active"
+        >
+          <!-- Línea 1 -->
+          <span class="hero-typewriter-container">
+            <span class="hero-typewriter line-1">Sabes que se</span>
+          </span>
+
+          <!-- Línea 2 -->
+          <span class="hero-typewriter-container">
+            <span class="hero-typewriter line-2">pierde agua.</span>
+          </span>
+
+          <!-- Línea final con delay -->
+          <span
+            class="block text-transparent bg-clip-text bg-gradient-to-r from-lilac to-cyan italic pr-4 reveal delay-reveal-final"
+          >
+            Ahora puedes saber dónde.
+          </span>
+        </h1>
+
+        <p
+          class="text-lg text-slate-600 max-w-xl mb-10 leading-relaxed reveal-left delay-300"
+        >
+          HydroTrace AI cruza los datos de consumo, población y reportes
+          para mostrarte qué zonas están fallando <br />
+          — y cuánto te está costando cada día que pasa.
+        </p>
+
+        <div class="reveal-left delay-500">
+          <div class="flex flex-col sm:flex-row gap-4 mb-10">
+
+  <a
+    href="#contacto"
+    class="inline-flex items-center justify-center gap-2 btn-primary px-8 py-3.5 font-display font-semibold text-sm"
+  >
+    Solicitar demo gratuita
+
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
     >
-      <div class="absolute inset-0 z-0">
-        <div
-          class="absolute top-[-15%] left-[-15%] w-[80%] h-[80%] bg-cyan-400/25 rounded-full blur-[130px] animate-pulse"
-        ></div>
+      <path
+        d="M5 12H19M19 12L12 5M19 12L12 19"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </a>
 
-        <div
-          class="absolute bottom-[-15%] right-[-15%] w-[80%] h-[80%] bg-orange-400/25 rounded-full blur-[130px] animate-pulse"
-          style="animation-delay: 2s"
-        ></div>
+  <a
+    href="#tecnologia"
+    class="inline-flex items-center justify-center gap-2 btn-outline px-8 py-3.5 font-display font-semibold text-sm"
+  >
+    Cómo funciona
 
-        <div
-          class="absolute inset-0 opacity-[0.07]"
-          style="
-            background-image: radial-gradient(#64748b 0.8px, transparent 0.8px);
-            background-size: 40px 40px;
-          "
-        ></div>
-      </div>
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M5 12H19M19 12L12 5M19 12L12 19"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </a>
 
-      <div class="max-w-7xl mx-auto px-6 relative z-10 w-full">
-        <div class="grid lg:grid-cols-2 gap-12 items-center">
-          <!-- Lado Izquierdo -->
-          <div class="text-left">
-            <p
-              class="text-cyan-600 font-bold tracking-[0.3em] uppercase mb-4 text-sm reveal-left delay-100"
-            >
-              Desarrollado por PumaScript Solutions
-            </p>
-
-            <h1
-              class="text-5xl md:text-7xl font-black mb-6 leading-[1.1] text-slate-900 reveal active"
-            >
-              <!-- Línea 1 -->
-              <span class="hero-typewriter-container">
-                <span class="hero-typewriter line-1">Sabes que se</span>
-              </span>
-
-              <!-- Línea 2 -->
-              <span class="hero-typewriter-container">
-                <span class="hero-typewriter line-2">pierde agua.</span>
-              </span>
-
-              <!-- Línea final: Ahora con delay-reveal-final para que espere al tecleado -->
-              <span
-                class="block text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-fuchsia-600 italic pr-4 reveal delay-reveal-final"
-              >
-                Ahora puedes saber dónde.
-              </span>
-            </h1>
-
-            <p
-              class="text-lg text-slate-600 max-w-xl mb-10 leading-relaxed reveal-left delay-300"
-            >
-              HydroTrace AI cruza los datos de consumo, población y reportes
-              para mostrarte qué zonas están fallando <br />
-              — y cuánto te está costando cada día que pasa.
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-6 reveal-left delay-500">
-              <a
-                href="#problematica"
-                class="bg-cyan-500 text-white font-black px-8 py-4 rounded-xl hover:scale-105 transition-all shadow-xl shadow-cyan-500/20 text-center"
-              >
-                CONÓCENOS
-              </a>
-            </div>
-          </div>
-
-          <!-- Lado Derecho -->
-          <div
-            class="hidden lg:flex justify-center items-center reveal delay-300"
-          >
-            <lottie-player
-              src="assets/animaciones/data_analysis.json"
-              background="transparent"
-              speed="1"
-              style="width: 550px; height: 550px"
-              loop
-              autoplay
-              class="drop-shadow-2xl"
-            >
-            </lottie-player>
-          </div>
+</div>
         </div>
       </div>
-    </section>
 
-    <!-- MARQUEE (pegado al inicio) -->
+      <!-- Lado Derecho: Lottie -->
+      <div class="hidden lg:flex justify-center items-center reveal delay-300">
+        <div class="relative">
+          <div class="absolute inset-0 bg-gradient-to-br from-cyan/20 to-lilac/10 rounded-full blur-3xl scale-110 opacity-60"></div>
+          <lottie-player
+            src="assets/animaciones/data_analysis.json"
+            background="transparent"
+            speed="1"
+            style="width: 550px; height: 550px"
+            loop
+            autoplay
+            class="relative z-10 drop-shadow-xl"
+          >
+          </lottie-player>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE HERO -->
+<div class="absolute bottom-0 left-0 w-full z-20 overflow-hidden">
+
+  <div class="relative flex overflow-x-hidden py-4 bg-white/70 backdrop-blur-xl border-y border-lilac/10">
+
+    <!-- fades -->
+    <div class="pointer-events-none absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-[#F8FAFC] to-transparent z-10"></div>
+    <div class="pointer-events-none absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-[#F8FAFC] to-transparent z-10"></div>
+
+    <!-- línea 1 -->
+    <div class="animate-marquee whitespace-nowrap flex items-center">
+
+      <span class="mx-8 text-[11px] font-display font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-slate-500">
+        <span class="text-lilac">◆</span> Detección de fugas
+      </span>
+
+      <span class="mx-8 text-[11px] font-display font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-slate-500">
+        <span class="text-lilac">◆</span> Datos unificados
+      </span>
+
+      <span class="mx-8 text-[11px] font-display font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-slate-500">
+        <span class="text-lilac">◆</span> Zonas críticas
+      </span>
+
+      <span class="mx-8 text-[11px] font-display font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-slate-500">
+        <span class="text-lilac">◆</span> Reducción de pérdidas
+      </span>
+
+      <span class="mx-8 text-[11px] font-display font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-slate-500">
+        <span class="text-lilac">◆</span> Control de tomas ilegales
+      </span>
+
+    </div>
+
+    <!-- línea 2 -->
+    <div class="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center py-4">
+
+      <span class="mx-8 text-[11px] font-display font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-slate-500">
+        <span class="text-lilac">◆</span> Priorización por impacto
+      </span>
+
+      <span class="mx-8 text-[11px] font-display font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-slate-500">
+        <span class="text-lilac">◆</span> Modelos predictivos
+      </span>
+
+      <span class="mx-8 text-[11px] font-display font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-slate-500">
+        <span class="text-lilac">◆</span> Decisiones operativas
+      </span>
+
+      <span class="mx-8 text-[11px] font-display font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-slate-500">
+        <span class="text-lilac">◆</span> Monitoreo en tiempo real
+      </span>
+
+      <span class="mx-8 text-[11px] font-display font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-slate-500">
+        <span class="text-lilac">◆</span> Plataforma SaaS
+      </span>
+
+    </div>
+
+  </div>
+</div>
+
+<!-- PROBLEMÁTICA -->
+
+<section id="problematica" class="relative py-36 overflow-hidden bg-[#FBFCFE] px-6">
+
+  <!-- Fondo -->
+  <div class="absolute inset-0 pointer-events-none">
+
+    <div class="absolute top-[-10%] left-[-10%] w-[45%] h-[45%] bg-lilac/10 rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-cyan/10 rounded-full blur-[120px]"></div>
 
     <div
-      class="absolute bottom-0 left-0 w-full z-20 flex overflow-x-hidden py-5 bg-white/80 backdrop-blur-md border-t border-slate-100"
-    >
-      <div
-        class="pointer-events-none absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-white to-transparent z-10"
-      ></div>
-      <div
-        class="pointer-events-none absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10"
-      ></div>
-
-      <!-- LÍNEA 1 -->
-      <div class="animate-marquee whitespace-nowrap flex items-center">
-        <span
-          class="mx-8 text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-slate-800"
-        >
-          <i class="lni lni-pulse text-cyan-500"></i> Detección de fugas
-        </span>
-
-        <span
-          class="mx-8 text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-slate-800"
-        >
-          <i class="lni lni-database text-cyan-500"></i> Datos unificados
-        </span>
-
-        <span
-          class="mx-8 text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-slate-800"
-        >
-          <i class="lni lni-map-marker text-cyan-500"></i> Zonas críticas
-        </span>
-
-        <span
-          class="mx-8 text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-slate-800"
-        >
-          <i class="lni lni-drop text-cyan-500"></i> Reducción de pérdidas
-        </span>
-
-        <span
-          class="mx-8 text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-slate-800"
-        >
-          <i class="lni lni-shield text-cyan-500"></i> Control de tomas ilegales
-        </span>
-      </div>
-
-      <!-- LÍNEA 2 -->
-      <div
-        class="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center py-5"
-      >
-        <span
-          class="mx-8 text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-slate-800"
-        >
-          <i class="lni lni-pulse text-cyan-500"></i> Priorización por impacto
-        </span>
-
-        <span
-          class="mx-8 text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-slate-800"
-        >
-          <i class="lni lni-database text-cyan-500"></i> Modelos predictivos
-        </span>
-
-        <span
-          class="mx-8 text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-slate-800"
-        >
-          <i class="lni lni-map-marker text-cyan-500"></i> Decisiones operativas
-        </span>
-
-        <span
-          class="mx-8 text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-slate-800"
-        >
-          <i class="lni lni-drop text-cyan-500"></i> Monitoreo en tiempo real
-        </span>
-
-        <span
-          class="mx-8 text-sm font-bold uppercase tracking-widest flex items-center gap-2 text-slate-800"
-        >
-          <i class="lni lni-shield text-cyan-500"></i> Plataforma SaaS
-        </span>
-      </div>
+      class="absolute inset-0 opacity-[0.03]"
+      style="
+        background-image: radial-gradient(#94a3b8 .8px, transparent .8px);
+        background-size: 42px 42px;
+      ">
     </div>
 
-    <!-- PROBLEMATICA -->
+  </div>
 
-    <section id="problematica" class="py-32 bg-white px-6">
-      <div class="max-w-7xl mx-auto">
-        <!-- HEADER -->
-        <div class="mb-20 reveal">
-          <p
-            class="text-cyan-600 font-bold tracking-[0.3em] uppercase mb-4 text-xs"
-          >
-            El desafío actual
-          </p>
+  <div class="max-w-7xl mx-auto relative z-10">
 
-          <h2
-            class="text-4xl md:text-5xl font-black text-slate-900 leading-tight"
-          >
-            <span class="font-normal italic"> No es el agua. </span>
-            <br />
-            <span
-              class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-700 to-blue-800"
-            >
-              — Es la falta de claridad para tomar decisiones.
-            </span>
-          </h2>
-        </div>
+    <!-- HEADER -->
+    <div class="mb-24 reveal text-center max-w-4xl mx-auto">
 
-        <div class="grid lg:grid-cols-2 gap-16 items-start">
-          <!-- TIMELINE -->
-          <div class="relative space-y-14">
-            <!-- línea vertical -->
-            <div
-              class="absolute left-[27px] top-4 bottom-4 w-[2px] bg-slate-100 z-0"
-            ></div>
+      <p class="text-lilac font-display font-bold tracking-[0.3em] uppercase mb-4 text-xs">
+        El desafío actual
+      </p>
 
-            <!-- ITEM 1 -->
-            <div class="relative z-10 flex gap-6 group reveal-left">
-              <div
-                class="w-14 h-14 shrink-0 bg-cyan-500 shadow-lg shadow-cyan-200 rounded-full flex items-center justify-center text-white text-sm font-bold tracking-wide group-hover:scale-110 transition-transform"
-              >
-                01
-              </div>
-              <div>
-                <h4
-                  class="font-black text-slate-900 text-sm uppercase tracking-tight mb-2"
-                >
-                  Fugas y extracciones ocultas
-                </h4>
-                <p class="text-slate-500 text-xs leading-relaxed max-w-md">
-                  Pérdidas físicas y consumo irregular que no aparecen en los
-                  sistemas actuales.
-                </p>
-              </div>
-            </div>
+      <h2 class="text-4xl md:text-6xl font-display font-bold text-slate-900 leading-[1.1]">
 
-            <!-- ITEM 2 -->
-            <div class="relative z-10 flex gap-6 group reveal-left delay-100">
-              <div
-                class="w-14 h-14 shrink-0 bg-blue-600 shadow-lg shadow-blue-200 rounded-full flex items-center justify-center text-white text-sm font-bold tracking-wide group-hover:scale-110 transition-transform"
-              >
-                02
-              </div>
-              <div>
-                <h4
-                  class="font-black text-slate-900 text-sm uppercase tracking-tight mb-2"
-                >
-                  Reacción tardía
-                </h4>
-                <p class="text-slate-500 text-xs leading-relaxed max-w-md">
-                  Se actúa cuando el problema ya es visible y el costo ya se
-                  acumuló.
-                </p>
-              </div>
-            </div>
+        <span class="text-slate-900 font-medium">
+          No es el agua.
+        </span>
 
-            <!-- ITEM 3 -->
-            <div class="relative z-10 flex gap-6 group reveal-left delay-200">
-              <div
-                class="w-14 h-14 shrink-0 bg-indigo-400 shadow-lg shadow-indigo-100 rounded-full flex items-center justify-center text-white text-sm font-bold tracking-wide group-hover:scale-110 transition-transform"
-              >
-                03
-              </div>
-              <div>
-                <h4
-                  class="font-black text-slate-900 text-sm uppercase tracking-tight mb-2"
-                >
-                  Información desconectada
-                </h4>
-                <p class="text-slate-500 text-xs leading-relaxed max-w-md">
-                  Datos dispersos que no se cruzan ni generan decisiones útiles.
-                </p>
-              </div>
-            </div>
+        <br>
 
-            <!-- ITEM 4 -->
-            <div class="relative z-10 flex gap-6 group reveal-left delay-300">
-              <div
-                class="w-14 h-14 shrink-0 bg-purple-600 shadow-lg shadow-purple-200 rounded-full flex items-center justify-center text-white text-sm font-bold tracking-wide group-hover:scale-110 transition-transform"
-              >
-                04
-              </div>
-              <div>
-                <h4
-                  class="font-black text-slate-900 text-sm uppercase tracking-tight mb-2"
-                >
-                  Prioridad difusa
-                </h4>
-                <p class="text-slate-500 text-xs leading-relaxed max-w-md">
-                  Se interviene sin claridad de impacto ni de dónde se pierde
-                  más dinero.
-                </p>
-              </div>
-            </div>
-          </div>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#6D28D9] to-[#A855F7]">
+          Es perder visibilidad sobre lo que ocurre debajo.
+        </span>
 
-          <!-- MÉTRICAS -->
-          <div class="lg:sticky lg:top-32 space-y-6 reveal-right">
-            <!-- 40% -->
-            <div
-              class="bg-slate-50 rounded-3xl p-8 border border-slate-100 relative overflow-hidden"
-            >
-              <span
-                class="bg-red-100 text-red-600 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-widest"
-              >
-                Falla estructural
-              </span>
+      </h2>
 
-              <div class="text-6xl font-black text-slate-900 mt-4">40%</div>
+    </div>
 
-              <p class="text-slate-600 mt-2 font-medium">
-                Del agua distribuida se pierde antes de facturarse.
-              </p>
-
-              <i
-                class="fas fa-tint absolute -bottom-4 -right-4 text-8xl text-slate-200/50"
-              ></i>
-            </div>
-
-            <!-- GRID -->
-            <div class="grid sm:grid-cols-2 gap-6">
-              <div
-                class="bg-orange-50 rounded-3xl p-8 border border-orange-100"
-              >
-                <p
-                  class="text-orange-400 text-[10px] font-black uppercase tracking-widest mb-2"
-                >
-                  Impacto económico
-                </p>
-
-                <div class="text-4xl font-black text-orange-500">$1.2M</div>
-
-                <p class="text-orange-900/60 text-xs mt-3 leading-relaxed">
-                  Pérdida mensual promedio sin monitoreo.
-                </p>
-              </div>
-
-              <div class="bg-cyan-50 rounded-3xl p-8 border border-cyan-100">
-                <p
-                  class="text-cyan-500 text-[10px] font-black uppercase tracking-widest mb-2"
-                >
-                  Visibilidad
-                </p>
-
-                <div class="text-4xl font-black text-cyan-500">0</div>
-
-                <p class="text-cyan-900/60 text-xs mt-3 leading-relaxed">
-                  Claridad en tiempo real sobre dónde intervenir.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TRANSICIÓN: PROBLEMATICA → TECNOLOGÍA -->
-
-    <div class="relative w-full flex justify-center">
-      <!-- Fade superior  -->
-      <div
-        class="absolute -top-10 w-full h-20 bg-gradient-to-b from-white to-transparent"
-      ></div>
+    <!-- FLOW -->
+    <div class="relative">
 
       <!-- Línea -->
-      <div
-        class="w-40 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-70"
-      ></div>
+      <div class="hidden lg:block absolute left-0 right-0 top-[70px] h-px">
 
-      <!-- Fade inferior  -->
-      <div
-        class="absolute -bottom-10 w-full h-20 bg-gradient-to-t from-cyan-50 to-transparent"
-      ></div>
-    </div>
+        <div class="relative h-full bg-gradient-to-r from-lilac/20 via-cyan/20 to-lilac/20">
 
-    <!-- Tecnología -->
+          <div class="absolute left-[12%] top-1/2 -translate-y-1/2 w-3 h-3 bg-lilac rounded-full animate-pulse"></div>
+          <div class="absolute left-[38%] top-1/2 -translate-y-1/2 w-3 h-3 bg-[#C084FC] rounded-full animate-pulse"></div>
+          <div class="absolute left-[64%] top-1/2 -translate-y-1/2 w-3 h-3 bg-cyan rounded-full animate-pulse"></div>
+          <div class="absolute right-[10%] top-1/2 -translate-y-1/2 w-3 h-3 bg-[#A855F7] rounded-full animate-pulse"></div>
 
-    <section id="tecnologia" class="relative py-40 bg-cyan-50 overflow-hidden">
-      <div class="absolute inset-0 z-0">
-        <div
-          class="absolute w-[600px] h-[600px] border border-cyan-400 rounded-full top-[-200px] left-[-150px] opacity-40 line-anim"
-        ></div>
-        <div
-          class="absolute w-[800px] h-[800px] border border-blue-400 rounded-full top-[20%] right-[-300px] opacity-30 line-anim"
-        ></div>
-        <div
-          class="absolute w-[500px] h-[500px] border border-cyan-300 rounded-full bottom-[-200px] left-[30%] opacity-30 line-anim"
-        ></div>
-        <div
-          class="absolute top-1/2 left-1/2 w-[600px] h-[600px] bg-cyan-200/20 blur-[120px] -translate-x-1/2 -translate-y-1/2 line-anim"
-        ></div>
+        </div>
+
       </div>
 
-      <div class="relative z-10 max-w-6xl mx-auto px-6">
-        <!-- HEADER -->
-        <div class="text-center mb-28 reveal">
-          <h2
-            class="text-xs font-bold tracking-[0.4em] text-cyan-600 uppercase mb-6"
-          >
-            Cómo Funciona
-          </h2>
-          <h3
-            class="text-4xl md:text-6xl font-black text-gray-900 mb-6 leading-tight"
-          >
-            De datos dispersos <br />
-            <span class="text-sky-400"> a una acción concreta </span>
-          </h3>
-          <p class="text-gray-600 text-lg max-w-2xl mx-auto">
-            HydroTrace AI conecta fuentes que antes estaban separadas y
-            convierte ese cruce en alertas operativas útiles.
-          </p>
-        </div>
+      <!-- STEPS -->
+      <div class="grid lg:grid-cols-4 gap-8 relative">
 
-        <!-- PASOS -->
-        <div class="relative">
-          <!-- Línea conectora: decorativa, sin reveal -->
-          <div
-            class="hidden md:block absolute top-10 left-[calc(16.6%)] right-[calc(16.6%)] h-[2px] bg-gradient-to-r from-cyan-400 via-blue-400 to-cyan-400 opacity-40"
-          ></div>
-
-          <div class="grid md:grid-cols-3 gap-0 md:gap-10">
-            <!-- PASO 1 -->
-            <div
-              class="relative flex flex-col items-center text-center px-6 pb-16 md:pb-0 reveal delay-100"
-            >
-              <div
-                class="w-20 h-20 rounded-full bg-white border-2 border-cyan-400 flex items-center justify-center mb-8 shadow-lg shadow-cyan-100 z-10"
-              >
-                <span class="text-3xl font-black text-cyan-500">1</span>
-              </div>
-              <h4 class="text-xl font-bold mb-4 text-gray-900">
-                Conecta tus fuentes
-              </h4>
-              <p class="text-gray-500 text-base leading-relaxed">
-                Consumo registrado, datos de población y reportes ciudadanos en
-                una sola plataforma. Sin integraciones complejas.
-              </p>
-              <div
-                class="md:hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-[2px] h-8 bg-gradient-to-b from-cyan-400 to-transparent"
-              ></div>
-            </div>
-
-            <!-- PASO 2 -->
-            <div
-              class="relative flex flex-col items-center text-center px-6 pb-16 md:pb-0 reveal delay-200"
-            >
-              <div
-                class="w-20 h-20 rounded-full bg-white border-2 border-blue-400 flex items-center justify-center mb-8 shadow-lg shadow-blue-100 z-10"
-              >
-                <span class="text-3xl font-black text-blue-500">2</span>
-              </div>
-              <h4 class="text-xl font-bold mb-4 text-gray-900">
-                Detecta lo que no cuadra
-              </h4>
-              <p class="text-gray-500 text-base leading-relaxed">
-                Los modelos identifican zonas donde el consumo no coincide con
-                lo esperado: señal de fuga, robo o falla técnica.
-              </p>
-              <div
-                class="md:hidden absolute bottom-0 left-1/2 -translate-x-1/2 w-[2px] h-8 bg-gradient-to-b from-blue-400 to-transparent"
-              ></div>
-            </div>
-
-            <!-- PASO 3 -->
-            <div
-              class="relative flex flex-col items-center text-center px-6 reveal delay-300"
-            >
-              <div
-                class="w-20 h-20 rounded-full bg-cyan-500 border-2 border-cyan-500 flex items-center justify-center mb-8 shadow-lg shadow-cyan-200 z-10"
-              >
-                <span class="text-3xl font-black text-white">3</span>
-              </div>
-              <h4 class="text-xl font-bold mb-4">
-                Actúa donde
-                <span class="text-cyan-600">más importa</span>
-              </h4>
-              <p class="text-gray-500 text-base leading-relaxed">
-                El sistema prioriza por impacto económico y operativo — para que
-                tu equipo intervenga primero donde más se pierde.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TRANSICIÓN: TECNOLOGÍA → DASHBOARD INTERACTIVO -->
-
-    <div class="relative w-full flex justify-center">
-      <!-- Fade superior -->
-      <div
-        class="absolute -top-10 w-full h-20 bg-gradient-to-b from-cyan-50 to-transparent"
-      ></div>
-
-      <div
-        class="w-40 h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-70"
-      ></div>
-
-      <!-- Fade inferior -->
-      <div
-        class="absolute -bottom-10 w-full h-20 bg-gradient-to-t from-white to-transparent"
-      ></div>
-    </div>
-
-    <!-- Dashboard interactivo -->
-
-    <section id="dashboard" class="py-24 bg-white px-6">
-      <div class="max-w-7xl mx-auto">
-        <!-- HEADER -->
-        <div class="text-center mb-16 reveal">
-          <h2
-            class="text-xs font-bold tracking-[0.4em] text-blue-600 uppercase mb-4"
-          >
-            Plataforma Operativa
-          </h2>
-          <h3 class="text-4xl font-light text-slate-900 italic">
-            Decisiones en tiempo real sobre
-            <span class="font-bold not-italic">dónde se pierde el agua</span>
-          </h3>
-        </div>
-
-        <!-- El marco del Dashboard -->
-        <div
-          class="bg-white rounded-[2.5rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.25)] border border-slate-200 overflow-hidden flex flex-col md:flex-row h-[700px] reveal delay-200"
-        >
-          <!-- Sidebar -->
-          <aside
-            class="w-20 md:w-24 bg-slate-900 flex flex-col items-center py-10 gap-10"
-          >
-            <div
-              class="w-10 h-10 bg-blue-500 rounded-xl flex items-center justify-center text-white"
-            >
-              <i data-lucide="droplet" class="w-5 h-5"></i>
-            </div>
-            <nav class="flex flex-col gap-8 text-slate-500">
-              <a href="#" class="text-white">
-                <i data-lucide="layout-dashboard" class="w-6 h-6"></i>
-              </a>
-              <a href="#" class="hover:text-white transition-colors">
-                <i data-lucide="map" class="w-6 h-6"></i>
-              </a>
-              <a href="#" class="hover:text-white transition-colors">
-                <i data-lucide="bell" class="w-6 h-6"></i>
-              </a>
-            </nav>
-            <div class="mt-auto">
-              <img
-                src="https://ui-avatars.com/api/?name=Admin&background=3b82f6&color=fff"
-                class="w-10 h-10 rounded-full border-2 border-slate-700"
-              />
-            </div>
-          </aside>
-
-          <main class="flex-1 flex flex-col bg-white overflow-y-auto">
-            <header
-              class="p-8 border-b border-slate-200 bg-white flex justify-between items-center"
-            >
-              <div>
-                <h4 class="font-bold text-slate-900">Centro de Monitoreo</h4>
-                <p class="text-xs text-slate-400">Actualizado en tiempo real</p>
-              </div>
-              <div class="flex gap-3">
-                <button
-                  class="px-4 py-2 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition"
-                >
-                  Exportar reporte
-                </button>
-                <button
-                  class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold shadow-lg shadow-blue-200"
-                >
-                  Filtrar zonas críticas
-                </button>
-              </div>
-            </header>
-
-            <div class="p-8 space-y-8">
-              <!-- Grid de Stats -->
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div
-                  class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm"
-                >
-                  <p
-                    class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1"
-                  >
-                    Consumo detectado
-                  </p>
-                  <div class="flex items-end gap-2">
-                    <span class="text-3xl font-black text-slate-900">42.8</span>
-                    <span class="text-slate-400 text-xs mb-1 font-medium"
-                      >m³/s</span
-                    >
-                  </div>
-                </div>
-
-                <div
-                  class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm"
-                >
-                  <p
-                    class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1"
-                  >
-                    Anomalías detectadas
-                  </p>
-                  <div class="flex items-end gap-2">
-                    <span
-                      id="fugas-count"
-                      class="text-3xl font-black text-slate-900 transition-all duration-300"
-                      >12</span
-                    >
-                    <span class="text-slate-400 text-xs mb-1 font-medium"
-                      >zonas</span
-                    >
-                    <span
-                      class="text-red-500 text-[10px] font-bold ml-auto bg-red-50 px-2 py-0.5 rounded-md mb-1"
-                    >
-                      Alta prioridad
-                    </span>
-                  </div>
-                </div>
-
-                <div
-                  class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm"
-                >
-                  <p
-                    class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1"
-                  >
-                    Pérdida estimada
-                  </p>
-                  <div class="flex items-end gap-2">
-                    <span class="text-3xl font-black text-slate-900"
-                      >$1.2M</span
-                    >
-                    <span class="text-slate-400 text-xs mb-1 font-medium"
-                      >MXN</span
-                    >
-                  </div>
-                </div>
-              </div>
-
-              <!-- Gráficas y Mapas -->
-              <div class="grid lg:grid-cols-5 gap-6">
-                <div
-                  class="lg:col-span-3 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm"
-                >
-                  <h5 class="font-bold text-slate-800 text-sm mb-8">
-                    Detección de anomalías en consumo
-                  </h5>
-                  <div
-                    class="relative h-48 w-full bg-white rounded-xl overflow-hidden border border-slate-100"
-                  >
-                    <svg
-                      class="absolute bottom-0 left-0 w-full h-full"
-                      viewBox="0 0 1000 200"
-                    >
-                      <path
-                        d="M0,150 Q100,80 200,120 T400,100 T600,140 T800,90 T1000,110"
-                        fill="none"
-                        stroke="#3b82f6"
-                        stroke-width="3"
-                        class="path-anim"
-                      />
-                      <circle
-                        cx="600"
-                        cy="140"
-                        r="6"
-                        fill="#ef4444"
-                        class="animate-pulse"
-                      />
-                    </svg>
-                  </div>
-                </div>
-
-                <div
-                  class="lg:col-span-2 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm"
-                >
-                  <h5 class="font-bold text-slate-800 text-sm mb-6">
-                    Zonas críticas detectadas
-                  </h5>
-                  <div
-                    class="h-48 bg-white rounded-xl relative overflow-hidden border border-slate-100"
-                  >
-                    <img
-                      src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5ce?auto=format&fit=crop&q=80&w=800"
-                      class="w-full h-full object-cover opacity-20 grayscale"
-                    />
-                    <div
-                      class="absolute top-1/3 left-1/4 w-2 h-2 bg-red-500 rounded-full animate-ping"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </main>
-        </div>
-      </div>
-    </section>
-
-    <!-- Negocio + Precios -->
-
-    <section id="negocio" class="relative py-40 bg-white overflow-hidden">
-      <div class="max-w-7xl mx-auto">
-        <div
-          class="relative bg-gradient-to-br from-slate-900 to-slate-800 rounded-[3rem] p-12 md:p-20 text-white overflow-hidden reveal"
-        >
-          <div
-            class="absolute top-0 right-0 w-96 h-96 bg-cyan-500/20 blur-[120px]"
-          ></div>
-          <div
-            class="absolute bottom-0 left-0 w-96 h-96 bg-blue-500/20 blur-[120px]"
-          ></div>
-
-          <div
-            class="flex flex-col md:flex-row justify-between items-end gap-10 mb-20"
-          >
-            <div class="max-w-2xl reveal-left delay-200">
-              <h2
-                class="text-xs font-bold tracking-[0.4em] text-cyan-400 uppercase mb-4"
-              >
-                Modelo de Negocio
-              </h2>
-              <h3 class="text-4xl md:text-6xl font-light leading-tight">
-                Detectar el problema es <br />
-                <span
-                  class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400"
-                >
-                  recuperar ingresos
-                </span>
-              </h3>
-            </div>
-
-            <div class="max-w-sm text-gray-300 reveal delay-400">
-              <p class="italic mb-6">"Se paga con el ahorro que genera."</p>
-              <a
-                href="#contacto"
-                class="inline-block bg-cyan-500 text-slate-900 font-bold px-8 py-4 rounded-full hover:bg-white transition"
-              >
-                Solicitar demo
-              </a>
-            </div>
-          </div>
-
-          <!-- Métricas -->
-          <div class="grid md:grid-cols-3 gap-12 mb-20">
-            <div class="reveal delay-100">
-              <div class="text-5xl font-black mb-4">6–8 meses</div>
-              <p class="text-cyan-400 text-xs uppercase tracking-widest mb-2">
-                Retorno de inversión
-              </p>
-              <p class="text-gray-400 text-sm">
-                El ahorro generado por reducción de ANC cubre la suscripción
-                desde los primeros meses.
-              </p>
-            </div>
-
-            <div class="reveal delay-200">
-              <div class="text-5xl font-black mb-4">+3x</div>
-              <p class="text-cyan-400 text-xs uppercase tracking-widest mb-2">
-                Retorno anual estimado
-              </p>
-              <p class="text-gray-400 text-sm">
-                Basado en detección temprana de fugas y eliminación de consumo
-                no registrado.
-              </p>
-            </div>
-
-            <div class="reveal delay-300">
-              <div class="text-5xl font-black mb-4">SaaS</div>
-              <p class="text-cyan-400 text-xs uppercase tracking-widest mb-2">
-                Sin instalación costosa
-              </p>
-              <p class="text-gray-400 text-sm">
-                Suscripción mensual escalable desde $50K MXN, ajustable al
-                tamaño de tu red.
-              </p>
-            </div>
-          </div>
-
-          <!-- Qué incluye -->
-          <div class="border-t border-white/10 pt-16 reveal delay-500">
-            <p
-              class="text-xs font-bold tracking-[0.3em] text-cyan-400 uppercase mb-10"
-            >
-              Qué incluye la plataforma
-            </p>
-            <div
-              class="grid md:grid-cols-2 gap-5 text-slate-300 text-sm max-w-2xl"
-            >
-              <div class="flex items-center gap-3">
-                <i class="fas fa-check text-cyan-400"></i> Monitoreo operativo
-                24/7
-              </div>
-              <div class="flex items-center gap-3">
-                <i class="fas fa-check text-cyan-400"></i> Detección automática
-                de anomalías
-              </div>
-              <div class="flex items-center gap-3">
-                <i class="fas fa-check text-cyan-400"></i> Priorización de zonas
-                críticas
-              </div>
-              <div class="flex items-center gap-3">
-                <i class="fas fa-check text-cyan-400"></i> Reportes de pérdidas
-                y ahorro estimado
-              </div>
-              <div class="flex items-center gap-3">
-                <i class="fas fa-check text-cyan-400"></i> Actualización
-                continua del modelo
-              </div>
-              <div class="flex items-center gap-3">
-                <i class="fas fa-check text-cyan-400"></i> Soporte técnico
-                incluido
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Roadmap -->
-
-    <section
-      id="roadmap"
-      class="py-32 bg-slate-950 text-white relative overflow-hidden"
-    >
-      <div
-        class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-cyan-500/10 blur-[120px]"
-      ></div>
-
-      <div class="max-w-5xl mx-auto px-6 relative z-10">
-        <!-- HEADER -->
-        <div class="text-center mb-24 reveal">
-          <h2
-            class="text-xs tracking-[0.4em] uppercase text-cyan-400 font-bold mb-4"
-          >
-            Roadmap
-          </h2>
-          <h3 class="text-4xl md:text-6xl font-black">
-            Dónde estamos. <br />Hacia dónde vamos.
-          </h3>
-          <p class="text-gray-400 mt-6 max-w-xl mx-auto">
-            HydroTrace AI está en operación activa. Cada fase suma capacidad,
-            cobertura y valor para los organismos que confían en la plataforma.
-          </p>
-        </div>
-
-        <div class="relative">
-          <div
-            class="absolute left-1/2 top-0 -translate-x-1/2 w-[2px] h-full bg-gradient-to-b from-cyan-500 via-blue-500 to-transparent reveal"
-          ></div>
-
-          <div class="mb-20 flex flex-col md:flex-row items-center">
-            <div class="md:w-1/2 md:pr-12 text-right reveal-left delay-100">
-              <h4 class="text-cyan-400 text-sm uppercase font-bold mb-2">
-                Fase 1 · Actual
-              </h4>
-              <h3 class="text-2xl font-bold mb-3">
-                Modelo validado con datos reales
-              </h3>
-              <p class="text-gray-400">
-                Detección de anomalías funcionando sobre datos históricos
-                reales. El modelo identifica zonas críticas con precisión
-                demostrada.
-              </p>
-            </div>
-            <div
-              class="w-6 h-6 bg-cyan-500 rounded-full border-4 border-slate-950 shadow-[0_0_20px_rgba(6,182,212,0.8)] z-10 reveal delay-300"
-            ></div>
-            <div class="md:w-1/2"></div>
-          </div>
-
-          <div class="mb-20 flex flex-col md:flex-row items-center">
-            <div class="md:w-1/2"></div>
-            <div
-              class="w-6 h-6 bg-white rounded-full border-4 border-slate-950 shadow-lg z-10 reveal delay-300"
-            ></div>
-            <div class="md:w-1/2 md:pl-12 text-left reveal-right delay-100">
-              <h4 class="text-gray-400 text-sm uppercase font-bold mb-2">
-                Fase 2 · En desarrollo
-              </h4>
-              <h3 class="text-2xl font-bold mb-3">
-                Dashboard operativo para clientes
-              </h3>
-              <p class="text-gray-400">
-                Interfaz de monitoreo en tiempo real con alertas automáticas,
-                reportes exportables y acceso multiusuario para equipos
-                operativos.
-              </p>
-            </div>
-          </div>
-
-          <div class="flex flex-col md:flex-row items-center">
-            <div class="md:w-1/2 md:pr-12 text-right reveal-left delay-100">
-              <h4 class="text-gray-400 text-sm uppercase font-bold mb-2">
-                Fase 3 · Próximo
-              </h4>
-              <h3 class="text-2xl font-bold mb-3">
-                Expansión multicliente y API abierta
-              </h3>
-              <p class="text-gray-400">
-                Arquitectura SaaS multitenancy para escalar a diferentes
-                ciudades y sectores, con integración directa a sistemas SCADA y
-                ERP existentes.
-              </p>
-            </div>
-            <div
-              class="w-6 h-6 bg-white rounded-full border-4 border-slate-950 shadow-lg z-10 reveal delay-300"
-            ></div>
-            <div class="md:w-1/2"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Noticias & Insights -->
-    <section id="blog" class="py-32 bg-slate-950 text-white">
-      <div class="max-w-7xl mx-auto px-6">
-        <div class="mb-16">
-          <p
-            class="text-cyan-400 uppercase tracking-[0.3em] text-xs font-bold mb-4"
-          >
-            Insights & Actualidad
-          </p>
-
-          <h2 class="text-4xl md:text-6xl font-black mb-6">
-            Crisis hídrica: una presión constante.
-          </h2>
-
-          <p class="text-gray-400 max-w-2xl">
-            Casos reales, noticias y tendencias que reflejan los desafíos reales
-            en la gestión del agua y dónde la inteligencia predictiva puede
-            marcar la diferencia.
-          </p>
-        </div>
-
-        <!-- Grid de noticias sin animaciones de reveal -->
-        <div class="grid lg:grid-cols-3 gap-10">
-          <a
-            href="https://www.elfinanciero.com.mx/cdmx/2024/03/16/dia-0-en-el-sistema-cutzamala-como-seria-un-estado-de-emergencia-si-la-cdmx-se-queda-sin-agua/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="lg:col-span-2 group relative overflow-hidden rounded-3xl block"
-          >
-            <img
-              src="assets/imagenes/cdmx1.jpg"
-              alt="Gente caminando en la ciudad"
-              class="w-full h-[400px] object-cover group-hover:scale-105 transition duration-700"
-            />
-            <div
-              class="absolute inset-0 bg-gradient-to-t from-black/90 to-transparent"
-            ></div>
-
-            <div class="absolute bottom-0 p-8">
-              <span
-                class="text-cyan-400 text-xs font-bold uppercase tracking-widest"
-              >
-                Al borde del colapso
-              </span>
-
-              <h3 class="text-2xl md:text-3xl font-bold mt-3 mb-4">
-                “Día Cero” en CDMX: el escenario donde el agua podría agotarse
-              </h3>
-
-              <p class="text-gray-300 text-sm mb-4">
-                La crisis del Sistema Cutzamala evidencia la fragilidad del
-                suministro hídrico en la ciudad.
-              </p>
-
-              <span
-                class="text-white text-sm font-semibold group-hover:text-cyan-400 transition"
-              >
-                Leer en El Financiero →
-              </span>
-            </div>
-          </a>
-
-          <div class="flex flex-col gap-10">
-            <a
-              href="https://www.linkedin.com/pulse/b2b-transformación-digital-través-de-las-7-capas-ia-isaac-bosch-uvc0f/"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="group block"
-            >
-              <div class="overflow-hidden rounded-2xl mb-4">
-                <img
-                  src="assets/imagenes/B2B.jpg"
-                  class="w-full h-40 object-cover group-hover:scale-105 transition duration-500"
-                />
-              </div>
-
-              <span class="text-xs text-blue-400 font-bold uppercase">
-                Tecnología & IA
-              </span>
-
-              <h4
-                class="font-bold text-lg mt-2 group-hover:text-cyan-400 transition"
-              >
-                Transformación digital e IA: el nuevo estándar en sistemas
-                empresariales
-              </h4>
-            </a>
-
-            <a
-              href="https://causanaturamedia.com/es/periodismo-cn/agua-perdida-los-miles-de-millones-de-litros-desperdiciados-por-fugas-en-mexico"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="group block"
-            >
-              <div class="overflow-hidden rounded-2xl mb-4">
-                <img
-                  src="assets/imagenes/crisisAgua1.jpg"
-                  alt="Crisis de agua en México"
-                  class="w-full h-40 object-cover group-hover:scale-105 transition duration-500"
-                />
-              </div>
-
-              <span class="text-xs text-red-400 font-bold uppercase">
-                Impacto & Crisis
-              </span>
-
-              <h4
-                class="font-bold text-lg mt-2 group-hover:text-cyan-400 transition"
-              >
-                Millones de litros de agua se pierden diariamente por fugas en
-                México
-              </h4>
-            </a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Capacidades del sistema / Preguntas frecuentes -->
-
-    <section id="consulta" class="py-32 bg-white text-slate-900">
-      <div class="max-w-6xl mx-auto px-6 text-center">
-        <!-- HEADER -->
-        <div class="reveal">
-          <p
-            class="text-cyan-600 uppercase tracking-[0.3em] text-xs font-bold mb-4"
-          >
-            Consideraciones clave
-          </p>
-          <h2 class="text-4xl md:text-5xl font-black mb-6 text-slate-900">
-            Antes de implementarlo
-          </h2>
-          <p class="text-gray-600 max-w-2xl mx-auto mb-16 reveal delay-100">
-            Resolvemos las dudas operativas más comunes al integrar HydroTrace AI en tu sistema.
-          </p>
-        </div>
-
-        <!-- CARDS -->
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div class="card-tech reveal delay-100">
-            <h3 class="text-lg font-bold mb-2">
-              ¿Funciona con datos incompletos?
-            </h3>
-            <p class="text-gray-600 text-sm">
-              Sí. El sistema está diseñado para operar incluso cuando la
-              información es parcial o inconsistente.
-            </p>
-          </div>
-
-          <div class="card-tech reveal delay-200">
-            <h3 class="text-lg font-bold mb-2">¿Qué tan preciso es?</h3>
-            <p class="text-gray-600 text-sm">
-              Detecta patrones anómalos con alta precisión al cruzar múltiples
-              fuentes de información.
-            </p>
-          </div>
-
-          <div class="card-tech reveal delay-300">
-            <h3 class="text-lg font-bold mb-2">
-              ¿Necesito infraestructura nueva?
-            </h3>
-            <p class="text-gray-600 text-sm">
-              No necesariamente. Puede integrarse con los datos que ya existen
-              en tu operación actual.
-            </p>
-          </div>
-
-          <div class="card-tech reveal delay-400">
-            <h3 class="text-lg font-bold mb-2">
-              ¿Qué tipo de resultado obtengo?
-            </h3>
-            <p class="text-gray-600 text-sm">
-              Alertas claras sobre dónde intervenir primero, priorizadas por
-              impacto económico.
-            </p>
-          </div>
-        </div>
-
-        <!-- CTA -->
-        <div class="reveal delay-500">
-          <a
-            href="#contacto"
-            class="mt-16 inline-block bg-cyan-500 text-slate-900 px-10 py-4 rounded-xl font-bold hover:bg-cyan-400 hover:scale-105 transition-all shadow-[0_10px_30px_-5px_rgba(6,182,212,0.4)]"
-          >
-            Evaluar mi caso →
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- TRANSICIÓN -->
-
-    <div class="relative w-full flex justify-center">
-      <div
-        class="w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-70"
-      ></div>
-
-      <!-- Fade inferior -->
-      <div
-        class="absolute -bottom-10 w-full h-20 bg-gradient-to-t from-white to-transparent"
-      ></div>
-    </div>
-
-    <!-- Nosotros / Empresa -->
-
-    <section id="nosotros" class="py-32 bg-white px-6 relative overflow-hidden">
-      <!-- Lottie fondo -->
-      <div
-        class="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-50"
-      >
-        <lottie-player
-          src="assets/animaciones/tech_pattern.json"
-          background="transparent"
-          speed="1"
-          loop
-          autoplay
-          class="w-full h-full scale-125"
-        >
-        </lottie-player>
-      </div>
-
-      <div class="absolute inset-0 z-0">
-        <div
-          class="absolute inset-0 bg-gradient-to-b from-white/20 via-white/10 to-white/30"
-        ></div>
-        <div
-          class="absolute inset-0 bg-gradient-to-tr from-cyan-100/20 via-transparent to-blue-100/20"
-        ></div>
-      </div>
-
-      <!-- contenido -->
-      <div class="relative z-10 max-w-7xl mx-auto">
-        <!-- Branding-->
-        <div class="text-center mb-28">
-          <p
-            class="text-cyan-500 uppercase tracking-[0.35em] text-[11px] font-bold mb-5"
-          >
-            Quiénes somos
-          </p>
-
-          <div
-            class="inline-block p-4 rounded-3xl bg-gradient-to-br from-slate-50 to-white mb-10 border border-slate-200 shadow-md"
-          >
-            <img
-              src="assets/logo/logo_pumascript.png"
-              class="h-16 md:h-20 w-auto mx-auto object-contain"
-            />
-          </div>
-
-          <h2
-            class="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight bg-gradient-to-r from-slate-900 via-slate-800 to-slate-600 bg-clip-text text-transparent"
-          >
-            PumaScript Solutions
-          </h2>
-
-          <p class="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
-            Desarrollamos sistemas enfocados en resolver problemas reales con
-            impacto operativo medible. Trabajamos donde la información es
-            incompleta, existen fallas estructurales y las decisiones son
-            críticas.
-          </p>
-        </div>
-
-        <!-- Enfoque -->
-        <div class="text-center mb-28 reveal">
-          <div class="typewriter-container">
-            <p
-              class="text-cyan-500 uppercase tracking-[0.35em] text-[11px] font-bold mb-5 typewriter-text"
-            >
-              Arquitectura tecnológica
-            </p>
-          </div>
-
-          <h3
-            class="text-4xl md:text-6xl font-light text-slate-900 mb-8 leading-tight"
-          >
-            Infraestructura inteligente
-            <span
-              class="block font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600"
-            >
-              diseñada para crecer contigo
-            </span>
-          </h3>
-
-          <p class="text-slate-600 max-w-3xl mx-auto text-lg mb-6">
-            Validado en la Ciudad de México, con una arquitectura flexible para
-            replicarse en otras ciudades de México y Latinoamérica.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- TRANSICIÓN -->
-
-    <div class="relative w-full flex justify-center">
-      <div
-        class="w-full h-[2px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent opacity-70"
-      ></div>
-
-      <!-- Fade inferior -->
-      <div
-        class="absolute -bottom-10 w-full h-20 bg-gradient-to-t from-white to-transparent"
-      ></div>
-    </div>
-
-    <!-- Formulario de contacto conectado a la base de datos -->
-    <section
-      id="contacto"
-      class="py-32 text-slate-900 relative overflow-hidden bg-gradient-to-b from-white via-cyan-50 to-white"
-    >
-      <div
-        class="max-w-6xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center"
-      >
-        <!-- Columna de información -->
+        <!-- 1 -->
         <div class="reveal-left">
-          <p
-            class="text-cyan-600 uppercase tracking-[0.3em] text-xs font-bold mb-4"
-          >
-            Contacto
-          </p>
-          <h2 class="text-4xl md:text-5xl font-black mb-6">
-            ¿Tu red tiene pérdidas que no puedes ubicar?
-          </h2>
-          <p class="text-gray-600 mb-8">
-            Cuéntanos cómo opera tu sistema y en menos de 24 horas te diremos si
-            HydroTrace AI puede ayudarte — sin compromiso.
-          </p>
 
-          <!-- Iconos de contacto -->
-          <div class="space-y-4 text-gray-600">
-            <div class="flex items-center gap-3">
-              <i data-lucide="mail" class="w-5 h-5 text-cyan-600"></i>
-              <span>contacto@pumascriptsolutions.ai</span>
+          <div class="relative rounded-[32px] bg-white border border-lilac/10 p-8 overflow-hidden min-h-[280px] shadow-[0_20px_60px_rgba(90,50,250,.05)]">
+
+            <div class="absolute top-0 right-0 w-28 h-28 bg-lilac/10 blur-3xl"></div>
+
+            <div class="text-[#2F6BFF] text-5xl mb-6 opacity-90">
+              <i class="fas fa-water"></i>
             </div>
-            <div class="flex items-center gap-3">
-              <i data-lucide="map-pin" class="w-5 h-5 text-cyan-600"></i>
-              <span>Ciudad de México</span>
-            </div>
-            <div class="flex items-center gap-3">
-              <i data-lucide="clock" class="w-5 h-5 text-cyan-600"></i>
-              <span>Respuesta en menos de 24h</span>
-            </div>
+
+            <span class="text-[10px] uppercase tracking-[0.3em] text-[#2F6BFF] font-bold">
+              Entrada
+            </span>
+
+            <h3 class="text-xl font-display font-bold text-slate-900 mt-3 mb-3">
+              El agua entra al sistema
+            </h3>
+
+            <p class="text-slate-500 text-sm leading-relaxed">
+              Producción y distribución siguen operando, pero sin lectura integral del comportamiento real.
+            </p>
+
           </div>
         </div>
 
-        <!-- Formulario -->
-        <div
-          class="bg-white rounded-3xl p-10 shadow-2xl border border-gray-200 reveal-right delay-200"
-        >
+        <!-- 2 DARK LILAC -->
+        <div class="reveal-left delay-100">
+
+          <div class="relative rounded-[32px] bg-[#221433] border border-[#7C3AED]/20 p-8 overflow-hidden min-h-[320px] shadow-[0_25px_80px_rgba(91,33,182,.18)]">
+
+            <div class="absolute inset-0 bg-gradient-to-br from-[#A855F7]/15 to-transparent"></div>
+
+            <div class="relative z-10">
+
+              <div class="text-[#C084FC] text-5xl mb-6">
+                <i class="fas fa-eye-slash"></i>
+              </div>
+
+              <span class="text-[10px] uppercase tracking-[0.3em] text-[#C084FC] font-bold">
+                Punto ciego
+              </span>
+
+              <h3 class="text-2xl font-display font-bold text-white mt-3 mb-3">
+                La visibilidad desaparece
+              </h3>
+
+              <p class="text-[#D6D3E6] text-sm leading-relaxed">
+                Consumo, demografía y reportes viven separados.
+                Nadie ve el patrón completo.
+              </p>
+
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="reveal-left delay-200">
+
+          <div class="relative rounded-[32px] border border-cyan/10 bg-white p-8 overflow-hidden min-h-[280px] shadow-[0_20px_60px_rgba(59,130,246,.05)]">
+
+            <div class="absolute bottom-0 right-0 w-28 h-28 bg-cyan/10 blur-3xl"></div>
+
+            <div class="text-cyan text-5xl mb-6">
+              <i class="fas fa-hourglass-half"></i>
+            </div>
+
+            <span class="text-[10px] uppercase tracking-[0.3em] text-cyan font-bold">
+              Reacción
+            </span>
+
+            <h3 class="text-xl font-display font-bold text-slate-900 mt-3 mb-3">
+              Se actúa demasiado tarde
+            </h3>
+
+            <p class="text-slate-500 text-sm leading-relaxed">
+              La intervención comienza cuando la fuga ya impactó operación y costos.
+            </p>
+
+          </div>
+        </div>
+
+        <!-- 4 DARK LILAC RESULT -->
+        <div class="reveal-left delay-300">
+
+          <div class="relative rounded-[36px] overflow-hidden bg-gradient-to-br from-[#7C3AED] to-[#A855F7] p-[1px] min-h-[320px] shadow-[0_30px_90px_rgba(124,58,237,.20)]">
+
+            <div class="rounded-[35px] bg-[#1B1128] h-full p-8 relative overflow-hidden">
+
+              <div class="absolute inset-0 bg-gradient-to-br from-[#A855F7]/10 to-transparent"></div>
+
+              <div class="relative z-10">
+
+                <div class="text-[#D8B4FE] text-5xl mb-6">
+                  <i class="fas fa-arrow-trend-down"></i>
+                </div>
+
+                <span class="text-[10px] uppercase tracking-[0.3em] text-[#D8B4FE] font-bold">
+                  Resultado
+                </span>
+
+                <div class="text-6xl font-display font-bold text-white mt-3">
+                  40%
+                </div>
+
+                <p class="text-[#C4B5FD] text-xs uppercase tracking-[0.25em] mb-4">
+                  Agua no recuperada
+                </p>
+
+                <p class="text-[#DDD6FE] text-sm leading-relaxed">
+                  El agua ya no solo se pierde.
+                  También se pierde capacidad de decidir dónde intervenir.
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TRANSICIÓN -->
+<div class="w-full flex justify-center bg-[#F8FAFC]">
+  <div class="w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-lilac/20 to-transparent"></div>
+</div>
+
+<!-- TECNOLOGÍA -->
+
+<section id="tecnologia" class="relative py-32 bg-[#FAF8FF] overflow-hidden">
+
+  <!-- Fondo -->
+  <div class="absolute inset-0 z-0 pointer-events-none">
+
+    <!-- Glow principal -->
+    <div class="absolute top-[-18%] left-[-10%] w-[55%] h-[55%] bg-[#D9D4FF]/45 rounded-full blur-[140px]"></div>
+
+    <div class="absolute bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-[#E9E4FF]/50 rounded-full blur-[150px]"></div>
+
+    <!-- Accent cyan -->
+    <div class="absolute top-[35%] right-[15%] w-[28%] h-[28%] bg-[#B3E5FC]/20 rounded-full blur-[120px]"></div>
+
+    <!-- Círculos -->
+    <div class="absolute w-[650px] h-[650px] border border-lilac/15 rounded-full top-[-220px] left-[-180px] line-anim"></div>
+
+    <div class="absolute w-[850px] h-[850px] border border-lilac/10 rounded-full bottom-[-320px] right-[-220px] line-anim"></div>
+
+    <!-- Grid -->
+    <div
+      class="absolute inset-0 opacity-[0.035]"
+      style="
+        background-image: radial-gradient(#A78BFA .8px, transparent .8px);
+        background-size: 34px 34px;
+      ">
+    </div>
+
+  </div>
+
+  <div class="relative z-10 max-w-7xl mx-auto px-6">
+
+    <!-- HEADER -->
+    <div class="text-center mb-24 reveal">
+
+      <p class="text-lilac font-display font-bold tracking-[0.25em] uppercase mb-5 text-sm">
+        Cómo funciona
+      </p>
+
+      <h2 class="text-5xl md:text-6xl font-display font-bold text-slate-900 mb-7 leading-tight">
+        De datos dispersos <br />
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#6D28D9] to-[#C026D3]">
+          a una acción concreta.
+        </span>
+      </h2>
+
+      <p class="text-slate-500 text-xl max-w-3xl mx-auto leading-relaxed">
+        HydroTrace AI conecta fuentes que antes estaban separadas y convierte ese cruce en alertas operativas que tu equipo puede atender en minutos.
+      </p>
+
+    </div>
+
+    <!-- PASOS -->
+    <div class="relative mb-24 max-w-6xl mx-auto">
+
+      <!-- Línea -->
+      <div class="hidden md:block absolute top-[48px] left-[16%] right-[16%] h-[2px] bg-gradient-to-r from-lilac/30 via-cyan/25 to-lilac/30 z-0"></div>
+
+      <div class="grid md:grid-cols-3 gap-12 relative z-10">
+
+        <!-- PASO 1 -->
+        <div class="flex flex-col items-center text-center reveal delay-100">
+
+          <div class="relative mb-7 group">
+
+            <div class="absolute inset-0 bg-lilac/25 rounded-full blur-lg scale-125 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+            <div class="w-24 h-24 rounded-full bg-white/80 backdrop-blur-md border-2 border-lilac/25 flex items-center justify-center relative z-10 shadow-[0_10px_30px_rgba(167,139,250,.15)] transition-transform duration-300 group-hover:scale-105">
+
+              <span class="text-4xl font-display font-bold text-lilac">1</span>
+
+            </div>
+          </div>
+
+          <h4 class="text-2xl font-display font-bold mb-4 text-slate-900">
+            Conecta tus fuentes
+          </h4>
+
+          <p class="text-slate-500 text-base leading-relaxed max-w-sm">
+            Consumo registrado, datos de población y reportes ciudadanos en una sola plataforma. Sin integraciones complejas.
+          </p>
+
+        </div>
+
+        <!-- PASO 2 -->
+        <div class="flex flex-col items-center text-center reveal delay-200">
+
+          <div class="relative mb-7 group">
+
+            <div class="absolute inset-0 bg-cyan/20 rounded-full blur-lg scale-125 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+            <div class="w-24 h-24 rounded-full bg-white/80 backdrop-blur-md border-2 border-cyan/30 flex items-center justify-center relative z-10 shadow-[0_10px_30px_rgba(59,130,246,.12)] transition-transform duration-300 group-hover:scale-105">
+
+              <span class="text-4xl font-display font-bold text-cyan">2</span>
+
+            </div>
+          </div>
+
+          <h4 class="text-2xl font-display font-bold mb-4 text-slate-900">
+            Detecta lo que no cuadra
+          </h4>
+
+          <p class="text-slate-500 text-base leading-relaxed max-w-sm">
+            Los modelos identifican zonas donde el consumo no coincide con lo esperado: señal de fuga, robo o falla técnica.
+          </p>
+
+        </div>
+
+        <!-- PASO 3 -->
+        <div class="flex flex-col items-center text-center reveal delay-300">
+
+          <div class="relative mb-7 group">
+
+            <div class="absolute inset-0 bg-lilac/40 rounded-full blur-xl scale-110 opacity-60 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+            <div class="w-24 h-24 rounded-full bg-gradient-to-r from-lilac to-[#8b5cf6] border border-white/30 flex items-center justify-center relative z-10 shadow-[0_15px_40px_rgba(167,139,250,.35)] transition-transform duration-300 group-hover:-translate-y-1">
+
+              <span class="text-4xl font-display font-bold text-white">3</span>
+
+            </div>
+          </div>
+
+          <h4 class="text-2xl font-display font-bold mb-4 text-slate-900">
+            Actúa donde
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#6D28D9] to-[#C026D3]">
+  más importa
+</span>
+          </h4>
+
+          <p class="text-slate-500 text-base leading-relaxed max-w-sm">
+            El sistema prioriza por impacto económico y operativo — para que tu equipo intervenga primero donde más se pierde.
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- TRANSICIÓN -->
+<div class="w-full flex justify-center bg-white">
+  <div class="w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-lilac/20 to-transparent"></div>
+</div>
+
+<!-- Dashboard interactivo -->
+
+<section id="dashboard" class="relative py-40 bg-[#FFFFFF] overflow-hidden">
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-lilac/5 to-cyan/5 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="max-w-7xl mx-auto relative z-10">
+
+    <div class="text-center mb-16 reveal">
+      <p class="text-lilac font-display font-bold tracking-[0.25em] uppercase mb-4 text-xs">
+        Plataforma Operativa
+      </p>
+      <h2 class="text-4xl md:text-5xl font-display font-bold text-slate-900 leading-tight">
+        Decisiones en tiempo real sobre <br />
+          dónde se pierde el agua.
+      </h2>
+    </div>
+
+    <!-- Marco del Dashboard -->
+    <div class="bg-white rounded-[2rem] shadow-[0_32px_80px_-16px_rgba(168,85,247,0.15)] border border-slate-200/60 overflow-hidden flex flex-col md:flex-row h-[700px] reveal delay-200 transition-all hover:shadow-[0_40px_100px_-16px_rgba(168,85,247,0.2)]">
+
+      <!-- Sidebar -->
+      <aside class="w-20 md:w-24 bg-navy flex flex-col items-center py-8 gap-10 border-r border-slate-800">
+        <div class="w-10 h-10 bg-gradient-to-br from-lilac to-cyan rounded-xl flex items-center justify-center text-white shadow-lg shadow-lilac/20">
+          <i data-lucide="droplet" class="w-5 h-5"></i>
+        </div>
+        <nav class="flex flex-col gap-8 text-slate-500">
+          <a href="#" class="text-lilac bg-lilac/10 p-3 rounded-xl transition-colors">
+            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="hover:text-white p-3 rounded-xl transition-colors">
+            <i data-lucide="map" class="w-5 h-5"></i>
+          </a>
+          <a href="#" class="hover:text-white p-3 rounded-xl transition-colors relative">
+            <i data-lucide="bell" class="w-5 h-5"></i>
+            <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-navy"></span>
+          </a>
+        </nav>
+        <div class="mt-auto">
+          <img
+            src="https://ui-avatars.com/api/?name=Admin&background=A855F7&color=fff&rounded=true&bold=true"
+            class="w-10 h-10 rounded-full border-2 border-slate-700 hover:border-lilac transition-colors cursor-pointer"
+            alt="Admin Avatar"
+          />
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 flex flex-col bg-[#F8FAFC] overflow-y-auto">
+        <header class="p-8 border-b border-slate-200/60 bg-white/50 backdrop-blur-md flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-center sticky top-0 z-10">
+          <div>
+            <h4 class="font-display font-bold text-slate-900 text-lg">Centro de Monitoreo</h4>
+            <p class="text-xs text-slate-500 font-medium flex items-center gap-2 mt-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              Actualizado en tiempo real
+            </p>
+          </div>
+          <div class="flex gap-3">
+            <button class="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs font-bold hover:border-lilac hover:text-lilac transition-all shadow-sm">
+              Exportar reporte
+            </button>
+            <button class="px-4 py-2 bg-gradient-to-r from-lilac to-[#8b5cf6] text-white rounded-lg text-xs font-bold shadow-[0_4px_14px_rgba(168,85,247,0.3)] hover:-translate-y-0.5 transition-all">
+              Filtrar zonas críticas
+            </button>
+          </div>
+        </header>
+
+        <div class="p-8 space-y-8">
+          <!-- Stats -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Consumo detectado</p>
+              <div class="flex items-end gap-2">
+                <span class="text-3xl font-display font-bold text-slate-900">42.8</span>
+                <span class="text-slate-400 text-xs mb-1 font-medium">m³/s</span>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-16 h-16 bg-red-500/5 rounded-bl-full"></div>
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Anomalías detectadas</p>
+              <div class="flex items-end gap-2">
+                <span id="fugas-count" class="text-3xl font-display font-bold text-slate-900 transition-all duration-300">12</span>
+                <span class="text-slate-400 text-xs mb-1 font-medium">zonas</span>
+                <span class="text-red-500 text-[10px] font-bold ml-auto bg-red-50 border border-red-100 px-2 py-1 rounded-md mb-1">
+                  Alta prioridad
+                </span>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Pérdida estimada</p>
+              <div class="flex items-end gap-2">
+                <span class="text-3xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-600">$1.2M</span>
+                <span class="text-slate-400 text-xs mb-1 font-medium">MXN</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gráficas -->
+          <div class="grid lg:grid-cols-5 gap-6">
+            <div class="lg:col-span-3 bg-white p-8 rounded-2xl border border-slate-100 shadow-sm">
+              <h5 class="font-display font-bold text-slate-900 text-sm mb-8">Detección de anomalías en consumo</h5>
+              <div class="relative h-48 w-full bg-[#F8FAFC] rounded-xl overflow-hidden border border-slate-100/50">
+                <svg class="absolute bottom-0 left-0 w-full h-full" viewBox="0 0 1000 200" preserveAspectRatio="none">
+                  <defs>
+                    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#A855F7" />
+                      <stop offset="100%" stop-color="#56D7FD" />
+                    </linearGradient>
+                    <linearGradient id="fillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#A855F7" stop-opacity="0.1" />
+                      <stop offset="100%" stop-color="#A855F7" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M0,200 L0,150 Q100,80 200,120 T400,100 T600,140 T800,90 T1000,110 L1000,200 Z" fill="url(#fillGrad)" class="path-anim" />
+                  <path d="M0,150 Q100,80 200,120 T400,100 T600,140 T800,90 T1000,110" fill="none" stroke="url(#lineGrad)" stroke-width="3" stroke-linecap="round" class="path-anim" />
+                  <circle cx="600" cy="140" r="5" fill="#ef4444" class="animate-pulse" />
+                  <circle cx="600" cy="140" r="12" fill="#ef4444" opacity="0.2" class="animate-ping" />
+                </svg>
+              </div>
+            </div>
+
+            <div class="lg:col-span-2 bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col">
+              <h5 class="font-display font-bold text-slate-900 text-sm mb-6">Zonas críticas detectadas</h5>
+              <div class="flex-1 bg-slate-50 rounded-xl relative overflow-hidden border border-slate-100">
+                <img
+                  src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5ce?auto=format&fit=crop&q=80&w=800"
+                  class="w-full h-full object-cover opacity-30 mix-blend-luminosity"
+                  alt="Mapa de zona urbana"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-transparent"></div>
+                <div class="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2">
+                  <div class="w-3 h-3 bg-red-500 rounded-full relative z-10"></div>
+                  <div class="w-8 h-8 bg-red-500/30 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-ping"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSICIÓN -->
+<div class="w-full flex justify-center bg-white">
+  <div class="w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-lilac/20 to-transparent"></div>
+</div>
+
+
+<!-- NEGOCIO + IMPACTO -->
+
+<section id="negocio" class="relative py-28 overflow-hidden bg-[#0D0720] px-6">
+
+  <!-- Fondo -->
+  <div class="absolute inset-0 pointer-events-none">
+    <div class="absolute top-[-15%] left-[-10%] w-[50%] h-[50%] bg-[#C026D3]/15 rounded-full blur-[130px]"></div>
+    <div class="absolute bottom-[-15%] right-[-10%] w-[45%] h-[45%] bg-[#A855F7]/12 rounded-full blur-[130px]"></div>
+    <div class="absolute inset-0 opacity-[0.04]" style="background-image: radial-gradient(#c084fc 0.8px, transparent 0.8px); background-size: 32px 32px;"></div>
+  </div>
+
+  <div class="max-w-5xl mx-auto relative z-10">
+
+    <!-- FRASE GRANDE -->
+    <div class="text-center mb-16 reveal">
+      <p class="text-fuchsia-400 font-display font-bold tracking-[0.3em] uppercase mb-4 text-xs">¿Por qué HydroTrace AI?</p>
+      <h2 class="text-4xl md:text-5xl font-display font-bold text-white leading-tight mb-5">
+        Dejas de adivinar dónde está la fuga.<br/>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-[#56D7FD]">
+          Empiezas a saber exactamente dónde ir.
+        </span>
+      </h2>
+      <p class="text-slate-400 text-base max-w-xl mx-auto leading-relaxed">
+        Tu equipo hoy responde cuando algo ya falló. Con HydroTrace AI, prioriza antes de que escale — con datos, no con intuición.
+      </p>
+    </div>
+
+    <!-- 3 NÚMEROS -->
+    <div class="grid grid-cols-3 gap-4 mb-14 reveal">
+
+      <div class="text-center p-6 rounded-2xl bg-white/5 border border-white/10">
+        <div class="text-4xl font-display font-black text-white mb-1">180K</div>
+        <p class="text-fuchsia-400 text-[11px] uppercase tracking-widest font-bold mb-1">personas</p>
+        <p class="text-slate-500 text-xs">Volumen recuperable al año</p>
+      </div>
+
+      <div class="text-center p-6 rounded-2xl bg-fuchsia-500/10 border border-fuchsia-500/20">
+        <div class="text-4xl font-display font-black text-white mb-1">20%</div>
+        <p class="text-fuchsia-400 text-[11px] uppercase tracking-widest font-bold mb-1">menos mermas</p>
+        <p class="text-slate-500 text-xs">Reducción estimada de pérdidas</p>
+      </div>
+
+      <div class="text-center p-6 rounded-2xl bg-white/5 border border-white/10">
+        <div class="text-4xl font-display font-black text-white mb-1">&lt;2 min</div>
+        <p class="text-[#56D7FD] text-[11px] uppercase tracking-widest font-bold mb-1">para decidir</p>
+        <p class="text-slate-500 text-xs">Zonas críticas identificadas al instante</p>
+      </div>
+
+    </div>
+
+    <!-- TARJETA PRECIO -->
+    <div class="rounded-[2rem] bg-white/[0.04] border border-fuchsia-500/20 backdrop-blur-xl p-10 md:p-12 reveal">
+
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-10">
+
+        <!-- Izquierda -->
+        <div class="flex-1">
+          <p class="text-[11px] uppercase tracking-widest text-fuchsia-400 font-bold mb-4">Licencia SaaS · B2G</p>
+          <div class="text-5xl font-display font-black text-white mb-1">$85,000
+            <span class="text-lg font-normal text-slate-400">MXN / mes</span>
+          </div>
+          <p class="text-slate-400 text-sm mt-3 mb-7 leading-relaxed">
+            Sin sensores. Sin obra física. Sin reemplazar lo que ya tienes.<br/>
+            Punto de equilibrio en ~8 meses — pagado con el agua que dejas de perder.
+          </p>
+          <ul class="space-y-2 text-sm text-slate-300">
+            <li class="flex items-center gap-2"><span class="text-fuchsia-400">✓</span> Dashboard con mapa de calor y ranking de zonas críticas</li>
+            <li class="flex items-center gap-2"><span class="text-fuchsia-400">✓</span> Alertas clasificadas por nivel de criticidad</li>
+            <li class="flex items-center gap-2"><span class="text-fuchsia-400">✓</span> Actualización periódica del modelo predictivo</li>
+            <li class="flex items-center gap-2"><span class="text-fuchsia-400">✓</span> Soporte técnico incluido</li>
+          </ul>
+        </div>
+
+        <!-- Derecha: CTA -->
+        <div class="flex flex-col items-center gap-4 md:min-w-[200px]">
+          <a href="#contacto" class="w-full text-center bg-gradient-to-r from-fuchsia-500 to-[#A855F7] text-white px-8 py-4 font-display font-bold text-sm rounded-2xl shadow-[0_4px_20px_rgba(192,38,211,0.35)] hover:-translate-y-0.5 transition-all">
+            Solicitar demo
+          </a>
+          <a href="#contacto" class="w-full text-center border border-white/15 text-slate-300 px-8 py-4 rounded-2xl text-sm font-semibold hover:border-fuchsia-400 hover:text-white transition">
+            Hablar con el equipo
+          </a>
+          <p class="text-xs text-slate-500 text-center">Sin compromiso · Respuesta en 24 hrs</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+
+<!-- TRANSICIÓN -->
+<div class="w-full h-px bg-gradient-to-r from-transparent via-lilac/20 to-transparent"></div>
+
+<!-- CONTACTO CLEAN -->
+
+<section
+  id="contacto"
+  class="py-32 relative overflow-hidden bg-[#F8F7FF]"
+>
+
+  <!-- textura ligera -->
+  <div
+    class="absolute inset-0 opacity-[0.03]"
+    style="
+      background-image:
+      linear-gradient(to right,#A78BFA 1px,transparent 1px),
+      linear-gradient(to bottom,#A78BFA 1px,transparent 1px);
+      background-size:40px 40px;
+    ">
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6 relative z-10">
+
+    <!-- Header -->
+    <div class="text-center mb-20 reveal">
+
+      <p class="text-lilac uppercase tracking-[0.35em] text-sm font-bold mb-5">
+        Contacto
+      </p>
+
+      <h2 class="text-5xl md:text-6xl font-display font-bold text-slate-900 leading-tight mb-5">
+        Hablemos de tu operación.
+      </h2>
+
+      <p class="text-slate-500 max-w-2xl mx-auto text-xl leading-relaxed">
+        Cuéntanos qué está ocurriendo y te diremos si HydroTrace AI puede ayudarte.
+      </p>
+
+    </div>
+
+    <!-- CARD -->
+    <div class="bg-white rounded-[36px] border border-slate-200/70 shadow-[0_30px_80px_rgba(15,23,42,.06)] overflow-hidden">
+
+      <div class="grid md:grid-cols-5">
+
+        <!-- IZQUIERDA -->
+        <div class="md:col-span-2 p-10 md:p-12 border-b md:border-b-0 md:border-r border-slate-100">
+
+          <div class="sticky top-10">
+
+            <h3 class="text-2xl font-display font-bold text-slate-900 mb-6">
+              Una conversación directa.
+            </h3>
+
+            <p class="text-slate-500 leading-relaxed mb-10">
+              Revisamos tu caso y te damos una respuesta clara en menos de 24 horas.
+            </p>
+
+            <div class="space-y-7">
+
+              <div class="flex gap-4">
+                <div class="w-11 h-11 rounded-2xl bg-lilac/10 flex items-center justify-center text-lilac">
+                  <i data-lucide="mail" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400 mb-1">
+                    Email
+                  </p>
+                  <p class="text-slate-700">
+                    contacto@pumascriptsolutions.ai
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex gap-4">
+                <div class="w-11 h-11 rounded-2xl bg-cyan/10 flex items-center justify-center text-cyan">
+                  <i data-lucide="map-pin" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400 mb-1">
+                    Ubicación
+                  </p>
+                  <p class="text-slate-700">
+                    Ciudad de México
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex gap-4">
+                <div class="w-11 h-11 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500">
+                  <i data-lucide="clock" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400 mb-1">
+                    Respuesta
+                  </p>
+                  <p class="text-slate-700">
+                    Menos de 24 horas
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- FORM -->
+        <div class="md:col-span-3 p-10 md:p-12">
+
+          <!-- Tabs -->
+          <div class="flex gap-2 mb-8 p-1 bg-slate-100 rounded-2xl">
+
+            <button
+              onclick="setTab('demo')"
+              id="tab-demo"
+              class="flex-1 py-3 rounded-xl text-sm font-semibold bg-white shadow-sm text-slate-900"
+            >
+              Ver plataforma
+            </button>
+
+            <button
+              onclick="setTab('evaluacion')"
+              id="tab-evaluacion"
+              class="flex-1 py-3 rounded-xl text-sm font-semibold text-slate-500"
+            >
+              Evaluar operación
+            </button>
+
+          </div>
+
           <form
             id="form-contacto"
             action="/dashboard-clientes"
             method="POST"
             class="space-y-6"
           >
-          
-            <input
-              type="text"
-              name="nombre"
-              placeholder="Nombre"
-              class="form-pro"
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Correo"
-              class="form-pro"
-              required
-            />
-            <input
-              type="text"
-              name="empresa"
-              placeholder="Empresa"
-              class="form-pro"
-            />
-            <select name="interes" class="form-pro italic text-gray-400">
-              <option disabled selected>¿Qué necesitas?</option>
-              <option value="demo" class="not-italic text-slate-900">
-                Ver la plataforma en acción
-              </option>
-              <option value="evaluacion" class="not-italic text-slate-900">
-                Evaluar mi operación
-              </option>
-            </select>
-            <textarea
-              name="mensaje"
-              rows="4"
-              placeholder="Mensaje..."
-              class="form-pro"
-            ></textarea>
-            <button type="submit" id="btn-enviar" class="btn-contacto">
-              Enviar mensaje →
+
+            <input type="hidden" name="interes" id="campo-interes" value="demo">
+
+            <!-- Nombre + Empresa -->
+            <div class="grid md:grid-cols-2 gap-5">
+
+              <div>
+                <label class="text-sm text-slate-600 mb-2 block">
+                  Nombre
+                </label>
+
+                <input
+                  type="text"
+                  name="nombre"
+                  placeholder="Tu nombre"
+                  class="w-full h-14 px-5 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 focus:border-lilac focus:bg-white outline-none transition"
+                />
+              </div>
+
+              <div>
+                <label class="text-sm text-slate-600 mb-2 block">
+                  Empresa
+                </label>
+
+                <input
+                  type="text"
+                  name="empresa"
+                  placeholder="Organismo / empresa"
+                  class="w-full h-14 px-5 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 focus:border-lilac focus:bg-white outline-none transition"
+                />
+              </div>
+
+            </div>
+
+            <!-- Email -->
+            <div>
+
+              <label class="text-sm text-slate-600 mb-2 block">
+                Correo institucional
+              </label>
+
+              <input
+                type="email"
+                name="email"
+                placeholder="correo@organismo.gob.mx"
+                class="w-full h-14 px-5 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 focus:border-lilac focus:bg-white outline-none transition"
+              />
+
+            </div>
+
+            <!-- Mensaje -->
+            <div>
+
+              <label class="text-sm text-slate-600 mb-2 block">
+                ¿Cuál es tu reto principal?
+              </label>
+
+              <textarea
+                rows="5"
+                placeholder="Describe brevemente el problema..."
+                class="w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 focus:border-lilac focus:bg-white outline-none resize-none transition"></textarea>
+
+            </div>
+
+            <!-- CTA -->
+            <button
+              type="submit"
+              class="w-full h-14 rounded-2xl bg-slate-900 text-white font-semibold hover:-translate-y-0.5 transition-all shadow-lg"
+            >
+              Solicitar conversación →
             </button>
+
+            <p class="text-center text-sm text-slate-400">
+              Sin spam. Sin presión comercial.
+            </p>
+
           </form>
 
-          <!-- Mensaje de éxito -->
-          <div
-            id="success-container"
-            class="hidden mt-6 p-4 bg-emerald-50 border border-emerald-100 rounded-xl"
-          >
-            <p
-              class="text-emerald-700 text-center font-bold flex items-center justify-center gap-2"
-            >
-              <i data-lucide="check-circle" class="w-5 h-5"></i> ¡Mensaje
-              enviado con éxito!
-            </p>
-          </div>
         </div>
+
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <!-- Footer -->
+<!-- FOOTER LIGHT -->
 
-    <footer
-      class="bg-[#020617] text-white pt-20 pb-10 border-t border-white/5 relative overflow-hidden"
-    >
-      <div
-        class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_20%_30%,#06b6d4,transparent_40%),radial-gradient(circle_at_80%_70%,#3b82f6,transparent_40%)]"
-      ></div>
+<footer class="relative bg-[#FAFBFF] overflow-hidden border-t border-[#EAE7FF]">
 
-      <div class="max-w-7xl mx-auto px-4 relative z-10">
-        <div
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16"
-        >
-          <div class="space-y-6">
-            <div class="flex items-center gap-4">
-              <img
-                src="assets/logo/logo_cara.png"
-                alt="HydroTrace AI Logo"
-                class="w-14 h-14 object-contain"
-              />
-              <span
-                class="text-2xl font-black tracking-tighter uppercase leading-none"
-              >
-                <span class="text-cyan-400">Hydro</span>Trace
-                <span class="text-cyan-400">AI</span>
-              </span>
-            </div>
+  <!-- Fondo -->
+  <div class="absolute inset-0 pointer-events-none">
 
-            <p class="text-slate-400 text-sm leading-relaxed">
-              Inteligencia artificial diseñada para proteger el recurso más
-              vital. Identificamos fugas y extracciones irregulares con
-              precisión predictiva para asegurar un futuro resiliente.
-            </p>
+    <div class="absolute top-[-80px] left-[5%] w-[300px] h-[300px] bg-fuchsia-400/6 rounded-full blur-[120px]"></div>
+    <div class="absolute bottom-[-80px] right-[5%] w-[280px] h-[280px] bg-lilac/8 rounded-full blur-[120px]"></div>
 
-            <div class="flex gap-4">
-              <a href="#" class="social-icon" title="LinkedIn"
-                ><i class="fab fa-linkedin-in"></i
-              ></a>
-              <a href="#" class="social-icon" title="Twitter"
-                ><i class="fab fa-twitter"></i
-              ></a>
-              <a href="#" class="social-icon" title="Instagram"
-                ><i class="fab fa-instagram"></i
-              ></a>
-            </div>
-          </div>
+    <div
+      class="absolute inset-0 opacity-[0.03]"
+      style="
+        background-image: radial-gradient(#8B5CF6 0.8px, transparent 0.8px);
+        background-size: 34px 34px;
+      ">
+    </div>
 
-          <div>
-            <h4 class="footer-title">Explora</h4>
-            <ul class="footer-links">
-              <li><a href="#inicio">Inicio</a></li>
-              <li><a href="#roadmap">Hoja de Ruta</a></li>
-              <li><a href="#blog">Insights Industriales</a></li>
-              <li><a href="#consulta">Modelado Técnico</a></li>
-              <li><a href="#contacto">Contacto Directo</a></li>
-            </ul>
-          </div>
+  </div>
 
-          <div>
-            <h4 class="footer-title">Capacidades</h4>
-            <ul class="footer-links">
-              <li><span>Detección por Isolation Forest</span></li>
-              <li><span>Modelado de Consumo Teórico</span></li>
-              <li><span>Clustering de Redes (K-Means)</span></li>
-              <li><span>Análisis de Agua No Contabilizada</span></li>
-              <li><span>Dashboards de Business Intelligence</span></li>
-            </ul>
-          </div>
+  <div class="max-w-6xl mx-auto px-6 relative z-10">
 
-          <div>
-            <h4 class="footer-title">Conecta</h4>
-            <ul class="space-y-5 text-slate-400 text-sm">
-              <li class="flex items-start gap-3">
-                <i class="fas fa-map-marker-alt text-cyan-400 mt-1"></i>
-                <span>Ciudad de México, MX</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <i class="fas fa-envelope text-cyan-400"></i>
-                <span>contacto@pumascriptsolutions.ai</span>
-              </li>
-              <li class="flex items-center gap-3">
-                <i class="fas fa-clock text-cyan-400"></i>
-                <span>Atención prioritaria 24/7</span>
-              </li>
-            </ul>
-          </div>
-        </div>
+    <!-- MAIN -->
+    <div class="py-16 flex flex-col md:flex-row justify-between items-start gap-12">
 
-        <div
-          class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6"
-        >
-          <p
-            class="text-xs text-slate-500 uppercase tracking-widest text-center"
-          >
-            © 2026
-            <span class="text-white font-bold">PumaScript Solutions</span> |
-            HydroTrace AI:
-            <span class="italic text-slate-400 font-normal"
-              >Innovación en gestión hídrica</span
-            >
-          </p>
+      <!-- Marca -->
+      <div class="max-w-sm">
+
+        <div class="flex items-center gap-3 mb-4">
+
+          <img
+            src="assets/logo/logo_cara.png"
+            alt="HydroTrace AI"
+            class="w-9 h-9 object-contain"/>
 
           <div
-            class="flex gap-8 text-[10px] font-black uppercase tracking-tighter text-slate-500"
-          >
-            <a href="#" class="hover:text-white transition">Privacidad</a>
-            <a href="#" class="hover:text-white transition">Términos</a>
-            <a href="#" class="hover:text-white transition">Cookies</a>
-          </div>
-        </div>
-      </div>
-    </footer>
+            class="leading-none tracking-[0.14em] uppercase"
+            style="font-family:'Outfit',sans-serif;">
 
-    <script>
+            <span class="font-light text-[20px] text-slate-900">
+              HydroTrace
+            </span>
+
+            <span class="font-extralight text-[#2F6BFF] text-[20px]">
+              AI
+            </span>
+
+          </div>
+
+        </div>
+
+        <p class="text-slate-500 text-sm leading-relaxed">
+          Inteligencia hídrica para detectar pérdidas y priorizar intervenciones con impacto operativo medible.
+        </p>
+
+      </div>
+
+      <!-- Navegación -->
+      <div class="flex flex-col gap-3 text-sm">
+
+        <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">
+          Navegación
+        </p>
+
+        <a href="#problematica" class="text-slate-500 hover:text-slate-900 transition">
+          El reto
+        </a>
+
+        <a href="#tecnologia" class="text-slate-500 hover:text-slate-900 transition">
+          Tecnología
+        </a>
+
+        <a href="#negocio" class="text-slate-500 hover:text-slate-900 transition">
+          Implementación
+        </a>
+
+        <a href="#consulta" class="text-slate-500 hover:text-slate-900 transition">
+          Negocio
+        </a>
+
+        <a href="#contacto" class="text-lilac hover:text-fuchsia-500 transition font-medium">
+          Contacto
+        </a>
+
+      </div>
+
+      <!-- Desarrollado -->
+      <div class="flex flex-col gap-3 text-sm">
+
+        <p class="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">
+          Desarrollado por
+        </p>
+
+        <div class="flex items-center gap-2 mb-1">
+
+          <img
+            src="assets/logo/logo_pumascript.png"
+            alt="PumaScript"
+            class="w-5 h-5 object-contain opacity-80"/>
+
+          <span class="text-slate-800 font-medium text-sm">
+            PumaScript Solutions
+          </span>
+
+        </div>
+
+        <p class="text-slate-500 text-xs leading-relaxed">
+          Facultad de Ingeniería · UNAM<br/>
+          Ciudad de México
+        </p>
+
+        <div class="flex items-center gap-2 text-slate-500 text-xs mt-1">
+
+          <i class="fas fa-envelope text-lilac text-xs"></i>
+
+          <span>
+            contacto@pumascriptsolutions.ai
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bottom -->
+    <div class="border-t border-[#EAE7FF] py-5 flex flex-col md:flex-row justify-between items-center gap-3">
+
+      <p class="text-xs text-slate-400">
+        © 2026 PumaScript Solutions · HydroTrace AI
+      </p>
+
+      <div class="flex gap-5 text-xs text-slate-400">
+
+        <a href="#" class="hover:text-slate-700 transition">
+          Privacidad
+        </a>
+
+        <a href="#" class="hover:text-slate-700 transition">
+          Términos
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+</footer>
+
+<script>
       /* Scripts Principal de Interacción */
+
+
+  function setTab(tab) {
+    document.getElementById('campo-interes').value = tab;
+    const demo = document.getElementById('tab-demo');
+    const eval_ = document.getElementById('tab-evaluacion');
+    if (tab === 'demo') {
+      demo.classList.add('bg-[#5A32FA]', 'text-white');
+      demo.classList.remove('text-slate-400');
+      eval_.classList.remove('bg-[#5A32FA]', 'text-white');
+      eval_.classList.add('text-slate-400');
+    } else {
+      eval_.classList.add('bg-[#5A32FA]', 'text-white');
+      eval_.classList.remove('text-slate-400');
+      demo.classList.remove('bg-[#5A32FA]', 'text-white');
+      demo.classList.add('text-slate-400');
+    }
+  }
 
       document.addEventListener("DOMContentLoaded", () => {
         // 1. INICIALIZACIÓN DE ICONOS (Lucide)
@@ -2101,15 +1700,14 @@
         const setupRevealAnimations = () => {
           const observerOptions = {
             root: null,
-            rootMargin: "0px 0px -100px 0px", // Evita que se active justo en el borde inferior
-            threshold: 0.15, // El 15% del elemento debe ser visible
+            rootMargin: "0px 0px -100px 0px",
+            threshold: 0.15,
           };
 
           const revealCallback = (entries, observer) => {
             entries.forEach((entry) => {
               if (entry.isIntersecting) {
                 entry.target.classList.add("active");
-                // Una vez revelado, dejamos de observarlo para ahorrar recursos
                 observer.unobserve(entry.target);
               }
             });
@@ -2120,7 +1718,6 @@
             observerOptions,
           );
 
-          // Seleccionamos todos los tipos de reveal
           const elementsToReveal = document.querySelectorAll(
             ".reveal, .reveal-left, .reveal-right",
           );
@@ -2140,15 +1737,13 @@
 
               if (currentScroll <= 10) {
                 navbar.style.transform = "translateY(0)";
-                navbar.classList.remove("shadow-lg"); // Menos sombra al inicio
+                navbar.classList.remove("shadow-lg");
                 return;
               }
 
               if (currentScroll > lastScroll && currentScroll > 100) {
-                // Scroll hacia abajo - Ocultar
                 navbar.style.transform = "translateY(-100%)";
               } else {
-                // Scroll hacia arriba - Mostrar con sombra
                 navbar.style.transform = "translateY(0)";
                 navbar.classList.add("shadow-lg");
               }
@@ -2181,19 +1776,14 @@
           if (!form) return;
 
           form.addEventListener("submit", (e) => {
-            // Bloqueo preventivo de doble envío
             btn.disabled = true;
             btn.innerHTML = `
         <span class="flex items-center justify-center gap-2">
           <i class="fas fa-circle-notch animate-spin"></i> Enviando...
         </span>
       `;
-
-            // Nota: Aquí el formulario seguirá su curso al action="/contacto"
-            // a menos que uses preventDefault() para una API.
           });
 
-          // Revisar si venimos de un envío exitoso (URL params)
           const urlParams = new URLSearchParams(window.location.search);
           if (urlParams.has("success") && successMsg) {
             successMsg.classList.remove("hidden");
@@ -2218,7 +1808,6 @@
 
           setInterval(() => {
             if (Math.random() > 0.85) {
-              // 15% de probabilidad de nueva anomalía
               fugasCount++;
               counter.innerText = fugasCount;
               counter.classList.add("text-red-500", "scale-110");
@@ -2237,5 +1826,6 @@
     </script>
 
     <script src="https://unpkg.com/lucide@latest"></script>
-  </body>
+
+</body>
 </html>
