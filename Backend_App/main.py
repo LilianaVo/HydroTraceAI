@@ -439,40 +439,67 @@ def dashboard_admin():
     if df is None:
         flash("No se encontro el dataset. Ejecuta el entrenamiento primero.", "warning")
         kpis_fallback = {
-            "dinero_riesgo": "$210.87M",
-            "ahorro_proyectado": "$42.17M",
-            "m3_perdidos": "11.46M m³"
+            "dinero_riesgo": "Sin datos",
+            "ahorro_proyectado": "Sin datos",
+            "m3_perdidos": "—"
         }
         return render_template(
             "dashboard_admin.html",
             stats=stats,
             kpis=kpis_fallback,
-            tabla_completa=[], 
+            tabla_completa=[],
             leads=leads,
-            metricas={}, 
-            mapa_json="[]"
+            metricas={"colonias_anomalas": 0, "confianza_ml": "0%"},
+            mapa_json="[]",
+            per_capita_json="[]",
+            top_exceso_json="[]",
         )
 
-    # 4. KPIs Económicos Reales (Punto 2 - ¡Conectando el jale de Ana!)
+    # 4. KPIs Económicos Reales
     kpis_reales = calcular_impacto_economico(df)
     kpis = {
-    "dinero_riesgo"    : f"${kpis_reales.get('costo_perdida_total', 210868476):,.2f}",
-    "ahorro_proyectado": f"${kpis_reales.get('roi_proyectado', 42173695):,.2f}",
-    "m3_perdidos"      : f"{kpis_reales.get('m3_en_riesgo', 11460000):,.0f} m³",
+        "dinero_riesgo"    : f"${kpis_reales.get('costo_perdida_total', 0):,.2f}",
+        "ahorro_proyectado": f"${kpis_reales.get('roi_proyectado', 0):,.2f}",
+        "m3_perdidos"      : f"{kpis_reales.get('m3_en_riesgo', 0):,.0f} m³",
     }
 
-    # 5. Preservamos toda tu lógica analítica original (Métricas, Tabla y Mapa)
+    # 5. Métricas, Tabla completa (todas las colonias) y Mapa
     metricas = calcular_metricas_resumen(df)
     metricas["confianza_ml"] = f"{reporte_desempeno_negocio(df)}%"
 
-    tabla = df[df["es_anomalia"] == -1][[
-        "alcaldia", "colonia", "diagnostico_final",
-        "exceso_consumo", "anomalia_score", "total_reportes",
-    ]].to_dict(orient="records")
+    # Tabla: TODAS las colonias con columna consumo_per_capita si está disponible
+    cols_tabla = ["alcaldia", "colonia", "diagnostico_final",
+                  "exceso_consumo", "anomalia_score", "total_reportes"]
+    if "consumo_per_capita" in df.columns:
+        cols_tabla.append("consumo_per_capita")
+    tabla = df[cols_tabla].to_dict(orient="records")
 
     mapa_json = json.dumps(preparar_datos_mapa(df), ensure_ascii=False)
 
-    # 6. Renderizado final enviando TODOS los componentes mezclados con éxito
+    # 6. Datos auxiliares para las gráficas JS
+    # Top 10 por consumo per cápita (para el bar chart)
+    per_capita_json = "[]"
+    if "consumo_per_capita" in df.columns:
+        top_pc = (
+            df[["colonia", "consumo_per_capita", "diagnostico_final"]]
+            .dropna(subset=["consumo_per_capita"])
+            .sort_values("consumo_per_capita", ascending=False)
+            .head(10)
+        )
+        per_capita_json = json.dumps(top_pc.to_dict(orient="records"), ensure_ascii=False)
+
+    # Top 10 colonias con mayor exceso absoluto (para el chart de exceso)
+    top_exceso_json = "[]"
+    if "exceso_consumo" in df.columns:
+        top_exc = (
+            df[["colonia", "exceso_consumo", "diagnostico_final"]]
+            .dropna(subset=["exceso_consumo"])
+            .sort_values("exceso_consumo", ascending=False)
+            .head(10)
+        )
+        top_exceso_json = json.dumps(top_exc.to_dict(orient="records"), ensure_ascii=False)
+
+    # 7. Renderizado final
     return render_template(
         "dashboard_admin.html",
         stats=stats,
@@ -480,7 +507,9 @@ def dashboard_admin():
         tabla_completa=tabla,
         leads=leads,
         metricas=metricas,
-        mapa_json=mapa_json
+        mapa_json=mapa_json,
+        per_capita_json=per_capita_json,
+        top_exceso_json=top_exceso_json,
     )
 
 
@@ -610,8 +639,63 @@ def mapa_interactivo():
 
 @app.route('/graficas/<path:filename>')
 def servir_graficas(filename):
-    """Ruta para que Ileana pueda mostrar las gráficas en el Admin Dashboard"""
+    """Ruta para que Ileana pueda mostrar las graficas en el Admin Dashboard"""
     return send_from_directory(GRAFICAS_DIR, filename)
+
+
+@app.route("/api/resumen")
+def api_resumen():
+    """
+    Endpoint JSON con las metricas de resumen del modelo ML.
+    Devuelve KPIs economicos + conteos por diagnostico.
+    Util para refrescar el dashboard sin recargar la pagina.
+    """
+    df = cargar_resultados()
+    if df is None:
+        return jsonify({"error": "Dataset no disponible"}), 503
+
+    impacto  = calcular_impacto_economico(df)
+    metricas = calcular_metricas_resumen(df)
+    metricas["confianza_ml"] = f"{reporte_desempeno_negocio(df)}%"
+
+    conteos = df["diagnostico_final"].str.upper().apply(
+        lambda x: "CRITICO" if "TICO" in x else
+                  "SOSPECHOSO" if "SOSPECHOSO" in x else
+                  "DEFICIENCIA" if "DEFICIENCIA" in x else "NORMAL"
+    ).value_counts().to_dict()
+
+    return jsonify({
+        "total_colonias"     : len(df),
+        "colonias_anomalas"  : int((df["es_anomalia"] == -1).sum()),
+        "kpis"               : impacto,
+        "metricas"           : metricas,
+        "conteos_diagnostico": conteos,
+    })
+
+
+@app.route("/api/etl-status")
+def api_etl_status():
+    """
+    Verifica el estado del pipeline ETL: si el CSV existe y cuando fue generado.
+    El dashboard Admin lo usa para mostrar el timestamp del ultimo entrenamiento.
+    """
+    import datetime
+    existe    = CSV_RESULTADOS.exists()
+    timestamp = None
+    shape     = None
+    if existe:
+        timestamp = datetime.datetime.fromtimestamp(
+            CSV_RESULTADOS.stat().st_mtime
+        ).strftime("%d %b %Y, %H:%M:%S")
+        df = cargar_resultados()
+        if df is not None:
+            shape = {"filas": len(df), "columnas": len(df.columns)}
+    return jsonify({
+        "csv_existe" : existe,
+        "csv_path"   : str(CSV_RESULTADOS),
+        "ultima_mod" : timestamp,
+        "shape"      : shape,
+    })
 
 @app.route("/actualizar-estatus/<int:lead_id>", methods=["POST"])
 def actualizar_estatus(lead_id: int):
