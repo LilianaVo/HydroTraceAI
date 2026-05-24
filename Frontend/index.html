@@ -418,6 +418,11 @@
       backdrop-filter: blur(12px);
       border: 1px solid rgba(168, 85, 247, 0.1);
     }
+
+    html {
+    zoom: 1.25;
+  }
+  
   </style>
 </head>
 
@@ -502,42 +507,45 @@
   id="inicio"
   class="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#F8FAFC]"
 >
+
   <!-- Destellos de fondo -->
-<div class="absolute inset-0 z-0">
+  <div class="absolute inset-0 z-0">
 
-  <!-- Burbuja lila -->
-  <div
-    class="absolute top-[-15%] left-[-10%] w-[75%] h-[75%] bg-[#D9D4FF]/40 rounded-full blur-[140px] animate-pulse"
-  ></div>
+    <!-- Burbuja lila -->
+    <div
+      class="absolute top-[-15%] left-[-10%] w-[75%] h-[75%] bg-[#D9D4FF]/40 rounded-full blur-[140px] animate-pulse"
+    ></div>
 
-  <!-- Burbuja cálida -->
-  <div
-    class="absolute bottom-[-15%] right-[-10%] w-[70%] h-[70%] bg-[#FFF0D4]/60 rounded-full blur-[140px] animate-pulse"
-    style="animation-delay: 2s"
-  ></div>
+    <!-- Burbuja cálida -->
+    <div
+      class="absolute bottom-[-15%] right-[-10%] w-[70%] h-[70%] bg-[#FFF0D4]/60 rounded-full blur-[140px] animate-pulse"
+      style="animation-delay: 2s"
+    ></div>
 
-  <!-- Burbuja cyan -->
-  <div
-    class="absolute top-[30%] right-[10%] w-[45%] h-[45%] bg-[#B3E5FC]/45 rounded-full blur-[120px] animate-pulse"
-    style="animation-delay: 4s"
-  ></div>
+    <!-- Burbuja cyan -->
+    <div
+      class="absolute top-[30%] right-[10%] w-[45%] h-[45%] bg-[#B3E5FC]/45 rounded-full blur-[120px] animate-pulse"
+      style="animation-delay: 4s"
+    ></div>
 
-  <!-- Grid sutil -->
-  <div
-    class="absolute inset-0 opacity-[0.045]"
-    style="
-      background-image: radial-gradient(#94a3b8 0.8px, transparent 0.8px);
-      background-size: 40px 40px;
-    "
-  ></div>
+    <!-- Grid -->
+    <div
+      class="absolute inset-0 opacity-[0.045]"
+      style="
+        background-image: radial-gradient(#94a3b8 0.8px, transparent 0.8px);
+        background-size: 40px 40px;
+      "
+    ></div>
 
-</div>
+  </div>
 
   <div class="max-w-7xl mx-auto px-6 relative z-10 w-full pt-16">
+
     <div class="grid lg:grid-cols-2 gap-12 items-center">
 
-      <!-- Lado Izquierdo -->
+      <!-- LEFT -->
       <div class="text-left">
+
         <p
           class="text-[#2F6BFF] drop-shadow-[0_0_10px_rgba(47,107,255,0.35)] font-display font-bold tracking-[0.25em] uppercase mb-4 text-xs reveal-left delay-100"
         >
@@ -547,22 +555,21 @@
         <h1
           class="text-5xl md:text-7xl font-bold mb-6 leading-[1.1] text-slate-900 reveal active"
         >
-          <!-- Línea 1 -->
+
           <span class="hero-typewriter-container">
             <span class="hero-typewriter line-1">Sabes que se</span>
           </span>
 
-          <!-- Línea 2 -->
           <span class="hero-typewriter-container">
             <span class="hero-typewriter line-2">pierde agua.</span>
           </span>
 
-          <!-- Línea final con delay -->
           <span
             class="block text-transparent bg-clip-text bg-gradient-to-r from-lilac to-cyan italic pr-4 reveal delay-reveal-final"
           >
             Ahora puedes saber dónde.
           </span>
+
         </h1>
 
         <p
@@ -574,62 +581,68 @@
         </p>
 
         <div class="reveal-left delay-500">
+
           <div class="flex flex-col sm:flex-row gap-4 mb-10">
 
-  <a
-    href="#contacto"
-    class="inline-flex items-center justify-center gap-2 btn-primary px-8 py-3.5 font-display font-semibold text-sm"
-  >
-    Solicitar demo gratuita
+            <a
+              href="#contacto"
+              class="inline-flex items-center justify-center gap-2 btn-primary px-8 py-3.5 font-display font-semibold text-sm"
+            >
+              Solicitar demo gratuita
 
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M5 12H19M19 12L12 5M19 12L12 19"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
-  </a>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M5 12H19M19 12L12 5M19 12L12 19"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
 
-  <a
-    href="#tecnologia"
-    class="inline-flex items-center justify-center gap-2 btn-outline px-8 py-3.5 font-display font-semibold text-sm"
-  >
-    Cómo funciona
+            <a
+              href="#tecnologia"
+              class="inline-flex items-center justify-center gap-2 btn-outline px-8 py-3.5 font-display font-semibold text-sm"
+            >
+              Cómo funciona
 
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M5 12H19M19 12L12 5M19 12L12 19"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
-  </a>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M5 12H19M19 12L12 5M19 12L12 19"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
 
-</div>
+          </div>
+
         </div>
+
       </div>
 
-      <!-- Lado Derecho: Lottie -->
+      <!-- RIGHT -->
       <div class="hidden lg:flex justify-center items-center reveal delay-300">
+
         <div class="relative">
+
           <div class="absolute inset-0 bg-gradient-to-br from-cyan/20 to-lilac/10 rounded-full blur-3xl scale-110 opacity-60"></div>
+
           <lottie-player
             src="assets/animaciones/data_analysis.json"
             background="transparent"
@@ -640,23 +653,31 @@
             class="relative z-10 drop-shadow-xl"
           >
           </lottie-player>
+
         </div>
+
       </div>
 
     </div>
+
   </div>
+
 </section>
 
-<!-- MARQUEE HERO -->
-<div class="absolute bottom-0 left-0 w-full z-20 overflow-hidden">
+<!-- MARQUEE TRANSITION -->
 
-  <div class="relative flex overflow-x-hidden py-4 bg-white/70 backdrop-blur-xl border-y border-lilac/10">
+<div class="relative w-full overflow-hidden bg-white z-20">
+
+  <!-- top glow line -->
+  <div class="h-px w-full bg-gradient-to-r from-transparent via-lilac/30 to-transparent"></div>
+
+  <div class="relative flex overflow-x-hidden py-5 border-y border-slate-200/60">
 
     <!-- fades -->
-    <div class="pointer-events-none absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-[#F8FAFC] to-transparent z-10"></div>
-    <div class="pointer-events-none absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-[#F8FAFC] to-transparent z-10"></div>
+    <div class="pointer-events-none absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-white to-transparent z-10"></div>
+    <div class="pointer-events-none absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-white to-transparent z-10"></div>
 
-    <!-- línea 1 -->
+    <!-- ROW 1 -->
     <div class="animate-marquee whitespace-nowrap flex items-center">
 
       <span class="mx-8 text-[11px] font-display font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-slate-500">
@@ -681,8 +702,8 @@
 
     </div>
 
-    <!-- línea 2 -->
-    <div class="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center py-4">
+    <!-- ROW 2 -->
+    <div class="absolute top-0 animate-marquee2 whitespace-nowrap flex items-center py-5">
 
       <span class="mx-8 text-[11px] font-display font-bold uppercase tracking-[0.2em] flex items-center gap-2 text-slate-500">
         <span class="text-lilac">◆</span> Priorización por impacto
@@ -707,6 +728,7 @@
     </div>
 
   </div>
+
 </div>
 
 <!-- PROBLEMÁTICA -->
@@ -1058,6 +1080,7 @@
 <!-- Dashboard interactivo -->
 
 <section id="dashboard" class="relative py-40 bg-[#FFFFFF] overflow-hidden">
+  
   <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-br from-lilac/5 to-cyan/5 rounded-full blur-3xl pointer-events-none"></div>
 
   <div class="max-w-7xl mx-auto relative z-10">
@@ -1066,170 +1089,102 @@
       <p class="text-lilac font-display font-bold tracking-[0.25em] uppercase mb-4 text-xs">
         Plataforma Operativa
       </p>
+
       <h2 class="text-4xl md:text-5xl font-display font-bold text-slate-900 leading-tight">
         Decisiones en tiempo real sobre <br />
-          dónde se pierde el agua.
+        dónde se pierde el agua.
       </h2>
     </div>
 
-    <!-- Marco del Dashboard -->
-    <div class="bg-white rounded-[2rem] shadow-[0_32px_80px_-16px_rgba(168,85,247,0.15)] border border-slate-200/60 overflow-hidden flex flex-col md:flex-row h-[700px] reveal delay-200 transition-all hover:shadow-[0_40px_100px_-16px_rgba(168,85,247,0.2)]">
+    <!-- Imagen Dashboard -->
+    <div class="relative reveal delay-200">
 
-      <!-- Sidebar -->
-      <aside class="w-20 md:w-24 bg-navy flex flex-col items-center py-8 gap-10 border-r border-slate-800">
-        <div class="w-10 h-10 bg-gradient-to-br from-lilac to-cyan rounded-xl flex items-center justify-center text-white shadow-lg shadow-lilac/20">
-          <i data-lucide="droplet" class="w-5 h-5"></i>
-        </div>
-        <nav class="flex flex-col gap-8 text-slate-500">
-          <a href="#" class="text-lilac bg-lilac/10 p-3 rounded-xl transition-colors">
-            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-          </a>
-          <a href="#" class="hover:text-white p-3 rounded-xl transition-colors">
-            <i data-lucide="map" class="w-5 h-5"></i>
-          </a>
-          <a href="#" class="hover:text-white p-3 rounded-xl transition-colors relative">
-            <i data-lucide="bell" class="w-5 h-5"></i>
-            <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-navy"></span>
-          </a>
-        </nav>
-        <div class="mt-auto">
-          <img
-            src="https://ui-avatars.com/api/?name=Admin&background=A855F7&color=fff&rounded=true&bold=true"
-            class="w-10 h-10 rounded-full border-2 border-slate-700 hover:border-lilac transition-colors cursor-pointer"
-            alt="Admin Avatar"
-          />
-        </div>
-      </aside>
+      <div class="absolute inset-0 bg-gradient-to-r from-lilac/20 to-cyan/20 blur-3xl scale-95 rounded-[40px]"></div>
 
-      <!-- Main Content -->
-      <main class="flex-1 flex flex-col bg-[#F8FAFC] overflow-y-auto">
-        <header class="p-8 border-b border-slate-200/60 bg-white/50 backdrop-blur-md flex flex-col sm:flex-row gap-4 sm:gap-0 justify-between items-center sticky top-0 z-10">
-          <div>
-            <h4 class="font-display font-bold text-slate-900 text-lg">Centro de Monitoreo</h4>
-            <p class="text-xs text-slate-500 font-medium flex items-center gap-2 mt-1">
-              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              Actualizado en tiempo real
-            </p>
-          </div>
-          <div class="flex gap-3">
-            <button class="px-4 py-2 bg-white border border-slate-200 text-slate-600 rounded-lg text-xs font-bold hover:border-lilac hover:text-lilac transition-all shadow-sm">
-              Exportar reporte
-            </button>
-            <button class="px-4 py-2 bg-gradient-to-r from-lilac to-[#8b5cf6] text-white rounded-lg text-xs font-bold shadow-[0_4px_14px_rgba(168,85,247,0.3)] hover:-translate-y-0.5 transition-all">
-              Filtrar zonas críticas
-            </button>
-          </div>
-        </header>
+      <img
+        src="assets/imagenes/dashboards_dual.png"
+        alt="HydroTrace AI Dashboard"
+        class="relative w-full rounded-[32px] shadow-[0_32px_80px_-16px_rgba(168,85,247,0.18)] border border-slate-200/60"
+      />
 
-        <div class="p-8 space-y-8">
-          <!-- Stats -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Consumo detectado</p>
-              <div class="flex items-end gap-2">
-                <span class="text-3xl font-display font-bold text-slate-900">42.8</span>
-                <span class="text-slate-400 text-xs mb-1 font-medium">m³/s</span>
-              </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
-              <div class="absolute top-0 right-0 w-16 h-16 bg-red-500/5 rounded-bl-full"></div>
-              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Anomalías detectadas</p>
-              <div class="flex items-end gap-2">
-                <span id="fugas-count" class="text-3xl font-display font-bold text-slate-900 transition-all duration-300">12</span>
-                <span class="text-slate-400 text-xs mb-1 font-medium">zonas</span>
-                <span class="text-red-500 text-[10px] font-bold ml-auto bg-red-50 border border-red-100 px-2 py-1 rounded-md mb-1">
-                  Alta prioridad
-                </span>
-              </div>
-            </div>
-
-            <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-              <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Pérdida estimada</p>
-              <div class="flex items-end gap-2">
-                <span class="text-3xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-900 to-slate-600">$1.2M</span>
-                <span class="text-slate-400 text-xs mb-1 font-medium">MXN</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Gráficas -->
-          <div class="grid lg:grid-cols-5 gap-6">
-            <div class="lg:col-span-3 bg-white p-8 rounded-2xl border border-slate-100 shadow-sm">
-              <h5 class="font-display font-bold text-slate-900 text-sm mb-8">Detección de anomalías en consumo</h5>
-              <div class="relative h-48 w-full bg-[#F8FAFC] rounded-xl overflow-hidden border border-slate-100/50">
-                <svg class="absolute bottom-0 left-0 w-full h-full" viewBox="0 0 1000 200" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stop-color="#A855F7" />
-                      <stop offset="100%" stop-color="#56D7FD" />
-                    </linearGradient>
-                    <linearGradient id="fillGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#A855F7" stop-opacity="0.1" />
-                      <stop offset="100%" stop-color="#A855F7" stop-opacity="0" />
-                    </linearGradient>
-                  </defs>
-                  <path d="M0,200 L0,150 Q100,80 200,120 T400,100 T600,140 T800,90 T1000,110 L1000,200 Z" fill="url(#fillGrad)" class="path-anim" />
-                  <path d="M0,150 Q100,80 200,120 T400,100 T600,140 T800,90 T1000,110" fill="none" stroke="url(#lineGrad)" stroke-width="3" stroke-linecap="round" class="path-anim" />
-                  <circle cx="600" cy="140" r="5" fill="#ef4444" class="animate-pulse" />
-                  <circle cx="600" cy="140" r="12" fill="#ef4444" opacity="0.2" class="animate-ping" />
-                </svg>
-              </div>
-            </div>
-
-            <div class="lg:col-span-2 bg-white p-8 rounded-2xl border border-slate-100 shadow-sm flex flex-col">
-              <h5 class="font-display font-bold text-slate-900 text-sm mb-6">Zonas críticas detectadas</h5>
-              <div class="flex-1 bg-slate-50 rounded-xl relative overflow-hidden border border-slate-100">
-                <img
-                  src="https://images.unsplash.com/photo-1526778548025-fa2f459cd5ce?auto=format&fit=crop&q=80&w=800"
-                  class="w-full h-full object-cover opacity-30 mix-blend-luminosity"
-                  alt="Mapa de zona urbana"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-transparent"></div>
-                <div class="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2">
-                  <div class="w-3 h-3 bg-red-500 rounded-full relative z-10"></div>
-                  <div class="w-8 h-8 bg-red-500/30 rounded-full absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-ping"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
     </div>
+
   </div>
 </section>
 
-<!-- TRANSICIÓN -->
-<div class="w-full flex justify-center bg-white">
-  <div class="w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-lilac/20 to-transparent"></div>
-</div>
 
+<!-- WAVE TRANSITION -->
+
+<div class="relative overflow-hidden leading-none bg-[#0D0720]">
+
+  <svg
+    class="block w-full h-[170px]"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 1440 320"
+    preserveAspectRatio="none"
+  >
+
+    <path
+      fill="#ffffff"
+      d="M0,96L60,117.3C120,139,240,181,360,192C480,203,600,181,720,160C840,139,960,117,1080,133.3C1200,149,1320,203,1380,229.3L1440,256L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"
+    ></path>
+
+  </svg>
+
+</div>
 
 <!-- NEGOCIO + IMPACTO -->
 
-<section id="negocio" class="relative py-28 overflow-hidden bg-[#0D0720] px-6">
+<section
+  id="negocio"
+  class="relative -mt-1 py-28 overflow-hidden bg-[#0D0720] px-6"
+>
 
   <!-- Fondo -->
   <div class="absolute inset-0 pointer-events-none">
+
+    <!-- Glow izquierda -->
     <div class="absolute top-[-15%] left-[-10%] w-[50%] h-[50%] bg-[#C026D3]/15 rounded-full blur-[130px]"></div>
+
+    <!-- Glow derecha -->
     <div class="absolute bottom-[-15%] right-[-10%] w-[45%] h-[45%] bg-[#A855F7]/12 rounded-full blur-[130px]"></div>
-    <div class="absolute inset-0 opacity-[0.04]" style="background-image: radial-gradient(#c084fc 0.8px, transparent 0.8px); background-size: 32px 32px;"></div>
+
+    <!-- Grid -->
+    <div
+      class="absolute inset-0 opacity-[0.04]"
+      style="
+        background-image: radial-gradient(#c084fc 0.8px, transparent 0.8px);
+        background-size: 32px 32px;
+      "
+    ></div>
+
+    <!-- Fade superior -->
+    <div class="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-[#0D0720] to-transparent"></div>
+
   </div>
 
   <div class="max-w-5xl mx-auto relative z-10">
 
     <!-- FRASE GRANDE -->
     <div class="text-center mb-16 reveal">
-      <p class="text-fuchsia-400 font-display font-bold tracking-[0.3em] uppercase mb-4 text-xs">¿Por qué HydroTrace AI?</p>
+
+      <p class="text-fuchsia-400 font-display font-bold tracking-[0.3em] uppercase mb-4 text-xs">
+        ¿Por qué HydroTrace AI?
+      </p>
+
       <h2 class="text-4xl md:text-5xl font-display font-bold text-white leading-tight mb-5">
         Dejas de adivinar dónde está la fuga.<br/>
+
         <span class="text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-400 to-[#56D7FD]">
           Empiezas a saber exactamente dónde ir.
         </span>
+
       </h2>
+
       <p class="text-slate-400 text-base max-w-xl mx-auto leading-relaxed">
         Tu equipo hoy responde cuando algo ya falló. Con HydroTrace AI, prioriza antes de que escale — con datos, no con intuición.
       </p>
+
     </div>
 
     <!-- 3 NÚMEROS -->
@@ -1297,17 +1252,42 @@
 </section>
 
 
-<!-- TRANSICIÓN -->
-<div class="w-full h-px bg-gradient-to-r from-transparent via-lilac/20 to-transparent"></div>
+<!-- FIN NEGOCIO WAVE -->
 
-<!-- CONTACTO CLEAN -->
+<div class="relative overflow-hidden leading-none bg-[#0D0720]">
+
+  <svg
+    class="block w-full h-[170px]"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 1440 320"
+    preserveAspectRatio="none"
+  >
+
+    <path
+      fill="#F8FAFC"
+      d="M0,224L60,202.7C120,181,240,139,360,128C480,117,600,139,720,160C840,181,960,203,1080,186.7C1200,171,1320,117,1380,90.7L1440,64L1440,320L1380,320C1320,320,1200,320,1080,320C960,320,840,320,720,320C600,320,480,320,360,320C240,320,120,320,60,320L0,320Z"
+    ></path>
+
+  </svg>
+
+</div>
+
+
+<!-- CONTACTO PREMIUM -->
 
 <section
   id="contacto"
-  class="py-32 relative overflow-hidden bg-[#F8F7FF]"
+  class="relative py-36 overflow-hidden bg-[#F8FAFC]"
 >
 
-  <!-- textura ligera -->
+  <!-- Background Glow -->
+<div class="absolute top-32 left-1/2 -translate-x-1/2 w-[900px] h-[900px] bg-gradient-to-br from-lilac/10 to-cyan/10 blur-3xl rounded-full pointer-events-none"></div>
+
+<!-- Top Fade -->
+<div class="absolute top-0 left-0 w-full h-40 bg-gradient-to-b from-[#F8FAFC] to-transparent pointer-events-none"></div>
+
+
+  <!-- Grid Texture -->
   <div
     class="absolute inset-0 opacity-[0.03]"
     style="
@@ -1318,206 +1298,237 @@
     ">
   </div>
 
-  <div class="max-w-6xl mx-auto px-6 relative z-10">
+  <div class="max-w-7xl mx-auto px-6 relative z-10">
 
     <!-- Header -->
     <div class="text-center mb-20 reveal">
 
-      <p class="text-lilac uppercase tracking-[0.35em] text-sm font-bold mb-5">
-        Contacto
+      <p class="text-lilac uppercase tracking-[0.35em] text-xs font-bold mb-5">
+        CONTACTO
       </p>
 
-      <h2 class="text-5xl md:text-6xl font-display font-bold text-slate-900 leading-tight mb-5">
-        Hablemos de tu operación.
+      <h2 class="text-5xl md:text-6xl font-display font-bold text-slate-900 leading-tight mb-6">
+        Descubre qué está pasando <br />
+        en tu red hídrica.
       </h2>
 
       <p class="text-slate-500 max-w-2xl mx-auto text-xl leading-relaxed">
-        Cuéntanos qué está ocurriendo y te diremos si HydroTrace AI puede ayudarte.
+        Agenda una demostración y analiza en minutos dónde podría estarse perdiendo agua.
       </p>
 
     </div>
 
-    <!-- CARD -->
-    <div class="bg-white rounded-[36px] border border-slate-200/70 shadow-[0_30px_80px_rgba(15,23,42,.06)] overflow-hidden">
+    <!-- MAIN CARD -->
+    <div class="relative">
 
-      <div class="grid md:grid-cols-5">
+      <!-- Glow -->
+      <div class="absolute inset-0 bg-gradient-to-r from-lilac/10 to-cyan/10 blur-3xl scale-95 rounded-[40px]"></div>
 
-        <!-- IZQUIERDA -->
-        <div class="md:col-span-2 p-10 md:p-12 border-b md:border-b-0 md:border-r border-slate-100">
+      <div class="relative bg-white/80 backdrop-blur-xl border border-white/60 rounded-[36px] shadow-[0_30px_90px_rgba(15,23,42,.08)] overflow-hidden">
 
-          <div class="sticky top-10">
+        <div class="grid lg:grid-cols-5">
 
-            <h3 class="text-2xl font-display font-bold text-slate-900 mb-6">
-              Una conversación directa.
-            </h3>
+          <!-- LEFT SIDE -->
+          <div class="lg:col-span-2 p-10 md:p-14 bg-gradient-to-br from-[#faf7ff] to-[#f8fbff] border-b lg:border-b-0 lg:border-r border-slate-100">
 
-            <p class="text-slate-500 leading-relaxed mb-10">
-              Revisamos tu caso y te damos una respuesta clara en menos de 24 horas.
-            </p>
+            <div class="sticky top-10">
 
-            <div class="space-y-7">
-
-              <div class="flex gap-4">
-                <div class="w-11 h-11 rounded-2xl bg-lilac/10 flex items-center justify-center text-lilac">
-                  <i data-lucide="mail" class="w-5 h-5"></i>
-                </div>
-                <div>
-                  <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400 mb-1">
-                    Email
-                  </p>
-                  <p class="text-slate-700">
-                    contacto@pumascriptsolutions.ai
-                  </p>
-                </div>
+              <!-- Badge -->
+              <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 shadow-sm mb-8">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span class="text-xs font-semibold text-slate-600">
+                  Respuesta en menos de 24h
+                </span>
               </div>
 
-              <div class="flex gap-4">
-                <div class="w-11 h-11 rounded-2xl bg-cyan/10 flex items-center justify-center text-cyan">
-                  <i data-lucide="map-pin" class="w-5 h-5"></i>
-                </div>
-                <div>
-                  <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400 mb-1">
-                    Ubicación
-                  </p>
-                  <p class="text-slate-700">
-                    Ciudad de México
-                  </p>
-                </div>
-              </div>
+              <h3 class="text-3xl font-display font-bold text-slate-900 leading-tight mb-6">
+                Una conversación simple y directa.
+              </h3>
 
-              <div class="flex gap-4">
-                <div class="w-11 h-11 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500">
-                  <i data-lucide="clock" class="w-5 h-5"></i>
+              <p class="text-slate-500 leading-relaxed mb-12">
+                Revisamos tu operación, entendemos el problema y te mostramos si HydroTrace AI puede ayudarte a detectar pérdidas y priorizar zonas críticas.
+              </p>
+
+              <!-- Features -->
+              <div class="space-y-6">
+
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 rounded-2xl bg-lilac/10 flex items-center justify-center text-lilac shrink-0">
+                    <i data-lucide="mail" class="w-5 h-5"></i>
+                  </div>
+
+                  <div>
+                    <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-1">
+                      Email
+                    </p>
+
+                    <p class="text-slate-700 font-medium">
+                      contacto@pumascriptsolutions.ai
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <p class="text-[11px] uppercase tracking-[0.2em] text-slate-400 mb-1">
-                    Respuesta
-                  </p>
-                  <p class="text-slate-700">
-                    Menos de 24 horas
-                  </p>
+
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 rounded-2xl bg-cyan/10 flex items-center justify-center text-cyan shrink-0">
+                    <i data-lucide="map-pin" class="w-5 h-5"></i>
+                  </div>
+
+                  <div>
+                    <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-1">
+                      Ubicación
+                    </p>
+
+                    <p class="text-slate-700 font-medium">
+                      Ciudad de México
+                    </p>
+                  </div>
                 </div>
+
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-500 shrink-0">
+                    <i data-lucide="shield-check" class="w-5 h-5"></i>
+                  </div>
+
+                  <div>
+                    <p class="text-xs uppercase tracking-[0.2em] text-slate-400 mb-1">
+                      Evaluación
+                    </p>
+
+                    <p class="text-slate-700 font-medium">
+                      Sin costo y sin compromiso
+                    </p>
+                  </div>
+                </div>
+
               </div>
 
             </div>
 
           </div>
 
-        </div>
+          <!-- FORM -->
+          <div class="lg:col-span-3 p-10 md:p-14">
 
-        <!-- FORM -->
-        <div class="md:col-span-3 p-10 md:p-12">
-
-          <!-- Tabs -->
-          <div class="flex gap-2 mb-8 p-1 bg-slate-100 rounded-2xl">
-
-            <button
-              onclick="setTab('demo')"
-              id="tab-demo"
-              class="flex-1 py-3 rounded-xl text-sm font-semibold bg-white shadow-sm text-slate-900"
+            <form
+              id="form-contacto"
+              action="/dashboard-clientes"
+              method="POST"
+              class="space-y-7"
             >
-              Ver plataforma
-            </button>
 
-            <button
-              onclick="setTab('evaluacion')"
-              id="tab-evaluacion"
-              class="flex-1 py-3 rounded-xl text-sm font-semibold text-slate-500"
-            >
-              Evaluar operación
-            </button>
+              <!-- Row -->
+              <div class="grid md:grid-cols-2 gap-5">
+
+                <div>
+                  <label class="text-sm font-medium text-slate-700 mb-3 block">
+                    Nombre completo
+                  </label>
+
+                  <input
+                    type="text"
+                    name="nombre"
+                    placeholder="Tu nombre"
+                    class="w-full h-14 px-5 rounded-2xl border border-slate-200 bg-slate-50/80 focus:bg-white focus:border-lilac outline-none transition-all"
+                  />
+                </div>
+
+                <div>
+                  <label class="text-sm font-medium text-slate-700 mb-3 block">
+                    Empresa / Organismo
+                  </label>
+
+                  <input
+                    type="text"
+                    name="empresa"
+                    placeholder="Nombre de la organización"
+                    class="w-full h-14 px-5 rounded-2xl border border-slate-200 bg-slate-50/80 focus:bg-white focus:border-lilac outline-none transition-all"
+                  />
+                </div>
+
+              </div>
+
+              <!-- Email -->
+              <div>
+
+                <label class="text-sm font-medium text-slate-700 mb-3 block">
+                  Correo institucional
+                </label>
+
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="correo@organismo.gob.mx"
+                  class="w-full h-14 px-5 rounded-2xl border border-slate-200 bg-slate-50/80 focus:bg-white focus:border-lilac outline-none transition-all"
+                />
+
+              </div>
+
+              <!-- Select -->
+              <div>
+
+                <label class="text-sm font-medium text-slate-700 mb-3 block">
+                  ¿Qué te interesa?
+                </label>
+
+                <select
+                  name="interes"
+                  class="w-full h-14 px-5 rounded-2xl border border-slate-200 bg-slate-50/80 focus:bg-white focus:border-lilac outline-none transition-all text-slate-700"
+                >
+                  <option>Ver demo de HydroTrace AI</option>
+                  <option>Evaluar mi operación</option>
+                  <option>Analizar zonas críticas</option>
+                  <option>Hablar con el equipo</option>
+                </select>
+
+              </div>
+
+              <!-- Message -->
+              <div>
+
+                <label class="text-sm font-medium text-slate-700 mb-3 block">
+                  Cuéntanos tu reto principal
+                </label>
+
+                <textarea
+                  name="mensaje"
+                  rows="5"
+                  placeholder="Describe brevemente qué está ocurriendo en tu operación..."
+                  class="w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50/80 focus:bg-white focus:border-lilac outline-none resize-none transition-all"
+                ></textarea>
+
+              </div>
+
+              <!-- CTA -->
+              <button
+                type="submit"
+                class="group relative w-full h-16 rounded-2xl overflow-hidden bg-gradient-to-r from-lilac to-[#8b5cf6] text-white font-semibold shadow-[0_12px_30px_rgba(168,85,247,.25)] transition-all hover:-translate-y-1"
+              >
+
+                <span class="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-white/10"></span>
+
+                <span class="relative flex items-center justify-center gap-3">
+                  Solicitar demostración
+                  <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </span>
+
+              </button>
+
+              <p class="text-center text-sm text-slate-400 pt-2">
+                Sin spam. Sin presión comercial.
+              </p>
+
+            </form>
 
           </div>
-
-          <form
-            id="form-contacto"
-            action="/dashboard-clientes"
-            method="POST"
-            class="space-y-6"
-          >
-
-            <input type="hidden" name="interes" id="campo-interes" value="demo">
-
-            <!-- Nombre + Empresa -->
-            <div class="grid md:grid-cols-2 gap-5">
-
-              <div>
-                <label class="text-sm text-slate-600 mb-2 block">
-                  Nombre
-                </label>
-
-                <input
-                  type="text"
-                  name="nombre"
-                  placeholder="Tu nombre"
-                  class="w-full h-14 px-5 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 focus:border-lilac focus:bg-white outline-none transition"
-                />
-              </div>
-
-              <div>
-                <label class="text-sm text-slate-600 mb-2 block">
-                  Empresa
-                </label>
-
-                <input
-                  type="text"
-                  name="empresa"
-                  placeholder="Organismo / empresa"
-                  class="w-full h-14 px-5 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 focus:border-lilac focus:bg-white outline-none transition"
-                />
-              </div>
-
-            </div>
-
-            <!-- Email -->
-            <div>
-
-              <label class="text-sm text-slate-600 mb-2 block">
-                Correo institucional
-              </label>
-
-              <input
-                type="email"
-                name="email"
-                placeholder="correo@organismo.gob.mx"
-                class="w-full h-14 px-5 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 focus:border-lilac focus:bg-white outline-none transition"
-              />
-
-            </div>
-
-            <!-- Mensaje -->
-            <div>
-
-              <label class="text-sm text-slate-600 mb-2 block">
-                ¿Cuál es tu reto principal?
-              </label>
-
-              <textarea
-                rows="5"
-                placeholder="Describe brevemente el problema..."
-                class="w-full px-5 py-4 rounded-2xl border border-slate-200 bg-slate-50 text-slate-900 placeholder-slate-400 focus:border-lilac focus:bg-white outline-none resize-none transition"></textarea>
-
-            </div>
-
-            <!-- CTA -->
-            <button
-              type="submit"
-              class="w-full h-14 rounded-2xl bg-slate-900 text-white font-semibold hover:-translate-y-0.5 transition-all shadow-lg"
-            >
-              Solicitar conversación →
-            </button>
-
-            <p class="text-center text-sm text-slate-400">
-              Sin spam. Sin presión comercial.
-            </p>
-
-          </form>
 
         </div>
 
       </div>
+
     </div>
+
   </div>
+
 </section>
 
 <!-- FOOTER LIGHT -->

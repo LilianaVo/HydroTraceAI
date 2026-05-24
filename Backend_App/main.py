@@ -620,6 +620,37 @@ def actualizar_estatus(lead_id: int):
     db.session.commit()
     return redirect(url_for("dashboard_admin"))
 
+@app.route("/api/leads")
+def api_leads():
+    try:
+        leads = Lead.query.order_by(Lead.fecha_registro.desc()).all()
+        return jsonify([{
+            "id":             l.id,
+            "nombre":         l.nombre,
+            "email":          l.email,
+            "empresa":        l.empresa,
+            "interes":        l.interes,
+            "mensaje":        l.mensaje,
+            "status":         l.status,
+            "fecha_registro": l.fecha_registro.strftime("%d %b %Y, %H:%M") if l.fecha_registro else "—"
+        } for l in leads])
+    except Exception:
+        return jsonify([])
+
+@app.route("/actualizar-crm", methods=["POST"])
+def actualizar_crm():
+    data = request.get_json()
+    lead = Lead(
+        nombre  = data.get("nombre"),
+        email   = data.get("email"),
+        empresa = data.get("inst"),
+        interes = data.get("interes", "—"),
+        mensaje = data.get("notas"),
+    )
+    db.session.add(lead)
+    db.session.commit()
+    return jsonify({"id": lead.id, "ok": True})
+
 @app.route("/logout")
 def logout():
     session.clear()
