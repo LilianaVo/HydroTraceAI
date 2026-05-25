@@ -860,6 +860,22 @@ html {
   zoom: 1.10;
 }
 
+.dot-cluster.cluster-sky    { background: #3B8EFF; }
+.dot-cluster.cluster-amber  { background: #F59E0B; }
+.dot-cluster.cluster-purple { background: #7C6EF5; }
+.dot-cluster.cluster-rose   { background: #FF5E8A; }
+
+.val-cluster.cluster-sky    { color: #3B8EFF; }
+.val-cluster.cluster-amber  { color: #F59E0B; }
+.val-cluster.cluster-purple { color: #7C6EF5; }
+.val-cluster.cluster-rose   { color: #FF5E8A; }
+
+.bar-cluster.cluster-sky    { background: #3B8EFF; }
+.bar-cluster.cluster-amber  { background: #F59E0B; }
+.bar-cluster.cluster-purple { background: #7C6EF5; }
+.bar-cluster.cluster-rose   { background: #FF5E8A; }
+
+.bar-cluster { height: 100%; }
 
   </style>
 </head>
@@ -905,12 +921,12 @@ html {
       <div class="deco-bar" style="height:46%;animation-delay:0.55s"></div>
     </div>
     <div class="deco-stat">
-      <span>160 colonias monitoreadas</span>
+      <span>{{ total_colonias }} colonias monitoreadas</span>
       <span>CDMX</span>
     </div>
   </div>
 
-  <!-- Clusters widget -->
+<!-- Clusters widget -->
 <div style="
   margin:0 16px 4px;
   background:linear-gradient(135deg,rgba(196,181,253,0.18) 0%,rgba(147,197,253,0.10) 100%);
@@ -919,51 +935,17 @@ html {
   padding:16px 14px 12px;
   position:relative;overflow:hidden;
 ">
-  <div class="deco-label">Perfiles Urbanos </div>
+  <div class="deco-label">Perfiles Urbanos</div>
 
-  <!-- Fila cluster 1 -->
+  {% for c in clusters_info %}
   <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
     <div style="display:flex;align-items:center;gap:7px;">
-      <div style="width:7px;height:7px;border-radius:50%;background:var(--sky);flex-shrink:0;"></div>
-      <span style="font-size:11px;font-weight:600;color:var(--text);">Mixto Urbano</span>
+      <div class="dot-cluster {{ c.color }}" style="width:7px;height:7px;border-radius:50%;flex-shrink:0;"></div>
+      <span style="font-size:11px;font-weight:600;color:var(--text);">{{ c.nombre }}</span>
     </div>
-    <span style="font-size:11px;font-weight:700;color:var(--sky);">106</span>
+    <span class="val-cluster {{ c.color }}" style="font-size:11px;font-weight:700;">{{ c.conteo }}</span>
   </div>
-
-  <!-- Fila cluster 2 -->
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
-    <div style="display:flex;align-items:center;gap:7px;">
-      <div style="width:7px;height:7px;border-radius:50%;background:var(--amber);flex-shrink:0;"></div>
-      <span style="font-size:11px;font-weight:600;color:var(--text);">Industrial</span>
-    </div>
-    <span style="font-size:11px;font-weight:700;color:var(--amber);">49</span>
-  </div>
-
-  <!-- Fila cluster 0 -->
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;">
-    <div style="display:flex;align-items:center;gap:7px;">
-      <div style="width:7px;height:7px;border-radius:50%;background:var(--purple);flex-shrink:0;"></div>
-      <span style="font-size:11px;font-weight:600;color:var(--text);">Residencial Premium</span>
-    </div>
-    <span style="font-size:11px;font-weight:700;color:var(--purple);">4</span>
-  </div>
-
-  <!-- Fila cluster 3 -->
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-    <div style="display:flex;align-items:center;gap:7px;">
-      <div style="width:7px;height:7px;border-radius:50%;background:var(--rose);flex-shrink:0;"></div>
-      <span style="font-size:11px;font-weight:600;color:var(--text);">Vulnerable</span>
-    </div>
-    <span style="font-size:11px;font-weight:700;color:var(--rose);">1</span>
-  </div>
-
-  <!-- Barra proporcional -->
-  <div style="display:flex;height:6px;border-radius:4px;overflow:hidden;">
-    <div style="width:66.25%;background:var(--sky);"></div>
-    <div style="width:30.625%;background:var(--amber);"></div>
-    <div style="width:2.5%;background:var(--purple);"></div>
-    <div style="width:0.625%;background:var(--rose);"></div>
-  </div>
+  {% endfor %}
 
 </div>
 
@@ -1020,6 +1002,28 @@ html {
     </div>
     Alertas en Vivo
   </a>
+
+  <a class="nav-link" href="#sec-campo" onclick="navScroll('#sec-campo',this)">
+  <div class="nav-icon">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+      <line x1="12" y1="18" x2="12" y2="12"/>
+      <line x1="9" y1="15" x2="15" y2="15"/>
+    </svg>
+  </div>
+  Reporte de Campo
+</a>
+
+<a class="nav-link" href="#sec-roi-ana" onclick="navScroll('#sec-roi-ana',this)">
+  <div class="nav-icon">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="12" y1="1" x2="12" y2="23"/>
+      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+    </svg>
+  </div>
+  Simulador ROI
+</a>
 
   <!-- Decorative animated rings -->
   <div class="sidebar-geo">
@@ -1114,17 +1118,17 @@ html {
         <p class="hero-subtitle">Detecta fugas, localiza tomas clandestinas y prioriza a tus cuadrillas basándote en el impacto económico. Deja de operar a ciegas.</p>
         <div class="hero-stats">
           <div class="hero-stat">
-            <span class="hero-stat-val">160</span>
+            <span class="hero-stat-val">{{ total_colonias }}</span>
             <span class="hero-stat-label">Colonias</span>
           </div>
           <div class="hero-divider"></div>
           <div class="hero-stat">
-            <span class="hero-stat-val">13.75%</span>
+            <span class="hero-stat-val">{{ tasa_confianza }}%</span>
             <span class="hero-stat-label">Tasa de anomalía</span>
           </div>
           <div class="hero-divider"></div>
           <div class="hero-stat">
-            <span class="hero-stat-val">16</span>
+            <span class="hero-stat-val">{{ alcaldias_cubiertas }}</span>
             <span class="hero-stat-label">Alcaldías</span>
           </div>
         </div>
@@ -1167,8 +1171,8 @@ html {
   display:flex;flex-direction:column;gap:4px;
 ">
   <div style="font-size:9px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--purple);">Hallazgo principal</div>
-  <div style="font-size:13px;font-weight:800;color:var(--text);letter-spacing:-0.02em;">13.75% de colonias con anomalía</div>
-  <div style="font-size:10.5px;color:var(--text2);font-weight:500;line-height:1.5;">22 de 160 colonias analizadas presentan exceso de consumo estadísticamente significativo.</div>
+  <div style="font-size:13px;font-weight:800;color:var(--text);letter-spacing:-0.02em;">{{ tasa_confianza }}% de colonias con anomalía</div>
+  <div style="font-size:10.5px;color:var(--text2);font-weight:500;line-height:1.5;">{{ alertas_criticas }} de {{ total_colonias }} colonias analizadas presentan exceso de consumo estadísticamente significativo.</div>
 </div>
       </div>
     </div>
@@ -1529,58 +1533,30 @@ html {
         </div>
       </div>
 
-      <!-- Alertas en Tiempo Real -->
       <div class="panel" id="sec-alertas" style="display:flex;flex-direction:column;">
-        <div class="panel-hd">
-          <div class="panel-title">
-            <div class="panel-dot" style="background:var(--rose);animation:pulse-dot 2s infinite;"></div>
-            Alertas en Tiempo Real
-          </div>
-          <span class="tag" style="background:var(--rose-pale);color:var(--rose);">COLONIAS CRÍTICAS</span>
-        </div>
-
-        <div class="panel-bd" style="flex:1;padding-top:4px;padding-bottom:2px;">
-
-          {% for zona in ranking[:4] %}
-<div class="alert-row">
-  <div class="alert-ico {% if 'TICO' in zona.diagnostico_final %}alert-ico-critico{% elif 'SOSPECHOSO' in zona.diagnostico_final %}alert-ico-sospechoso{% else %}alert-ico-deficiencia{% endif %}">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-      <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-    </svg>
-  </div>
-  <div>
-    <div class="alert-severity {% if 'TICO' in zona.diagnostico_final %}alert-sev-critico{% elif 'SOSPECHOSO' in zona.diagnostico_final %}alert-sev-sospechoso{% else %}alert-sev-deficiencia{% endif %}">
-      {{ zona.diagnostico_final.split('(')[0].strip() }} · {{ zona.alcaldia.title() }}
+  <div class="panel-hd">
+    <div class="panel-title">
+      <div class="panel-dot" style="background:var(--sky);"></div>
+      Exceso por Alcaldía
     </div>
-    <div class="alert-text">
-      <strong>{{ zona.colonia.title() }}</strong> — Exceso de {{ "{:,.0f}".format(zona.exceso_consumo) }} m³ detectado por IA.
+    <span class="tag" style="background:var(--sky-pale);color:var(--sky);">Top 5 · m³</span>
+  </div>
+  <div class="panel-bd" style="flex:1;padding-top:8px;">
+    <canvas id="excesoPorAlcaldiaChart" height="200"></canvas>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 22px 16px;border-top:1px solid var(--border2);">
+    <div style="background:var(--lavender-pale);border-radius:10px;padding:10px 12px;">
+      <div style="font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;">Tasa detección</div>
+      <div style="font-size:16px;font-weight:800;color:var(--purple);letter-spacing:-0.02em;">{{ tasa_confianza }}%</div>
+      <div style="font-size:9.5px;color:var(--text2);font-weight:500;">{{ alertas_criticas }} / {{ total_colonias }} colonias</div>
+    </div>
+    <div style="background:var(--sage-pale);border-radius:10px;padding:10px 12px;">
+      <div style="font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;">Contaminación IF</div>
+      <div style="font-size:16px;font-weight:800;color:var(--sage);letter-spacing:-0.02em;">15%</div>
+      <div style="font-size:9.5px;color:var(--text2);font-weight:500;">Parámetro conservador</div>
     </div>
   </div>
 </div>
-{% endfor %}
-
-        </div>
-
-        <div style="
-  display:grid;grid-template-columns:1fr 1fr;gap:8px;
-  padding:10px 22px 4px;
-  border-top:1px solid var(--border2);
-  margin-bottom:4px;
-">
-  <div style="background:var(--lavender-pale);border-radius:10px;padding:10px 12px;">
-    <div style="font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;">Tasa detección</div>
-    <div style="font-size:16px;font-weight:800;color:var(--purple);letter-spacing:-0.02em;">13.75%</div>
-    <div style="font-size:9.5px;color:var(--text2);font-weight:500;">22 / 160 colonias</div>
-  </div>
-  <div style="background:var(--sage-pale);border-radius:10px;padding:10px 12px;">
-    <div style="font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;">Contaminación IF</div>
-    <div style="font-size:16px;font-weight:800;color:var(--sage);letter-spacing:-0.02em;">15%</div>
-    <div style="font-size:9.5px;color:var(--text2);font-weight:500;">Parámetro conservador</div>
-  </div>
-</div>
-
-      </div>
 
     </div>
 
@@ -1661,6 +1637,8 @@ html {
       </div>
 
     </div>
+
+
   </div><!-- /content -->
 
   <!-- ── CALENDARIO DE INSPECCIONES ── -->
@@ -1750,6 +1728,116 @@ html {
   </div>
 </div>
 
+    <!-- ── REPORTE DE CAMPO ── -->
+<div id="sec-campo" style="margin-bottom:24px;">
+  <div style="
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); box-shadow:var(--shadow);
+    backdrop-filter:blur(16px); overflow:hidden;
+  ">
+
+    <!-- Header -->
+    <div style="padding:18px 24px 14px; border-bottom:1px solid var(--border2);
+      display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--purple);flex-shrink:0;"></div>
+        <span style="font-size:14px;font-weight:700;color:var(--text);letter-spacing:-0.015em;">
+          Reporte de Inspección de Campo
+        </span>
+        <span style="font-size:9.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+          padding:4px 10px;border-radius:7px;background:var(--lavender-pale);color:var(--purple);">
+          Cuadrilla SEGIAGUA
+        </span>
+      </div>
+    </div>
+
+    <div style="padding:24px; display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+
+      <!-- Columna izquierda: selección de colonia y hallazgo -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+
+        <!-- Colonia inspeccionada -->
+        <div>
+          <label style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
+            color:var(--text3);display:block;margin-bottom:6px;">
+            Colonia inspeccionada
+          </label>
+          <select id="campo-colonia" style="width:100%;padding:9px 12px;border-radius:10px;
+            border:1px solid var(--border);background:var(--surface);font-family:'Figtree',sans-serif;
+            font-size:12.5px;color:var(--text);outline:none;">
+            <option value="">— Selecciona colonia —</option>
+            {% for zona in ranking %}
+            <option value="{{ zona.colonia }}|{{ zona.alcaldia }}|{{ zona.diagnostico_final }}">
+              {{ zona.colonia.title() }} · {{ zona.alcaldia.title() }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Fecha de inspección -->
+        <div>
+          <label style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
+            color:var(--text3);display:block;margin-bottom:6px;">
+            Fecha de inspección
+          </label>
+          <input type="date" id="campo-fecha" style="width:100%;padding:9px 12px;border-radius:10px;
+            border:1px solid var(--border);background:var(--surface);font-family:'Figtree',sans-serif;
+            font-size:12.5px;color:var(--text);outline:none;" />
+        </div>
+
+        <!-- Hallazgo encontrado -->
+        <div>
+          <label style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
+            color:var(--text3);display:block;margin-bottom:6px;">
+            Hallazgo encontrado
+          </label>
+          <select id="campo-hallazgo" style="width:100%;padding:9px 12px;border-radius:10px;
+            border:1px solid var(--border);background:var(--surface);font-family:'Figtree',sans-serif;
+            font-size:12.5px;color:var(--text);outline:none;">
+            <option value="">— Selecciona hallazgo —</option>
+            <option value="FUGA_CONFIRMADA">Fuga de red confirmada</option>
+            <option value="TOMA_CLANDESTINA">Toma clandestina detectada</option>
+            <option value="PRESION_BAJA">Baja presión / Desabasto confirmado</option>
+            <option value="SIN_HALLAZGO">Sin hallazgo — Falso positivo</option>
+            <option value="PENDIENTE">Requiere revisión adicional</option>
+          </select>
+        </div>
+
+        <!-- Notas de la cuadrilla -->
+        <div>
+          <label style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
+            color:var(--text3);display:block;margin-bottom:6px;">
+            Observaciones de campo
+          </label>
+          <textarea id="campo-notas" rows="3" placeholder="Describe el hallazgo, condición de la infraestructura, acciones tomadas..."
+            style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--border);
+            background:var(--surface);font-family:'Figtree',sans-serif;font-size:12px;
+            color:var(--text);outline:none;resize:vertical;"></textarea>
+        </div>
+
+        <button onclick="registrarReporteCampo()" class="btn-primary" style="width:100%;padding:11px;">
+          Registrar reporte
+        </button>
+
+      </div>
+
+      <!-- Columna derecha: historial de reportes registrados -->
+      <div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
+          color:var(--text3);margin-bottom:12px;">
+          Reportes registrados en esta sesión
+        </div>
+        <div id="campo-historial" style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto;">
+          <div style="text-align:center;padding:32px 0;color:var(--text3);font-size:12px;font-weight:500;">
+            Sin reportes aún. Registra el primer hallazgo.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <script>
 // ── DATOS DE INSPECCIONES (basados en el ranking real del modelo) ──
 const inspeccionesData = {
@@ -1780,6 +1868,71 @@ const inspeccionesData = {
     { colonia: "El Contadero", alcaldia: "Cuajimalpa", tipo: "DEFICIENCIA", color: "#30D158" },
   ],
 };
+
+// ── REPORTE DE CAMPO ──
+const HALLAZGO_LABEL = {
+  FUGA_CONFIRMADA:   { label: "Fuga confirmada",        color: "#FF2D55" },
+  TOMA_CLANDESTINA:  { label: "Toma clandestina",       color: "#FF9F0A" },
+  PRESION_BAJA:      { label: "Baja presión",           color: "#30D158" },
+  SIN_HALLAZGO:      { label: "Falso positivo",         color: "#8E8E93" },
+  PENDIENTE:         { label: "Revisión adicional",     color: "#BEB0FC" },
+};
+
+let campoReportes = [];
+
+function registrarReporteCampo() {
+  const coloniaRaw = document.getElementById("campo-colonia").value;
+  const fecha      = document.getElementById("campo-fecha").value;
+  const hallazgo   = document.getElementById("campo-hallazgo").value;
+  const notas      = document.getElementById("campo-notas").value.trim();
+
+  if (!coloniaRaw || !fecha || !hallazgo) {
+    alert("Completa colonia, fecha y hallazgo antes de registrar.");
+    return;
+  }
+
+  const [colonia, alcaldia, diagnostico] = coloniaRaw.split("|");
+  const info = HALLAZGO_LABEL[hallazgo] || { label: hallazgo, color: "#8E8E93" };
+
+  const reporte = { colonia, alcaldia, diagnostico, fecha, hallazgo, label: info.label, color: info.color, notas };
+  campoReportes.unshift(reporte);
+  renderHistorialCampo();
+
+  // Enviar a Flask
+  fetch("/api/reporte-campo", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(reporte)
+  }).catch(() => {});
+
+  // Limpiar campos
+  document.getElementById("campo-colonia").value  = "";
+  document.getElementById("campo-fecha").value    = "";
+  document.getElementById("campo-hallazgo").value = "";
+  document.getElementById("campo-notas").value    = "";
+}
+
+function renderHistorialCampo() {
+  const el = document.getElementById("campo-historial");
+  if (!campoReportes.length) {
+    el.innerHTML = `<div style="text-align:center;padding:32px 0;color:var(--text3);font-size:12px;font-weight:500;">Sin reportes aún.</div>`;
+    return;
+  }
+  el.innerHTML = campoReportes.map(r => `
+    <div style="padding:12px 14px;border-radius:10px;background:rgba(255,255,255,0.7);
+      border:1px solid var(--border2);display:flex;gap:10px;align-items:flex-start;">
+      <span style="width:9px;height:9px;border-radius:50%;background:${r.color};
+        flex-shrink:0;margin-top:3px;display:inline-block;box-shadow:0 0 6px ${r.color};"></span>
+      <div style="flex:1;">
+        <div style="font-size:12.5px;font-weight:700;color:var(--text);">${r.colonia.replace(/\b\w/g, c=>c.toUpperCase())}</div>
+        <div style="font-size:10.5px;color:var(--text3);font-weight:500;margin-bottom:4px;">${r.alcaldia} · ${r.fecha}</div>
+        <span style="font-size:9.5px;font-weight:800;padding:2px 9px;border-radius:6px;
+          background:${r.color}18;color:${r.color};">${r.label}</span>
+        ${r.notas ? `<div style="font-size:11px;color:var(--text2);margin-top:6px;line-height:1.5;">${r.notas}</div>` : ""}
+      </div>
+    </div>
+  `).join("");
+}
 
 let calYear  = 2026;
 let calMonth = 4; // Mayo (0-indexed)
@@ -1966,7 +2119,8 @@ renderCalendario();
 <script id="hydrotrace-data" type="application/json">
   {
     "rankingData": {{ ranking | tojson }},
-    "perdidaBase": {{ costo_perdida_total | default(210868476) }}
+    "perdidaBase": {{ costo_perdida_total | default(210868476) }},
+    "clustersData": {{ clusters_json | safe }}
   }
 </script>
 
@@ -2323,6 +2477,46 @@ if (totalExceso > 0 && excesoF.length >= 2) {
       });
     });
   });
+
+  (function() {
+  const ctx = document.getElementById('excesoPorAlcaldiaChart');
+  if (!ctx) return;
+
+  // Agrupar rankingData por alcaldía y sumar exceso
+  const porAlcaldia = {};
+  rankingData.forEach(r => {
+    const alc = r.alcaldia || "—";
+    porAlcaldia[alc] = (porAlcaldia[alc] || 0) + (r.exceso_consumo || 0);
+  });
+
+  const sorted = Object.entries(porAlcaldia)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 5);
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: sorted.map(([alc]) => alc.replace(/\b\w/g, c => c.toUpperCase())),
+      datasets: [{
+        data: sorted.map(([, v]) => Math.round(v)),
+        backgroundColor: ['#7C6EF5','#3B8EFF','#F59E0B','#FF5E8A','#00C896'],
+        borderRadius: 10,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: 'rgba(139,124,246,0.08)' }, ticks: { color: 'var(--text3)', font: { size: 10 } }, border: { display: false } },
+        y: { grid: { display: false }, ticks: { color: 'var(--text2)', font: { size: 11, weight: '600' } } }
+      }
+    }
+  });
+})();
+
 </script>
 </body>
 </html>

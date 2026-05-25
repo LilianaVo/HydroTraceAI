@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diccionario de Datos — HydroTrace AI</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f1e;
+    --surface: #101828;
+    --surface2: #1a2540;
+    --border: #1e3a5f;
+    --accent: #00d4ff;
+    --accent2: #0066cc;
+    --accent3: #00ff88;
+    --warn: #ff9500;
+    --danger: #ff3b5c;
+    --text: #e8f4f8;
+    --muted: #6a8aaa;
+    --tag-bg: #0d2236;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Space Grotesk', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,100,200,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 90%, rgba(0,212,255,0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  header {
+    margin-bottom: 56px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 32px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+  .badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity:1; } 50% { opacity:0.3; }
+  }
+
+  h1 {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 620px;
+  }
+
+  .meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-top: 24px;
+  }
+  .meta-item {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .meta-item strong { color: var(--accent); font-weight: 600; }
+
+  /* ── TOC ── */
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent2);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 48px;
+  }
+  .toc h3 {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .toc ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 16px; }
+  .toc li a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 13px;
+    font-family: 'IBM Plex Mono', monospace;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+  .toc li a:hover { opacity: 1; }
+
+  /* ── SECTION ── */
+  section { margin-bottom: 56px; }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .section-icon {
+    width: 40px; height: 40px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .section-info h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .section-info .file-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    opacity: 0.7;
+  }
+  .section-info p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+  .section-stats {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .stat-chip {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    padding: 4px 12px;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    color: var(--muted);
+  }
+  .stat-chip strong { color: var(--text); }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; border-radius: 4px; border: 1px solid var(--border); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead tr {
+    background: var(--surface2);
+    border-bottom: 2px solid var(--border);
+  }
+  thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  tbody tr {
+    border-bottom: 1px solid rgba(30,58,95,0.5);
+    transition: background 0.15s;
+  }
+  tbody tr:hover { background: rgba(0,212,255,0.03); }
+  tbody tr:last-child { border-bottom: none; }
+  td {
+    padding: 13px 16px;
+    vertical-align: top;
+  }
+
+  .col-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  .col-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+  .type-str  { color: #ff9f40; }
+  .type-float{ color: #4bc8eb; }
+  .type-int  { color: #a3e635; }
+
+  .col-desc {
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 13px;
+  }
+  .col-example {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .col-unit {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: #c084fc;
+    white-space: nowrap;
+  }
+
+  .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    padding: 2px 8px;
+    border-radius: 2px;
+    margin-top: 4px;
+    letter-spacing: 0.05em;
+  }
+  .tag-key   { background: rgba(251,191,36,0.12); color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+  .tag-geo   { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+  .tag-ml    { background: rgba(167,139,250,0.12); color: #a78bfa; border: 1px solid rgba(167,139,250,0.25); }
+  .tag-kpi   { background: rgba(0,212,255,0.1);   color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+  .tag-cat   { background: rgba(249,115,22,0.12); color: #fb923c; border: 1px solid rgba(249,115,22,0.25); }
+  .tag-etl   { background: rgba(99,102,241,0.12); color: #818cf8; border: 1px solid rgba(99,102,241,0.25); }
+
+  /* ── VALUES BLOCK ── */
+  .values-block {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+  .val { color: var(--text); }
+
+  /* ── MODELS SECTION ── */
+  .model-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .model-card h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .model-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    background: rgba(167,139,250,0.15);
+    color: #a78bfa;
+    border: 1px solid rgba(167,139,250,0.3);
+    border-radius: 2px;
+  }
+  .model-card p { font-size: 13px; color: var(--muted); line-height: 1.55; }
+  .model-detail { margin-top: 10px; font-size: 12px; font-family: 'IBM Plex Mono', monospace; }
+  .model-detail span { color: var(--accent); }
+
+  /* ── SOURCES ── */
+  .sources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .source-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+  }
+  .source-card .src-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .source-card p { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  footer span { color: var(--accent); }
+
+  hr.divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <header>
+    <div class="badge">Documentación Técnica v1.0</div>
+    <h1>Diccionario de <span>Datos</span></h1>
+    <p class="subtitle">
+      Descripción completa de variables, tipos, rangos y semántica para el sistema de detección de anomalías hídricas a nivel colonia en la CDMX.
+    </p>
+    <div class="meta-row">
+      <div class="meta-item">Proyecto: <strong>HydroTrace AI</strong></div>
+      <div class="meta-item">Institución: <strong>UNAM</strong></div>
+      <div class="meta-item">Cobertura: <strong>160 colonias · 16 alcaldías</strong></div>
+      <div class="meta-item">Año de referencia: <strong>2019</strong></div>
+      <div class="meta-item">Fecha del documento: <strong>2026-05-23</strong></div>
+    </div>
+  </header>
+
+  <!-- TOC -->
+  <div class="toc">
+    <h3>Contenido</h3>
+    <ul>
+      <li><a href="#maestro">1. dataset_maestro_colonia_final</a></li>
+      <li><a href="#resultados">2. resultados_finales_IA</a></li>
+      <li><a href="#modelos">3. Modelos de Machine Learning</a></li>
+      <li><a href="#fuentes">4. Fuentes de Datos</a></li>
+      <li><a href="#pipeline">5. Pipeline ETL</a></li>
+    </ul>
+  </div>
+
+  <!-- ══════════════════════════════════════════════
+       DATASET 1: MAESTRO
+  ══════════════════════════════════════════════ -->
+  <section id="maestro">
+    <div class="section-header">
+      <div class="section-icon">🗄️</div>
+      <div class="section-info">
+        <h2>Dataset Maestro de Colonias</h2>
+        <div class="file-name">dataset_maestro_colonia_final.csv</div>
+        <p>Dataset de entrada al pipeline de ML. Integra cinco fuentes heterogéneas (consumo, demografía, reportes ciudadanos, índice de marginación e información geoespacial) a nivel colonia. Es generado por <code>etl_pipeline.py</code> y consumido por <code>modelos_ml.py</code>.</p>
+      </div>
+    </div>
+
+    <div class="section-stats">
+      <div class="stat-chip">Filas: <strong>~160</strong></div>
+      <div class="stat-chip">Columnas: <strong>18</strong></div>
+      <div class="stat-chip">Granularidad: <strong>Colonia</strong></div>
+      <div class="stat-chip">Origen: <strong>ETL Pipeline</strong></div>
+      <div class="stat-chip">Formato: <strong>CSV (UTF-8)</strong></div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Campo</th>
+            <th>Tipo</th>
+            <th>Unidad</th>
+            <th>Descripción</th>
+            <th>Valores / Rango</th>
+            <th>Etiqueta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-example">01</td>
+            <td class="col-name">alcaldia</td>
+            <td class="col-type type-str">str</td>
+            <td class="col-unit">—</td>
+            <td class="col-desc">Nombre normalizado (sin acentos, mayúsculas) de la alcaldía a la que pertenece la colonia. Clave de agrupación geopolítica principal.</td>
+            <td class="values-block"><span class="val">CUAUHTEMOC</span><br><span class="val">MIGUEL HIDALGO</span><br>… 16 valores</td>
+            <td><span class="tag tag-key">ID</span> <span class="tag tag-geo">GEO</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">02</td>
+            <td class="col-name">colonia</td>
+            <td class="col-type type-str">str</td>
+            <td class="col-unit">—</td>
+            <td class="col-desc">Nombre normalizado de la colonia. Junto con <em>alcaldia</em> forma la llave compuesta de unicidad del registro.</td>
+            <td class="values-block">~159 valores únicos</td>
+            <td><span class="tag tag-key">ID</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">03</td>
+            <td class="col-name">superficie_km2_calculada</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">km²</td>
+            <td class="col-desc">Superficie de la colonia calculada a partir de geometrías GeoJSON proyectadas al sistema ITRF2008/LCC (EPSG:6372). Usado para calcular densidad poblacional.</td>
+            <td class="values-block">min: <span class="val">0.09</span> · max: <span class="val">11.80</span><br>mediana: <span class="val">0.73</span></td>
+            <td><span class="tag tag-geo">GEO</span> <span class="tag tag-etl">ETL</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">04</td>
+            <td class="col-name">vocacion_principal</td>
+            <td class="col-type type-str">str</td>
+            <td class="col-unit">—</td>
+            <td class="col-desc">Vocación de uso de suelo predominante de la colonia, derivada del uso de suelo CDMX. Determina patrones de consumo esperados.</td>
+            <td class="values-block">
+              <span class="val">Habitacional/Comercial</span><br>
+              <span class="val">Habitacional/Reserva</span><br>
+              <span class="val">Habitacional/Industrial</span><br>
+              <span class="val">Habitacional/Rural</span><br>
+              <span class="val">Habitacional/Corporativo</span><br>
+              <span class="val">Comercial/Servicios</span><br>
+              <span class="val">Industrial/Comercial</span><br>
+              <span class="val">Rural/Reserva</span>
+            </td>
+            <td><span class="tag tag-cat">CAT</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">05</td>
+            <td class="col-name">uso_suelo_num</td>
+            <td class="col-type type-int">int64</td>
+            <td class="col-unit">—</td>
+            <td class="col-desc">Codificación ordinal de <em>vocacion_principal</em>: 0 = Rural/Reserva, 1 = Habitacional, 2 = Comercial/Industrial. Usado directamente como feature en los modelos.</td>
+            <td class="values-block"><span class="val">0</span> · <span class="val">1</span> · <span class="val">2</span></td>
+            <td><span class="tag tag-ml">ML FEATURE</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">06</td>
+            <td class="col-name">consumo_total</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">m³</td>
+            <td class="col-desc">Consumo total de agua registrado en la colonia durante el período de referencia 2019. Suma de consumo doméstico y no doméstico.</td>
+            <td class="values-block">min: <span class="val">1,164</span> · max: <span class="val">1,046,448</span><br>mediana: <span class="val">227,365</span></td>
+            <td><span class="tag tag-kpi">KPI</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">07</td>
+            <td class="col-name">consumo_total_dom</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">m³</td>
+            <td class="col-desc">Consumo de agua del sector doméstico (uso residencial). Componente de <em>consumo_total</em>.</td>
+            <td class="values-block">min: <span class="val">0</span> · max: <span class="val">541,750</span></td>
+            <td><span class="tag tag-kpi">KPI</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">08</td>
+            <td class="col-name">consumo_total_no_dom</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">m³</td>
+            <td class="col-desc">Consumo de agua del sector no doméstico (comercios, industria, servicios, gobierno). Componente de <em>consumo_total</em>.</td>
+            <td class="values-block">min: <span class="val">0</span> · max: <span class="val">667,282</span></td>
+            <td><span class="tag tag-kpi">KPI</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">09</td>
+            <td class="col-name">pob</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">habitantes</td>
+            <td class="col-desc">Población total de la colonia, proveniente del Censo de Población y Vivienda 2020. Imputada con mediana por alcaldía cuando falta.</td>
+            <td class="values-block">min: <span class="val">386</span> · max: <span class="val">30,097</span><br>mediana: <span class="val">9,282</span></td>
+            <td><span class="tag tag-ml">ML FEATURE</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">10</td>
+            <td class="col-name">consumo_per_capita</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">m³/hab</td>
+            <td class="col-desc">Consumo total dividido entre la población. Indicador de eficiencia hídrica y principal feature de los modelos de clustering y anomalía.</td>
+            <td class="values-block">min: <span class="val">0.16</span> · max: <span class="val">1,157.6</span><br>mediana: <span class="val">26.7</span></td>
+            <td><span class="tag tag-ml">ML FEATURE</span> <span class="tag tag-kpi">KPI</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">11</td>
+            <td class="col-name">densidad_poblacional</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">hab/km²</td>
+            <td class="col-desc">Razón entre <em>pob</em> y <em>superficie_km2_calculada</em>. Proxy de la presión sobre la infraestructura hídrica. Feature de los modelos.</td>
+            <td class="values-block">min: <span class="val">104</span> · max: <span class="val">87,659</span><br>mediana: <span class="val">10,082</span></td>
+            <td><span class="tag tag-ml">ML FEATURE</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">12</td>
+            <td class="col-name">total_reportes</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">reportes</td>
+            <td class="col-desc">Número total de reportes ciudadanos relacionados con el servicio de agua recibidos durante el período. Suma de fugas y falta de agua.</td>
+            <td class="values-block">min: <span class="val">5</span> · max: <span class="val">2,401</span><br>mediana: <span class="val">228</span></td>
+            <td><span class="tag tag-kpi">KPI</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">13</td>
+            <td class="col-name">reportes_fuga</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">reportes</td>
+            <td class="col-desc">Número de reportes ciudadanos clasificados como fuga visible de la red. Alta correlación con pérdidas no contabilizadas (PNCA).</td>
+            <td class="values-block">min: <span class="val">0</span> · max: <span class="val">376</span></td>
+            <td><span class="tag tag-kpi">KPI</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">14</td>
+            <td class="col-name">reportes_falta_agua</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">reportes</td>
+            <td class="col-desc">Número de reportes ciudadanos por baja presión, desabasto o corte del servicio. Indicador de deficiencias en distribución.</td>
+            <td class="values-block">min: <span class="val">0</span> · max: <span class="val">2,225</span></td>
+            <td><span class="tag tag-kpi">KPI</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">15</td>
+            <td class="col-name">idsm</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">índice [0–1]</td>
+            <td class="col-desc">Índice de Desarrollo Social de la Colonia (IDSM) normalizado al rango [0,1]. Escala continua donde valores cercanos a 1 indican mayor desarrollo. Feature en los modelos.</td>
+            <td class="values-block">min: <span class="val">0.00</span> · max: <span class="val">0.98</span><br>mediana: <span class="val">0.86</span></td>
+            <td><span class="tag tag-ml">ML FEATURE</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">16</td>
+            <td class="col-name">e_idsm</td>
+            <td class="col-type type-str">str</td>
+            <td class="col-unit">—</td>
+            <td class="col-desc">Categorización ordinal del IDSM en estratos de marginación. Versión legible del índice para visualización y reportes.</td>
+            <td class="values-block">
+              <span class="val">Muy alto</span> · <span class="val">Alto</span><br>
+              <span class="val">Medio</span> · <span class="val">Bajo</span><br>
+              <span class="val">Muy bajo</span> · <span class="val">Sin dato</span>
+            </td>
+            <td><span class="tag tag-cat">CAT</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">17</td>
+            <td class="col-name">latitud</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">grados WGS84</td>
+            <td class="col-desc">Latitud del centroide representativo de la colonia en el sistema de referencia WGS84. Usada para geolocalización en mapas del dashboard.</td>
+            <td class="values-block">~<span class="val">19.17</span> — <span class="val">19.56</span></td>
+            <td><span class="tag tag-geo">GEO</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">18</td>
+            <td class="col-name">longitud</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">grados WGS84</td>
+            <td class="col-desc">Longitud del centroide representativo de la colonia en el sistema de referencia WGS84. Usada para geolocalización en mapas del dashboard.</td>
+            <td class="values-block">~<span class="val">-99.30</span> — <span class="val">-98.99</span></td>
+            <td><span class="tag tag-geo">GEO</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════
+       DATASET 2: RESULTADOS
+  ══════════════════════════════════════════════ -->
+  <section id="resultados">
+    <div class="section-header">
+      <div class="section-icon">🤖</div>
+      <div class="section-info">
+        <h2>Resultados del Modelo de IA</h2>
+        <div class="file-name">resultados_finales_IA.csv</div>
+        <p>Dataset de salida del pipeline de ML. Extiende el dataset maestro con los resultados de los tres modelos: cluster de perfil hídrico (KMeans), score de anomalía (Isolation Forest) y diagnóstico final. Es consumido por <code>main.py</code> para alimentar el dashboard.</p>
+      </div>
+    </div>
+
+    <div class="section-stats">
+      <div class="stat-chip">Filas: <strong>160</strong></div>
+      <div class="stat-chip">Columnas: <strong>24</strong></div>
+      <div class="stat-chip">Columnas nuevas (IA): <strong>+6</strong></div>
+      <div class="stat-chip">Origen: <strong>modelos_ml.py</strong></div>
+    </div>
+
+    <p style="font-size:13px; color:var(--muted); margin-bottom:20px;">
+      Las primeras 18 columnas son idénticas al dataset maestro (ver sección anterior). A continuación se documentan únicamente las <strong style="color:var(--text)">6 columnas añadidas por los modelos de IA</strong>.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Campo</th>
+            <th>Tipo</th>
+            <th>Unidad</th>
+            <th>Descripción</th>
+            <th>Valores / Rango</th>
+            <th>Modelo origen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-example">19</td>
+            <td class="col-name">cluster_perfil</td>
+            <td class="col-type type-int">int64</td>
+            <td class="col-unit">—</td>
+            <td class="col-desc">Grupo asignado por KMeans (K=4) basado en las features normalizadas: <em>consumo_per_capita</em>, <em>densidad_poblacional</em>, <em>uso_suelo_num</em> e <em>idsm</em>. K=4 fue elegido por interpretabilidad de negocio.</td>
+            <td class="values-block">
+              <span class="val">0</span> Bajo consumo / alta densidad<br>
+              <span class="val">1</span> Consumo típico<br>
+              <span class="val">2</span> Alto consumo residencial<br>
+              <span class="val">3</span> Consumo muy alto / mixto
+            </td>
+            <td><span class="tag tag-ml">KMeans K=4</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">20</td>
+            <td class="col-name">es_anomalia</td>
+            <td class="col-type type-int">int64</td>
+            <td class="col-unit">—</td>
+            <td class="col-desc">Indicador binario de anomalía producido por Isolation Forest. Valor 1 indica que la colonia fue clasificada como anómala; -1 indica que el modelo no detectó anomalía en este registro (ver nota).</td>
+            <td class="values-block">
+              <span class="val">1</span> Anomalía detectada<br>
+              <span class="val">-1</span> Sin anomalía (IF estándar)
+            </td>
+            <td><span class="tag tag-ml">Isolation Forest</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">21</td>
+            <td class="col-name">anomalia_score</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">score continuo</td>
+            <td class="col-desc">Score de anomalía continuo del Isolation Forest. Valores positivos indican mayor normalidad; valores negativos o cercanos a 0 indican mayor grado de anomalía. Los umbrales de diagnóstico se calculan con percentiles 25 y 75.</td>
+            <td class="values-block">min: <span class="val">-0.25</span> · max: <span class="val">0.12</span><br>mediana: <span class="val">0.065</span></td>
+            <td><span class="tag tag-ml">Isolation Forest</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">22</td>
+            <td class="col-name">consumo_esperado</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">m³</td>
+            <td class="col-desc">Consumo total predicho por el modelo de Regresión Lineal, usando las mismas 4 features del pipeline. Sirve como línea base para calcular el exceso de consumo.</td>
+            <td class="values-block">min: <span class="val">163,849</span> · max: <span class="val">387,347</span><br>mediana: <span class="val">273,347</span></td>
+            <td><span class="tag tag-ml">Regresión Lineal</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">23</td>
+            <td class="col-name">exceso_consumo</td>
+            <td class="col-type type-float">float64</td>
+            <td class="col-unit">m³</td>
+            <td class="col-desc">Diferencia entre <em>consumo_total</em> real y <em>consumo_esperado</em>. Positivo: la colonia consume más de lo predicho (posible fuga o huachicol). Negativo: consume menos (posible desabasto).</td>
+            <td class="values-block">min: <span class="val">-225,263</span> · max: <span class="val">773,023</span><br>mediana: <span class="val">-65,443</span></td>
+            <td><span class="tag tag-ml">Derivada</span></td>
+          </tr>
+          <tr>
+            <td class="col-example">24</td>
+            <td class="col-name">diagnostico_final</td>
+            <td class="col-type type-str">str</td>
+            <td class="col-unit">—</td>
+            <td class="col-desc">Etiqueta de riesgo final asignada por la lógica de negocio combinando el score de Isolation Forest, el exceso de consumo y los percentiles de reportes. Es el output principal del sistema para operaciones de SACMEX.</td>
+            <td class="values-block">
+              <span class="val" style="color:#ff3b5c">CRÍTICO (Posible Fuga de Red)</span><br>
+              <span class="val" style="color:#ff9500">SOSPECHOSO (Posible Huachicol)</span><br>
+              <span class="val" style="color:#ff9500">SOSPECHOSO (Exceso Detectado por IA)</span><br>
+              <span class="val" style="color:#4bc8eb">DEFICIENCIA (Posible Baja Presión o Desabasto)</span><br>
+              <span class="val" style="color:#34d399">NORMAL</span>
+            </td>
+            <td><span class="tag tag-ml">Regla de negocio</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════
+       MODELOS
+  ══════════════════════════════════════════════ -->
+  <section id="modelos">
+    <div class="section-header">
+      <div class="section-icon">⚙️</div>
+      <div class="section-info">
+        <h2>Modelos de Machine Learning</h2>
+        <div class="file-name">modelos_ml.py · módulo: Irving Morales &amp; Ileana Lee</div>
+        <p>Tres modelos forman el pipeline analítico. Las 4 features comunes son: <code>consumo_per_capita</code>, <code>densidad_poblacional</code>, <code>uso_suelo_num</code>, <code>idsm</code>.</p>
+      </div>
+    </div>
+
+    <div class="model-card">
+      <h4>🔵 Segmentación de Perfiles Hídricos <span class="model-badge">KMeans · K=4</span></h4>
+      <p>Agrupa colonias en 4 perfiles según patrones de consumo. K fue elegido por interpretabilidad operacional (no solo por métrica de codo). Las features se escalan con StandardScaler antes del ajuste.</p>
+      <div class="model-detail">
+        Output: <span>cluster_perfil</span> (int 0–3) &nbsp;|&nbsp;
+        Reducción PCA 2D para visualización en dashboard
+      </div>
+    </div>
+
+    <div class="model-card">
+      <h4>🔴 Detección de Anomalías <span class="model-badge">Isolation Forest</span></h4>
+      <p>Identifica colonias con comportamiento hídrico atípico. Los umbrales de diagnóstico se calculan dinámicamente con percentiles (P25 / P75) sobre el dataset real, evitando valores fijos arbitrarios.</p>
+      <div class="model-detail">
+        Output: <span>es_anomalia</span> (int) · <span>anomalia_score</span> (float)
+      </div>
+    </div>
+
+    <div class="model-card">
+      <h4>🟡 Estimación de Consumo Esperado <span class="model-badge">Regresión Lineal</span></h4>
+      <p>Predice el consumo "normal" de cada colonia dado su perfil socioeconómico y demográfico. El exceso respecto al predicho es la señal principal para detectar huachicol o fugas.</p>
+      <div class="model-detail">
+        Output: <span>consumo_esperado</span> (m³) · <span>exceso_consumo</span> (m³)
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════
+       FUENTES
+  ══════════════════════════════════════════════ -->
+  <section id="fuentes">
+    <div class="section-header">
+      <div class="section-icon">📁</div>
+      <div class="section-info">
+        <h2>Fuentes de Datos Originales</h2>
+        <div class="file-name">Integradas en etl_pipeline.py</div>
+        <p>Cinco fuentes heterogéneas son procesadas, normalizadas y unidas por el ETL para producir el dataset maestro.</p>
+      </div>
+    </div>
+    <div class="sources-grid">
+      <div class="source-card">
+        <div class="src-name">consumo_agua_historico_2019.csv</div>
+        <p>Registros de consumo doméstico y no doméstico por colonia. Fuente: SACMEX / SEDEMA.</p>
+      </div>
+      <div class="source-card">
+        <div class="src-name">ids_ut.xlsx</div>
+        <p>Índice de Desarrollo Social por colonia (IDSM) y categoría de marginación. Fuente: EVALUA CDMX.</p>
+      </div>
+      <div class="source-card">
+        <div class="src-name">coloniascdmx.csv + GeoJSON</div>
+        <p>Catálogo oficial de colonias con geometrías para cálculo de superficie (EPSG:6372).</p>
+      </div>
+      <div class="source-card">
+        <div class="src-name">reportes_agua_hist.csv</div>
+        <p>Reportes ciudadanos de fuga y desabasto por colonia. Fuente: plataforma 311 CDMX.</p>
+      </div>
+      <div class="source-card">
+        <div class="src-name">superficie_alcaldias.csv</div>
+        <p>Superficie oficial por alcaldía usada como referencia de validación geográfica.</p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ══════════════════════════════════════════════
+       PIPELINE
+  ══════════════════════════════════════════════ -->
+  <section id="pipeline">
+    <div class="section-header">
+      <div class="section-icon">🔄</div>
+      <div class="section-info">
+        <h2>Notas del Pipeline ETL</h2>
+        <div class="file-name">etl_pipeline.py · HydroTrace AI — Data Engineering Team</div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Decisión técnica</th>
+            <th>Detalle</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="col-name" style="white-space:nowrap">Normalización de texto</td>
+            <td class="col-desc">Todos los nombres de alcaldía y colonia pasan por <code>unicodedata.NFD</code> + strip de combining chars + uppercase. Tabla de homologación explícita para alcaldías con nombres irregulares (ej. "CUAJIMALPA DE MORELOS" → "CUAJIMALPA").</td>
+          </tr>
+          <tr>
+            <td class="col-name" style="white-space:nowrap">Proyección geográfica</td>
+            <td class="col-desc">Las geometrías GeoJSON (WGS84 / EPSG:4326) se reproyectan a ITRF2008/LCC (EPSG:6372) con <code>pyproj</code> y <code>shapely</code> para calcular superficies en km² con precisión métrica.</td>
+          </tr>
+          <tr>
+            <td class="col-name" style="white-space:nowrap">Imputación de nulos</td>
+            <td class="col-desc">Los valores faltantes en variables numéricas clave se imputan con la <strong>mediana por alcaldía</strong>, preservando heterogeneidad geográfica y evitando distorsión por valores extremos.</td>
+          </tr>
+          <tr>
+            <td class="col-name" style="white-space:nowrap">Selección Top-10</td>
+            <td class="col-desc">El ETL exporta únicamente las 10 colonias de mayor consumo por alcaldía (160 registros totales). Este subconjunto es representativo de las zonas con mayor riesgo operativo.</td>
+          </tr>
+          <tr>
+            <td class="col-name" style="white-space:nowrap">Umbrales dinámicos</td>
+            <td class="col-desc">Los umbrales de diagnóstico (alto reporte: P75; anomalía: P25) se recalculan en cada ejecución del modelo sobre la distribución real, sin valores fijos.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <div>HydroTrace AI — <span>UNAM</span> · Diccionario de Datos v1.0</div>
+    <div>Generado el <span>2026-05-23</span></div>
+  </footer>
+
+</div>
+</body>
+</html>
