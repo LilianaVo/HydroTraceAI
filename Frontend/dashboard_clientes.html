@@ -856,9 +856,6 @@
   font-size: 10px; color: var(--text3); font-weight: 500;
 }
 
-html {
-  zoom: 1.10;
-}
 
 .dot-cluster.cluster-sky    { background: #3B8EFF; }
 .dot-cluster.cluster-amber  { background: #F59E0B; }
@@ -1000,10 +997,10 @@ html {
         <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
       </svg>
     </div>
-    Alertas en Vivo
+    Exceso por Alcaldía
   </a>
 
-  <a class="nav-link" href="#sec-campo" onclick="navScroll('#sec-campo',this)">
+  <a class="nav-link" onclick="showClienteSection('campo');return false;" style="cursor:pointer;">
   <div class="nav-icon">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -1015,14 +1012,15 @@ html {
   Reporte de Campo
 </a>
 
-<a class="nav-link" href="#sec-roi-ana" onclick="navScroll('#sec-roi-ana',this)">
+<a class="nav-link" onclick="showClienteSection('roi-ana');return false;" style="cursor:pointer;">
   <div class="nav-icon">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <line x1="12" y1="1" x2="12" y2="23"/>
-      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+      <line x1="18" y1="20" x2="18" y2="10"/>
+      <line x1="12" y1="20" x2="12" y2="4"/>
+      <line x1="6" y1="20" x2="6" y2="14"/>
     </svg>
   </div>
-  Simulador ROI
+  Análisis ROI
 </a>
 
   <!-- Decorative animated rings -->
@@ -1268,7 +1266,7 @@ html {
     </svg>
   </div>
   <div>
-    <div class="mini-val">{{ 100 - tasa_confianza }}%</div>
+    <span class="hero-stat-val">{{ tasa_confianza }}%</span>
     <div class="mini-label">Detecciones Silenciosas</div>
   </div>
 </div>
@@ -1638,7 +1636,6 @@ html {
 
     </div>
 
-
   </div><!-- /content -->
 
   <!-- ── CALENDARIO DE INSPECCIONES ── -->
@@ -1729,146 +1726,24 @@ html {
 </div>
 
     <!-- ── REPORTE DE CAMPO ── -->
-<div id="sec-campo" style="margin-bottom:24px;">
-  <div style="
-    background:var(--surface); border:1px solid var(--border);
-    border-radius:var(--radius); box-shadow:var(--shadow);
-    backdrop-filter:blur(16px); overflow:hidden;
-  ">
-
-    <!-- Header -->
-    <div style="padding:18px 24px 14px; border-bottom:1px solid var(--border2);
-      display:flex; align-items:center; justify-content:space-between;">
-      <div style="display:flex;align-items:center;gap:10px;">
-        <div style="width:8px;height:8px;border-radius:50%;background:var(--purple);flex-shrink:0;"></div>
-        <span style="font-size:14px;font-weight:700;color:var(--text);letter-spacing:-0.015em;">
-          Reporte de Inspección de Campo
-        </span>
-        <span style="font-size:9.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
-          padding:4px 10px;border-radius:7px;background:var(--lavender-pale);color:var(--purple);">
-          Cuadrilla SEGIAGUA
-        </span>
-      </div>
-    </div>
-
-    <div style="padding:24px; display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-
-      <!-- Columna izquierda: selección de colonia y hallazgo -->
-      <div style="display:flex;flex-direction:column;gap:14px;">
-
-        <!-- Colonia inspeccionada -->
-        <div>
-          <label style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
-            color:var(--text3);display:block;margin-bottom:6px;">
-            Colonia inspeccionada
-          </label>
-          <select id="campo-colonia" style="width:100%;padding:9px 12px;border-radius:10px;
-            border:1px solid var(--border);background:var(--surface);font-family:'Figtree',sans-serif;
-            font-size:12.5px;color:var(--text);outline:none;">
-            <option value="">— Selecciona colonia —</option>
-            {% for zona in ranking %}
-            <option value="{{ zona.colonia }}|{{ zona.alcaldia }}|{{ zona.diagnostico_final }}">
-              {{ zona.colonia.title() }} · {{ zona.alcaldia.title() }}
-            </option>
-            {% endfor %}
-          </select>
-        </div>
-
-        <!-- Fecha de inspección -->
-        <div>
-          <label style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
-            color:var(--text3);display:block;margin-bottom:6px;">
-            Fecha de inspección
-          </label>
-          <input type="date" id="campo-fecha" style="width:100%;padding:9px 12px;border-radius:10px;
-            border:1px solid var(--border);background:var(--surface);font-family:'Figtree',sans-serif;
-            font-size:12.5px;color:var(--text);outline:none;" />
-        </div>
-
-        <!-- Hallazgo encontrado -->
-        <div>
-          <label style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
-            color:var(--text3);display:block;margin-bottom:6px;">
-            Hallazgo encontrado
-          </label>
-          <select id="campo-hallazgo" style="width:100%;padding:9px 12px;border-radius:10px;
-            border:1px solid var(--border);background:var(--surface);font-family:'Figtree',sans-serif;
-            font-size:12.5px;color:var(--text);outline:none;">
-            <option value="">— Selecciona hallazgo —</option>
-            <option value="FUGA_CONFIRMADA">Fuga de red confirmada</option>
-            <option value="TOMA_CLANDESTINA">Toma clandestina detectada</option>
-            <option value="PRESION_BAJA">Baja presión / Desabasto confirmado</option>
-            <option value="SIN_HALLAZGO">Sin hallazgo — Falso positivo</option>
-            <option value="PENDIENTE">Requiere revisión adicional</option>
-          </select>
-        </div>
-
-        <!-- Notas de la cuadrilla -->
-        <div>
-          <label style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
-            color:var(--text3);display:block;margin-bottom:6px;">
-            Observaciones de campo
-          </label>
-          <textarea id="campo-notas" rows="3" placeholder="Describe el hallazgo, condición de la infraestructura, acciones tomadas..."
-            style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--border);
-            background:var(--surface);font-family:'Figtree',sans-serif;font-size:12px;
-            color:var(--text);outline:none;resize:vertical;"></textarea>
-        </div>
-
-        <button onclick="registrarReporteCampo()" class="btn-primary" style="width:100%;padding:11px;">
-          Registrar reporte
-        </button>
-
-      </div>
-
-      <!-- Columna derecha: historial de reportes registrados -->
-      <div>
-        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
-          color:var(--text3);margin-bottom:12px;">
-          Reportes registrados en esta sesión
-        </div>
-        <div id="campo-historial" style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto;">
-          <div style="text-align:center;padding:32px 0;color:var(--text3);font-size:12px;font-weight:500;">
-            Sin reportes aún. Registra el primer hallazgo.
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
 
 <script>
-// ── DATOS DE INSPECCIONES (basados en el ranking real del modelo) ──
-const inspeccionesData = {
-  "2026-05-22": [
-    { colonia: "Lomas de Chapultepec", alcaldia: "Miguel Hidalgo", tipo: "CRÍTICO", color: "#FF2D55" },
-    { colonia: "Peón de los Baños",    alcaldia: "Venustiano Carranza", tipo: "CRÍTICO", color: "#FF2D55" },
-  ],
-  "2026-05-23": [
-    { colonia: "Belisario Domínguez", alcaldia: "Tlalpan", tipo: "SOSPECHOSO", color: "#FF9F0A" },
-  ],
-  "2026-05-26": [
-    { colonia: "Pantitlán IV",   alcaldia: "Iztacalco", tipo: "DEFICIENCIA", color: "#30D158" },
-    { colonia: "Viaducto Piedad", alcaldia: "Iztacalco", tipo: "DEFICIENCIA", color: "#30D158" },
-  ],
-  "2026-05-27": [
-    { colonia: "Prado Churubusco", alcaldia: "Coyoacán", tipo: "DEFICIENCIA", color: "#30D158" },
-  ],
-  "2026-05-28": [
-    { colonia: "Moctezuma 1a Sección", alcaldia: "Venustiano Carranza", tipo: "DEFICIENCIA", color: "#30D158" },
-  ],
-  "2026-05-29": [
-    { colonia: "Jardín Balbuena III", alcaldia: "Venustiano Carranza", tipo: "DEFICIENCIA", color: "#30D158" },
-  ],
-  "2026-06-02": [
-    { colonia: "Santa María Tepepan", alcaldia: "Xochimilco", tipo: "DEFICIENCIA", color: "#30D158" },
-  ],
-  "2026-06-03": [
-    { colonia: "El Contadero", alcaldia: "Cuajimalpa", tipo: "DEFICIENCIA", color: "#30D158" },
-  ],
-};
 
+// ── DATOS DE INSPECCIONES — cargados dinámicamente desde el backend ──
+let inspeccionesData = {};
+
+fetch("/api/inspecciones-calendario")
+  .then(r => r.json())
+  .then(data => {
+    inspeccionesData = data;
+    renderCalendario();          // re-renderiza el calendario con datos reales
+  })
+  .catch(() => {
+    // Si falla el fetch, el calendario queda vacío pero no rompe nada
+    renderCalendario();
+  });
+
+  
 // ── REPORTE DE CAMPO ──
 const HALLAZGO_LABEL = {
   FUGA_CONFIRMADA:   { label: "Fuga confirmada",        color: "#FF2D55" },
@@ -2115,6 +1990,235 @@ renderCalendario();
 
 </div><!-- /main-wrap -->
 
+<!-- ── OVERLAY: ANÁLISIS ROI DETALLADO ── -->
+<div id="sec-roi-ana" style="display:none;position:fixed;top:0;left:var(--sidebar);right:0;bottom:0;overflow-y:auto;background:var(--bg);z-index:999;padding:48px 40px;">
+
+  <div style="margin-bottom:24px;">
+    <button onclick="cerrarSeccionCliente()" style="
+      display:inline-flex;align-items:center;gap:7px;
+      background:transparent;border:1px solid var(--border);
+      color:var(--text2);border-radius:10px;padding:7px 14px;
+      font-size:12px;font-weight:600;font-family:'Figtree',sans-serif;
+      cursor:pointer;
+    ">← Volver al Dashboard</button>
+  </div>
+
+  <div style="margin-bottom:28px;">
+
+    <!-- Header -->
+    <div style="margin-bottom:24px;">
+      <div style="font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--purple);margin-bottom:6px;">Análisis Financiero</div>
+      <h2 style="font-size:26px;font-weight:800;color:var(--text);letter-spacing:-0.03em;margin-bottom:8px;">Impacto Económico del Agua No Contabilizada</h2>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7;max-width:680px;font-weight:500;">
+        Desglose completo del volumen y costo asociado a cada colonia con anomalía detectada. Calculado a $18.40/m³ (tarifa SACMEX vigente). Solo colonias con exceso de consumo positivo generan pérdida recuperable.
+      </p>
+    </div>
+
+    <!-- KPIs superiores -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;" id="ana-kpis">
+      <!-- Se llenan desde JS con datos del backend -->
+    </div>
+
+    <!-- Grid principal: tabla + desglose -->
+    <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:20px;margin-bottom:24px;">
+
+      <!-- Tabla de colonias con exceso -->
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;">
+        <div style="padding:16px 22px 13px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:7px;height:7px;border-radius:50%;background:var(--rose);flex-shrink:0;"></div>
+            <span style="font-size:13px;font-weight:700;color:var(--text);">Colonias con Pérdida Hídrica</span>
+          </div>
+          <span id="ana-tabla-count" style="font-size:9.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:7px;background:var(--rose-pale);color:var(--rose);">— colonias</span>
+        </div>
+        <div style="overflow-x:auto;max-height:420px;overflow-y:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:11.5px;" id="ana-tabla">
+            <thead>
+              <tr style="position:sticky;top:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);">
+                <th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border2);">#</th>
+                <th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border2);">Colonia</th>
+                <th style="padding:10px 14px;text-align:left;font-size:10px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border2);">Alcaldía</th>
+                <th style="padding:10px 14px;text-align:right;font-size:10px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border2);">Exceso m³</th>
+                <th style="padding:10px 14px;text-align:right;font-size:10px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border2);">Costo MXN</th>
+                <th style="padding:10px 14px;text-align:center;font-size:10px;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border2);">Diagnóstico</th>
+              </tr>
+            </thead>
+            <tbody id="ana-tabla-body">
+              <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--text3);font-size:12px;">Cargando datos…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Panel lateral: desglose por perfil de cluster -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+
+        <!-- Dom vs No-Dom -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px;">
+          <div style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;">Consumo Dom. vs No-Dom.</div>
+          <canvas id="ana-donuts-chart" height="160"></canvas>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;" id="ana-dom-stats"></div>
+        </div>
+
+        <!-- Perfil de clusters en colonias anómalas -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px 22px;">
+          <div style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;">Perfil Urbano de Colonias Anómalas</div>
+          <div id="ana-clusters-bars"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Gráfica: top 10 exceso por colonia -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:24px;">
+      <div style="padding:16px 22px 13px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="width:7px;height:7px;border-radius:50%;background:var(--purple);flex-shrink:0;"></div>
+          <span style="font-size:13px;font-weight:700;color:var(--text);">Top 10 · Pérdida Económica por Colonia</span>
+        </div>
+        <span style="font-size:9.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:4px 10px;border-radius:7px;background:var(--lavender-pale);color:var(--purple);">$MXN / m³</span>
+      </div>
+      <div style="padding:20px 24px;">
+        <canvas id="ana-top10-chart" height="90"></canvas>
+      </div>
+    </div>
+
+    <!-- Escenarios de recuperación -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px 28px;">
+      <div style="font-size:11px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:4px;">Proyección de Recuperación</div>
+      <div style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.02em;margin-bottom:20px;">¿Cuánto puedes recuperar según la intervención?</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" id="ana-escenarios"></div>
+      <div style="margin-top:16px;padding:12px 16px;background:var(--amber-pale);border:1px solid var(--amber-mid);border-radius:11px;font-size:11px;color:var(--amber);font-weight:600;line-height:1.6;">
+        ⚠ Proyecciones calculadas sobre el exceso total detectado por el modelo. La recuperación real depende de la capacidad operativa de las cuadrillas, el tipo de intervención y el tiempo de respuesta en campo.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+<!-- ── OVERLAY: REPORTE DE CAMPO ── -->
+<div id="sec-campo" style="display:none;position:fixed;top:0;left:var(--sidebar);right:0;bottom:0;overflow-y:auto;background:var(--bg);z-index:999;padding:48px 40px;">
+
+    <div style="margin-bottom:24px;">
+  <button onclick="cerrarSeccionCliente()" style="
+    display:inline-flex;align-items:center;gap:7px;
+    background:transparent;border:1px solid var(--border);
+    color:var(--text2);border-radius:10px;padding:7px 14px;
+    font-size:12px;font-weight:600;font-family:'Figtree',sans-serif;
+    cursor:pointer;
+  ">← Volver al Dashboard</button>
+</div>
+
+  <div style="
+    background:var(--surface); border:1px solid var(--border);
+    border-radius:var(--radius); box-shadow:var(--shadow);
+    backdrop-filter:blur(16px); overflow:hidden;
+  ">
+
+    <!-- Header -->
+    <div style="padding:18px 24px 14px; border-bottom:1px solid var(--border2);
+      display:flex; align-items:center; justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--purple);flex-shrink:0;"></div>
+        <span style="font-size:14px;font-weight:700;color:var(--text);letter-spacing:-0.015em;">
+          Reporte de Inspección de Campo
+        </span>
+        <span style="font-size:9.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
+          padding:4px 10px;border-radius:7px;background:var(--lavender-pale);color:var(--purple);">
+          Cuadrilla SEGIAGUA
+        </span>
+      </div>
+    </div>
+
+    <div style="padding:24px; display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+
+      <!-- Columna izquierda: selección de colonia y hallazgo -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+
+        <!-- Colonia inspeccionada -->
+        <div>
+          <label style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
+            color:var(--text3);display:block;margin-bottom:6px;">
+            Colonia inspeccionada
+          </label>
+          <select id="campo-colonia" style="width:100%;padding:9px 12px;border-radius:10px;
+            border:1px solid var(--border);background:var(--surface);font-family:'Figtree',sans-serif;
+            font-size:12.5px;color:var(--text);outline:none;">
+            <option value="">— Selecciona colonia —</option>
+            {% for zona in ranking %}
+            <option value="{{ zona.colonia }}|{{ zona.alcaldia }}|{{ zona.diagnostico_final }}">
+              {{ zona.colonia.title() }} · {{ zona.alcaldia.title() }}
+            </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Fecha de inspección -->
+        <div>
+          <label style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
+            color:var(--text3);display:block;margin-bottom:6px;">
+            Fecha de inspección
+          </label>
+          <input type="date" id="campo-fecha" style="width:100%;padding:9px 12px;border-radius:10px;
+            border:1px solid var(--border);background:var(--surface);font-family:'Figtree',sans-serif;
+            font-size:12.5px;color:var(--text);outline:none;" />
+        </div>
+
+        <!-- Hallazgo encontrado -->
+        <div>
+          <label style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
+            color:var(--text3);display:block;margin-bottom:6px;">
+            Hallazgo encontrado
+          </label>
+          <select id="campo-hallazgo" style="width:100%;padding:9px 12px;border-radius:10px;
+            border:1px solid var(--border);background:var(--surface);font-family:'Figtree',sans-serif;
+            font-size:12.5px;color:var(--text);outline:none;">
+            <option value="">— Selecciona hallazgo —</option>
+            <option value="FUGA_CONFIRMADA">Fuga de red confirmada</option>
+            <option value="TOMA_CLANDESTINA">Toma clandestina detectada</option>
+            <option value="PRESION_BAJA">Baja presión / Desabasto confirmado</option>
+            <option value="SIN_HALLAZGO">Sin hallazgo — Falso positivo</option>
+            <option value="PENDIENTE">Requiere revisión adicional</option>
+          </select>
+        </div>
+
+        <!-- Notas de la cuadrilla -->
+        <div>
+          <label style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
+            color:var(--text3);display:block;margin-bottom:6px;">
+            Observaciones de campo
+          </label>
+          <textarea id="campo-notas" rows="3" placeholder="Describe el hallazgo, condición de la infraestructura, acciones tomadas..."
+            style="width:100%;padding:9px 12px;border-radius:10px;border:1px solid var(--border);
+            background:var(--surface);font-family:'Figtree',sans-serif;font-size:12px;
+            color:var(--text);outline:none;resize:vertical;"></textarea>
+        </div>
+
+        <button onclick="registrarReporteCampo()" class="btn-primary" style="width:100%;padding:11px;">
+          Registrar reporte
+        </button>
+
+      </div>
+
+      <!-- Columna derecha: historial de reportes registrados -->
+      <div>
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;
+          color:var(--text3);margin-bottom:12px;">
+          Reportes registrados en esta sesión
+        </div>
+        <div id="campo-historial" style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto;">
+          <div style="text-align:center;padding:32px 0;color:var(--text3);font-size:12px;font-weight:500;">
+            Sin reportes aún. Registra el primer hallazgo.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <!-- Jinja2 data injection (kept intact for backend) -->
 <script id="hydrotrace-data" type="application/json">
   {
@@ -2181,6 +2285,174 @@ renderCalendario();
     });
   }
 
+  // ── PESTAÑA: ANÁLISIS ROI DETALLADO ──────────────────────────────
+(function iniciarAnaROI() {
+
+  const TARIFA = 18.40;
+  const CLUSTER_NOMBRES = { 0:'Residencial Premium', 1:'Mixto Urbano', 2:'Industrial', 3:'Vulnerable' };
+  const CLUSTER_COLORES = { 0:'var(--purple)', 1:'var(--sky)', 2:'var(--amber)', 3:'var(--rose)' };
+  const DIAG_COLOR = d => {
+    const u = (d||'').toUpperCase();
+    if (u.includes('TICO'))        return { bg:'var(--rose-pale)',   txt:'var(--rose)' };
+    if (u.includes('SOSPECHOSO'))  return { bg:'var(--amber-pale)',  txt:'var(--amber)' };
+    if (u.includes('DEFICIENCIA')) return { bg:'var(--sage-pale)',   txt:'var(--sage)' };
+    return { bg:'var(--sky-pale)', txt:'var(--sky)' };
+  };
+  const fmt = n => Number(n).toLocaleString('es-MX', { maximumFractionDigits: 0 });
+  const fmtMXN = n => '$' + Number(n).toLocaleString('es-MX', { maximumFractionDigits: 0 });
+
+  // rankingData ya existe en el scope global (lo inyecta Flask)
+  if (typeof rankingData === 'undefined' || !rankingData.length) return;
+
+  const conExceso = rankingData.filter(r => (r.exceso_consumo || 0) > 0)
+    .map(r => ({ ...r, costo: r.exceso_consumo * TARIFA }))
+    .sort((a, b) => b.costo - a.costo);
+
+  // ── KPIs superiores
+  const totalExceso = conExceso.reduce((s, r) => s + r.exceso_consumo, 0);
+  const totalCosto  = conExceso.reduce((s, r) => s + r.costo, 0);
+  const pobEq       = Math.round(totalExceso * 0.20 / 133.59);
+  const kpiDefs = [
+    { label:'Colonias con pérdida', val: conExceso.length,   color:'var(--rose)',   icon:'⚠' },
+    { label:'m³ en exceso total',   val: fmt(totalExceso),   color:'var(--sky)',    icon:'💧' },
+    { label:'Pérdida estimada',     val: fmtMXN(totalCosto), color:'var(--amber)',  icon:'💰' },
+    { label:'Hab. recuperables',    val: fmt(pobEq),          color:'var(--sage)',   icon:'👥' },
+  ];
+  const kpiEl = document.getElementById('ana-kpis');
+  if (kpiEl) {
+    kpiEl.innerHTML = kpiDefs.map(k => `
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;">
+        <div style="width:42px;height:42px;border-radius:12px;background:${k.color}18;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">${k.icon}</div>
+        <div>
+          <div style="font-size:20px;font-weight:800;color:${k.color};letter-spacing:-0.03em;line-height:1;">${k.val}</div>
+          <div style="font-size:10.5px;color:var(--text2);font-weight:600;margin-top:3px;">${k.label}</div>
+        </div>
+      </div>`).join('');
+  }
+
+  // ── Tabla
+  const countEl = document.getElementById('ana-tabla-count');
+  const tbodyEl = document.getElementById('ana-tabla-body');
+  if (countEl) countEl.textContent = conExceso.length + ' colonias';
+  if (tbodyEl) {
+    tbodyEl.innerHTML = conExceso.map((r, i) => {
+      const dc = DIAG_COLOR(r.diagnostico_final);
+      const diag = (r.diagnostico_final||'').toUpperCase().includes('TICO') ? 'CRÍTICO'
+                 : (r.diagnostico_final||'').toUpperCase().includes('SOSPECHOSO') ? 'SOSPECHOSO' : 'DEFICIENCIA';
+      return `
+        <tr style="border-bottom:1px solid var(--border2);transition:background 0.15s;"
+            onmouseenter="this.style.background='rgba(167,139,250,0.04)'"
+            onmouseleave="this.style.background='transparent'">
+          <td style="padding:9px 14px;font-size:10.5px;color:var(--text3);font-weight:700;">${i+1}</td>
+          <td style="padding:9px 14px;font-weight:700;color:var(--text);font-size:12px;">${(r.colonia||'').replace(/\b\w/g,c=>c.toUpperCase())}</td>
+          <td style="padding:9px 14px;font-size:11px;color:var(--text2);">${(r.alcaldia||'').replace(/\b\w/g,c=>c.toUpperCase())}</td>
+          <td style="padding:9px 14px;text-align:right;font-size:11.5px;font-weight:700;color:var(--sky);">${fmt(r.exceso_consumo)}</td>
+          <td style="padding:9px 14px;text-align:right;font-size:11.5px;font-weight:800;color:var(--rose);">${fmtMXN(r.costo)}</td>
+          <td style="padding:9px 14px;text-align:center;">
+            <span style="font-size:9px;font-weight:800;padding:3px 9px;border-radius:6px;background:${dc.bg};color:${dc.txt};">${diag}</span>
+          </td>
+        </tr>`;
+    }).join('');
+  }
+
+  // ── Donut Dom vs No-Dom
+  const totalDom   = conExceso.reduce((s, r) => s + (r.consumo_total_dom   || 0), 0);
+  const totalNoDom = conExceso.reduce((s, r) => s + (r.consumo_total_no_dom || 0), 0);
+  const ctxDonut = document.getElementById('ana-donuts-chart');
+  if (ctxDonut && typeof Chart !== 'undefined') {
+    new Chart(ctxDonut, {
+      type: 'doughnut',
+      data: {
+        labels: ['Doméstico', 'No Doméstico'],
+        datasets: [{ data: [Math.round(totalDom), Math.round(totalNoDom)], backgroundColor: ['#7C6EF5','#3B8EFF'], borderWidth: 0, hoverOffset: 6 }]
+      },
+      options: { responsive:true, cutout:'70%', plugins:{ legend:{ display:false } } }
+    });
+  }
+  const domStatsEl = document.getElementById('ana-dom-stats');
+  if (domStatsEl) {
+    const pctDom = Math.round(totalDom / (totalDom + totalNoDom) * 100);
+    domStatsEl.innerHTML = `
+      <div style="background:rgba(124,110,245,0.07);border-radius:10px;padding:10px 12px;">
+        <div style="font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;">Doméstico</div>
+        <div style="font-size:15px;font-weight:800;color:var(--purple);">${pctDom}%</div>
+        <div style="font-size:9.5px;color:var(--text2);">${fmt(totalDom)} m³</div>
+      </div>
+      <div style="background:rgba(59,142,255,0.07);border-radius:10px;padding:10px 12px;">
+        <div style="font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;">No Doméstico</div>
+        <div style="font-size:15px;font-weight:800;color:var(--sky);">${100-pctDom}%</div>
+        <div style="font-size:9.5px;color:var(--text2);">${fmt(totalNoDom)} m³</div>
+      </div>`;
+  }
+
+  // ── Clusters en colonias anómalas
+  const clustersEl = document.getElementById('ana-clusters-bars');
+  if (clustersEl) {
+    const conteo = {};
+    conExceso.forEach(r => { const c = r.cluster_perfil ?? '—'; conteo[c] = (conteo[c]||0)+1; });
+    const total = conExceso.length;
+    clustersEl.innerHTML = Object.entries(conteo).sort((a,b)=>b[1]-a[1]).map(([c,n]) => {
+      const nombre = CLUSTER_NOMBRES[c] || 'Perfil '+c;
+      const color  = CLUSTER_COLORES[c] || 'var(--text3)';
+      const pct    = Math.round(n/total*100);
+      return `
+        <div style="margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+            <span style="font-size:11.5px;font-weight:600;color:var(--text);">${nombre}</span>
+            <span style="font-size:11px;font-weight:800;color:${color};">${n} colonias</span>
+          </div>
+          <div style="height:5px;background:rgba(167,139,250,0.09);border-radius:3px;overflow:hidden;">
+            <div style="height:100%;width:${pct}%;background:${color};border-radius:3px;transition:width 0.8s cubic-bezier(.16,1,.3,1);"></div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  // ── Top 10 barras
+  const top10 = conExceso.slice(0, 10);
+  const ctxBar = document.getElementById('ana-top10-chart');
+  if (ctxBar && typeof Chart !== 'undefined') {
+    new Chart(ctxBar, {
+      type: 'bar',
+      data: {
+        labels: top10.map(r => r.colonia.split(' ').slice(0,2).join(' ')),
+        datasets: [
+          { label:'Costo MXN', data: top10.map(r => Math.round(r.costo)), backgroundColor:'rgba(255,94,138,0.75)', borderRadius:8, borderSkipped:false, yAxisID:'y' },
+          { label:'Exceso m³', data: top10.map(r => Math.round(r.exceso_consumo)), backgroundColor:'rgba(59,142,255,0.55)', borderRadius:8, borderSkipped:false, yAxisID:'y1' },
+        ]
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{ legend:{ labels:{ color:'var(--text2)', font:{ family:'Figtree', size:11 } } } },
+        scales:{
+          x:{ grid:{ display:false }, ticks:{ color:'var(--text3)', font:{ size:10 } } },
+          y:{ position:'left',  grid:{ color:'rgba(139,124,246,0.07)' }, ticks:{ color:'var(--rose)',  font:{ size:10 }, callback: v => fmtMXN(v) }, border:{ display:false } },
+          y1:{ position:'right', grid:{ display:false }, ticks:{ color:'var(--sky)', font:{ size:10 }, callback: v => fmt(v)+' m³' } },
+        }
+      }
+    });
+  }
+
+  // ── Escenarios de recuperación
+  const escenariosEl = document.getElementById('ana-escenarios');
+  if (escenariosEl) {
+    const escenarios = [
+      { label:'Conservador', pct:15, desc:'Solo fugas confirmadas por reportes ciudadanos', color:'var(--sky)', bg:'var(--sky-pale)' },
+      { label:'Moderado',    pct:30, desc:'Intervención en colonias CRÍTICO y SOSPECHOSO', color:'var(--purple)', bg:'var(--lavender-pale)', destacado:true },
+      { label:'Agresivo',    pct:55, desc:'Intervención completa con seguimiento 12 meses', color:'var(--sage)', bg:'var(--sage-pale)' },
+    ];
+    escenariosEl.innerHTML = escenarios.map(e => `
+      <div style="border-radius:var(--radius);padding:22px 20px;background:${e.destacado ? 'linear-gradient(135deg,var(--purple),#6D3FC8)' : e.bg};border:1px solid ${e.destacado ? 'transparent' : 'var(--border)'};box-shadow:${e.destacado ? '0 8px 28px rgba(109,63,200,0.28)' : 'var(--shadow)'};">
+        <div style="font-size:10px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:${e.destacado ? 'rgba(255,255,255,0.7)' : 'var(--text3)'};margin-bottom:6px;">${e.label}</div>
+        <div style="font-size:32px;font-weight:800;color:${e.destacado ? 'white' : e.color};letter-spacing:-0.04em;line-height:1;margin-bottom:4px;">${e.pct}%</div>
+        <div style="font-size:18px;font-weight:800;color:${e.destacado ? 'rgba(255,255,255,0.9)' : e.color};margin-bottom:8px;">${fmtMXN(totalCosto * e.pct/100)}</div>
+        <div style="font-size:10.5px;color:${e.destacado ? 'rgba(255,255,255,0.65)' : 'var(--text2)'};line-height:1.5;font-weight:500;">${e.desc}</div>
+      </div>`).join('');
+  }
+
+})();
+
+
   // ── ROI SLIDER ──
   const roiDisplay = document.getElementById("roi-display");
 
@@ -2207,6 +2479,42 @@ setScenario(document.querySelectorAll("#roi-scenarios button")[1], 30);
     document.querySelectorAll(".nav-link").forEach(l => l.classList.remove("active"));
     if (linkEl) linkEl.classList.add("active");
   }
+
+// ── SECCIONES FLOTANTES ──
+function showClienteSection(name) {
+  const secRoi   = document.getElementById('sec-roi-ana');
+  const secCampo = document.getElementById('sec-campo');
+  const bc       = document.querySelector('.breadcrumb .current');
+
+  const OCULTO = 'display:none;position:fixed;top:0;left:var(--sidebar);right:0;bottom:0;overflow-y:auto;background:var(--bg);z-index:999;padding:48px 40px;';
+  const VISIBLE = 'display:block;position:fixed;top:0;left:var(--sidebar);right:0;bottom:0;overflow-y:auto;background:var(--bg);z-index:999;padding:48px 40px;';
+
+  if (secRoi)   secRoi.style.cssText   = OCULTO;
+  if (secCampo) secCampo.style.cssText = OCULTO;
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+  if (name === 'roi-ana' && secRoi) {
+    secRoi.style.cssText = VISIBLE;
+    if (bc) bc.textContent = 'Análisis ROI';
+    event.currentTarget.classList.add('active');
+  } else if (name === 'campo' && secCampo) {
+    secCampo.style.cssText = VISIBLE;
+    if (bc) bc.textContent = 'Reporte de Campo';
+    event.currentTarget.classList.add('active');
+  }
+}
+
+function cerrarSeccionCliente() {
+  const OCULTO = 'display:none;position:fixed;top:0;left:var(--sidebar);right:0;bottom:0;overflow-y:auto;background:var(--bg);z-index:999;padding:48px 40px;';
+  const secRoi   = document.getElementById('sec-roi-ana');
+  const secCampo = document.getElementById('sec-campo');
+  if (secRoi)   secRoi.style.cssText   = OCULTO;
+  if (secCampo) secCampo.style.cssText = OCULTO;
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const bc = document.querySelector('.breadcrumb .current');
+  if (bc) bc.textContent = 'Dashboard';
+}
+
 
   // ── EXPORT CSV ──
   document.getElementById("btn-exportar").addEventListener("click", () => {

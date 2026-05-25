@@ -1440,31 +1440,7 @@ input[type="search"]::placeholder {
               </div>
             </div>
 
-            <!-- Slot 3: visualizacion_clusters_pca -->
-            <div style="
-              background:rgba(255,255,255,0.02);
-              border:1px solid rgba(255,255,255,0.06);
-              border-radius:16px;
-              overflow:hidden;
-              cursor:pointer;
-              transition:.25s ease;
-            " onmouseover="this.style.borderColor='rgba(48,209,88,0.35)';this.style.transform='translateY(-3px)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.transform='translateY(0)'"
-               onclick="openImgModal(document.getElementById('img-clusters').src,'Clusters PCA — KMeans')">
-              <div id="ph-clusters" style="height:180px;display:flex;align-items:center;justify-content:center;color:rgba(180,167,245,0.3);font-size:11px;flex-direction:column;gap:8px;background:rgba(48,209,88,0.03)">
-                <i class="fa-regular fa-image" style="font-size:32px;opacity:.25"></i>
-                <span style="font-family:var(--font-mono)">visualizacion_clusters_pca.png</span>
-              </div>
-              <img id="img-clusters" style="display:none;width:100%;height:180px;object-fit:cover" alt="">
-              <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
-                <div>
-                  <div style="font-size:12px;font-weight:600;margin-bottom:2px">Clusters PCA</div>
-                  <div style="font-size:10px;color:rgba(180,167,245,0.4)">KMeans · visualización 2D</div>
-                </div>
-                <span style="background:rgba(48,209,88,0.1);border:1px solid rgba(48,209,88,0.2);color:#30D158;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:700">PCA</span>
-              </div>
-            </div>
-
-            <!-- Slot 4: mapa_anomalias_analitico -->
+            <!-- Slot 3: mapa_anomalias_analitico -->
             <div style="
               background:rgba(255,255,255,0.02);
               border:1px solid rgba(255,255,255,0.06);
@@ -1487,6 +1463,136 @@ input[type="search"]::placeholder {
                 <span style="background:rgba(255,45,85,0.1);border:1px solid rgba(255,45,85,0.2);color:#FF2D55;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:700">IF</span>
               </div>
             </div>
+
+            <div style="
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.25s ease;
+" onmouseover="this.style.borderColor='rgba(139,92,246,0.35)';this.style.transform='translateY(-3px)'"
+   onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.transform='translateY(0)'"
+   onclick="openImgModal(document.getElementById('img-heatmap').src,'Heatmap de Correlaciones')">
+
+  <div id="ph-heatmap" style="height:180px;display:flex;align-items:center;justify-content:center;color:rgba(180,167,245,0.3);font-size:11px;flex-direction:column;gap:8px;background:rgba(139,92,246,0.03)">
+    <i class="fa-regular fa-image" style="font-size:32px;opacity:.25"></i>
+    <span style="font-family:var(--font-mono)">heatmap_correlaciones.png</span>
+  </div>
+  <img id="img-heatmap" style="display:none;width:100%;height:180px;object-fit:cover" alt="">
+
+  <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:2px">Heatmap Correlaciones</div>
+      <div style="font-size:10px;color:rgba(180,167,245,0.4)">Relación entre variables del modelo</div>
+    </div>
+    <span style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);color:#8b5cf6;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:700">EDA</span>
+  </div>
+</div>
+
+<div style="
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.25s ease;
+" onmouseover="this.style.borderColor='rgba(16,185,129,0.35)';this.style.transform='translateY(-3px)'"
+   onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.transform='translateY(0)'"
+   onclick="openImgModal(document.getElementById('img-diagnosticos').src,'Distribución Diagnósticos')">
+
+  <div id="ph-diagnosticos" style="height:180px;display:flex;align-items:center;justify-content:center;color:rgba(180,167,245,0.3);font-size:11px;flex-direction:column;gap:8px;background:rgba(16,185,129,0.03)">
+    <i class="fa-regular fa-image" style="font-size:32px;opacity:.25"></i>
+    <span style="font-family:var(--font-mono)">distribucion_diagnosticos.png</span>
+  </div>
+  <img id="img-diagnosticos" style="display:none;width:100%;height:180px;object-fit:cover" alt="">
+
+  <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:2px">Distribución Diagnósticos</div>
+      <div style="font-size:10px;color:rgba(180,167,245,0.4)">Clasificación generada por IA</div>
+    </div>
+    <span style="background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);color:#10b981;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:700">IA</span>
+  </div>
+</div>
+
+<div style="
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.25s ease;
+" onmouseover="this.style.borderColor='rgba(245,158,11,0.35)';this.style.transform='translateY(-3px)'"
+   onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.transform='translateY(0)'"
+   onclick="openImgModal(document.getElementById('img-alcaldia').src,'Exceso por Alcaldía')">
+
+  <div id="ph-alcaldia" style="height:180px;display:flex;align-items:center;justify-content:center;color:rgba(180,167,245,0.3);font-size:11px;flex-direction:column;gap:8px;background:rgba(245,158,11,0.03)">
+    <i class="fa-regular fa-image" style="font-size:32px;opacity:.25"></i>
+    <span style="font-family:var(--font-mono)">exceso_por_alcaldia.png</span>
+  </div>
+  <img id="img-alcaldia" style="display:none;width:100%;height:180px;object-fit:cover" alt="">
+
+  <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:2px">Exceso por Alcaldía</div>
+      <div style="font-size:10px;color:rgba(180,167,245,0.4)">Consumo agregado por zona</div>
+    </div>
+    <span style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);color:#f59e0b;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:700">KPI</span>
+  </div>
+</div>
+
+<div style="
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.25s ease;
+" onmouseover="this.style.borderColor='rgba(6,182,212,0.35)';this.style.transform='translateY(-3px)'"
+   onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.transform='translateY(0)'"
+   onclick="openImgModal(document.getElementById('img-boxplot').src,'Boxplot Consumo Cluster')">
+
+  <div id="ph-boxplot" style="height:180px;display:flex;align-items:center;justify-content:center;color:rgba(180,167,245,0.3);font-size:11px;flex-direction:column;gap:8px;background:rgba(6,182,212,0.03)">
+    <i class="fa-regular fa-image" style="font-size:32px;opacity:.25"></i>
+    <span style="font-family:var(--font-mono)">boxplot_consumo_cluster.png</span>
+  </div>
+  <img id="img-boxplot" style="display:none;width:100%;height:180px;object-fit:cover" alt="">
+
+  <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:2px">Boxplot Consumo Cluster</div>
+      <div style="font-size:10px;color:rgba(180,167,245,0.4)">Distribución por perfiles urbanos</div>
+    </div>
+    <span style="background:rgba(6,182,212,0.1);border:1px solid rgba(6,182,212,0.2);color:#06b6d4;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:700">ML</span>
+  </div>
+</div>
+
+<div style="
+  background:rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.06);
+  border-radius:16px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.25s ease;
+" onmouseover="this.style.borderColor='rgba(255,45,85,0.35)';this.style.transform='translateY(-3px)'"
+   onmouseout="this.style.borderColor='rgba(255,255,255,0.06)';this.style.transform='translateY(0)'"
+   onclick="openImgModal(document.getElementById('img-top10').src,'Top 10 Anomalías')">
+
+  <div id="ph-top10" style="height:180px;display:flex;align-items:center;justify-content:center;color:rgba(180,167,245,0.3);font-size:11px;flex-direction:column;gap:8px;background:rgba(255,45,85,0.03)">
+    <i class="fa-regular fa-image" style="font-size:32px;opacity:.25"></i>
+    <span style="font-family:var(--font-mono)">top10_anomalias.png</span>
+  </div>
+  <img id="img-top10" style="display:none;width:100%;height:180px;object-fit:cover" alt="">
+
+  <div style="padding:14px 16px;display:flex;align-items:center;justify-content:space-between">
+    <div>
+      <div style="font-size:12px;font-weight:600;margin-bottom:2px">Top 10 Anomalías</div>
+      <div style="font-size:10px;color:rgba(180,167,245,0.4)">Colonias con mayor riesgo detectado</div>
+    </div>
+    <span style="background:rgba(255,45,85,0.1);border:1px solid rgba(255,45,85,0.2);color:#FF2D55;padding:2px 8px;border-radius:6px;font-size:9px;font-weight:700">TOP</span>
+  </div>
+</div>
 
           </div>
           </div>  <!-- ← AGREGAR ESTE: cierra el grid de imágenes -->
@@ -1913,7 +2019,32 @@ const GRAFICAS_MAP = {
   'metodo_codo':              { img:'img-barras',   ph:'ph-barras'   },
   'scatter_consumo_densidad': { img:'img-scatter',  ph:'ph-scatter'  },
   'visualizacion_clusters_pca': { img:'img-clusters', ph:'ph-clusters' },
-  'mapa_anomalias_analitico': { img:'img-iforest',  ph:'ph-iforest'  }
+  'mapa_anomalias_analitico': { img:'img-iforest',  ph:'ph-iforest'  },
+
+  'heatmap_correlaciones': {
+    img:'img-heatmap',
+    ph:'ph-heatmap'
+  },
+
+  'distribucion_diagnosticos': {
+    img:'img-diagnosticos',
+    ph:'ph-diagnosticos'
+  },
+
+  'exceso_por_alcaldia': {
+    img:'img-alcaldia',
+    ph:'ph-alcaldia'
+  },
+
+  'boxplot_consumo_cluster': {
+    img:'img-boxplot',
+    ph:'ph-boxplot'
+  },
+
+  'top10_anomalias': {
+    img:'img-top10',
+    ph:'ph-top10'
+  }
 };
 function b64ToBlob(b64, mime) {
   const bin = atob(b64), arr = new Uint8Array(bin.length);
@@ -1942,17 +2073,26 @@ function loadGraficas(input) {
 // Carga automática desde Flask cuando corre en backend
 function autoCargarGraficas() {
   const archivos = [
-    { url: '/graficas/metodo_codo.png',                slot: 'img-barras',   ph: 'ph-barras'   },
-    { url: '/graficas/scatter_consumo_densidad.png',    slot: 'img-scatter',  ph: 'ph-scatter'  },
-    { url: '/graficas/visualizacion_clusters_pca.png',  slot: 'img-clusters', ph: 'ph-clusters' },
-    { url: '/graficas/mapa_anomalias_analitico.png',    slot: 'img-iforest',  ph: 'ph-iforest'  }
+    { url: '/graficas/metodo_codo.png',                slot: 'img-barras',       ph: 'ph-barras' },
+    { url: '/graficas/scatter_consumo_densidad.png',    slot: 'img-scatter',      ph: 'ph-scatter' },
+    { url: '/graficas/mapa_anomalias_analitico.png',    slot: 'img-iforest',      ph: 'ph-iforest' },
+    { url: '/graficas/heatmap_correlaciones.png',       slot: 'img-heatmap',      ph: 'ph-heatmap' },
+    { url: '/graficas/distribucion_diagnosticos.png',   slot: 'img-diagnosticos', ph: 'ph-diagnosticos' },
+    { url: '/graficas/exceso_por_alcaldia.png',         slot: 'img-alcaldia',     ph: 'ph-alcaldia' },
+    { url: '/graficas/boxplot_consumo_cluster.png',     slot: 'img-boxplot',      ph: 'ph-boxplot' },
+    { url: '/graficas/top10_anomalias.png',             slot: 'img-top10',        ph: 'ph-top10' }
   ];
+
   archivos.forEach(({ url, slot, ph }) => {
     const img = document.getElementById(slot);
     const phEl = document.getElementById(ph);
     if (!img) return;
     const tester = new Image();
-    tester.onload = () => { img.src = url; img.style.display = 'block'; if (phEl) phEl.style.display = 'none'; };
+    tester.onload = () => { 
+      img.src = url; 
+      img.style.display = 'block'; 
+      if (phEl) phEl.style.display = 'none'; 
+    };
     tester.src = url;
   });
 }
@@ -2025,7 +2165,42 @@ function renderPreview() {
 ============================================================ */
 let CRM_DATA = [], crmNextId = 1;
 function crmEstadoColor(e) {
-  return ({ 'Nuevo':'color:#a78bfa','Contactado':'color:var(--neon-cyan)','En negociación':'color:var(--amber)','Cerrado':'color:var(--emerald)','Descartado':'color:var(--text-dim)' })[e] || '';
+  return ({ 'Nuevo':'color:#a78bfa','Contactado':'color:var(--neon-cyan)','En negociación':'color:var(--amber)','Cerrado':'color:var(--emerald)','Descartado':'color:var(--text-dim)','Reporte Campo':'color:var(--rose)' })[e] || '';
+}
+
+function crmEstadoBg(e) {
+  const ESTADOS = {
+    'Nuevo':          'background:rgba(167,139,250,0.12);border:1px solid rgba(167,139,250,0.3);color:#a78bfa',
+    'Contactado':     'background:rgba(127,216,204,0.12);border:1px solid rgba(127,216,204,0.3);color:var(--neon-cyan)',
+    'En negociaci\u00f3n': 'background:rgba(249,200,122,0.12);border:1px solid rgba(249,200,122,0.3);color:var(--amber)',
+    'Cerrado':        'background:rgba(110,207,176,0.12);border:1px solid rgba(110,207,176,0.3);color:var(--emerald)',
+    'Descartado':     'background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:var(--text-dim)',
+    'Reporte Campo':  'background:rgba(244,165,184,0.12);border:1px solid rgba(244,165,184,0.3);color:var(--rose)',
+  };
+  return ESTADOS[e] || ESTADOS['Nuevo'];
+}
+
+function normalizarEstado(s) {
+  if (!s || !s.trim()) return 'Nuevo';
+  const map = {
+    'nuevo':'Nuevo','contactado':'Contactado',
+    'en negociaci\u00f3n':'En negociaci\u00f3n','en negociacion':'En negociaci\u00f3n',
+    'cerrado':'Cerrado','descartado':'Descartado','reporte campo':'Reporte Campo',
+  };
+  return map[s.trim().toLowerCase()] || s.trim() || 'Nuevo';
+}
+
+function cambiarEstado(id, nuevoEstado) {
+  const r = CRM_DATA.find(x => x.id === id);
+  if (!r) return;
+  r.estado = nuevoEstado;
+  // Sincronizar con Flask si está disponible
+  fetch('/actualizar-estatus/' + id, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'nuevo_estatus=' + encodeURIComponent(nuevoEstado)
+  }).catch(() => {});
+  crmRender();
 }
 
 function crmRender() {
@@ -2041,7 +2216,12 @@ function crmRender() {
       <td style="padding:9px 10px;color:var(--text-dim)">${r.inst}</td>
       <td style="padding:9px 10px;color:var(--text-dim)">${r.email}</td>
       <td style="padding:9px 10px;color:var(--text-dim)">${r.tel}</td>
-      <td style="padding:9px 10px"><span style="${crmEstadoColor(r.estado)}">${r.estado}</span></td>
+      <td style="padding:4px 10px">
+        <select onchange="cambiarEstado(${r.id}, this.value)"
+          style="${crmEstadoBg(r.estado)};border-radius:20px;padding:3px 22px 3px 10px;font-size:11px;font-weight:600;font-family:var(--font-sans);cursor:pointer;outline:none;appearance:none;-webkit-appearance:none;background-image:url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2210%22 height=%226%22><path d=%22M0 0l5 6 5-6z%22 fill=%22rgba(255,255,255,.3)%22/></svg>');background-repeat:no-repeat;background-position:right 6px center;">
+          ${['Nuevo','Contactado','En negociación','Cerrado','Descartado'].map(op => '<option value="'+op+'"'+(r.estado===op?' selected':'')+' style="background:#0a0f1e;color:#e2e8f0">'+op+'</option>').join('')}
+        </select>
+      </td>
       <td style="padding:9px 10px;color:var(--text-dim)">${r.notas}</td>
       <td style="padding:9px 10px;color:var(--text-dim);font-size:11px;white-space:nowrap">${r.fecha || '—'}</td>
       <td style="padding:9px 10px"><button onclick="crmEliminar(${r.id})" style="background:rgba(231,76,60,.15);border:1px solid rgba(231,76,60,.3);color:#e74c3c;border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer"><i class="fa-solid fa-trash"></i></button></td>
@@ -2086,7 +2266,7 @@ function cargarLeadsDesdeFlask() {
         inst:   l.empresa || '—',
         email:  l.email || '—',
         tel:    '—',
-        estado: l.status || 'Nuevo',
+        estado: normalizarEstado(l.status),
         notas:  l.mensaje || '—',
         fecha:  l.fecha_registro || '—'
       }));

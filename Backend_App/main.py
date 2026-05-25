@@ -420,6 +420,24 @@ def home():
     return render_template("index.html")
 
 
+@app.route("/contacto", methods=["POST"])
+def contacto():
+    """
+    Recibe el formulario de contacto del index.html,
+    guarda el lead y regresa al index mostrando el mensaje de éxito.
+    """
+    db.session.add(Lead(
+        nombre  = request.form.get("nombre", "").strip() or "—",
+        email   = request.form.get("email",  "").strip() or "—",
+        empresa = request.form.get("empresa","").strip() or "—",
+        interes = request.form.get("interes","demo"),
+        mensaje = request.form.get("mensaje","").strip() or "—",
+    ))
+    db.session.commit()
+    log.info("Nuevo lead desde index: %s", request.form.get("nombre"))
+    return redirect(url_for("home", success=1))
+
+
 @app.route("/ejecutar-entrenamiento")
 def disparar_ml():
     """
@@ -531,20 +549,8 @@ def dashboard_admin():
         top_exceso_json=top_exceso_json,
     )
 
-@app.route("/dashboard-clientes", methods=["GET", "POST"])
+@app.route("/dashboard-clientes")
 def dashboard_clientes():
-    if request.method == "POST":
-        db.session.add(Lead(
-            nombre  = request.form.get("nombre"),
-            email   = request.form.get("email"),
-            empresa = request.form.get("empresa"),
-            interes = request.form.get("interes"),
-            mensaje = request.form.get("mensaje"),
-        ))
-        db.session.commit()
-        flash("Gracias por tu interés. El equipo HydroTrace se pondrá en contacto.", "success")
-        return redirect(url_for("dashboard_clientes"))
-
     df = cargar_resultados()
 
     if df is None:
@@ -619,6 +625,68 @@ def api_reporte_campo():
     db.session.add(lead)
     db.session.commit()
     return jsonify({"ok": True, "id": lead.id})
+
+@app.route("/api/inspecciones-calendario")
+def api_inspecciones_calendario():
+    """
+    Genera el calendario de inspecciones programadas automáticamente
+    basado en el ranking real del modelo (colonias no-NORMAL),
+    ordenadas por prioridad (CRÍTICO → SOSPECHOSO → DEFICIENCIA).
+    """
+    df = cargar_resultados()
+    if df is None:
+        return jsonify({}), 503
+
+    COLOR_MAP = {
+        "CRÍTICO":     "#FF2D55",
+        "SOSPECHOSO":  "#FF9F0A",
+        "DEFICIENCIA": "#30D158",
+        "NORMAL":      "#0A84FF",
+    }
+
+    # Solo colonias que requieren inspección
+    df_insp = df[df["diagnostico_final"] != "NORMAL"].copy()
+
+    # Normalizar etiqueta corta del diagnóstico
+    def tipo_corto(diag):
+        d = str(diag).upper()
+        if "TICO" in d:     return "CRÍTICO"
+        if "SOSPECHOSO" in d: return "SOSPECHOSO"
+        if "DEFICIENCIA" in d: return "DEFICIENCIA"
+        return "NORMAL"
+
+    df_insp["tipo"] = df_insp["diagnostico_final"].apply(tipo_corto)
+
+    # Ordenar: CRÍTICO primero, luego SOSPECHOSO, luego DEFICIENCIA
+    orden = {"CRÍTICO": 0, "SOSPECHOSO": 1, "DEFICIENCIA": 2}
+    df_insp["_orden"] = df_insp["tipo"].map(orden)
+    df_insp = df_insp.sort_values("_orden")
+
+    # Distribuir inspecciones: 2 por día hábil, empezando desde hoy
+    import datetime
+    calendario = {}
+    fecha = datetime.date.today()
+    colonias = df_insp[["colonia", "alcaldia", "tipo"]].to_dict(orient="records")
+
+    i = 0
+    while i < len(colonias):
+        # Saltar fines de semana
+        if fecha.weekday() < 5:
+            lote = colonias[i:i+2]
+            key = fecha.strftime("%Y-%m-%d")
+            calendario[key] = [
+                {
+                    "colonia":  r["colonia"].title(),
+                    "alcaldia": r["alcaldia"].title(),
+                    "tipo":     r["tipo"],
+                    "color":    COLOR_MAP.get(r["tipo"], "#98989D"),
+                }
+                for r in lote
+            ]
+            i += 2
+        fecha += datetime.timedelta(days=1)
+
+    return jsonify(calendario)
 
 @app.route("/api/mapa-datos")
 def api_mapa_datos():
@@ -755,6 +823,7 @@ def actualizar_crm():
     db.session.add(lead)
     db.session.commit()
     return jsonify({"id": lead.id, "ok": True})
+
 
 
 @app.route("/logout")
