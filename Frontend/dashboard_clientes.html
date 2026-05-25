@@ -1383,8 +1383,11 @@
 <div class="map-legend-item"><span class="map-legend-dot" style="background:#30D158;box-shadow:0 0 6px #30D158;"></span>Deficiencia</div>
 <div class="map-legend-item"><span class="map-legend-dot" style="background:#0A84FF;box-shadow:0 0 6px #0A84FF;"></span>Normal</div>
             </div>
-            <button class="map-btn-sm">
+            <button class="map-btn-sm" onclick="map.flyTo([19.35,-99.15],10,{animate:true,duration:1})">
               Ver todo CDMX
+            </button>
+            <button id="btn-heat" class="map-btn-sm" onclick="toggleCalor()" style="border-color:rgba(255,45,85,0.3);color:#FF2D55;background:rgba(255,45,85,0.06);">
+              🌡 Calor
             </button>
           </div>
         </div>
@@ -2689,42 +2692,102 @@ if (totalExceso > 0 && excesoF.length >= 2) {
   setInterval(tick, 1000);
   tick();
 
+  // ── TOGGLE MAPA DE CALOR ──
+  let _mapRef = null, _calorRef = null, _calorActivo = false;
+  let _indiceRef = null; // referencia al array de marcadores
+
+  function toggleCalor() {
+    if (!_mapRef || !_calorRef || !_indiceRef) return;
+    const btn = document.getElementById('btn-heat');
+    if (_calorActivo) {
+      // Desactivar calor → mostrar puntos
+      _mapRef.removeLayer(_calorRef);
+      _indiceRef.forEach(c => c.marker.addTo(_mapRef));
+      _calorActivo = false;
+      btn.style.background  = 'rgba(255,45,85,0.06)';
+      btn.style.borderColor = 'rgba(255,45,85,0.3)';
+      btn.textContent       = '🌡 Calor';
+    } else {
+      // Activar calor → ocultar puntos
+      _indiceRef.forEach(c => _mapRef.removeLayer(c.marker));
+      _calorRef.addTo(_mapRef);
+      _calorActivo = true;
+      btn.style.background  = 'rgba(255,45,85,0.18)';
+      btn.style.borderColor = '#FF2D55';
+      btn.textContent       = '✕ Calor';
+    }
+  }
+
   // ── MAPA LEAFLET ──
+  // Cargar leaflet.heat dinámicamente
+  const _heatScript = document.createElement('script');
+  _heatScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js';
+  document.head.appendChild(_heatScript);
+
+  _heatScript.onload = () => {
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      const map = L.map("map", { zoomControl: true }).setView([19.35, -99.15], 10);
+
+      // Límites geográficos CDMX — impide alejarse del área de interés
+      const CDMX_BOUNDS = L.latLngBounds(
+        L.latLng(19.05, -99.40),
+        L.latLng(19.65, -98.90)
+      );
+
+      const map = L.map("map", {
+        zoomControl        : true,
+        minZoom            : 10,
+        maxZoom            : 17,
+        maxBounds          : CDMX_BOUNDS,
+        maxBoundsViscosity : 1.0
+      }).setView([19.35, -99.15], 10);
 
       L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
         attribution: "© OpenStreetMap contributors © CARTO",
-        subdomains: "abcd", maxZoom: 19
+        subdomains: "abcd", maxZoom: 17
       }).addTo(map);
 
       map.invalidateSize();
 
       const indiceColonias = [];
 
-      // Paleta actualizada — coherente con variables CSS v2
       function pastelPorColor(hexOriginal) {
-  const m = (hexOriginal || "").toUpperCase();
-  if (m.includes("FF2D55")) return "#FF2D55";
-  if (m.includes("FF9F0A")) return "#FF9F0A";
-  if (m.includes("30D158")) return "#30D158";
-  if (m.includes("0A84FF")) return "#0A84FF";
-  return "#98989D";
-}
+        const m = (hexOriginal || "").toUpperCase();
+        if (m.includes("FF2D55")) return "#FF2D55";
+        if (m.includes("FF9F0A")) return "#FF9F0A";
+        if (m.includes("30D158")) return "#30D158";
+        if (m.includes("0A84FF")) return "#0A84FF";
+        return "#98989D";
+      }
 
       fetch("/api/mapa-datos")
         .then(r => r.json())
         .then(puntos => {
+
+          // Capa de calor — intensidad proporcional al exceso_m3
+          const maxExceso = Math.max(...puntos.map(p => p.exceso_m3 || 0));
+          const heatPoints = puntos.map(p => [
+            p.lat, p.lon,
+            maxExceso > 0 ? (p.exceso_m3 || 0) / maxExceso : 0.5
+          ]);
+          _calorRef = L.heatLayer(heatPoints, {
+            radius  : 30,
+            blur    : 22,
+            maxZoom : 14,
+            gradient: { 0.0:'#0A84FF', 0.4:'#30D158', 0.65:'#FF9F0A', 1.0:'#FF2D55' }
+          });
+          _mapRef    = map;
+          _indiceRef = indiceColonias;
+
           puntos.forEach(p => {
             const pastelColor = pastelPorColor(p.color);
             const marker = L.circleMarker([p.lat, p.lon], {
-              color: pastelColor,
-              fillColor: pastelColor,
-              fillOpacity: 0.72,
-              radius: 7,
-              weight: 2,
-              opacity: 0.9,
+              color       : pastelColor,
+              fillColor   : pastelColor,
+              fillOpacity : 0.72,
+              radius      : 7,
+              weight      : 2,
+              opacity     : 0.9,
             }).bindPopup(p.popup_html).addTo(map);
             indiceColonias.push({ nombre: p.colonia, alcaldia: p.alcaldia, lat: p.lat, lon: p.lon, color: pastelColor, marker });
           });
@@ -2785,6 +2848,7 @@ if (totalExceso > 0 && excesoF.length >= 2) {
       });
     });
   });
+  }; // fin _heatScript.onload
 
   (function() {
   const ctx = document.getElementById('excesoPorAlcaldiaChart');

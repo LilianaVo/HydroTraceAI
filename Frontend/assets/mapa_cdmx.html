@@ -7,51 +7,174 @@
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
+
     <style>
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #06080F; /* Fondo oscuro base */
+            background-color: #06080F;
             font-family: sans-serif;
         }
         #map {
             width: 100vw;
             height: 100vh;
         }
+
+        /* Botón toggle mapa de calor */
+        #btn-heat {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            z-index: 1000;
+            background: rgba(13,17,23,0.88);
+            border: 1px solid rgba(255,45,85,0.4);
+            color: #FF2D55;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s;
+            letter-spacing: 0.04em;
+        }
+        #btn-heat:hover {
+            background: rgba(255,45,85,0.15);
+        }
+        #btn-heat.activo {
+            background: rgba(255,45,85,0.22);
+            border-color: #FF2D55;
+        }
+
+        /* Leyenda flotante */
+        #leyenda {
+            position: absolute;
+            bottom: 30px;
+            right: 14px;
+            z-index: 1000;
+            background: rgba(13,17,23,0.88);
+            border: 1px solid rgba(99,102,241,0.2);
+            border-radius: 8px;
+            padding: 12px 16px;
+            backdrop-filter: blur(8px);
+        }
+        #leyenda .titulo {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(148,163,184,0.45);
+            margin-bottom: 9px;
+        }
+        #leyenda .item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            color: rgba(226,232,240,0.75);
+        }
+        #leyenda .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
-
     <div id="map"></div>
+    <button id="btn-heat" onclick="toggleCalor()">🌡 Mapa de Calor</button>
+
+    <!-- Leyenda -->
+    <div id="leyenda">
+        <div class="titulo">Nivel de riesgo</div>
+        <div class="item"><span class="dot" style="background:#FF2D55;box-shadow:0 0 6px rgba(255,45,85,0.6);"></span>Crítico</div>
+        <div class="item"><span class="dot" style="background:#FF9F0A;box-shadow:0 0 6px rgba(255,159,10,0.6);"></span>Sospechoso</div>
+        <div class="item"><span class="dot" style="background:#30D158;box-shadow:0 0 6px rgba(48,209,88,0.5);"></span>Deficiencia</div>
+        <div class="item"><span class="dot" style="background:#0A84FF;box-shadow:0 0 6px rgba(10,132,255,0.5);"></span>Normal</div>
+    </div>
 
     <script>
-        // mapa centrado en la CDMX 
-        const map = L.map('map').setView([19.35, -99.15], 11);
+        // Límites geográficos de la CDMX
+        const CDMX_BOUNDS = L.latLngBounds(
+            L.latLng(19.05, -99.40),
+            L.latLng(19.65, -98.90)
+        );
 
-        
+        const map = L.map('map', {
+            minZoom            : 10,
+            maxZoom            : 17,
+            maxBounds          : CDMX_BOUNDS,
+            maxBoundsViscosity : 1.0
+        }).setView([19.35, -99.15], 11);
+
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
             subdomains: 'abcd',
-            maxZoom: 19
+            maxZoom: 17
         }).addTo(map);
 
-    
+        let calorCapa   = null;
+        let calorActivo = false;
+        let marcadores  = []; // guardamos referencias para mostrar/ocultar
+
+        function toggleCalor() {
+            if (!calorCapa) return;
+            const btn = document.getElementById('btn-heat');
+            if (calorActivo) {
+                // Desactivar calor → mostrar puntos
+                map.removeLayer(calorCapa);
+                marcadores.forEach(m => m.addTo(map));
+                calorActivo = false;
+                btn.classList.remove('activo');
+                btn.textContent = '🌡 Mapa de Calor';
+            } else {
+                // Activar calor → ocultar puntos
+                marcadores.forEach(m => map.removeLayer(m));
+                calorCapa.addTo(map);
+                calorActivo = true;
+                btn.classList.add('activo');
+                btn.textContent = '✕ Ocultar Calor';
+            }
+        }
+
         fetch('/api/mapa-datos')
           .then(r => r.json())
           .then(puntos => {
+
+            const maxExceso = Math.max(...puntos.map(p => p.exceso_m3 || 0));
+            const heatPoints = puntos.map(p => [
+                p.lat, p.lon,
+                maxExceso > 0 ? (p.exceso_m3 || 0) / maxExceso : 0.5
+            ]);
+
+            calorCapa = L.heatLayer(heatPoints, {
+                radius  : 35,
+                blur    : 25,
+                maxZoom : 14,
+                gradient: {
+                    0.0 : '#0A84FF',
+                    0.4 : '#30D158',
+                    0.65: '#FF9F0A',
+                    1.0 : '#FF2D55'
+                }
+            });
+
+            // Marcadores — guardamos referencia para el toggle
             puntos.forEach(p => {
-              
-              L.circleMarker([p.lat, p.lon], { 
-                  color: p.color,
-                  fillColor: p.color,
-                  fillOpacity: 0.6,
-                  radius: 8, 
-                  weight: 2
-              })
-              .bindPopup(p.popup_html)
-              .addTo(map);
+                const m = L.circleMarker([p.lat, p.lon], {
+                    color      : p.color,
+                    fillColor  : p.color,
+                    fillOpacity: 0.6,
+                    radius     : 8,
+                    weight     : 2
+                })
+                .bindPopup(p.popup_html)
+                .addTo(map);
+                marcadores.push(m);
             });
           })
           .catch(err => console.error("Error cargando los datos del mapa:", err));
