@@ -997,7 +997,7 @@
         <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/>
       </svg>
     </div>
-    Exceso por Alcaldía
+    Consumo por Alcaldía
   </a>
 
   <a class="nav-link" onclick="showClienteSection('campo');return false;" style="cursor:pointer;">
@@ -1110,10 +1110,10 @@
       <div class="hero-content">
         <div class="hero-badge">
           <span class="hero-badge-dot"></span>
-          Inteligencia Hídrica · CDMX 2026
+          Sistema de Detección Hídrica · CDMX 2019
         </div>
         <h1 class="hero-title">HydroTrace <em>AI</em></h1>
-        <p class="hero-subtitle">Detecta fugas, localiza tomas clandestinas y prioriza a tus cuadrillas basándote en el impacto económico. Deja de operar a ciegas.</p>
+        <p class="hero-subtitle">Analizamos el consumo real de agua colonia por colonia. El sistema detecta automáticamente dónde se consume más de lo esperado y clasifica cada zona para que tus equipos actúen donde más impacta.</p>
         <div class="hero-stats">
           <div class="hero-stat">
             <span class="hero-stat-val">{{ total_colonias }}</span>
@@ -1122,7 +1122,7 @@
           <div class="hero-divider"></div>
           <div class="hero-stat">
             <span class="hero-stat-val">{{ tasa_confianza }}%</span>
-            <span class="hero-stat-label">Tasa de anomalía</span>
+            <span class="hero-stat-label">Confianza del modelo</span>
           </div>
           <div class="hero-divider"></div>
           <div class="hero-stat">
@@ -1169,8 +1169,8 @@
   display:flex;flex-direction:column;gap:4px;
 ">
   <div style="font-size:9px;font-weight:800;letter-spacing:0.15em;text-transform:uppercase;color:var(--purple);">Hallazgo principal</div>
-  <div style="font-size:13px;font-weight:800;color:var(--text);letter-spacing:-0.02em;">{{ tasa_confianza }}% de colonias con anomalía</div>
-  <div style="font-size:10.5px;color:var(--text2);font-weight:500;line-height:1.5;">{{ alertas_criticas }} de {{ total_colonias }} colonias analizadas presentan exceso de consumo estadísticamente significativo.</div>
+  <div style="font-size:13px;font-weight:800;color:var(--text);letter-spacing:-0.02em;">{{ tasa_confianza }}% de confianza en las detecciones</div>
+  <div style="font-size:10.5px;color:var(--text2);font-weight:500;line-height:1.5;">{{ alertas_criticas }} colonias en estado CRÍTICO de {{ total_colonias }} analizadas. {{ ranking|length }} zonas prioritarias identificadas para intervención.</div>
 </div>
       </div>
     </div>
@@ -1258,16 +1258,22 @@
       </div>
 
       <!-- Precisión: verde vibrante -->
-      <div class="mini-card vivid v-green">
+<div class="mini-card vivid v-green">
   <div class="mini-icon">
     <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
       <polyline points="22 4 12 14.01 9 11.01"/>
     </svg>
   </div>
+
   <div>
-    <span class="hero-stat-val">{{ tasa_confianza }}%</span>
-    <div class="mini-label">Detecciones Silenciosas</div>
+    <div class="hero-stat-val" style="color:white;">
+      {{ tasa_confianza }}%
+    </div>
+
+    <div style="font-size:10px;color:white;opacity:.9;margin-top:2px;">
+      % de anomalías con respaldo en reportes ciudadanos · Modelo entrenado sobre n=160
+    </div>
   </div>
 </div>
 
@@ -1295,11 +1301,11 @@
         <div class="kpi-accent-line" style="background:linear-gradient(90deg, var(--lavender), var(--purple-soft));"></div>
         <div class="kpi-top">
           <div>
-            <div class="kpi-label">Focos Rojos Geolocalizados</div>
+            <div class="kpi-label">Zonas Críticas Detectadas</div>
             <div class="kpi-val" style="color:var(--purple);">{{ alertas_criticas }}</div>
             <div class="kpi-foot">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-              <span style="color:var(--purple);font-weight:700;">Requieren inspección en campo</span>
+              <span style="color:var(--purple);font-weight:700;">Requieren visita de inspección</span>
             </div>
           </div>
           <div class="kpi-icon" style="background:var(--lavender-pale)">
@@ -1319,15 +1325,15 @@
         <div class="kpi-accent-line" style="background:linear-gradient(90deg, var(--rose), var(--mauve));"></div>
         <div class="kpi-top">
           <div>
-            <div class="kpi-label">Fuga de Capital Estimada</div>
+            <div class="kpi-label">Pérdida Económica Estimada</div>
             <div class="kpi-val" style="color:var(--rose);">{{ dinero_riesgo }}</div>
             <div class="kpi-foot">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-              <span style="color:var(--rose);font-weight:700;">Impacto económico</span>
-              <span style="color:var(--text2)"> MXN detectado</span>
+              <span style="color:var(--rose);font-weight:700;">Calculado a $18.40/m³</span>
+              <span style="color:var(--text2)"> (tarifa SACMEX 2024)</span>
             </div>
             <div style="margin-top:8px;font-size:10px;color:var(--text3);font-weight:500;line-height:1.5;">
-              Equivale al abastecimiento de <strong style="color:var(--text2);">~180,000 habitantes</strong>. Impacto directo en la red hídrica.
+              Agua que se consume sin facturar — en colonias con exceso confirmado por el modelo.
             </div>
           </div>
           <div class="kpi-icon" style="background:var(--rose-pale)">
@@ -1350,7 +1356,7 @@
             <div class="kpi-label">Proyección de Recuperación (ROI)</div>
             <div class="kpi-val" style="color:var(--sage);">{{ roi_proyectado }}</div>
             <div class="kpi-foot">
-              <span style="color:var(--text2)">Escenario conservador: Mitigando solo el 20% del volumen anómalo detectado.</span>
+              <span style="color:var(--text2)">Recuperando solo el 20% del volumen anómalo identificado por el modelo.</span>
             </div>
           </div>
           <div class="kpi-icon" style="background:var(--sage-pale)">
@@ -1429,9 +1435,9 @@
             <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
           <div style="font-size:11px;color:var(--amber);font-weight:600;line-height:1.6;">
-            <strong>CRÍTICO</strong> → Fuga mayor probable. Inspección física inmediata.<br>
-            <strong>SOSPECHOSO</strong> → Extracción irregular (Huachicol). Sugiere auditoría comercial.<br>
-            <strong>DEFICIENCIA</strong> → Caída de presión severa. Revisar válvulas de distribución.
+            <strong>CRÍTICO</strong> → Alta probabilidad de fuga activa en la red. Se recomienda inspección física en los próximos 7 días.<br>
+            <strong>SOSPECHOSO</strong> → Consumo anormalmente alto sin reportes ciudadanos. Posible extracción no autorizada — se sugiere auditoría de tomas.<br>
+            <strong>DEFICIENCIA</strong> → Consumo inferior al esperado con quejas de baja presión. Posible falla en la red de distribución.
           </div>
 </div>
         <div class="btn-row">
@@ -1445,7 +1451,7 @@
         <div class="chart-hd">
           <div class="panel-title">
             <div class="panel-dot" style="background:var(--purple-soft);"></div>
-            Exceso de consumo por alcaldía
+            Volumen de consumo irregular por alcaldía
           </div>
           <div class="chart-legend">
             <div class="legend-item">
@@ -1496,16 +1502,16 @@
     border:1px solid var(--border);background:linear-gradient(135deg,var(--purple),#6D3FC8);
     cursor:pointer;transition:all 0.2s;font-family:'Figtree',sans-serif;
   ">
-    <div style="font-size:18px;font-weight:800;color:white;">30%</div>
-    <div style="font-size:9px;color:rgba(255,255,255,0.75);margin-top:4px;line-height:1.4;">Intervención en colonias CRÍTICO y SOSPECHOSO</div>
+    <div style="font-size:18px;font-weight:800;color:white;">20%</div>
+    <div style="font-size:9px;color:rgba(255,255,255,0.75);margin-top:4px;line-height:1.4;">Escenario base del modelo (actual) </div>
   </button>
   <button onclick="setScenario(this,55)" style="
     flex:1;padding:12px 8px;border-radius:var(--radius-sm);
     border:1px solid var(--border);background:var(--surface);
     cursor:pointer;transition:all 0.2s;font-family:'Figtree',sans-serif;
   ">
-    <div style="font-size:18px;font-weight:800;color:var(--text2);">55%</div>
-    <div style="font-size:9px;color:var(--text3);margin-top:4px;line-height:1.4;">Intervención completa con seguimiento 12 meses</div>
+    <div style="font-size:18px;font-weight:800;color:var(--text2);">30%</div>
+    <div style="font-size:9px;color:var(--text3);margin-top:4px;line-height:1.4;">Intervención en colonias CRÍTICO y SOSPECHOSO</div>
   </button>
 </div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -1519,7 +1525,7 @@
                 </div>
               </div>
               <div class="roi-note">
-                ⚠ Pérdida calculada a $18.40/m³ (tarifa SACMEX vigente). Consumo de referencia: datos 2019. Valor orientativo para priorización operativa.
+                ⚠ La pérdida se calcula a $18.40/m³ (tarifa SACMEX vigente) sobre el exceso detectado en el primer semestre de 2019. Las cifras son una estimación de referencia para priorizar dónde intervenir — no reemplazan una auditoría de campo.
               </div>
             </div>
             <div>
@@ -1538,7 +1544,7 @@
   <div class="panel-hd">
     <div class="panel-title">
       <div class="panel-dot" style="background:var(--sky);"></div>
-      Exceso por Alcaldía
+      Consumo Irregular por Alcaldía
     </div>
     <span class="tag" style="background:var(--sky-pale);color:var(--sky);">Top 5 · m³</span>
   </div>
@@ -1552,9 +1558,9 @@
       <div style="font-size:9.5px;color:var(--text2);font-weight:500;">{{ alertas_criticas }} / {{ total_colonias }} colonias</div>
     </div>
     <div style="background:var(--sage-pale);border-radius:10px;padding:10px 12px;">
-      <div style="font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;">Contaminación IF</div>
+      <div style="font-size:9px;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:3px;">Sensibilidad del modelo</div>
       <div style="font-size:16px;font-weight:800;color:var(--sage);letter-spacing:-0.02em;">15%</div>
-      <div style="font-size:9.5px;color:var(--text2);font-weight:500;">Parámetro conservador</div>
+      <div style="font-size:9.5px;color:var(--text2);font-weight:500;">Umbral conservador</div>
     </div>
   </div>
 </div>
@@ -1844,7 +1850,7 @@ function renderCalendario() {
     const key    = `${calYear}-${mm}-${dd}`;
     const insp   = inspeccionesData[key] || [];
     const esHoy  = key === hoyStr;
-    const tieneCritico    = insp.some(i => i.tipo === "CRÍTICO");
+    const tieneCritico    = insp.some(i => i.tipo === "CRITICO");
     const tieneSospechoso = insp.some(i => i.tipo === "SOSPECHOSO");
     const tieneDeficiencia= insp.some(i => i.tipo === "DEFICIENCIA");
 
@@ -1986,7 +1992,7 @@ renderCalendario();
   <div class="footer-bar">
   <span>HydroTrace AI · Ingeniería UNAM · 2026</span>
   <span style="font-size:10px;color:var(--text3);font-weight:500;">
-    Modelo: Isolation Forest + Regresión Lineal + K-Means (K=4) · Fuente: SACMEX / Datos Abiertos CDMX 2019 · PumaScript Solutions
+    Modelo: Isolation Forest + Regresión Lineal + K-Means · Fuente: SACMEX / Datos Abiertos CDMX 2019 · PumaScript Solutions
   </span>
   <span id="footer-clock" style="font-size:10.5px;color:var(--text3);">Actualización: 14:37:00 · Latencia: 42ms</span>
 </div>
@@ -2013,7 +2019,7 @@ renderCalendario();
       <div style="font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--purple);margin-bottom:6px;">Análisis Financiero</div>
       <h2 style="font-size:26px;font-weight:800;color:var(--text);letter-spacing:-0.03em;margin-bottom:8px;">Impacto Económico del Agua No Contabilizada</h2>
       <p style="font-size:13px;color:var(--text2);line-height:1.7;max-width:680px;font-weight:500;">
-        Desglose completo del volumen y costo asociado a cada colonia con anomalía detectada. Calculado a $18.40/m³ (tarifa SACMEX vigente). Solo colonias con exceso de consumo positivo generan pérdida recuperable.
+        Desglose del volumen y costo de agua detectada fuera del rango normal, colonia por colonia. Calculado a $18.40/m³ (tarifa SACMEX vigente) sobre datos del primer semestre de 2019. Solo se incluyen colonias donde el modelo detectó consumo superior al esperado.
       </p>
     </div>
 
@@ -2092,7 +2098,7 @@ renderCalendario();
       <div style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.02em;margin-bottom:20px;">¿Cuánto puedes recuperar según la intervención?</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" id="ana-escenarios"></div>
       <div style="margin-top:16px;padding:12px 16px;background:var(--amber-pale);border:1px solid var(--amber-mid);border-radius:11px;font-size:11px;color:var(--amber);font-weight:600;line-height:1.6;">
-        ⚠ Proyecciones calculadas sobre el exceso total detectado por el modelo. La recuperación real depende de la capacidad operativa de las cuadrillas, el tipo de intervención y el tiempo de respuesta en campo.
+        ⚠ Las proyecciones se calculan sobre el primer semestre de 2019 (datos disponibles). La recuperación real depende de la capacidad operativa de las cuadrillas, el tipo de intervención y el tiempo de respuesta en campo. Úsalos como guía de priorización, no como cifra definitiva.
       </div>
     </div>
 
@@ -2314,12 +2320,14 @@ renderCalendario();
   // ── KPIs superiores
   const totalExceso = conExceso.reduce((s, r) => s + r.exceso_consumo, 0);
   const totalCosto  = conExceso.reduce((s, r) => s + r.costo, 0);
-  const pobEq       = Math.round(totalExceso * 0.20 / 133.59);
+  // C1: exceso_consumo es semestral. Para comparar contra M3_PER_CAPITA_ANUAL (133.59 m³/hab/año)
+  // se anualiza ×2 antes de calcular la población equivalente, igual que modelos_ml.py (HC-01).
+  const pobEq       = Math.round(totalExceso * 2 * 0.20 / 133.59);
   const kpiDefs = [
     { label:'Colonias con pérdida', val: conExceso.length,   color:'var(--rose)',   icon:'⚠' },
     { label:'m³ en exceso total',   val: fmt(totalExceso),   color:'var(--sky)',    icon:'💧' },
     { label:'Pérdida estimada',     val: fmtMXN(totalCosto), color:'var(--amber)',  icon:'💰' },
-    { label:'Hab. recuperables',    val: fmt(pobEq),          color:'var(--sage)',   icon:'👥' },
+    { label:'Habitantes abastecibles/año',    val: fmt(pobEq),          color:'var(--sage)',   icon:'👥' },
   ];
   const kpiEl = document.getElementById('ana-kpis');
   if (kpiEl) {
@@ -2657,14 +2665,11 @@ if (totalExceso > 0 && excesoF.length >= 2) {
         insightContainer.innerHTML = `
             <div style="margin-top: 15px; padding: 16px; background: rgba(124,110,245,0.05); border-left: 4px solid rgba(124,110,245,0.5); border-radius: 8px; text-align: left;">
                 <div style="font-size: 12px; font-weight: 800; color: #2D2657; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 6px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2D2657" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1.45.62 2.84 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/>
-                    </svg>
-                    Foco Operativo Crítico
+                   Dónde actuar primero
                 </div>
                 <ul style="font-size: 12px; color: #5C5288; line-height: 1.6; font-weight: 500; margin: 0; padding-left: 20px;">
-                    <li style="margin-bottom: 4px;"><strong>${top1Nombre}</strong> y <strong>${top2Nombre}</strong> concentran el <strong>${pctTop2}%</strong> de la desviación hídrica total.</li>
-                    <li>Representan los puntos de mayor impacto operativo potencial.</li>
+                    <li style="margin-bottom: 4px;"><strong>${top1Nombre}</strong> y <strong>${top2Nombre}</strong> concentran el <strong>${pctTop2}%</strong> del volumen irregular total detectado.</li>
+                    <li>Son las alcaldías donde una intervención tiene mayor retorno económico potencial.</li>
                 </ul>
             </div>
         `;

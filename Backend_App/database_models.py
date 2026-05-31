@@ -22,7 +22,7 @@ class Lead(db.Model):
     nombre         = db.Column(db.String(100), nullable=False)
     email          = db.Column(db.String(100), nullable=False)
     empresa        = db.Column(db.String(100), nullable=True)
-    telefono       = db.Column(db.String(30),  nullable=True)   # agregado: el CRM lo envía como r.tel
+    telefono       = db.Column(db.String(30),  nullable=True)  
     interes        = db.Column(db.String(100), nullable=True)
     mensaje        = db.Column(db.Text,        nullable=True)
     status         = db.Column(db.String(20),  default='Nuevo')

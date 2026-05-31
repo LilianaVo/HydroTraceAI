@@ -713,14 +713,14 @@ input[type="search"]::placeholder {
     ">
       <div style="display:flex;align-items:center;gap:12px">
         <span class="live-dot"></span>
-        <span style="font-size:14px;font-weight:700">Mapa Geoespacial · CDMX · 159 colonias</span>
+        <span id="mapa-titulo" style="font-size:14px;font-weight:700">Mapa Geoespacial · CDMX · {{ stats.total_colonias }} colonias</span>
         <span style="font-family:var(--font-mono);font-size:10px;color:rgba(180,167,245,0.35)">EPSG:4326 · Leaflet.js</span>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
-        <span style="background:var(--critico-bg);border:1px solid var(--critico-border);color:var(--critico);padding:3px 9px;border-radius:5px;font-size:10px;font-weight:700">● 2 Crítico</span>
-        <span style="background:var(--sospechoso-bg);border:1px solid var(--sospechoso-border);color:var(--sospechoso);padding:3px 9px;border-radius:5px;font-size:10px;font-weight:700">● 11 Sospechoso</span>
-        <span style="background:var(--deficiencia-bg);border:1px solid var(--deficiencia-border);color:var(--deficiencia);padding:3px 9px;border-radius:5px;font-size:10px;font-weight:700">● 9 Deficiencia</span>
-        <span style="background:var(--agua-bg);border:1px solid var(--agua-border);color:var(--agua);padding:3px 9px;border-radius:5px;font-size:10px;font-weight:700">● 137 Normal</span>
+        <span style="background:var(--critico-bg);border:1px solid var(--critico-border);color:var(--critico);padding:3px 9px;border-radius:5px;font-size:10px;font-weight:700" id="mapa-label-critico">● 0 Crítico</span>
+        <span style="background:var(--sospechoso-bg);border:1px solid var(--sospechoso-border);color:var(--sospechoso);padding:3px 9px;border-radius:5px;font-size:10px;font-weight:700" id="mapa-label-sospechoso">● 0 Sospechoso</span>
+        <span style="background:var(--deficiencia-bg);border:1px solid var(--deficiencia-border);color:var(--deficiencia);padding:3px 9px;border-radius:5px;font-size:10px;font-weight:700" id="mapa-label-deficiencia">● 0 Deficiencia</span>
+        <span style="background:var(--agua-bg);border:1px solid var(--agua-border);color:var(--agua);padding:3px 9px;border-radius:5px;font-size:10px;font-weight:700" id="mapa-label-normal">● 0 Normal</span>
         <button onclick="closeMap()" class="btn-ghost" style="padding:6px 12px;font-size:10px">✕ Cerrar</button>
       </div>
     </div>
@@ -750,7 +750,7 @@ input[type="search"]::placeholder {
     ">
       <div style="display:flex;align-items:center;gap:10px">
         <span class="live-dot"></span>
-        <span style="font-size:13px;font-weight:700" id="modal-title">API Endpoint</span>
+        <span style="font-size:13px;font-weight:700" id="apiModalTitle">API Endpoint</span>
       </div>
       <div style="display:flex;gap:8px">
         <button onclick="copyApiJson()" class="btn-download" style="font-size:10px;padding:6px 12px">
@@ -774,13 +774,13 @@ input[type="search"]::placeholder {
       font-size:12px;
       color:rgba(180,167,245,0.55);
     ">
-      <span style="background:var(--dinero-bg);border:1px solid var(--dinero-border);color:var(--dinero);padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700">GET</span>
-      <span id="modal-url">http://localhost:5000/api/endpoint</span>
+      <span id="apiModalMethod" style="background:var(--dinero-bg);border:1px solid var(--dinero-border);color:var(--dinero);padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700">GET</span>
+      <span id="apiModalUrl">http://localhost:5000/api/endpoint</span>
     </div>
 
     <!-- Descripción + JSON -->
-    <div style="padding:16px 24px 0;font-size:11px;color:rgba(180,167,245,0.40)" id="modal-desc"></div>
-    <pre class="json-block" id="modal-json"></pre>
+    <div style="padding:16px 24px 0;font-size:11px;color:rgba(180,167,245,0.40)" id="apiModalDesc"></div>
+    <pre class="json-block" id="apiModalBody"></pre>
 
   </div>
 </div>
@@ -1101,13 +1101,14 @@ input[type="search"]::placeholder {
         <table class="data-table" id="mainTable">
           <thead>
             <tr>
-              <th>Alcaldía</th>
+              <th>#</th>
               <th>Colonia</th>
+              <th>Alcaldía</th>
               <th>Diagnóstico</th>
               <th>Exceso m³</th>
-              <th>Score IF</th>
               <th>Per Cápita</th>
               <th>Reportes</th>
+              <th>Score IF</th>
             </tr>
           </thead>
           <tbody id="tableBody"></tbody>
@@ -1127,10 +1128,10 @@ input[type="search"]::placeholder {
           </div>
           <div style="font-size:10px;color:rgba(255,255,255,0.35);padding:0 20px 8px;margin-top:6px">Distribución de los 4 niveles de riesgo asignados por la combinación de Isolation Forest + regresión.</div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <span class="pill pill-critico">2</span>
-            <span class="pill pill-sospechoso">11</span>
-            <span class="pill pill-deficiencia">9</span>
-            <span class="pill pill-normal">138</span>
+            <span class="pill pill-critico" id="pill-critico">0</span>
+            <span class="pill pill-sospechoso" id="pill-sospechoso">0</span>
+            <span class="pill pill-deficiencia" id="pill-deficiencia">0</span>
+            <span class="pill pill-normal" id="pill-normal">0</span>
           </div>
         </div>
         <div style="padding:20px;display:flex;align-items:center;justify-content:center">
@@ -1167,7 +1168,7 @@ input[type="search"]::placeholder {
           </div>
           <div class="pipeline-step">
             <div class="step-num" style="background:rgba(245,158,11,0.10);color:#f59e0b;border:1px solid rgba(245,158,11,0.22)">05</div>
-            <div><div class="step-title">Modelos ML</div><div class="step-detail">KMeans K=4 · IsolationForest 15% · R²=0.14</div></div>
+            <div><div class="step-title">Modelos ML</div><div class="step-detail">KMeans K=4 · IsolationForest contam. dinámico · R²=0.28</div></div>
           </div>
           <div class="pipeline-step">
             <div class="step-num" style="background:rgba(167,143,212,0.10);color:#c3b4e8;border:1px solid rgba(167,143,212,0.20)">06</div>
@@ -1233,7 +1234,7 @@ input[type="search"]::placeholder {
             <div><span class="log-ts">[GEO]</span><span class="log-warn">!</span>  <span class="log-info">Geometrías inválidas → imputadas con mediana de alcaldía</span></div>
             <div><span class="log-ts">[ETL]</span><span class="log-ok">✓</span> <span class="log-info">Merge completado · shape ({{ stats.total_colonias }}, 18)</span></div>
             <div><span class="log-ts">[ML]</span> <span class="log-ok">✓</span> <span class="log-info">K-Means K=4 completado</span></div>
-            <div><span class="log-ts">[ML]</span> <span class="log-ok">✓</span> <span class="log-info">IsolationForest · {{ metricas.colonias_anomalas }} anomalías detectadas</span></div>
+            <div><span class="log-ts">[ML]</span> <span class="log-ok">✓</span> <span class="log-info">IsolationForest contam. dinámico · {{ metricas.colonias_anomalas }} anomalías detectadas</span></div>
             <div><span class="log-ts">[ML]</span> <span class="log-ok">✓</span> <span class="log-info">Regresión Lineal completada</span></div>
             <div><span class="log-ts">[ML]</span> <span class="log-ok">✓</span> <span class="log-info">Diagnósticos generados · confianza {{ metricas.confianza_ml }}</span></div>
             <div><span class="log-ts">[FIN]</span><span class="log-ok">✓</span> <span class="log-info">Impacto: {{ kpis.dinero_riesgo }} MXN</span></div>
@@ -1327,7 +1328,7 @@ input[type="search"]::placeholder {
               </div>
               <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
                 <span style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);color:#8b5cf6;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600">{{ stats.total_colonias }} colonias</span>
-                <span style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);color:#8b5cf6;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600">24 columnas</span>
+                <span style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);color:#8b5cf6;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600">{{ tabla_completa[0].keys()|list|length if tabla_completa else 0 }} columnas</span>
                 <span style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);color:#8b5cf6;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:600">Diagnósticos + IF scores</span>
               </div>
               <button class="btn-primary" style="width:100%;justify-content:center;padding:10px" onclick="downloadCSV('resultados')">
@@ -1887,7 +1888,7 @@ let currentFilter = 'all', currentSearch = '';
 
 function diagPill(d) {
   const u = (d || '').toUpperCase();
-  if (u.includes('CRÍTICO'))     return `<span style="background:rgba(231,76,60,.15);color:#e74c3c;border:1px solid rgba(231,76,60,.3);border-radius:20px;padding:2px 10px;font-size:10px;white-space:nowrap">CRÍTICO</span>`;
+  if (u.includes('TICO'))        return `<span style="background:rgba(231,76,60,.15);color:#e74c3c;border:1px solid rgba(231,76,60,.3);border-radius:20px;padding:2px 10px;font-size:10px;white-space:nowrap">CRÍTICO</span>`;
   if (u.includes('SOSPECHOSO'))  return `<span style="background:rgba(230,126,34,.15);color:#e67e22;border:1px solid rgba(230,126,34,.3);border-radius:20px;padding:2px 10px;font-size:10px;white-space:nowrap">SOSPECHOSO</span>`;
   if (u.includes('DEFICIENCIA')) return `<span style="background:rgba(241,196,15,.15);color:#f1c40f;border:1px solid rgba(241,196,15,.3);border-radius:20px;padding:2px 10px;font-size:10px;white-space:nowrap">DEFICIENCIA</span>`;
   return `<span style="background:rgba(52,152,219,.12);color:#3498db;border:1px solid rgba(52,152,219,.25);border-radius:20px;padding:2px 10px;font-size:10px;white-space:nowrap">NORMAL</span>`;
@@ -1898,10 +1899,10 @@ function renderTable() {
   if (currentFilter !== 'all') {
     rows = rows.filter(r => {
       const d = (r.diagnostico_final || '').toUpperCase();
-      if (currentFilter === 'critico')     return d.includes('CRÍTICO');
-      if (currentFilter === 'sospechoso')  return d.includes('SOSPECHOSO');
-      if (currentFilter === 'deficiencia') return d.includes('DEFICIENCIA');
-      if (currentFilter === 'normal')      return d.includes('NORMAL');
+      if (currentFilter === 'CRITICO')     return d.includes('TICO');    // cubre CRÍTICO con/sin acento
+      if (currentFilter === 'SOSPECHOSO')  return d.includes('SOSPECHOSO');
+      if (currentFilter === 'DEFICIENCIA') return d.includes('DEFICIENCIA');
+      if (currentFilter === 'NORMAL')      return d.includes('NORMAL') && !d.includes('SOSPECHOSO') && !d.includes('TICO') && !d.includes('DEFICIENCIA');
       return true;
     });
   }
@@ -1911,16 +1912,18 @@ function renderTable() {
   }
   const tbody = document.getElementById('tableBody');
   if (!tbody) return;
+  const rowCount = document.getElementById('row-count');
+  if (rowCount) rowCount.textContent = `${rows.length} colonias`;
   tbody.innerHTML = rows.map((r, i) => `
-    <tr style="border-bottom:1px solid rgba(255,255,255,.04);${(r.diagnostico_final||'').toUpperCase().includes('CRÍTICO')?'background:rgba(255,45,85,0.04);':''}" onmouseover="this.style.background='rgba(255,255,255,.03)'" onmouseout="this.style.background='${(r.diagnostico_final||'').toUpperCase().includes('CRÍTICO')?'rgba(255,45,85,0.04)':''}'">
+    <tr style="border-bottom:1px solid rgba(255,255,255,.04);${(r.diagnostico_final||'').toUpperCase().includes('TICO')?'background:rgba(255,45,85,0.04);':''}" onmouseover="this.style.background='rgba(255,255,255,.03)'" onmouseout="this.style.background='${(r.diagnostico_final||'').toUpperCase().includes('TICO')?'rgba(255,45,85,0.04)':''}'">
       <td style="padding:10px 12px;color:var(--text-dim)">${i+1}</td>
       <td style="padding:10px 12px;font-weight:600">${r.colonia}</td>
       <td style="padding:10px 12px;color:var(--text-dim)">${r.alcaldia}</td>
       <td style="padding:10px 12px">${diagPill(r.diagnostico_final)}</td>
       <td style="padding:10px 12px;color:var(--neon-cyan);font-variant-numeric:tabular-nums">${Number(r.exceso_consumo).toLocaleString('es-MX',{maximumFractionDigits:0})} m³</td>
-      <td style="padding:10px 12px;color:var(--text-dim)">${Number(r.consumo_per_capita).toFixed(1)}</td>
+      <td style="padding:10px 12px;color:var(--text-dim)">${r.consumo_per_capita != null ? Number(r.consumo_per_capita).toFixed(1) : '—'}</td>
       <td style="padding:10px 12px;color:var(--text-dim)">${Number(r.total_reportes).toLocaleString('es-MX')}</td>
-      <td style="padding:10px 12px;color:${r.anomalia_score<0?'#e74c3c':'var(--text-dim)'}">${r.anomalia_score.toFixed(4)}</td>
+      <td style="padding:10px 12px;color:${r.anomalia_score<0?'#e74c3c':'var(--text-dim)'}">${r.anomalia_score != null ? r.anomalia_score.toFixed(4) : '—'}</td>
     </tr>`).join('');
 }
 
@@ -1940,18 +1943,35 @@ function setFilter(f, btn) {
    KPI COUNTERS
 ============================================================ */
 (function computeKPIs() {
-  let critico = 0, sospechoso = 0, deficiencia = 0;
+  let critico = 0, sospechoso = 0, deficiencia = 0, normal = 0;
   TABLE_DATA.forEach(r => {
     const d = (r.diagnostico_final||'').toUpperCase();
-    if (d.includes('CRÍTICO'))          critico++;
+    if (d.includes('TICO'))          critico++;      // cubre CRÍTICO con/sin acento
     else if (d.includes('SOSPECHOSO'))  sospechoso++;
     else if (d.includes('DEFICIENCIA')) deficiencia++;
+    else normal++;
   });
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  // KPI bar (tarjetas superiores)
   set('kpi-critico',    critico);
   set('kpi-sospechoso', sospechoso);
   set('kpi-deficiencia',deficiencia);
   set('kpi-colonias',   TABLE_DATA.length);
+  // Pills del donut
+  set('pill-critico',    critico);
+  set('pill-sospechoso', sospechoso);
+  set('pill-deficiencia',deficiencia);
+  set('pill-normal',     normal);
+  // Etiquetas del mapa modal
+  set('mapa-label-critico',    `● ${critico} Crítico`);
+  set('mapa-label-sospechoso', `● ${sospechoso} Sospechoso`);
+  set('mapa-label-deficiencia',`● ${deficiencia} Deficiencia`);
+  set('mapa-label-normal',     `● ${normal} Normal`);
+  // Título del mapa modal
+  const mapaSubtitle = document.getElementById('mapa-titulo');
+  if (mapaSubtitle) mapaSubtitle.textContent = `Mapa Geoespacial · CDMX · ${TABLE_DATA.length} colonias`;
+  // row-count de la tabla
+  set('row-count', `${TABLE_DATA.length} colonias`);
 })();
 
 /* ============================================================
@@ -1979,9 +1999,9 @@ function closeMap() { const m = document.getElementById('mapModal'); if (m) m.st
    API MODAL
 ============================================================ */
 const API_DATA = {
-  prediccion: { title:'Endpoint — Predicción', method:'POST', url:'/api/predict',   body:{ alcaldia:'CUAUHTEMOC', colonia:'JUAREZ', consumo_total:1046448.3 } },
-  colonias:   { title:'Endpoint — Colonias',   method:'GET',  url:'/api/colonias?diagnostico=CRÍTICO', body:null },
-  resumen:    { title:'Endpoint — Resumen',     method:'GET',  url:'/api/resumen',   body:null }
+  prediccion: { title:'Endpoint — Impacto Económico', method:'GET', url:'/api/impacto-economico', body:null },
+  colonias:   { title:'Endpoint — Resumen KPIs',      method:'GET', url:'/api/resumen',            body:null },
+  resumen:    { title:'Endpoint — Modelo de Negocio', method:'GET', url:'/api/modelo-negocio',     body:null }
 };
 function syntaxHighlight(obj) {
   return JSON.stringify(obj, null, 2).replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, m => {
@@ -2003,9 +2023,9 @@ function openApiModal(type) {
 }
 function closeModal() { const m = document.getElementById('apiModal'); if (m) m.classList.remove('open'); }
 function copyApiJson() {
-  const title = document.getElementById('apiModalTitle').textContent;
-  const d = Object.values(API_DATA).find(x => x.title === title);
-  const text = d?.body ? JSON.stringify(d.body, null, 2) : document.getElementById('apiModalUrl').textContent;
+  const url = document.getElementById('apiModalUrl').textContent;
+  const d = Object.values(API_DATA).find(x => x.url === url);
+  const text = d?.body ? JSON.stringify(d.body, null, 2) : url;
   navigator.clipboard.writeText(text).then(() => {
     const btn = event.target; const orig = btn.textContent;
     btn.textContent = '✓ Copiado!'; setTimeout(() => btn.textContent = orig, 1500);
@@ -2206,7 +2226,7 @@ function cambiarEstado(id, nuevoEstado) {
 function crmRender() {
   const q = ((document.getElementById('crm-buscar')||{}).value||'').toLowerCase();
   const rows = q ? CRM_DATA.filter(r => JSON.stringify(r).toLowerCase().includes(q)) : CRM_DATA;
-  const count = document.getElementById('crm-count'); if (count) count.textContent = `(${rows.length})`;
+  const count = document.getElementById('crm-count'); if (count) count.textContent = `${rows.length} contacto${rows.length !== 1 ? 's' : ''}`;
   const tbody = document.getElementById('crm-tbody'); if (!tbody) return;
   if (!rows.length) { tbody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--text-dim);font-size:13px">Sin prospectos registrados aún.</td></tr>`; return; }
   tbody.innerHTML = rows.map((r,i) => `
@@ -2336,7 +2356,7 @@ const glowPlugin = {
   let critico=0, sospechoso=0, deficiencia=0, normal=0;
   TABLE_DATA.forEach(r => {
     const d = (r.diagnostico_final||'').toUpperCase();
-    if (d.includes('CRÍTICO')) critico++;
+    if (d.includes('TICO')) critico++;           // cubre CRÍTICO con/sin acento
     else if (d.includes('SOSPECHOSO')) sospechoso++;
     else if (d.includes('DEFICIENCIA')) deficiencia++;
     else normal++;

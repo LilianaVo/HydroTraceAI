@@ -39,12 +39,9 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
 from flask import (Flask, flash, jsonify, redirect,
                    render_template, request, send_from_directory,
                    session, url_for)
-from sklearn.cluster import KMeans
-from sklearn.decomposition import PCA
 
 from database_models import db, User, Lead, get_cdmx_time
 
@@ -162,15 +159,33 @@ def calcular_impacto_economico(df: pd.DataFrame) -> dict:
       colonias_con_exceso  — cuántas colonias tienen exceso > 0
       desglose_por_colonia — lista ordenada para la tabla del dashboard
     """
+    # C2: guard de existencia para exceso_consumo
+    if "exceso_consumo" not in df.columns:
+        log.error("Columna 'exceso_consumo' no encontrada en el CSV. ¿Se ejecutó modelos_ml.py?")
+        return {
+            "costo_perdida_total": 0, "roi_proyectado": 0, "m3_en_riesgo": 0,
+            "poblacion_equivalente": 0, "colonias_con_exceso": 0, "desglose_por_colonia": [],
+        }
+
     df_exceso = df[df["exceso_consumo"] > 0].copy()
     df_exceso["costo_perdida"] = df_exceso["exceso_consumo"] * TARIFA_M3_PESOS
 
-    costo_total      = float(df_exceso["costo_perdida"].sum())
-    roi_proyectado   = costo_total * CAPACIDAD_RECUPERACION
-    m3_exceso_total  = float(df_exceso["exceso_consumo"].sum())
+    costo_total     = float(df_exceso["costo_perdida"].sum())
+    roi_proyectado  = costo_total * CAPACIDAD_RECUPERACION
+    m3_exceso_total = float(df_exceso["exceso_consumo"].sum())
 
-    # Personas que podrían ser abastecidas un año con el volumen recuperable
-    poblacion_eq = int(m3_exceso_total * CAPACIDAD_RECUPERACION / M3_PER_CAPITA_ANUAL)
+    # C1: Consumir poblacion_equivalente ya calculado por modelos_ml.py con escala anual
+    # correcta (HC-01). Si la columna no existe (CSV generado por versión anterior del ML),
+    # fallback al cálculo semestral con advertencia explícita.
+    if "poblacion_equivalente" in df.columns:
+        poblacion_eq = int(df["poblacion_equivalente"].sum())
+    else:
+        log.warning(
+            "Columna 'poblacion_equivalente' no encontrada en el CSV. "
+            "Usando cálculo semestral (×0.5 del valor correcto). "
+            "Re-ejecuta modelos_ml.py actualizado."
+        )
+        poblacion_eq = int(m3_exceso_total * CAPACIDAD_RECUPERACION / M3_PER_CAPITA_ANUAL)
 
     desglose = (
         df_exceso[[
@@ -300,6 +315,14 @@ def preparar_datos_mapa(df: pd.DataFrame) -> list[dict]:
          .addTo(map);
     """
     df_geo = df.dropna(subset=["latitud", "longitud"]).copy()
+
+    # C2: guard — si el CSV no tiene estas columnas el mapa retorna vacío con log
+    columnas_requeridas = {"exceso_consumo", "diagnostico_final", "anomalia_score", "total_reportes"}
+    faltantes = columnas_requeridas - set(df_geo.columns)
+    if faltantes:
+        log.error("preparar_datos_mapa: columnas faltantes en el CSV: %s. ¿Se ejecutó modelos_ml.py?", faltantes)
+        return []
+
     puntos: list[dict] = []
 
     for _, row in df_geo.iterrows():
@@ -362,6 +385,11 @@ def calcular_confianza_ml(df: pd.DataFrame) -> float:
     también tienen más quejas que el promedio, hay coherencia entre la señal
     estadística y la señal ciudadana — el modelo no está detectando ruido.
     """
+    # M4: guard — es_anomalia y total_reportes deben existir
+    if "es_anomalia" not in df.columns or "total_reportes" not in df.columns:
+        log.warning("calcular_confianza_ml: columnas 'es_anomalia' o 'total_reportes' no encontradas.")
+        return 0.0
+
     mediana      = df["total_reportes"].median()
     anomalas     = df[df["es_anomalia"] == -1]
     con_respaldo = anomalas[anomalas["total_reportes"] > mediana]
@@ -370,45 +398,24 @@ def calcular_confianza_ml(df: pd.DataFrame) -> float:
     return round(confianza, 2)
 
 
-def grafica_metodo_codo(X_scaled, max_k: int = 10) -> None:
-    """Genera y guarda la gráfica del método del codo (para el dashboard admin)."""
-    distortions = []
-    for k in range(1, max_k + 1):
-        km = KMeans(n_clusters=k, n_init=10, random_state=42)
-        km.fit(X_scaled)
-        distortions.append(km.inertia_)
+def normalizar_diagnostico(diagnostico: str) -> str:
+    """
+    Normaliza el texto de diagnóstico_final a una clave corta canónica.
+    Uso centralizado: reemplaza lambdas duplicadas en api_resumen,
+    api_inspecciones_calendario y dashboard_clientes.
 
-    fig, ax = plt.subplots(figsize=(8, 5))
-    ax.plot(range(1, max_k + 1), distortions, "bx-", color="#06b6d4", linewidth=2)
-    ax.axvline(x=4, color="red", linestyle="--", linewidth=1.5, label="K elegido = 4")
-    ax.set_xlabel("Número de Clusters (k)")
-    ax.set_ylabel("Inercia")
-    ax.set_title("Método del Codo — Selección de K")
-    ax.legend()
-    path = GRAFICAS_DIR / "metodo_codo_justificacion.png"
-    fig.savefig(path, dpi=150)
-    plt.close(fig)
-    log.info("Gráfica del codo guardada: %s", path)
-
-
-def visualizar_clusters_2d(X_scaled, clusters) -> None:
-    """Proyecta los 4 clusters en 2D con PCA y guarda la imagen."""
-    pca        = PCA(n_components=2)
-    components = pca.fit_transform(X_scaled)
-
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.scatterplot(
-        x=components[:, 0], y=components[:, 1],
-        hue=clusters, palette="viridis", s=100, ax=ax,
-    )
-    ax.set_title("Segmentación de Colonias — Proyección PCA 2D")
-    ax.set_xlabel("Componente Principal 1")
-    ax.set_ylabel("Componente Principal 2")
-    ax.legend(title="Cluster")
-    path = GRAFICAS_DIR / "visualizacion_clusters_pca.png"
-    fig.savefig(path, dpi=150)
-    plt.close(fig)
-    log.info("Mapa de clusters PCA guardado: %s", path)
+    Las etiquetas completas vienen de modelos_ml.py:
+      "CRÍTICO (Posible Fuga de Red)"                  → "CRITICO"
+      "SOSPECHOSO (Posible Huachicol)"                 → "SOSPECHOSO"
+      "SOSPECHOSO (Exceso Detectado por IA)"           → "SOSPECHOSO"
+      "DEFICIENCIA (Posible Baja Presión o Desabasto)" → "DEFICIENCIA"
+      "NORMAL"                                         → "NORMAL"
+    """
+    d = str(diagnostico).upper()
+    if "TICO" in d:        return "CRITICO"      # cubre CRÍTICO con y sin acento
+    if "SOSPECHOSO" in d:  return "SOSPECHOSO"
+    if "DEFICIENCIA" in d: return "DEFICIENCIA"
+    return "NORMAL"
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -471,14 +478,17 @@ def dashboard_admin():
         leads       = []
         total_leads = 0
 
-    # Cobertura: colonias con datos completos del Top 10 por alcaldía (máx 160)
+    # Cobertura: colonias presentes en el dataset final (Top-N por alcaldía del ETL).
+    # El máximo teórico es 16 alcaldías × 10 = 160, pero puede ser menor si alguna
+    # alcaldía tiene menos de 10 colonias elegibles. Se muestra el conteo real
+    # en lugar de un porcentaje sobre un denominador fijo potencialmente incorrecto.
     colonias_en_dataset = len(df) if df is not None else 0
-    cobertura_pct       = f"{colonias_en_dataset / 160 * 100:.1f}%" if colonias_en_dataset > 0 else "—"
+    cobertura_label     = f"{colonias_en_dataset} colonias" if colonias_en_dataset > 0 else "—"
 
     stats = {
         "total_colonias" : colonias_en_dataset,
         "total_leads"    : total_leads,
-        "cobertura"      : cobertura_pct,
+        "cobertura"      : cobertura_label,
         "poblacion_total": f"{df['pob'].sum():,.0f}" if df is not None and 'pob' in df.columns else "—",
     }
 
@@ -566,7 +576,7 @@ def dashboard_clientes():
     impacto        = calcular_impacto_economico(df)
     tasa_confianza = calcular_confianza_ml(df)
     alertas_criticas = int(
-        df["diagnostico_final"].str.contains("TICO", case=False, na=False).sum()
+        df["diagnostico_final"].apply(normalizar_diagnostico).eq("CRITICO").sum()
     )
     alcaldias_cubiertas = df["alcaldia"].nunique()
 
@@ -638,27 +648,19 @@ def api_inspecciones_calendario():
         return jsonify({}), 503
 
     COLOR_MAP = {
-        "CRÍTICO":     "#FF2D55",
-        "SOSPECHOSO":  "#FF9F0A",
+        "CRITICO"    : "#FF2D55",
+        "SOSPECHOSO" : "#FF9F0A",
         "DEFICIENCIA": "#30D158",
-        "NORMAL":      "#0A84FF",
+        "NORMAL"     : "#0A84FF",
     }
 
-    # Solo colonias que requieren inspección
-    df_insp = df[df["diagnostico_final"] != "NORMAL"].copy()
+    # Solo colonias que requieren inspección (excluye NORMAL por clave canónica)
+    df_insp = df[df["diagnostico_final"].apply(normalizar_diagnostico) != "NORMAL"].copy()
 
-    # Normalizar etiqueta corta del diagnóstico
-    def tipo_corto(diag):
-        d = str(diag).upper()
-        if "TICO" in d:     return "CRÍTICO"
-        if "SOSPECHOSO" in d: return "SOSPECHOSO"
-        if "DEFICIENCIA" in d: return "DEFICIENCIA"
-        return "NORMAL"
+    df_insp["tipo"] = df_insp["diagnostico_final"].apply(normalizar_diagnostico)
 
-    df_insp["tipo"] = df_insp["diagnostico_final"].apply(tipo_corto)
-
-    # Ordenar: CRÍTICO primero, luego SOSPECHOSO, luego DEFICIENCIA
-    orden = {"CRÍTICO": 0, "SOSPECHOSO": 1, "DEFICIENCIA": 2}
+    # Ordenar: CRITICO primero, luego SOSPECHOSO, luego DEFICIENCIA
+    orden = {"CRITICO": 0, "SOSPECHOSO": 1, "DEFICIENCIA": 2}
     df_insp["_orden"] = df_insp["tipo"].map(orden)
     df_insp = df_insp.sort_values("_orden")
 
@@ -729,11 +731,7 @@ def api_resumen():
     impacto  = calcular_impacto_economico(df)
     metricas = calcular_metricas_resumen(df)
 
-    conteos = df["diagnostico_final"].str.upper().apply(
-        lambda x: "CRITICO"    if "TICO"       in x else
-                  "SOSPECHOSO" if "SOSPECHOSO"  in x else
-                  "DEFICIENCIA" if "DEFICIENCIA" in x else "NORMAL"
-    ).value_counts().to_dict()
+    conteos = df["diagnostico_final"].apply(normalizar_diagnostico).value_counts().to_dict()
 
     return jsonify({
         "total_colonias"      : len(df),
