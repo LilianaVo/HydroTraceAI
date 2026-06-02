@@ -1377,7 +1377,7 @@ DESCRIPCIÓN:
             <div class="kpi-val" style="color:var(--rose);">{{ dinero_riesgo }}</div>
             <div class="kpi-foot">
               <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
-              <span style="color:var(--rose);font-weight:700;">Calculado a $18.40/m³</span>
+              <span style="color:var(--rose);font-weight:700;">Calculado a $123.79/m³</span>
               <span style="color:var(--text2)"> (tarifa SACMEX 2024)</span>
             </div>
             <div style="margin-top:8px;font-size:10px;color:var(--text3);font-weight:500;line-height:1.5;">
@@ -1574,13 +1574,13 @@ DESCRIPCIÓN:
                 </div>
               </div>
               <div class="roi-note">
-                ⚠ La pérdida se calcula a $18.40/m³ (tarifa SACMEX vigente) sobre el exceso detectado en el primer semestre de 2019. Las cifras son una estimación de referencia para priorizar dónde intervenir — no reemplazan una auditoría de campo.
+                ⚠ La pérdida se calcula a $123.79/m³ (tarifa SACMEX vigente) sobre el exceso detectado en el primer semestre de 2019. Las cifras son una estimación de referencia para priorizar dónde intervenir — no reemplazan una auditoría de campo.
               </div>
             </div>
             <div>
               <div class="roi-display">
                 <div class="roi-label">Recuperación proyectada</div>
-                <div id="roi-display" class="roi-val">$42.2M</div>
+                <div id="roi-display" class="roi-val">$381.0M</div>
                 <div class="roi-unit">MXN anuales</div>
                 <div class="roi-confirm">✓ Retorno positivo proyectado</div>
               </div>
@@ -2068,7 +2068,7 @@ renderCalendario();
       <div style="font-size:11px;font-weight:800;letter-spacing:0.18em;text-transform:uppercase;color:var(--purple);margin-bottom:6px;">Análisis Financiero</div>
       <h2 style="font-size:26px;font-weight:800;color:var(--text);letter-spacing:-0.03em;margin-bottom:8px;">Impacto Económico del Agua No Contabilizada</h2>
       <p style="font-size:13px;color:var(--text2);line-height:1.7;max-width:680px;font-weight:500;">
-        Desglose del volumen y costo de agua detectada fuera del rango normal, colonia por colonia. Calculado a $18.40/m³ (tarifa SACMEX vigente) sobre datos del primer semestre de 2019. Solo se incluyen colonias donde el modelo detectó consumo superior al esperado.
+        Desglose del volumen y costo de agua detectada fuera del rango normal, colonia por colonia. Calculado a $123.79/m³ (tarifa SACMEX vigente) sobre datos del primer semestre de 2019. Solo se incluyen colonias donde el modelo detectó consumo superior al esperado.
       </p>
     </div>
 
@@ -2346,7 +2346,7 @@ renderCalendario();
   // ── PESTAÑA: ANÁLISIS ROI DETALLADO ──────────────────────────────
 (function iniciarAnaROI() {
 
-  const TARIFA = 18.40;
+  const TARIFA = 123.79;
   const CLUSTER_NOMBRES = { 0:'Residencial Premium', 1:'Mixto Urbano', 2:'Industrial', 3:'Vulnerable' };
   const CLUSTER_COLORES = { 0:'var(--purple)', 1:'var(--sky)', 2:'var(--amber)', 3:'var(--rose)' };
   const DIAG_COLOR = d => {
@@ -2376,7 +2376,7 @@ renderCalendario();
     { label:'Colonias con pérdida', val: conExceso.length,   color:'var(--rose)',   icon:'⚠' },
     { label:'m³ en exceso total',   val: fmt(totalExceso),   color:'var(--sky)',    icon:'💧' },
     { label:'Pérdida estimada',     val: fmtMXN(totalCosto), color:'var(--amber)',  icon:'💰' },
-    { label:'Habitantes abastecibles/año',    val: fmt(pobEq),          color:'var(--sage)',   icon:'👥' },
+    { label:'Habitantes abastecibles/año (133.59 m³/hab/año)',    val: fmt(pobEq),          color:'var(--sage)',   icon:'👥' },
   ];
   const kpiEl = document.getElementById('ana-kpis');
   if (kpiEl) {
