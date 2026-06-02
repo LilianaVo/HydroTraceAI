@@ -1,9 +1,9 @@
+flask
+flask-sqlalchemy
 pandas
 numpy
 scikit-learn
-plotly
-streamlit
-flask
-
-/* Base de datos */
-flask-sqlalchemy
+matplotlib
+seaborn
+pyproj
+shapely

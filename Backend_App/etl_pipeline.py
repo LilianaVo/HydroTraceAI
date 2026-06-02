@@ -1,7 +1,14 @@
 """
 ================================================================================
-PROYECTO : HydroTrace AI — Ciencia de Datos UNAM
+EQUIPO: PUMASCRIPT SOLUTIONS
+
+PROYECTO : HydroTrace AI
 MÓDULO   : etl_pipeline.py
+AUTOR  : García López Bolívar / Data Engineer
+Materia : Ciencia de Datos en la Toma de Decisiones en las Organizaciones
+GRUPO: 04
+Facultad de Ingeniería, UNAM | Ciudad de México, 2026
+
 DESCRIPCIÓN:
     Pipeline ETL a nivel COLONIA para la CDMX.
     Integra 5 fuentes heterogéneas, calcula superficie por colonia vía
@@ -17,7 +24,6 @@ COBERTURA TEMPORAL:
       con el dataset de consumo.
 
 SALIDA   : dataset_maestro_colonia_final.csv
-AUTORES  : HydroTrace AI — Data Engineering Team
 ================================================================================
 
 HISTORIAL DE CAMBIOS:
@@ -66,13 +72,15 @@ from shapely.ops import transform
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 0. CONFIGURACIÓN DE RUTAS
-# ──────────────────────────────────────────────────────────────────────────────
+
+# ==============================================================================
+# SECCIÓN 0: CONFIGURACIÓN GLOBAL DE RUTAS Y CONSTANTES
+# ==============================================================================
 
 DATA_DIR = Path("data")
 DATA_DIR.mkdir(exist_ok=True)
 
+# Rutas centralizadas — cualquier cambio de fuente se hace aquí, no en las funciones
 RUTAS: dict[str, Path] = {
     "consumo"    : DATA_DIR / "consumo_agua_historico_2019.csv",
     "ids_ut"     : DATA_DIR / "ids_ut.xlsx",
@@ -84,26 +92,27 @@ RUTAS: dict[str, Path] = {
 OUTPUT_PATH = DATA_DIR / "dataset_maestro_colonia_final.csv"
 
 # Proyector universal: WGS84 → México ITRF2008 / LCC (EPSG:6372)
+# EPSG:6372 es el sistema de referencia oficial de México — necesario para
+# obtener áreas en metros cuadrados reales (no grados decimales).
 _TRANSFORMER = Transformer.from_crs("EPSG:4326", "EPSG:6372", always_xy=True)
 
-# Año de referencia: debe coincidir con el año del dataset de consumo.
-# Si en el futuro se actualiza el CSV, solo cambiar esta constante.
-# Afecta: filtro de reportes, validación de consumo, prints de cobertura.
+# Año de referencia para filtros de consumo y reportes.
+# Si en el futuro se actualiza el CSV a otro año, solo cambiar esta constante.
 ANIO_REFERENCIA: int = 2019
 
-# Factor de anualización del consumo semestral.
-# El dataset cubre bimestres 1-3 (6 meses). Multiplicar por este factor
-# produce una estimación anual comparada con benchmarks de consumo (p.ej. SACMEX).
-# ADVERTENCIA: es una proyección lineal — no captura estacionalidad.
+# El dataset cubre bimestres 1-3 (6 meses). Multiplicar por 2 produce una
+# estimación anual para comparar contra benchmarks de SACMEX.
+# ADVERTENCIA: proyección lineal — no captura estacionalidad hídrica.
 FACTOR_ANUALIZACION: float = 2.0
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 1. UTILIDADES DE NORMALIZACIÓN
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 1: NORMALIZACIÓN DE NOMBRES GEOGRÁFICOS
+# ==============================================================================
 
-# Tabla de homologación explícita para alcaldías con nombres irregulares
-# entre fuentes (SACMEX vs INEGI vs datos abiertos CDMX).
+# Las 5 fuentes del ETL provienen de SACMEX, INEGI y datos abiertos CDMX,
+# y usan nombres de alcaldías inconsistentes entre sí. Este mapeo homologa
+# los casos conocidos que rompen los joins por nombre.
 _MAPEO_ALCALDIAS: dict[str, str] = {
     "CUAJIMALPA DE MORELOS" : "CUAJIMALPA",
     "LA MAGDALENA CONTRERAS": "MAGDALENA CONTRERAS",
@@ -128,9 +137,9 @@ def normalizar(texto: object) -> object:
     return _MAPEO_ALCALDIAS.get(texto, texto)
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 2. CÁLCULO GEOGRÁFICO — SUPERFICIE POR COLONIA
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 2: CÁLCULO GEOGRÁFICO — SUPERFICIE POR COLONIA
+# ==============================================================================
 
 def _proyectar(geom):
     """Proyecta una geometría Shapely de EPSG:4326 a EPSG:6372."""
@@ -147,7 +156,8 @@ def calcular_superficie_km2(geo_shape_str: str) -> float:
         geom = shape(json.loads(geo_shape_str))
         if geom.is_empty:
             return np.nan
-        return _proyectar(geom).area / 1_000_000  # m² → km²
+        # El área de la geometría proyectada está en m² — se divide entre 1M para km²
+        return _proyectar(geom).area / 1_000_000
     except Exception:
         return np.nan
 
@@ -156,6 +166,10 @@ def cargar_geometrias_colonias() -> pd.DataFrame:
     """
     Carga coloniascdmx.csv, normaliza nombres y calcula la superficie
     en km² para cada colonia usando su polígono oficial.
+
+    Esta es la BASE del dataset maestro: todas las demás fuentes se unen
+    aquí mediante LEFT JOIN, lo que garantiza que ninguna colonia se pierda
+    por no tener datos en una fuente secundaria.
 
     Columnas de salida: alcaldia, colonia, superficie_km2_calculada
     """
@@ -176,9 +190,9 @@ def cargar_geometrias_colonias() -> pd.DataFrame:
     )
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 3. MAPEO DE USO DE SUELO (Highest-Weight Rule)
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 3: CLASIFICACIÓN DE USO DE SUELO (Highest-Weight Rule)
+# ==============================================================================
 
 # [FIX-F12] Tabla de pesos revisada:
 #   · Peso 2 → solo vocaciones cuya ACTIVIDAD PRINCIPAL es industrial
@@ -187,21 +201,19 @@ def cargar_geometrias_colonias() -> pd.DataFrame:
 #              corporativo o de servicios como actividad SECUNDARIA.
 #   · Peso 0 → vocaciones residenciales puras, rurales o de reserva ecológica.
 #
-# [MEJ-05] La lógica de split("/") asume que superficie_alcaldias.csv usa
-#          la barra "/" como separador de vocaciones compuestas.
-#          La función _validar_separador_vocaciones() verifica esto al cargar.
-
+# Esta diferenciación importa en modelos_ml.py: uso_suelo_num entra como
+# feature en K-Means y Regresión Lineal. Un error aquí sesga el clustering.
 _PESOS_SUELO: list[tuple[list[str], int]] = [
     (["INDUSTRIAL"],                           2),  # Actividad principal industrial
     (["HABITACIONAL", "COMERCIAL",
       "CORPORATIVO", "SERVICIOS", "MIXTO"],    1),  # Mixto o habitacional con componente comercial
-    # Habitacional puro / Rural / Reserva → 0
+    # Habitacional puro / Rural / Reserva → 0 (default)
 ]
 
 
 def mapear_uso_suelo(vocacion: object) -> int:
     """
-    Asigna un peso numérico a la vocación territorial.
+    Asigna un peso numérico a la vocación territorial de una alcaldía.
 
     Regla de prioridad (Highest-Weight First):
       1. Si el PRIMER componente de la vocación es 'INDUSTRIAL' → peso 2.
@@ -210,16 +222,20 @@ def mapear_uso_suelo(vocacion: object) -> int:
       2. Si la vocación contiene cualquier componente no residencial → peso 1.
       3. Default → peso 0.
 
-    Asume separador "/" entre componentes de vocación compuesta.
+    Asume separador "/" entre componentes de vocación compuesta [MEJ-05].
     """
     if not isinstance(vocacion, str):
         return 0
+
+    # La actividad principal define el peso predominante de la zona
     primer_termino = vocacion.split("/")[0].strip().upper()
     if primer_termino == "INDUSTRIAL":
         return 2
+
     v = vocacion.upper()
     if any(kw in v for kw in ["INDUSTRIAL", "COMERCIAL", "CORPORATIVO", "SERVICIOS"]):
         return 1
+
     return 0
 
 
@@ -252,7 +268,7 @@ def cargar_uso_suelo() -> pd.DataFrame:
     """
     print("[ETL] Procesando uso de suelo por alcaldía...")
     df = pd.read_csv(RUTAS["superficie"])
-    df["alcaldia"]      = df["alcaldia"].apply(normalizar)
+    df["alcaldia"] = df["alcaldia"].apply(normalizar)
 
     _validar_separador_vocaciones(df)  # [MEJ-05]
 
@@ -260,9 +276,9 @@ def cargar_uso_suelo() -> pd.DataFrame:
     return df[["alcaldia", "vocacion_principal", "uso_suelo_num"]]
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 4. CONSUMO TOTAL POR COLONIA — PRIMER SEMESTRE 2019
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 4: CONSUMO TOTAL POR COLONIA — PRIMER SEMESTRE 2019
+# ==============================================================================
 
 def cargar_consumo() -> pd.DataFrame:
     """
@@ -283,11 +299,10 @@ def cargar_consumo() -> pd.DataFrame:
         es actualizado en el futuro con datos de otro año, el pipeline lo
         detecta en lugar de procesarlos silenciosamente.
 
-    [MEJ-02] consumo_per_capita_anualizado:
-        Columna adicional = consumo_total × FACTOR_ANUALIZACION (×2).
+    [MEJ-02] consumo_anualizado:
+        Columna = consumo_total × FACTOR_ANUALIZACION (×2).
         Permite comparar contra benchmarks anuales (ej. 133.59 m³/hab/año
         de SACMEX) sin sesgo por cobertura semestral.
-        Es una proyección lineal — no captura estacionalidad hídrica.
 
     Columnas de salida: alcaldia, colonia, consumo_total,
                         consumo_total_dom, consumo_total_no_dom,
@@ -299,7 +314,7 @@ def cargar_consumo() -> pd.DataFrame:
     df["alcaldia"] = df["alcaldia"].apply(normalizar)
     df["colonia"]  = df["colonia"].apply(normalizar)
 
-    # [MEJ-01] Validación de año en el CSV de consumo
+    # [MEJ-01] Detectar registros fuera del año de referencia antes de agregar
     if "fecha_referencia" in df.columns:
         df["fecha_referencia"] = pd.to_datetime(df["fecha_referencia"], errors="coerce")
         n_otros = (df["fecha_referencia"].dt.year != ANIO_REFERENCIA).sum()
@@ -319,7 +334,7 @@ def cargar_consumo() -> pd.DataFrame:
             f"(cobertura: {len(bimestres)} de 6 bimestres anuales — primer semestre)"
         )
 
-    # Coordenadas representativas: primer registro cronológico de la colonia
+    # Se toma el primer registro cronológico como coordenadas representativas de la colonia
     sort_col = "fecha_referencia" if "fecha_referencia" in df.columns else df.columns[0]
     coords = (
         df.sort_values(sort_col)
@@ -328,6 +343,7 @@ def cargar_consumo() -> pd.DataFrame:
           .reset_index()
     )
 
+    # Agregación por colonia: suma de volúmenes y conteo de bimestres disponibles
     agg_dict = {
         "consumo_total"        : ("consumo_total",        "sum"),
         "consumo_total_dom"    : ("consumo_total_dom",    "sum"),
@@ -338,20 +354,21 @@ def cargar_consumo() -> pd.DataFrame:
 
     agg = df.groupby(["alcaldia", "colonia"]).agg(**agg_dict).reset_index()
 
-    # [MEJ-02] Consumo anualizado como proyección lineal del semestral
+    # [MEJ-02] Proyección lineal del consumo semestral a escala anual
     agg["consumo_anualizado"] = (agg["consumo_total"] * FACTOR_ANUALIZACION).round(2)
 
     return agg.merge(coords, on=["alcaldia", "colonia"], how="left")
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 5. POBLACIÓN POR COLONIA (ids_ut.xlsx)
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 5: POBLACIÓN E ÍNDICE SOCIOECONÓMICO (ids_ut.xlsx)
+# ==============================================================================
 
 def cargar_poblacion() -> pd.DataFrame:
     """
     Lee la hoja 'base_ut_final' del archivo ids_ut.xlsx y extrae la
-    población (pob) por Unidad Territorial, que corresponde a colonias.
+    población (pob) e índice de desarrollo social municipal (idsm)
+    por Unidad Territorial, que corresponde a colonias.
 
     NOTA: El ids_ut tiene 37 filas con encoding corrupto ('?' en lugar de
     caracteres especiales como ñ o á). Estas filas no coincidirán con el
@@ -366,6 +383,7 @@ def cargar_poblacion() -> pd.DataFrame:
     df["alcaldia"] = df["alcaldia"].apply(normalizar)
     df["colonia"]  = df["nombre_ut"].apply(normalizar)
 
+    # Varias UTs pueden mapear a la misma colonia — se consolidan por suma/promedio
     agg = df.groupby(["alcaldia", "colonia"]).agg(
         pob    = ("pob",    "sum"),
         idsm   = ("idsm",   "mean"),
@@ -375,9 +393,9 @@ def cargar_poblacion() -> pd.DataFrame:
     return agg
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 6. REPORTES CIUDADANOS (SEGUIAGUA) POR COLONIA — AÑO 2019
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 6: REPORTES CIUDADANOS SEGUIAGUA — AÑO 2019
+# ==============================================================================
 
 def cargar_reportes() -> pd.DataFrame:
     """
@@ -390,14 +408,11 @@ def cargar_reportes() -> pd.DataFrame:
         temporal con el dataset de consumo.
 
     [MEJ-03] INDICADOR DE PRESENCIA EN JOIN (tiene_reportes_2019):
-        Las colonias que sí aparecen en este resultado tienen reportes reales
-        en 2019 (aunque su conteo sea 0 después del filtro de tipo de falla).
-        Las colonias que NO aparecen recibirán total_reportes = 0 por el
-        left join en el orquestador, pero ahí ese 0 significa "sin datos",
-        no "nadie reportó nada".
-        La columna 'tiene_reportes_2019' = True en este resultado permite que
-        el orquestador marque correctamente cuáles colonias tuvieron presencia
-        en el sistema de reportes y cuáles simplemente no hicieron match.
+        Las colonias que aparecen en este resultado tuvieron reportes reales en 2019.
+        Las que NO aparecen recibirán total_reportes = 0 por el left join, pero
+        ese 0 significa "sin datos", no "nadie reportó nada".
+        Este flag es crítico en modelos_ml.py para no clasificar como HUACHICOL
+        a colonias que simplemente no hicieron match en el join.
 
     Columnas de salida: alcaldia, colonia, total_reportes,
                         reportes_fuga, reportes_falta_agua,
@@ -406,7 +421,7 @@ def cargar_reportes() -> pd.DataFrame:
     print(f"[ETL] Procesando reportes ciudadanos SEGUIAGUA (solo {ANIO_REFERENCIA})...")
     df = pd.read_csv(RUTAS["reportes"])
 
-    # [FIX-F09] Filtrar solo el año de referencia
+    # [FIX-F09] Filtrar solo el año de referencia — el dataset original cubre 2018-2021
     df["fecha"] = pd.to_datetime(df["fecha"], errors="coerce")
     n_total     = len(df)
     df          = df[df["fecha"].dt.year == ANIO_REFERENCIA].copy()
@@ -419,9 +434,13 @@ def cargar_reportes() -> pd.DataFrame:
     df["alcaldia"] = df["alcaldia"].apply(normalizar)
     df["colonia"]  = df["colonia_datos_abiertos"].apply(normalizar)
 
+    # Solo interesan reportes de fuga de agua o falta de suministro
     mask = df["tipo_de_falla"].str.contains(r"Fuga|Falta", case=False, na=False)
     df   = df[mask].copy()
 
+    # Separar en dos señales distintas para el diagnóstico:
+    # · fuga → consumo anómalo alto con evidencia ciudadana (→ CRÍTICO)
+    # · falta_agua → presión baja o desabasto (→ DEFICIENCIA)
     df["es_fuga"]       = df["tipo_de_falla"].str.contains("Fuga",  case=False, na=False)
     df["es_falta_agua"] = df["tipo_de_falla"].str.contains("Falta", case=False, na=False)
 
@@ -431,23 +450,25 @@ def cargar_reportes() -> pd.DataFrame:
         reportes_falta_agua = ("es_falta_agua",  "sum"),
     ).reset_index()
 
-    # [MEJ-03] Marcar colonias con presencia confirmada en el sistema de reportes 2019
+    # [MEJ-03] Flag de presencia confirmada — distingue cero real de dato ausente
     agg["tiene_reportes_2019"] = True
 
     return agg
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 7. AUDITORÍA DE CALIDAD DE DATOS
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 7: AUDITORÍA DE CALIDAD DE DATOS
+# ==============================================================================
 
 def auditar(df: pd.DataFrame, nombre: str, cols_criticas: list[str] | None = None) -> None:
     """
     Audita un DataFrame en busca de:
       - Valores nulos (advertencia).
-      - Valores negativos en columnas numéricas (error crítico).
-      - Ceros en columnas críticas (alerta de integración).
-    Lanza ValueError si detecta negativos — indican corrupción de datos.
+      - Valores negativos en columnas numéricas (error crítico — lanza ValueError).
+      - Ceros en columnas críticas (alerta de integración — puede indicar join fallido).
+
+    longitud, latitud e idsm están excluidas del chequeo de negativos
+    porque sus valores negativos son geográficamente válidos.
     """
     print(f"\n[AUDITORÍA] {nombre} — shape: {df.shape}")
 
@@ -455,7 +476,7 @@ def auditar(df: pd.DataFrame, nombre: str, cols_criticas: list[str] | None = Non
     if nulos:
         print(f"  ⚠  {nulos} valores nulos detectados.")
 
-    # Columnas donde valores negativos son geográficamente válidos
+    # Valores negativos en columnas de consumo o población indican corrupción de datos
     _EXCLUIR_NEGATIVOS = {"longitud", "latitud", "idsm"}
     for col in df.select_dtypes(include="number").columns:
         if col in _EXCLUIR_NEGATIVOS:
@@ -477,32 +498,37 @@ def auditar(df: pd.DataFrame, nombre: str, cols_criticas: list[str] | None = Non
     print(f"  ✓  Auditoría completada para '{nombre}'.")
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 8. IMPUTACIÓN POR MEDIANA DE ALCALDÍA
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 8: IMPUTACIÓN ROBUSTA POR MEDIANA DE ALCALDÍA
+# ==============================================================================
 
 def imputar_con_mediana_alcaldia(df: pd.DataFrame, columnas: list[str]) -> pd.DataFrame:
     """
     Para cada columna en `columnas`, imputa los valores NaN de una colonia
     con la mediana de las colonias válidas de su misma alcaldía.
 
-    NOTA: Solo imputa NaN. Los ceros legítimos (como 0 reportes de fuga en
-    una colonia que genuinamente no tuvo fugas) NO se reemplazan.
-    Las columnas que deben imputar ceros se convierten a NaN explícitamente
-    antes de llamar a esta función cuando el cero no es semánticamente válido
-    (ej: superficie, población).
+    Por qué mediana y no media:
+        La media es sensible a outliers de consumo industrial. La mediana
+        de la alcaldía es más representativa para colonias sin dato.
 
-    [MEJ-04] Advertencia de alcaldías con una sola colonia:
-        Si una alcaldía tiene solo 1 colonia en el dataset, su mediana es
-        el valor de esa misma colonia. Si ese valor es NaN, la mediana también
-        lo es y se usa el fallback global. Se emite advertencia para trazabilidad.
+    IMPORTANTE — qué se imputa y qué no:
+        Solo se imputan NaN. Los ceros legítimos (ej. 0 reportes de fuga
+        en una colonia que genuinamente no tuvo fugas) NO se tocan.
+        Las columnas donde cero no es semánticamente válido (superficie,
+        población, consumo_total) deben convertirse a NaN ANTES de llamar
+        esta función — así lo hace integrar_dataset_maestro() en el paso 9.4.
+
+    [MEJ-04] Fallback global:
+        Si una alcaldía tiene solo 1 colonia y su valor es NaN, su mediana
+        también es NaN. En ese caso se usa la mediana global como fallback
+        y se emite advertencia para trazabilidad.
     """
     df = df.copy()
     for col in columnas:
         if col not in df.columns:
             continue
 
-        # [MEJ-04] Detectar alcaldías con una sola colonia (mediana = valor único)
+        # [MEJ-04] Detectar alcaldías con una sola colonia donde la mediana no aporta información
         tamanio_alcaldia = df.groupby("alcaldia")[col].transform("count")
         alcaldias_singleton = df.loc[
             (tamanio_alcaldia == 1) & df[col].isna(), "alcaldia"
@@ -516,57 +542,60 @@ def imputar_con_mediana_alcaldia(df: pd.DataFrame, columnas: list[str]) -> pd.Da
 
         medianas = df.groupby("alcaldia")[col].transform("median")
         df[col]  = df[col].fillna(medianas)
-        # Fallback global si toda la alcaldía es NaN
+        # Fallback global si toda la alcaldía es NaN (cubre el caso singleton)
         df[col]  = df[col].fillna(df[col].median())
+
     return df
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 9. ORQUESTADOR PRINCIPAL — INTEGRACIÓN Y KPIs
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 9: ORQUESTADOR — INTEGRACIÓN, KPIs Y FILTRO ESTRATÉGICO
+# ==============================================================================
 
 def integrar_dataset_maestro() -> pd.DataFrame:
     """
     Orquesta la integración de las 5 fuentes a nivel colonia:
-      1. Base geográfica  (coloniascdmx  → superficie_km2_calculada)
-      2. Uso de suelo     (superficie_alcaldias → vocacion, uso_suelo_num)
-      3. Consumo          (consumo_agua_historico_2019 — primer semestre)
-      4. Población        (ids_ut)
+      1. Base geográfica     (coloniascdmx  → superficie_km2_calculada)
+      2. Uso de suelo        (superficie_alcaldias → vocacion, uso_suelo_num)
+      3. Consumo             (consumo_agua_historico_2019 — primer semestre)
+      4. Población           (ids_ut → pob, idsm)
       5. Reportes SEGUIAGUA  (reportes_agua_hist — filtrado a 2019)
 
-    Luego:
-      - Imputa superficie y población faltantes con mediana de alcaldía.
-      - Calcula KPIs (consumo_per_capita, consumo_per_capita_anualizado,
-        densidad_poblacional).
+    Después de la integración:
+      - Imputa superficie, población y consumo faltantes con mediana de alcaldía.
+      - Calcula KPIs (consumo_per_capita, consumo_per_capita_anualizado, densidad).
       - Filtra Top-10 colonias de mayor consumo total por alcaldía.
 
     SOBRE EL FILTRO TOP-10:
-        Con ~1,494 colonias únicas en el dataset y recursos universitarios
-        limitados, se seleccionan las 10 colonias de mayor consumo total
-        por alcaldía (≤160 colonias en total). Estas representan los focos
-        de mayor volumen hídrico. Colonias de bajo consumo absoluto se
-        excluyen — limitación documentada del alcance del proyecto.
+        Con ~1,494 colonias únicas y alcance universitario, se retienen las 10
+        de mayor consumo por alcaldía (≤160 colonias en total). Representan los
+        focos de mayor volumen hídrico y son las de mayor interés operativo
+        para detección de anomalías.
     """
     print("\n" + "="*72)
     print("  HYDROTRACE AI — ETL PIPELINE COLONIA")
     print(f"  Año de referencia: {ANIO_REFERENCIA} | Cobertura: Primer Semestre (Bim. 1-3)")
     print("="*72)
 
-    # ── 9.1 Base geográfica ──────────────────────────────────────────────────
+    # ── 9.1 Base geográfica: ancla del pipeline ──────────────────────────────
+    # La geometría oficial define el universo de colonias. Todo join es LEFT
+    # desde aquí — ninguna colonia válida se pierde por falta de datos.
     df_geo   = cargar_geometrias_colonias()
     df_suelo = cargar_uso_suelo()
     df_base  = df_geo.merge(df_suelo, on="alcaldia", how="left")
     print(f"\n  Base geográfica: {len(df_base)} colonias únicas en coloniascdmx.csv")
 
-    # ── 9.2 Módulos de datos ─────────────────────────────────────────────────
+    # ── 9.2 Carga de las 3 fuentes temáticas ────────────────────────────────
     df_consumo  = cargar_consumo()
     df_pob      = cargar_poblacion()
     df_reportes = cargar_reportes()
 
     # ── 9.3 Merge progresivo con log de cobertura [MEJ-06] ──────────────────
+    # Cada join reporta cuántas colonias quedan sin match para detectar
+    # problemas de normalización o fuentes incompletas.
     print("\n[ETL] Integrando fuentes (LEFT JOIN desde geometría oficial)...")
 
-    df = df_base.merge(df_consumo,  on=["alcaldia", "colonia"], how="left")
+    df = df_base.merge(df_consumo, on=["alcaldia", "colonia"], how="left")
     n_sin_consumo = df["consumo_total"].isna().sum()
     if n_sin_consumo:
         print(f"  ⚠ [MEJ-06] {n_sin_consumo} colonias sin match en consumo "
@@ -584,17 +613,15 @@ def integrar_dataset_maestro() -> pd.DataFrame:
         print(f"  ℹ [MEJ-06] {n_sin_reportes} colonias sin presencia en reportes 2019 "
               f"({n_sin_reportes / len(df) * 100:.1f}%) → total_reportes = 0 (dato ausente, no cero real).")
 
-    # Materializar indicador de presencia antes del fillna general [MEJ-03]
+    # [MEJ-03] Materializar el flag ANTES del fillna general para no perder la distinción
     df["tiene_reportes_2019"] = df["tiene_reportes_2019"].fillna(False)
 
     print(f"  → Colonias en dataset integrado: {len(df)}")
 
-    # ── 9.4 Imputación robusta con mediana de alcaldía ───────────────────────
-    # Para superficie y población: cero no es un valor válido (ninguna colonia
-    # tiene 0 km² ni 0 habitantes), así que se reemplazan antes de imputar.
-    # Para reportes: cero SÍ es válido (colonia sin reportes ese año), por lo
-    # que solo se imputan NaN (colonias que no aparecen en el join de reportes).
-    # consumo_total: tratado igual que superficie — cero no es consumo válido.
+    # ── 9.4 Imputación robusta ───────────────────────────────────────────────
+    # Superficie, población y consumo: cero no es semánticamente válido.
+    # Se reemplazan por NaN antes de imputar para que la mediana los corrija.
+    # Reportes: cero SÍ es válido (colonia sin incidencias ese año).
     print("[ETL] Imputando valores faltantes con mediana de alcaldía...")
 
     df["superficie_km2_calculada"] = df["superficie_km2_calculada"].replace(0, np.nan)
@@ -606,7 +633,7 @@ def integrar_dataset_maestro() -> pd.DataFrame:
         columnas=["superficie_km2_calculada", "pob", "consumo_total"],
     )
 
-    # Columnas secundarias: NaN → 0 (colonias sin presencia en esa fuente)
+    # Columnas secundarias: NaN → 0 (colonias sin presencia confirmada en la fuente)
     df = df.fillna({
         "consumo_total_dom"     : 0,
         "consumo_total_no_dom"  : 0,
@@ -620,34 +647,33 @@ def integrar_dataset_maestro() -> pd.DataFrame:
         "bimestres_cubiertos"   : 0,
     })
 
-    # ── 9.5 Auditoría del dataset integrado ──────────────────────────────────
+    # ── 9.5 Auditoría de integridad ──────────────────────────────────────────
     auditar(
         df, "Dataset Maestro Integrado",
         cols_criticas=["consumo_total", "pob", "superficie_km2_calculada"],
     )
 
-    # ── 9.6 KPIs de Negocio ──────────────────────────────────────────────────
+    # ── 9.6 Cálculo de KPIs de negocio ───────────────────────────────────────
     print("\n[ETL] Calculando KPIs de negocio...")
 
-    # consumo_per_capita: basado en consumo semestral real
-    df["consumo_per_capita"]           = df["consumo_total"]      / df["pob"]
-    df["densidad_poblacional"]         = df["pob"]                / df["superficie_km2_calculada"]
+    # KPIs en escala semestral — son los que el modelo ML usará internamente
+    df["consumo_per_capita"]   = df["consumo_total"] / df["pob"]
+    df["densidad_poblacional"] = df["pob"]           / df["superficie_km2_calculada"]
 
-    # [MEJ-02] consumo_per_capita_anualizado: proyección lineal para benchmarks anuales
-    # Fórmula: (consumo_semestral / pob) * FACTOR_ANUALIZACION
-    # ADVERTENCIA: proyección lineal — no captura estacionalidad hídrica.
-    # Usar para comparar contra M3_PER_CAPITA_ANUAL en modelos_ml.py.
+    # [MEJ-02] Consumo per cápita anualizado para comparar contra benchmarks de SACMEX
+    # (133.59 m³/hab/año). Proyección lineal — no captura estacionalidad hídrica.
     df["consumo_per_capita_anualizado"] = (
         (df["consumo_anualizado"] / df["pob"]).round(4)
     )
 
+    # Reemplazar infinitos generados por divisiones con pob o superficie = 0
     df = df.replace([np.inf, -np.inf], np.nan)
     df = imputar_con_mediana_alcaldia(
         df, columnas=["consumo_per_capita", "consumo_per_capita_anualizado",
                       "densidad_poblacional"]
     )
 
-    # ── 9.7 Filtro Estratégico: Top-10 por alcaldía ──────────────────────────
+    # ── 9.7 Filtro estratégico: Top-10 colonias por consumo por alcaldía ─────
     print("[ETL] Aplicando filtro Top-10 colonias por consumo por alcaldía...")
     df_top10 = (
         df.sort_values("consumo_total", ascending=False)
@@ -660,30 +686,30 @@ def integrar_dataset_maestro() -> pd.DataFrame:
         f"({df_top10['alcaldia'].nunique()} alcaldías × ≤10 colonias)"
     )
 
-    # ── 9.8 Orden de columnas para el modelo ────────────────────────────────
+    # ── 9.8 Selección y orden final de columnas para el modelo ───────────────
     # [FIX-D05] pob_nbi eliminada: no la produce ninguna fuente del ETL.
     # [MEJ-02]  consumo_anualizado y consumo_per_capita_anualizado añadidos.
-    # [MEJ-03]  tiene_reportes_2019 añadido para distinguir ausencia de dato vs cero.
+    # [MEJ-03]  tiene_reportes_2019 incluido para preservar distinción ausente vs cero.
     columnas_modelo = [
         "alcaldia", "colonia",
         "superficie_km2_calculada",
         "vocacion_principal", "uso_suelo_num",
-        # Consumo semestral real (lo que el modelo debe usar internamente)
+        # Consumo semestral real — escala interna del modelo
         "consumo_total", "consumo_total_dom", "consumo_total_no_dom",
         "bimestres_cubiertos",
-        # Consumo anualizado (proyección ×2 para benchmarks externos)
+        # Proyección anual — para benchmarks externos
         "consumo_anualizado",
-        # Población y KPIs
+        # Población y KPIs derivados
         "pob",
         "consumo_per_capita",
         "consumo_per_capita_anualizado",
         "densidad_poblacional",
-        # Reportes y calidad de señal ciudadana
+        # Señal ciudadana para el diagnóstico de anomalías
         "total_reportes", "reportes_fuga", "reportes_falta_agua",
         "tiene_reportes_2019",
         # Índice socioeconómico
         "idsm", "e_idsm",
-        # Coordenadas
+        # Coordenadas para el mapa interactivo en el frontend
         "latitud", "longitud",
     ]
     columnas_salida = [c for c in columnas_modelo if c in df_top10.columns]
@@ -692,15 +718,19 @@ def integrar_dataset_maestro() -> pd.DataFrame:
     return df_top10
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# 10. PUNTO DE ENTRADA
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 10: PUNTO DE ENTRADA — EXPORTACIÓN Y RESUMEN FINAL
+# ==============================================================================
 
 def ejecutar_pipeline() -> pd.DataFrame | None:
-    """Punto de entrada del pipeline ETL. Orquesta todo y exporta el CSV."""
+    """
+    Punto de entrada del pipeline ETL. Llama a integrar_dataset_maestro(),
+    exporta el CSV y genera un resumen de cobertura para validación manual.
+    """
     try:
         df_final = integrar_dataset_maestro()
 
+        # UTF-8 con BOM para compatibilidad con Excel en Windows
         df_final.to_csv(OUTPUT_PATH, index=False, encoding="utf-8-sig")
 
         print("\n" + "="*72)
@@ -725,7 +755,7 @@ def ejecutar_pipeline() -> pd.DataFrame | None:
         cols_stats = [c for c in cols_stats if c in df_final.columns]
         print(df_final[cols_stats].describe().round(2).to_string())
 
-        # Resumen de cobertura de señal ciudadana [MEJ-03]
+        # [MEJ-03] Verificación final de cobertura ciudadana
         n_con_reportes = df_final["tiene_reportes_2019"].sum() if "tiene_reportes_2019" in df_final.columns else "N/A"
         print(f"\n[COBERTURA] Colonias con presencia confirmada en reportes 2019: "
               f"{n_con_reportes} de {len(df_final)}")

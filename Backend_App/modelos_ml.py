@@ -1,17 +1,25 @@
 """
 ================================================================================
-HydroTrace AI — Módulo de Machine Learning
-modelos_ml.py
 
-Autores : Irving Morales & Ileana Lee
+EQUIPO: PUMASCRIPT SOLUTIONS
+
+PROYECTO: HydroTrace AI 
+MÓDULO   : modelos_ml.py / Módulo de Machine Learning
+
+Autores : 
+
+- Ileana Lee / Project Manager, Lead Data Scientist & UX/UI
+- Irving Morales / QA Data Tester & Data Scientist
+
 Materia : Ciencia de Datos en la Toma de Decisiones en las Organizaciones
+GRUPO: 04
 Facultad de Ingeniería, UNAM | Ciudad de México, 2026
 
 Pipeline de tres modelos sobre el dataset maestro de colonias de la CDMX:
-  1. K-Means          → segmentación por perfil urbano
-  2. Regresión Lineal → línea base de consumo esperado
-  3. Isolation Forest → detección de anomalías por cluster
-  4. Diagnóstico      → etiqueta operativa por colonia
+  1. K-Means          → segmentación en 4 perfiles urbanos
+  2. Regresión Lineal → línea base de consumo esperado por colonia
+  3. Isolation Forest → detección de anomalías dentro de cada cluster
+  4. Diagnóstico      → etiqueta operativa final por colonia
 
 Salida: data/resultados_finales_IA.csv
 
@@ -57,7 +65,7 @@ import warnings
 from pathlib import Path
 
 import matplotlib
-matplotlib.use("Agg")          # Sin pantalla — compatible con servidor y CI
+matplotlib.use("Agg")   
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -71,57 +79,58 @@ from sklearn.preprocessing import StandardScaler
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=UserWarning)
 
-# ──────────────────────────────────────────────────────────────────────────────
-# CONFIGURACIÓN DE RUTAS
-# ──────────────────────────────────────────────────────────────────────────────
+
+# ==============================================================================
+# SECCIÓN 0: CONFIGURACIÓN DE RUTAS Y CONSTANTES DEL MODELO
+# ==============================================================================
 
 BASE_DIR     = Path(__file__).resolve().parent
 DATA_DIR     = BASE_DIR / "data"
 GRAFICAS_DIR = BASE_DIR / "graficas_reporte"
-DATA_PATH    = DATA_DIR / "dataset_maestro_colonia_final.csv"
-OUTPUT_PATH  = DATA_DIR / "resultados_finales_IA.csv"
+DATA_PATH    = DATA_DIR / "dataset_maestro_colonia_final.csv"   # Entrada: producida por etl_pipeline.py
+OUTPUT_PATH  = DATA_DIR / "resultados_finales_IA.csv"           # Salida: consumida por main.py
 
 DATA_DIR.mkdir(exist_ok=True)
 GRAFICAS_DIR.mkdir(parents=True, exist_ok=True)
 
-# Consumo per cápita promedio de la CDMX: 366 L/hab/día (fuente: SACMEX 2019).
-# Convierte m³ recuperables a población equivalente abastecida por un AÑO COMPLETO.
-# IMPORTANTE [HC-01]: usar siempre con exceso_consumo anualizado, no semestral.
+# Benchmark de consumo per cápita diario de la CDMX (fuente: SACMEX 2019).
+# Se usa para calcular cuántos habitantes podrían abastecerse con el exceso
+# de consumo anual recuperable de cada colonia anómala.
 LITROS_PER_CAPITA_DIA = 366.0
 M3_PER_CAPITA_ANUAL   = (LITROS_PER_CAPITA_DIA * 365) / 1000   # → 133.59 m³/hab/año
 
-# Features del modelo de clustering y Regresión.
-# Separadas en constantes para que main.py pueda leerlas sin reimplementarlas.
-FEATURES_CLUSTER    = ["consumo_per_capita", "densidad_poblacional", "uso_suelo_num", "idsm"]
-FEATURES_REGRESION  = ["pob", "densidad_poblacional", "superficie_km2_calculada",
-                        "idsm", "uso_suelo_num"]
+# Features separadas en constantes para que main.py pueda importarlas
+# sin necesidad de reimplementar la lógica de selección de variables.
+FEATURES_CLUSTER   = ["consumo_per_capita", "densidad_poblacional", "uso_suelo_num", "idsm"]
+FEATURES_REGRESION = ["pob", "densidad_poblacional", "superficie_km2_calculada",
+                      "idsm", "uso_suelo_num"]
 
-# Features para Isolation Forest: incluye exceso_consumo (desviación vs línea base).
-# Se define aquí pero solo se usa DESPUÉS de que estimar_consumo_base() genera
-# la columna exceso_consumo. Isolation Forest corre después de la regresión.
-FEATURES_ISO        = ["consumo_per_capita", "densidad_poblacional", "uso_suelo_num",
-                        "idsm", "exceso_consumo"]
+# Isolation Forest usa exceso_consumo además del perfil urbano.
+# Esta feature solo existe DESPUÉS de que estimar_consumo_base() corra — por
+# eso Isolation Forest se ejecuta en el paso 3, no antes.
+FEATURES_ISO       = ["consumo_per_capita", "densidad_poblacional", "uso_suelo_num",
+                      "idsm", "exceso_consumo"]
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# PASO 0 — CARGA Y ESCALADO
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 1: CARGA Y PREPARACIÓN DEL DATASET
+# ==============================================================================
 
 def cargar_y_preparar() -> tuple[pd.DataFrame | None, np.ndarray | None]:
     """
     Lee el dataset maestro generado por etl_pipeline.py y escala las features
-    que usará K-Means.
+    que usará K-Means con un StandardScaler global.
 
-    NOTA DE ESCALADO:
-        El StandardScaler global se usa exclusivamente para K-Means y Regresión
-        Lineal, donde comparar magnitudes entre grupos distintos es correcto.
-        Para Isolation Forest se aplica un re-escalado local por cluster
-        (ver detectar_anomalias), ya que el objetivo es detectar anomalías
-        dentro de cada grupo, no entre grupos.
+    NOTA DE ESCALADO — por qué global aquí y local en Isolation Forest:
+        K-Means necesita que todos los puntos estén en la misma referencia de
+        escala para comparar distancias entre clusters correctamente.
+        Isolation Forest en cambio compara colonias dentro de su propio cluster,
+        por lo que requiere un escalado local para no heredar el sesgo de escala
+        global entre grupos de distintas magnitudes.
 
     Devuelve:
-        df_model  — DataFrame limpio (sin NaN en features del modelo)
-        X_scaled  — matriz numpy escalada globalmente (para K-Means)
+        df_model  — DataFrame limpio, sin NaN en las features del modelo
+        X_scaled  — matriz numpy escalada globalmente (solo para K-Means)
     """
     if not DATA_PATH.exists():
         print(f"[ERROR] No se encontró {DATA_PATH}. Ejecuta etl_pipeline.py primero.")
@@ -129,7 +138,7 @@ def cargar_y_preparar() -> tuple[pd.DataFrame | None, np.ndarray | None]:
 
     df = pd.read_csv(DATA_PATH)
 
-    # Validar que las columnas nuevas del ETL mejorado existen
+    # Verificar columnas nuevas del ETL mejorado — sin ellas algunos pasos degradan
     _advertir_columnas_faltantes(df)
 
     df_model = df.dropna(subset=FEATURES_CLUSTER).copy()
@@ -144,9 +153,8 @@ def cargar_y_preparar() -> tuple[pd.DataFrame | None, np.ndarray | None]:
 def _advertir_columnas_faltantes(df: pd.DataFrame) -> None:
     """
     Verifica que el CSV contiene las columnas producidas por etl_pipeline.py
-    mejorado. Emite advertencias para columnas nuevas opcionales ausentes.
-    Las columnas críticas del modelo base no se verifican aquí — fallarán
-    naturalmente en dropna() o en la regresión si no existen.
+    mejorado. Un CSV desactualizado no rompe el pipeline, pero degrada los
+    resultados de escala temporal y la distinción de reportes ausentes vs cero.
     """
     columnas_nuevas = {
         "consumo_anualizado"            : "[HC-01] Ejecuta etl_pipeline.py actualizado para comparar contra benchmarks anuales.",
@@ -159,31 +167,31 @@ def _advertir_columnas_faltantes(df: pd.DataFrame) -> None:
             print(f"  ⚠ Columna '{col}' no encontrada en el CSV. {msg}")
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# PASO 1 — SEGMENTACIÓN (K-MEANS)
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 2: SEGMENTACIÓN POR PERFIL URBANO (K-MEANS)
+# ==============================================================================
 
 def ejecutar_clustering(df: pd.DataFrame, X_scaled: np.ndarray) -> pd.DataFrame:
     """
-    Agrupa las colonias en 4 perfiles urbanos usando K-Means.
+    Agrupa las colonias en 4 perfiles urbanos usando K-Means con escalado global.
 
     K=4 se eligió por interpretabilidad operativa, no solo por la curva del codo.
-    Los 4 clusters corresponden a perfiles reales de la CDMX:
+    Los clusters corresponden a perfiles reales de la CDMX:
       · Residencial de bajo consumo
       · Residencial / mixto de consumo medio
       · Comercial / servicios de alto consumo
       · Industrial o atípico (outlier legítimo, ej. Industrial Vallejo)
 
-    Un cluster de tamaño 1 es un resultado válido: significa que el modelo
-    aisló un outlier real, no que el algoritmo falló.
+    Un cluster de tamaño 1 es un resultado válido: el modelo aisló un outlier
+    real. El contamination de Isolation Forest se ajusta dinámicamente para
+    manejar estos casos sin que sklearn arroje error.
 
-    Parámetros fijos para reproducibilidad: random_state=42, n_init=10.
-    El escalado usado es el global (correcto para K-Means: se comparan
-    colonias entre sí usando las mismas referencias de escala).
+    Genera el archivo graficas_reporte/metodo_codo.png como evidencia visual
+    de la elección de K.
     """
     print("\n[K-MEANS] Iniciando segmentación por perfil urbano...")
 
-    # Método del codo: calcula inercia para K=1..10 y guarda la gráfica.
+    # Método del codo — calcula inercia para K=1..10 y grafica el punto de inflexión
     inercias = []
     for k in range(1, 11):
         km = KMeans(n_clusters=k, random_state=42, n_init=10)
@@ -202,7 +210,7 @@ def ejecutar_clustering(df: pd.DataFrame, X_scaled: np.ndarray) -> pd.DataFrame:
     fig.savefig(GRAFICAS_DIR / "metodo_codo.png", dpi=150)
     plt.close(fig)
 
-    # Modelo final con K=4
+    # Modelo final con los hiperparámetros definidos
     kmeans = KMeans(n_clusters=4, random_state=42, n_init=10)
     df["cluster_perfil"] = kmeans.fit_predict(X_scaled)
 
@@ -210,7 +218,8 @@ def ejecutar_clustering(df: pd.DataFrame, X_scaled: np.ndarray) -> pd.DataFrame:
     conteos = df["cluster_perfil"].value_counts().sort_index()
     print(conteos.to_string())
 
-    # Advertir clusters pequeños — contamination se ajusta dinámicamente en detectar_anomalias
+    # Advertir clusters pequeños — el contamination de Isolation Forest
+    # se ajustará dinámicamente en detectar_anomalias() para no fallar
     clusters_pequenos = conteos[conteos < 10]
     if not clusters_pequenos.empty:
         print(
@@ -221,36 +230,37 @@ def ejecutar_clustering(df: pd.DataFrame, X_scaled: np.ndarray) -> pd.DataFrame:
     return df
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# PASO 2 — REGRESIÓN LINEAL (LÍNEA BASE DE CONSUMO ESPERADO)
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 3: LÍNEA BASE DE CONSUMO ESPERADO (REGRESIÓN LINEAL)
+# ==============================================================================
 
 def estimar_consumo_base(df: pd.DataFrame) -> pd.DataFrame:
     """
     Entrena una Regresión Lineal Múltiple para estimar cuánto debería consumir
-    cada colonia dados sus atributos demográficos y de uso de suelo.
+    cada colonia dado su perfil demográfico y uso de suelo.
 
-    Variable dependiente : consumo_total (m³ facturados — primer semestre 2019)
-    Variables independientes: población, densidad, superficie, IDSM, uso de suelo
+    Variable dependiente:   consumo_total (m³ facturados — primer semestre 2019)
+    Variables predictoras:  población, densidad, superficie, IDSM, uso de suelo
 
-    El R² esperado es moderado o bajo — eso no es un fallo del modelo.
-    El consumo hídrico urbano depende de actividad económica, comercio informal
-    y hábitos culturales que no están en los datos disponibles. Lo importante
-    no es predecir con precisión sino tener una línea base estadística que
-    permita detectar desviaciones (exceso_consumo) que el Isolation Forest
-    confirmará o descartará como anomalías.
+    Por qué R² bajo no es un fallo:
+        El consumo hídrico urbano depende de actividad económica informal,
+        hábitos culturales y estado de la red — variables no disponibles en
+        datos públicos. La regresión no busca alta precisión predictiva, sino
+        una línea base estadística para que exceso_consumo capture las
+        desviaciones que Isolation Forest confirmará o descartará.
 
-    NOTA: exceso_consumo se calcula en la misma escala que consumo_total
-    (semestral). Para impacto financiero o comparación anual usar
-    exceso_consumo_anualizado (calculado en el paso 5).
+    NOTA DE ESCALA [HC-01]:
+        exceso_consumo queda en escala semestral (igual que consumo_total).
+        Para métricas anuales (poblacion_equivalente, impacto financiero)
+        se multiplica por 2 en el orquestador — ver paso HC-01.
 
     Genera:
-        consumo_esperado       — predicción del modelo (m³ semestral)
-        exceso_consumo         — diferencia real vs esperado (semestral)
+        consumo_esperado — predicción de la regresión (m³ semestral)
+        exceso_consumo   — diferencia real vs esperado (positivo = consume de más)
     """
     print("\n[REGRESIÓN] Entrenando modelo de consumo esperado...")
 
-    # Verificar que todas las features de regresión existen
+    # Ajuste defensivo: si alguna feature falta en el CSV, se omite sin romper el pipeline
     features_disponibles = [f for f in FEATURES_REGRESION if f in df.columns]
     features_faltantes   = [f for f in FEATURES_REGRESION if f not in df.columns]
     if features_faltantes:
@@ -277,39 +287,35 @@ def estimar_consumo_base(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# PASO 3 — DETECCIÓN DE ANOMALÍAS (ISOLATION FOREST POR CLUSTER)
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 4: DETECCIÓN DE ANOMALÍAS POR CLUSTER (ISOLATION FOREST)
+# ==============================================================================
 
 def detectar_anomalias(df: pd.DataFrame, X_scaled: np.ndarray) -> pd.DataFrame:
     """
     Aplica Isolation Forest de forma independiente dentro de cada cluster.
 
-    Por qué por cluster y no sobre todo el dataset:
-        Si se aplicara globalmente, las colonias residenciales de bajo consumo
-        serían marcadas como normales en comparación con las industriales, aunque
-        sean atípicas dentro de su propio perfil. Aplicarlo por cluster garantiza
-        que cada colonia se compara contra su grupo de similares.
+    Por qué por cluster y no sobre el dataset completo:
+        Si se aplicara globalmente, colonias residenciales de bajo consumo
+        quedarían clasificadas como normales en comparación con las industriales,
+        aunque sean atípicas dentro de su propio perfil. Al aplicarlo por cluster,
+        cada colonia se compara exclusivamente contra sus similares.
 
     [HC-02] ESCALADO LOCAL POR CLUSTER:
-        Cada cluster re-escala sus propias features con un StandardScaler local
-        antes de pasárselas a Isolation Forest. K-Means sigue usando el escalado
-        global (correcto — necesita que todos los puntos estén en la misma
-        referencia de escala para comparar distancias entre clusters).
+        Cada cluster re-escala sus features con un StandardScaler propio antes
+        de entrenar Isolation Forest. Heredar el escalado global introduciría
+        data leakage: la distribución de un cluster afectaría los scores
+        de otro cluster a través de la media/std global.
 
     [FIX-ISO-01] CONTAMINATION DINÁMICO:
-        contamination=0.15 fijo rompe con clusters de 1 o 4 colonias (donde
-        0.15×1=0.15 se redondea a 0 anomalías, o siempre fuerza exactamente 1).
-        Ahora se calcula por cluster: mínimo 1 anomalía garantizada, máximo 15%.
-        Fórmula: max(1/n, min(0.15, (n-1)/n))
+        Un valor fijo de contamination=0.15 falla con clusters de 1 o 4 colonias.
+        Fórmula: max(1/n, min(0.15, 0.49))
+        Garantiza al menos 1 anomalía por cluster y nunca supera el 49%.
 
-    [FIX-ISO-02] FEATURES ENRIQUECIDAS CON exceso_consumo:
-        La versión anterior usaba solo FEATURES_CLUSTER (perfil urbano).
-        Ahora Isolation Forest también recibe exceso_consumo — la desviación
-        real vs la línea base de la regresión — que es la señal más directa
-        de comportamiento anómalo. Esto mejora significativamente la calidad
-        de detección porque el modelo ya sabe cuáles colonias se desvían
-        estadísticamente de lo esperado dado su perfil.
+    [FIX-ISO-02] exceso_consumo COMO FEATURE:
+        La versión anterior solo usaba el perfil urbano (FEATURES_CLUSTER).
+        Incluir exceso_consumo — la señal directa de desviación estadística
+        respecto a la regresión — mejora significativamente la detección.
 
     Genera:
         es_anomalia    — 1=normal, -1=anómala (convención de scikit-learn)
@@ -317,35 +323,36 @@ def detectar_anomalias(df: pd.DataFrame, X_scaled: np.ndarray) -> pd.DataFrame:
     """
     print("\n[ISOLATION FOREST] Detectando anomalías por cluster (escalado local + exceso_consumo)...")
 
-    # Verificar que exceso_consumo existe (requiere que estimar_consumo_base() ya corrió)
-    features_iso = [f for f in FEATURES_ISO if f in df.columns]
+    # Verificar que exceso_consumo ya existe — requiere que la regresión haya corrido
+    features_iso  = [f for f in FEATURES_ISO if f in df.columns]
     faltantes_iso = [f for f in FEATURES_ISO if f not in df.columns]
     if faltantes_iso:
         print(f"  ⚠ Features no disponibles para Isolation Forest: {faltantes_iso} — se omiten.")
 
-    df["es_anomalia"]    = 1      # valor por defecto: normal
+    # Inicializar como normal — solo se sobreescribe si el cluster los marca como anómalos
+    df["es_anomalia"]    = 1
     df["anomalia_score"] = 0.0
 
     for cluster_id in sorted(df["cluster_perfil"].unique()):
-        mask  = df["cluster_perfil"] == cluster_id
-        idx   = df.index[mask]
-        n     = mask.sum()
+        mask = df["cluster_perfil"] == cluster_id
+        idx  = df.index[mask]
+        n    = mask.sum()
 
         X_cluster_raw = df.loc[idx, features_iso].values
 
-        # [HC-02] Re-escalar con estadística local del cluster
+        # [HC-02] Escalado local — estadística exclusiva del cluster
         scaler_local     = StandardScaler()
         X_cluster_scaled = scaler_local.fit_transform(X_cluster_raw)
 
-        # [FIX-ISO-01] Contamination dinámico — cluster singleton se marca directo
-        # porque sklearn no acepta contamination > 0.5 ni = 1.0.
+        # [FIX-ISO-01] Un cluster singleton no puede tener contamination calculado
+        # con la fórmula estándar — se marca directamente como anómalo
         if n == 1:
             df.loc[idx, "es_anomalia"]    = -1
             df.loc[idx, "anomalia_score"] = -1.0
             print(f"  Cluster {cluster_id}: 1 anómala de 1 colonia (singleton — marcada directamente)")
             continue
 
-        # max(1/n) garantiza al menos 1 anomalía; min(0.15) tope del 15%; nunca > 0.5
+        # max(1/n) garantiza al menos 1 anomalía; 0.49 es el tope que sklearn acepta
         contam = float(max(1 / n, min(0.15, 0.49)))
 
         iso    = IsolationForest(contamination=contam, random_state=42)
@@ -362,18 +369,20 @@ def detectar_anomalias(df: pd.DataFrame, X_scaled: np.ndarray) -> pd.DataFrame:
     total = (df["es_anomalia"] == -1).sum()
     print(f"  Total anomalías detectadas: {total}")
 
-    # ── Gráfica 1: Mapa analítico ────────────────────────────────────────────
+    # Gráfica 1: mapa analítico — consumo per cápita vs reportes ciudadanos
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.scatterplot(
         x=df["consumo_per_capita"], y=df["total_reportes"],
         hue=df["es_anomalia"], palette={1: "#0A84FF", -1: "#FF2D55"},
         alpha=0.75, s=80, ax=ax,
     )
+    # Limitar ejes al p95 para que los outliers extremos no compriman la nube principal
     x_lim = df["consumo_per_capita"].quantile(0.95)
     y_lim = df["total_reportes"].quantile(0.95)
     ax.set_xlim(0, x_lim)
     ax.set_ylim(0, y_lim)
 
+    # Etiquetar las 6 colonias anómalas de mayor consumo dentro del rango visible
     top_anomalas = df[
         (df["es_anomalia"] == -1) &
         (df["consumo_per_capita"] <= x_lim) &
@@ -402,7 +411,7 @@ def detectar_anomalias(df: pd.DataFrame, X_scaled: np.ndarray) -> pd.DataFrame:
     fig.savefig(GRAFICAS_DIR / "mapa_anomalias_analitico.png", dpi=150)
     plt.close(fig)
 
-    # ── Gráfica 2: Consumo per cápita vs densidad ────────────────────────────
+    # Gráfica 2: consumo per cápita vs densidad poblacional por estado de anomalía
     fig2, ax2 = plt.subplots(figsize=(10, 6))
     sns.scatterplot(
         x=df["densidad_poblacional"], y=df["consumo_per_capita"],
@@ -419,42 +428,40 @@ def detectar_anomalias(df: pd.DataFrame, X_scaled: np.ndarray) -> pd.DataFrame:
     return df
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# PASO 4 — UMBRALES DINÁMICOS (solo sobre las colonias anómalas)
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 5: CALIBRACIÓN DE UMBRALES DINÁMICOS
+# ==============================================================================
 
 def calibrar_umbrales(df_anomalas: pd.DataFrame) -> dict:
     """
-    Calcula los umbrales de diagnóstico ÚNICAMENTE sobre las colonias que
-    Isolation Forest marcó como anómalas (es_anomalia == -1).
+    Calcula los umbrales de diagnóstico SOLO sobre colonias anómalas (es_anomalia == -1).
 
-    Por qué no sobre el dataset completo:
-        Calcular percentiles sobre todas las colonias mezcla normales con anómalas
-        y eleva artificialmente los umbrales, reduciendo la sensibilidad.
-        Al filtrar solo las anómalas, los percentiles reflejan la distribución
-        real del subconjunto de interés.
+    Por qué sobre el subconjunto anómalo y no el dataset completo:
+        Incluir colonias normales elevaría artificialmente los percentiles y
+        reduciría la sensibilidad del diagnóstico. Los percentiles sobre el
+        subconjunto de interés reflejan la distribución real de las colonias
+        que el sistema debe clasificar.
 
     Por qué percentiles y no valores fijos:
-        Si el dataset se actualiza a un año distinto, un valor fijo como
-        "15 reportes" puede no tener ningún sentido. Los percentiles se
-        recalibran solos.
+        Si el dataset se actualiza a otro año o ciudad, un umbral fijo
+        como "15 reportes" puede carecer de sentido. Los percentiles se
+        recalibran automáticamente con cada ejecución.
 
     [HC-03] Guardia de umbrales degenerados:
-        Si bajo_reporte >= alto_reporte (puede ocurrir con muy pocos datos
-        anómalos donde p10 y p75 convergen), se usa la mediana como punto
-        de corte de emergencia para evitar que la condición HUACHICOL quede
-        inalcanzable. Se emite advertencia explícita.
+        Con muy pocas colonias anómalas, el p10 y p75 pueden converger o
+        invertirse. Si bajo_reporte >= alto_reporte, se usa la mediana como
+        punto de corte de emergencia para evitar que HUACHICOL sea inalcanzable.
 
-    Umbrales:
-        alto_reporte    — p75 de reportes entre anómalas → umbral CRÍTICO
-        bajo_reporte    — p10 de reportes entre anómalas → umbral HUACHICOL
-        alta_falta_agua — p75 de reportes_falta_agua     → umbral DEFICIENCIA
+    Umbrales resultantes:
+        alto_reporte    → p75 de reportes en anómalas (umbral CRÍTICO)
+        bajo_reporte    → p10 de reportes en anómalas (umbral HUACHICOL)
+        alta_falta_agua → p75 de reportes_falta_agua  (umbral DEFICIENCIA)
     """
     alto_reporte    = float(np.percentile(df_anomalas["total_reportes"], 75))
     bajo_reporte    = float(np.percentile(df_anomalas["total_reportes"], 10))
     alta_falta_agua = float(np.percentile(df_anomalas["reportes_falta_agua"], 75))
 
-    # [HC-03] Detectar y corregir umbrales degenerados
+    # [HC-03] Umbrales degenerados — ocurre con muy pocas colonias anómalas
     if bajo_reporte >= alto_reporte:
         mediana_reportes = float(df_anomalas["total_reportes"].median())
         print(
@@ -464,7 +471,7 @@ def calibrar_umbrales(df_anomalas: pd.DataFrame) -> dict:
             f"Usando mediana ({mediana_reportes:.0f}) como punto de corte de emergencia."
         )
         alto_reporte = mediana_reportes
-        bajo_reporte = mediana_reportes * 0.5  # 50% de la mediana como umbral bajo
+        bajo_reporte = mediana_reportes * 0.5
 
     umbrales = {
         "alto_reporte"   : alto_reporte,
@@ -476,81 +483,84 @@ def calibrar_umbrales(df_anomalas: pd.DataFrame) -> dict:
     print(f"  CRÍTICO     — reportes >= {umbrales['alto_reporte']:.0f}  (p75)")
     print(f"  HUACHICOL   — reportes <= {umbrales['bajo_reporte']:.0f}  (p10)")
     print(f"  DEFICIENCIA — falta_agua >= {umbrales['alta_falta_agua']:.0f}  (p75)")
+
     return umbrales
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# PASO 5 — DIAGNÓSTICO INTEGRADO
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 6: DIAGNÓSTICO INTEGRADO — ETIQUETA OPERATIVA POR COLONIA
+# ==============================================================================
 
 def clasificar_riesgo(row: pd.Series, umbrales: dict) -> str:
     """
-    Asigna una etiqueta operativa a cada colonia combinando tres señales:
-      · es_anomalia        — ¿el Isolation Forest la marcó como atípica?
-      · exceso_consumo     — ¿consume más o menos de lo que predice la regresión?
-      · reportes           — ¿cuántas quejas ciudadanas tiene?
-      · tiene_reportes_2019— ¿la colonia tuvo presencia en el sistema de reportes?
+    Asigna una etiqueta operativa combinando tres señales independientes:
+      1. es_anomalia        — ¿Isolation Forest la marcó como atípica?
+      2. exceso_consumo     — ¿consume más o menos de lo que predice la regresión?
+      3. reportes           — ¿cuántas quejas ciudadanas tiene y de qué tipo?
+      4. tiene_reportes_2019— ¿participó del sistema de reportes SEGUIAGUA?
 
-    El orden de las condiciones importa: se evalúan de mayor a menor gravedad
-    y se asigna la primera que se cumple.
+    El orden de evaluación importa — se asigna el primer diagnóstico que aplica,
+    de mayor a menor gravedad operativa.
 
-    [HC-04] DISTINCIÓN DE DATO AUSENTE vs CERO REAL:
-        Si tiene_reportes_2019 == False (o la columna no existe), la colonia
-        no participó del sistema de reportes SEGUIAGUA en 2019 — su valor
-        de total_reportes es 0 por ausencia de datos, no porque genuinamente
-        nadie reportó nada. En ese caso NO se clasifica como HUACHICOL
-        (que requiere evidencia positiva de bajo reporte) sino como
-        SOSPECHOSO (Exceso Detectado por IA).
+    [HC-04] DISTINCIÓN DATO AUSENTE vs CERO REAL:
+        Si tiene_reportes_2019 == False, el campo total_reportes = 0 es por
+        ausencia de datos en el join, no evidencia real de bajo reporte.
+        Una colonia sin datos ciudadanos con exceso detectado se clasifica
+        como SOSPECHOSO (Exceso IA), no como HUACHICOL.
+        Asumir True por defecto sería peligroso: clasificaría colonias sin
+        cobertura del sistema como extractores fraudulentos.
 
-    CRÍTICO          → anomalía + exceso + muchos reportes (fuga con evidencia ciudadana)
-    SOSPECHOSO H     → anomalía + exceso + reportes reales bajos (extracción silenciosa)
-    DEFICIENCIA      → consumo bajo + muchas quejas de falta de agua
-    SOSPECHOSO IA    → anomalía + exceso, sin datos ciudadanos o reportes intermedios
-    NORMAL           → todo lo demás
+    Categorías de salida:
+        CRÍTICO          → anomalía + exceso + muchos reportes (fuga con evidencia ciudadana)
+        SOSPECHOSO H     → anomalía + exceso + reportes reales bajos (extracción silenciosa)
+        DEFICIENCIA      → consumo bajo + muchas quejas de falta de agua (baja presión)
+        SOSPECHOSO IA    → anomalía + exceso, sin datos ciudadanos confirmados
+        NORMAL           → ninguna condición anterior se cumple
     """
     exceso = row["exceso_consumo"]
 
-    # [HC-04] La clasificación HUACHICOL requiere que la colonia sí aparezca
-    # en el sistema de reportes — de lo contrario el 0 es dato ausente.
-    # Default False: si la columna no existe, NO asumir datos ciudadanos válidos.
-    # Asumir True sería peligroso: clasificaría colonias sin datos como HUACHICOL.
+    # [HC-04] Default False: si la columna no existe, no asumir datos ciudadanos válidos
     tiene_datos_ciudadanos = bool(row.get("tiene_reportes_2019", False))
 
+    # Anomalía con exceso Y evidencia ciudadana alta → fuga de red con corroboración
     if row["es_anomalia"] == -1 and exceso > 0 and row["total_reportes"] >= umbrales["alto_reporte"]:
         return "CRÍTICO (Posible Fuga de Red)"
 
+    # Anomalía con exceso, datos ciudadanos confirmados Y reportes bajos → extracción ilícita
     if (row["es_anomalia"] == -1 and exceso > 0
             and tiene_datos_ciudadanos
             and row["total_reportes"] <= umbrales["bajo_reporte"]):
         return "SOSPECHOSO (Posible Huachicol)"
 
+    # Sin anomalía pero consumo bajo Y muchas quejas de falta de agua → desabasto o baja presión
     if exceso < 0 and row["reportes_falta_agua"] >= umbrales["alta_falta_agua"]:
         return "DEFICIENCIA (Posible Baja Presión o Desabasto)"
 
+    # Anomalía con exceso pero sin suficiente señal ciudadana para clasificar con certeza
     if row["es_anomalia"] == -1 and exceso > 0:
         return "SOSPECHOSO (Exceso Detectado por IA)"
 
     return "NORMAL"
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# ORQUESTADOR PRINCIPAL
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 7: ORQUESTADOR PRINCIPAL
+# ==============================================================================
 
 def ejecutar_pipeline() -> None:
     """
-    Ejecuta los 5 pasos en orden y exporta resultados_finales_IA.csv.
+    Ejecuta los 5 pasos del pipeline en el orden correcto y exporta el CSV final.
 
     El orden no es arbitrario:
-      Clustering primero → define los grupos de comparación para Isolation Forest.
-      Regresión segundo  → genera exceso_consumo que el diagnóstico necesita.
-      Isolation Forest   → requiere los clusters del paso 1.
-      Umbrales al final  → se calculan sobre las anómalas ya identificadas.
+      Paso 1 — Clustering primero: define los grupos de comparación para Isolation Forest.
+      Paso 2 — Regresión segundo: genera exceso_consumo, que el diagnóstico necesita
+               y que Isolation Forest usa como feature en el paso 3.
+      Paso 3 — Isolation Forest: requiere los clusters del paso 1 y exceso_consumo del paso 2.
+      Paso 4 — Umbrales: se calculan sobre las anómalas ya identificadas en el paso 3.
+      Paso 5 — Diagnóstico: combina señal del modelo con señal ciudadana.
 
-    [MD-03] Las gráficas analíticas se generan en un bloque try/except
-    independiente. Un fallo de matplotlib (ej. dependencias de sistema)
-    no cancela un pipeline que completó correctamente el entrenamiento
-    y exportó el CSV.
+    [MD-03] Las gráficas analíticas se ejecutan en un bloque try/except independiente.
+    Un fallo de matplotlib no cancela la exportación del CSV ya completada.
     """
     df_final, X_s = cargar_y_preparar()
     if df_final is None:
@@ -560,7 +570,7 @@ def ejecutar_pipeline() -> None:
     df_final = estimar_consumo_base(df_final)
     df_final = detectar_anomalias(df_final, X_s)
 
-    # Los umbrales se calculan DESPUÉS de detectar anomalías y SOLO sobre ellas
+    # Los umbrales se calculan DESPUÉS de detectar anomalías y exclusivamente sobre ellas
     anomalas = df_final[df_final["es_anomalia"] == -1]
     if anomalas.empty:
         print("[ERROR] No se detectaron anomalías. Verifica contamination en IsolationForest.")
@@ -573,9 +583,11 @@ def ejecutar_pipeline() -> None:
     ).astype(str).str.strip()
 
     # ── Métrica de impacto social [HC-01] ────────────────────────────────────
-    # Usa consumo_anualizado si está disponible (ETL mejorado) para comparar
-    # contra M3_PER_CAPITA_ANUAL en la misma escala temporal.
-    # Fallback: consumo_total semestral × 2 calculado aquí si la columna no existe.
+    # poblacion_equivalente = habitantes que podrían abastecerse un año con el
+    # 20% del exceso de consumo anualizado recuperable de la colonia.
+    # El 20% representa una estimación conservadora de reducción operativa factible.
+    # Se usa consumo_anualizado (×2 del semestral) para estar en la misma escala
+    # que M3_PER_CAPITA_ANUAL. Si la columna no existe, se aproxima aquí.
     if "consumo_anualizado" in df_final.columns:
         exceso_base = (
             df_final["consumo_anualizado"] - (df_final["consumo_esperado"] * 2)
@@ -597,8 +609,7 @@ def ejecutar_pipeline() -> None:
         f"({nota_escala})"
     )
 
-    # Ordenar por severidad (CRÍTICO primero) y dentro de cada nivel
-    # por consumo total descendente
+    # Ordenar por severidad operativa descendente, y dentro del mismo nivel por consumo
     orden_severidad = {
         "CRÍTICO (Posible Fuga de Red)"                  : 0,
         "SOSPECHOSO (Posible Huachicol)"                 : 1,
@@ -615,7 +626,7 @@ def ejecutar_pipeline() -> None:
     print(f"\n[OK] Pipeline completado → {OUTPUT_PATH}")
     print(f"     {len(df_final)} colonias | {(df_final['es_anomalia'] == -1).sum()} anomalías detectadas")
 
-    # [MD-03] Gráficas en bloque independiente — un fallo aquí no cancela el pipeline
+    # [MD-03] Bloque independiente — un fallo aquí no cancela la exportación del CSV
     try:
         generar_graficas_analiticas(df_final)
     except Exception as exc:
@@ -623,13 +634,14 @@ def ejecutar_pipeline() -> None:
         print("  El CSV de resultados fue exportado correctamente.")
 
 
-# ──────────────────────────────────────────────────────────────────────────────
-# GRÁFICAS ANALÍTICAS
-# ──────────────────────────────────────────────────────────────────────────────
+# ==============================================================================
+# SECCIÓN 8: GENERACIÓN DE GRÁFICAS ANALÍTICAS
+# ==============================================================================
 
 def generar_graficas_analiticas(df: pd.DataFrame) -> None:
     """
     Genera 5 gráficas analíticas y las guarda en graficas_reporte/.
+    Se ejecutan después de la exportación del CSV para no bloquear el pipeline.
 
     1. heatmap_correlaciones.png      — correlación entre variables numéricas clave
     2. distribucion_diagnosticos.png  — conteo de colonias por diagnóstico
@@ -687,10 +699,11 @@ def generar_graficas_analiticas(df: pd.DataFrame) -> None:
     print("  ✓ distribucion_diagnosticos.png")
 
     # ── 3. EXCESO DE CONSUMO POR ALCALDÍA ────────────────────────────────────
-    col_exceso = "consumo_anualizado" if "consumo_anualizado" in df.columns else "exceso_consumo"
+    col_exceso   = "consumo_anualizado" if "consumo_anualizado" in df.columns else "exceso_consumo"
     label_exceso = "Exceso Anualizado (miles de m³)" if col_exceso == "consumo_anualizado" \
                    else "Exceso de Consumo (miles de m³)"
 
+    # Solo colonias con exceso positivo — las de deficiencia no aportan al indicador de sobreconsumo
     exceso_alc = (
         df[df["exceso_consumo"] > 0]
         .groupby("alcaldia")["exceso_consumo"]
@@ -727,6 +740,7 @@ def generar_graficas_analiticas(df: pd.DataFrame) -> None:
     ax.set_ylabel("Consumo Per Cápita (m³/hab — semestral)")
     ax.set_title("Distribución de Consumo Per Cápita por Cluster", fontsize=12, fontweight="bold")
     ax.grid(axis="y", alpha=0.3)
+    # El límite superior al p95 evita que outliers extremos aplasten la distribución principal
     ax.set_ylim(0, df["consumo_per_capita"].quantile(0.95))
     fig.tight_layout()
     fig.savefig(GRAFICAS_DIR / "boxplot_consumo_cluster.png", dpi=150)
@@ -734,6 +748,7 @@ def generar_graficas_analiticas(df: pd.DataFrame) -> None:
     print("  ✓ boxplot_consumo_cluster.png")
 
     # ── 5. TOP 10 COLONIAS MÁS ANÓMALAS ─────────────────────────────────────
+    # nsmallest sobre anomalia_score porque valores más negativos = más anómalos (convención sklearn)
     top10 = (
         df[df["es_anomalia"] == -1]
         .nsmallest(10, "anomalia_score")[["colonia", "anomalia_score", "diagnostico_final"]]

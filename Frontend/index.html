@@ -1,4 +1,40 @@
 <!doctype html>
+<!--
+================================================================================
+EQUIPO: PUMASCRIPT SOLUTIONS
+
+PROYECTO : HydroTrace AI
+ARCHIVO  : index.html
+AUTOR  : Ileana Lee / Project Manager, Lead Data Scientist & UX/UI
+Materia  : Ciencia de Datos en la Toma de Decisiones en las Organizaciones
+GRUPO: 04
+Facultad de Ingeniería, UNAM | Ciudad de México, 2026
+
+DESCRIPCIÓN:
+    Landing page pública de HydroTrace AI.
+    Es el primer punto de contacto con el sistema —
+    introduce el problema hídrico, explica la solución y captura leads
+    mediante un formulario que el backend persiste como prospectos en la BD.
+
+    Secciones:
+        Navbar          → navegación fija con scroll-hide y accesos a dashboards
+        Hero            → propuesta de valor con animación typewriter y Lottie
+        Marquee         → ticker horizontal de capacidades del sistema
+        Problemática    → flujo visual de 4 pasos que explica el reto actual
+        Tecnología      → explicación de 3 pasos de cómo funciona la IA
+        Dashboard       → captura de pantalla de la plataforma en acción
+        Negocio         → modelo de precios SaaS B2G y métricas de impacto
+        Contacto        → formulario que hace POST a /contacto (Flask)
+        Footer          → navegación secundaria e información del equipo
+
+    Dependencias externas:
+        Tailwind CSS (CDN)          → utilidades de estilos
+        Font Awesome 6              → iconografía
+        Lucide                      → iconos del formulario de contacto
+        Google Fonts (Inter, Plus Jakarta Sans, Orbitron)
+        Lottie Player               → animación del Hero
+================================================================================
+-->
 <html lang="es" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
@@ -10,7 +46,7 @@
 
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- ✅ NUEVA: Tailwind Config del Remasterizado -->
+  <!-- Tailwind Config del Remasterizado -->
   <script>
     tailwind.config = {
       theme: {
@@ -430,7 +466,7 @@
 
 <body class="overflow-x-hidden">
 
-<!-- BARRA DE NAVEGACIÓN -->
+<!-- ════════ NAVBAR ════════ -->
 
 <nav
   id="navbar"
@@ -501,7 +537,7 @@
   </div>
 </nav>
 
-<!-- INICIO -->
+<!-- ════════ HERO ════════ -->
 
 <section
   id="inicio"
@@ -664,7 +700,7 @@
 
 </section>
 
-<!-- MARQUEE TRANSITION -->
+<!-- ════════ MARQUEE ════════ -->
 
 <div class="relative w-full overflow-hidden bg-white z-20">
 
@@ -731,7 +767,7 @@
 
 </div>
 
-<!-- PROBLEMÁTICA -->
+<!-- ════════ PROBLEMÁTICA ════════ -->
 
 <section id="problematica" class="relative py-36 overflow-hidden bg-[#FBFCFE] px-6">
 
@@ -924,12 +960,12 @@
   </div>
 </section>
 
-<!-- TRANSICIÓN -->
+<!-- ════════ DIVISOR ════════ -->
 <div class="w-full flex justify-center bg-[#F8FAFC]">
   <div class="w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-lilac/20 to-transparent"></div>
 </div>
 
-<!-- TECNOLOGÍA -->
+<!-- ════════ TECNOLOGÍA ════════ -->
 
 <section id="tecnologia" class="relative py-32 bg-[#FAF8FF] overflow-hidden">
 
@@ -1072,12 +1108,12 @@
   </div>
 </section>
 
-<!-- TRANSICIÓN -->
+<!-- ════════ DIVISOR ════════ -->
 <div class="w-full flex justify-center bg-white">
   <div class="w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-lilac/20 to-transparent"></div>
 </div>
 
-<!-- Dashboard interactivo -->
+<!-- ════════ DEMO DASHBOARD ════════ -->
 
 <section id="dashboard" class="relative py-40 bg-[#FFFFFF] overflow-hidden">
   
@@ -1113,7 +1149,7 @@
 </section>
 
 
-<!-- WAVE TRANSITION -->
+<!-- ════════ WAVE TRANSITION ════════ -->
 
 <div class="relative overflow-hidden leading-none bg-[#0D0720]">
 
@@ -1133,7 +1169,7 @@
 
 </div>
 
-<!-- NEGOCIO + IMPACTO -->
+<!-- ════════ NEGOCIO + IMPACTO ════════ -->
 
 <section
   id="negocio"
@@ -1252,7 +1288,7 @@
 </section>
 
 
-<!-- FIN NEGOCIO WAVE -->
+<!-- ════════ WAVE TRANSITION ════════ -->
 
 <div class="relative overflow-hidden leading-none bg-[#0D0720]">
 
@@ -1273,7 +1309,7 @@
 </div>
 
 
-<!-- CONTACTO PREMIUM -->
+<!-- ════════ CONTACTO ════════ -->
 
 <section
   id="contacto"
@@ -1549,7 +1585,7 @@
 
 </section>
 
-<!-- FOOTER LIGHT -->
+<!-- ════════ FOOTER ════════ -->
 
 <footer class="relative bg-[#FAFBFF] overflow-hidden border-t border-[#EAE7FF]">
 
@@ -1698,6 +1734,7 @@
   </div>
 </footer>
 
+<!-- ════════ SCRIPTS DE INTERACCIÓN ════════ -->
 <script>
       /* Scripts Principal de Interacción */
 

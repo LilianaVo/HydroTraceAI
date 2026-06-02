@@ -1,3 +1,54 @@
+<!--
+================================================================================
+EQUIPO: PUMASCRIPT SOLUTIONS
+
+PROYECTO : HydroTrace AI
+ARCHIVO  : dashboard_clientes.html
+AUTORES  : 
+
+- Ileana Lee / Project Manager, Lead Data Scientist & UX/UI
+- Ramírez Monzón Ana Cristina / Business Analyst & Financial Lead
+- Romero Pizano Christian Gustavo / Data Visualization Specialist
+
+
+Materia  : Ciencia de Datos en la Toma de Decisiones en las Organizaciones
+GRUPO: 04
+Facultad de Ingeniería, UNAM | Ciudad de México, 2026
+
+DESCRIPCIÓN:
+    Panel ejecutivo público orientado al cliente SEGIAGUA.
+    No requiere autenticación. Presenta los resultados del modelo ML
+    de forma visual y accionable: zonas críticas, impacto económico
+    y herramientas de planeación para equipos de campo.
+
+    Secciones:
+        Sidebar             → perfil del cliente, widget de clusters y
+                              métricas de cobertura geográfica
+        Topbar              → navegación principal y accesos rápidos
+        Hero Banner         → resumen ejecutivo con KPIs de impacto y mapa Leaflet
+        Cómo funciona       → guía visual de 3 pasos del proceso de la IA
+        Mini Stats          → 4 contadores de colonias, m³, precisión y críticas
+        KPIs                → tarjetas de colonias anómalas, pérdida MXN y ROI
+        Mapa interactivo    → mapa full-width con leyenda de diagnósticos
+        Ranking + Chart     → tabla de zonas prioritarias y gráfica de exceso por alcaldía
+        Simulador ROI       → calculadora interactiva de escenarios de recuperación
+        Próximos pasos      → guía de implementación en 3 fases
+        Calendario          → programación automática de inspecciones por día hábil
+        Reporte de campo    → formulario para que la cuadrilla registre hallazgos en sitio
+        Overlay ROI         → modal con desglose detallado del impacto económico
+        Overlay Campo       → modal para enviar el reporte al backend (/api/reporte-campo)
+        Footer              → créditos y versión del sistema
+
+    Dependencias externas:
+        Tailwind CSS (CDN)      → utilidades de estilos
+        Chart.js 4.4.1          → gráficas de exceso por alcaldía y donut de clusters
+        Leaflet 1.9.4           → mapa interactivo de zonas de riesgo
+        Font Awesome 6          → iconografía del panel
+
+    Data bridge (Flask → JS):
+        #hydrotrace-data        → JSON con ranking, impacto, clusters y mapa
+================================================================================
+-->
 <!doctype html>
 <html lang="es">
 <head>
@@ -16,7 +67,7 @@
     ═══════════════════════════════════════════════════════ */
     :root {
       /* ── Backgrounds ── */
-      --bg:        #F2F1FA;            /* ligeramente más frío que antes */
+      --bg:        #F2F1FA;            
       --bg2:       #E8E5F8;
       --surface:   rgba(255,255,255,0.87);
       --surface2:  rgba(255,255,255,0.62);
@@ -26,7 +77,7 @@
       --border2:   rgba(139,124,246,0.08);
 
       /* ── Brand purples ── */
-      --purple:      #7C6EF5;          /* ligeramente más oscuro → mayor contraste */
+      --purple:      #7C6EF5;          
       --purple-soft: #9B8BF8;
       --lavender:    #BEB0FC;
       --lavender-pale: #EAE6FE;
@@ -50,10 +101,7 @@
       --mauve:      #9B59F5;
       --mauve-pale: rgba(155,89,245,0.11);
 
-      /* ── Text — contraste accesible ──────────────────────
-         text:  sin cambio (ya era oscuro)
-         text2: de #6B7280 → #4B5563 (+contraste)
-         text3: de #A8B2C1 → #7A8698 (+contraste, no tan claro) */
+      /* ── Text — contraste accesible */
       --text:   #25214F;
       --text2:  #4B5563;
       --text3:  #7A8698;
@@ -1094,7 +1142,7 @@
   <!-- CONTENT -->
   <div class="content">
 
-    <!-- ── HERO BANNER ── -->
+    <!-- ════════ HERO BANNER ════════ -->
     <div class="hero">
       <div class="hero-glow1"></div>
       <div class="hero-glow2"></div>
@@ -1175,7 +1223,7 @@
       </div>
     </div>
 
-    <!-- ── CÓMO FUNCIONA ── -->
+    <!-- ════════ CÓMO FUNCIONA ════════ -->
 <div class="como-funciona" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;">
 
   <!-- 01 Detección -->
@@ -1226,7 +1274,7 @@
 
 </div>
 
-    <!-- ── MINI STATS ── -->
+    <!-- ════════ MINI STATS ════════ -->
     <div class="mini-stats" id="sec-kpis">
 
       <!-- Colonias analizadas: azul vibrante -->
@@ -1293,7 +1341,7 @@
 
     </div>
 
-    <!-- ── KPIs ── -->
+    <!-- ════════ KPIs ════════ -->
     <div class="kpi-grid">
 
       <!-- Colonias anómalas: mauve -->
@@ -1372,7 +1420,8 @@
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════
+    <!-- ════════ MAPA INTERACTIVO ════════
+
          MAP — Gran protagonismo
     ══════════════════════════════════════ -->
     <div class="map-section" id="sec-mapa">
@@ -1410,7 +1459,7 @@
       </div>
     </div>
 
-    <!-- ── BELOW MAP: Ranking + Chart ── -->
+    <!-- ════════ RANKING + CHART ════════ -->
     <div class="below-map-grid" id="sec-ranking">
 
       <!-- Ranking de Zonas Prioritarias -->
@@ -1473,7 +1522,7 @@
 
     </div>
 
-    <!-- ── BOT GRID: ROI + Alertas ── -->
+    <!-- ════════ SIMULADOR ROI ════════ -->
     <div class="bot-grid" id="sec-roi">
 
       <!-- Simulador ROI -->
@@ -1568,7 +1617,7 @@
     </div>
 
 
-    <!-- ── PRÓXIMOS PASOS ── -->
+    <!-- ════════ PRÓXIMOS PASOS ════════ -->
     <div style="
       display:grid; grid-template-columns:repeat(3,1fr);
       gap:14px; margin-bottom:24px;
@@ -1647,7 +1696,7 @@
 
   </div><!-- /content -->
 
-  <!-- ── CALENDARIO DE INSPECCIONES ── -->
+  <!-- ════════ CALENDARIO DE INSPECCIONES ════════ -->
 <div style="margin-bottom:24px;">
 
   <!-- Header del panel -->
@@ -1734,7 +1783,7 @@
   </div>
 </div>
 
-    <!-- ── REPORTE DE CAMPO ── -->
+    <!-- ════════ REPORTE DE CAMPO ════════ -->
 
 <script>
 
@@ -1988,7 +2037,7 @@ document.addEventListener("mousemove", e => {
 renderCalendario();
 </script>
 
-  <!-- FOOTER -->
+  <!-- ════════ FOOTER ════════ -->
   <div class="footer-bar">
   <span>HydroTrace AI · Ingeniería UNAM · 2026</span>
   <span style="font-size:10px;color:var(--text3);font-weight:500;">
@@ -1999,7 +2048,7 @@ renderCalendario();
 
 </div><!-- /main-wrap -->
 
-<!-- ── OVERLAY: ANÁLISIS ROI DETALLADO ── -->
+<!-- ════════ OVERLAY: ANÁLISIS ROI DETALLADO ════════ -->
 <div id="sec-roi-ana" style="display:none;position:fixed;top:0;left:var(--sidebar);right:0;bottom:0;overflow-y:auto;background:var(--bg);z-index:999;padding:48px 40px;">
 
   <div style="margin-bottom:24px;">
@@ -2107,7 +2156,7 @@ renderCalendario();
 
 
 
-<!-- ── OVERLAY: REPORTE DE CAMPO ── -->
+<!-- ════════ OVERLAY: REPORTE DE CAMPO ════════ -->
 <div id="sec-campo" style="display:none;position:fixed;top:0;left:var(--sidebar);right:0;bottom:0;overflow-y:auto;background:var(--bg);z-index:999;padding:48px 40px;">
 
     <div style="margin-bottom:24px;">
@@ -2228,7 +2277,7 @@ renderCalendario();
   </div>
 </div>
 
-<!-- Jinja2 data injection (kept intact for backend) -->
+<!-- ════════ DATA BRIDGE: FLASK → JS ════════ -->
 <script id="hydrotrace-data" type="application/json">
   {
     "rankingData": {{ ranking | tojson }},
