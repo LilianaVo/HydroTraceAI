@@ -112,8 +112,8 @@ db.init_app(app)
 # Fuentes documentadas para la defensa del proyecto.
 # ==============================================================================
 
-# Tarifa SACMEX para uso comercial/industrial (Gaceta Oficial CDMX, enero 2024)
-TARIFA_M3_PESOS: float = 18.40
+# Tarifa SACMEX para uso doméstico (Gaceta Oficial CDMX, enero 2026)
+TARIFA_M3_PESOS: float = 123.79
 
 # Capacidad de recuperación física estimada del volumen excedente identificado.
 # El sistema detecta zonas — cuánto se recupera depende de la intervención de campo.
