@@ -189,7 +189,7 @@ def calcular_impacto_economico(df: pd.DataFrame) -> dict:
     negativo y no generan costo de pérdida — su problema es desabasto, no exceso.
 
     Métricas calculadas:
-        costo_perdida_total   — exceso total × tarifa SACMEX ($18.40/m³)
+        costo_perdida_total   — exceso total × tarifa SACMEX ($123.79/m³)
         roi_proyectado        — costo_total × 20% (capacidad de recuperación física)
         m3_en_riesgo          — suma de excesos positivos en m³
         poblacion_equivalente — m³ recuperables / 133.59 m³/hab/año
@@ -666,10 +666,21 @@ def dashboard_clientes():
     clusters_json = json.dumps(clusters_info)
 
     # Solo colonias que requieren atención — el cliente no necesita ver las NORMAL
-    ranking = df[df["diagnostico_final"] != "NORMAL"][[
-        "alcaldia", "colonia", "diagnostico_final",
-        "exceso_consumo", "total_reportes",
-    ]].to_dict(orient="records")
+    #ranking = df[df["diagnostico_final"] != "NORMAL"][[
+    #    "alcaldia", "colonia", "diagnostico_final",
+    #    "exceso_consumo", "total_reportes",
+    #]].to_dict(orient="records")
+
+    # 1. Columnas fijas
+    cols_ranking = ["alcaldia", "colonia", "diagnostico_final", "exceso_consumo", "total_reportes"]
+
+    # 2. Por cada columna opcional, buscar valor en CSV 
+    for col_opcional in ["consumo_total_dom", "consumo_total_no_dom", "cluster_perfil"]:
+      if col_opcional in df.columns:
+        cols_ranking.append(col_opcional)
+
+    # 3. Ahora la lista contiene los valores necesarios
+    ranking = df[df["diagnostico_final"] != "NORMAL"][cols_ranking].to_dict(orient="records")
 
     mapa_json = json.dumps(preparar_datos_mapa(df), ensure_ascii=False)
 
