@@ -2147,7 +2147,7 @@ renderCalendario();
       <div style="font-size:18px;font-weight:800;color:var(--text);letter-spacing:-0.02em;margin-bottom:20px;">¿Cuánto puedes recuperar según la intervención?</div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;" id="ana-escenarios"></div>
       <div style="margin-top:16px;padding:12px 16px;background:var(--amber-pale);border:1px solid var(--amber-mid);border-radius:11px;font-size:11px;color:var(--amber);font-weight:600;line-height:1.6;">
-        ⚠ Las proyecciones se calculan sobre el primer semestre de 2019 (datos disponibles). La recuperación real depende de la capacidad operativa de las cuadrillas, el tipo de intervención y el tiempo de respuesta en campo. Úsalos como guía de priorización, no como cifra definitiva.
+        ⚠ Las proyecciones se calculan sobre el primer semestre de 2026 (datos disponibles). La recuperación real depende de la capacidad operativa de las cuadrillas, el tipo de intervención y el tiempo de respuesta en campo. Úsalos como guía de priorización, no como cifra definitiva.
       </div>
     </div>
 
@@ -2281,7 +2281,7 @@ renderCalendario();
 <script id="hydrotrace-data" type="application/json">
   {
     "rankingData": {{ ranking | tojson }},
-    "perdidaBase": {{ costo_perdida_total | default(210868476) }},
+    "perdidaBase": {{ costo_perdida_total | default(1270023033) }},
     "clustersData": {{ clusters_json | safe }}
   }
 </script>
@@ -2295,7 +2295,7 @@ renderCalendario();
     perdidaBase = _data.perdidaBase;
   } catch(e) {
     rankingData = [];
-    perdidaBase = 210868476;
+    perdidaBase = 1270023033;
   }
 
   // ── PALETA PASTEL para el ranking (reemplaza los colores duros de Christian) ──
