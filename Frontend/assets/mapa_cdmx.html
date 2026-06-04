@@ -48,6 +48,40 @@
             border-color: #FF2D55;
         }
 
+        /* Botón pantalla completa */
+        #btn-fullscreen {
+            position: absolute;
+            top: 14px;
+            right: 160px; /* Separación para que no tape el otro botón */
+            z-index: 1000;
+            background: rgba(13,17,23,0.88);
+            border: 1px solid rgba(99,102,241,0.35);
+            color: #A78BFA;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s;
+            letter-spacing: 0.04em;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        #btn-fullscreen:hover {
+            background: rgba(167,139,250,0.15);
+            border-color: #A78BFA;
+        }
+
+        /* Asegurar que leyenda y botones se vean en fullscreen */
+        :-webkit-full-screen #leyenda,
+        :-webkit-full-screen #btn-heat,
+        :-webkit-full-screen #btn-fullscreen { display: flex; }
+        :fullscreen #leyenda,
+        :fullscreen #btn-heat,
+        :fullscreen #btn-fullscreen { display: flex; }
+
         /* Leyenda flotante */
         #leyenda {
             position: absolute;
@@ -87,8 +121,14 @@
 <body>
     <div id="map"></div>
     <button id="btn-heat" onclick="toggleCalor()">🌡 Mapa de Calor</button>
+    
+    <button id="btn-fullscreen" onclick="toggleFullscreen()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+        </svg>
+        Pantalla Completa
+    </button>
 
-    <!-- Leyenda -->
     <div id="leyenda">
         <div class="titulo">Nivel de riesgo</div>
         <div class="item"><span class="dot" style="background:#FF2D55;box-shadow:0 0 6px rgba(255,45,85,0.6);"></span>Crítico</div>
@@ -119,20 +159,18 @@
 
         let calorCapa   = null;
         let calorActivo = false;
-        let marcadores  = []; // guardamos referencias para mostrar/ocultar
+        let marcadores  = []; 
 
         function toggleCalor() {
             if (!calorCapa) return;
             const btn = document.getElementById('btn-heat');
             if (calorActivo) {
-                // Desactivar calor → mostrar puntos
                 map.removeLayer(calorCapa);
                 marcadores.forEach(m => m.addTo(map));
                 calorActivo = false;
                 btn.classList.remove('activo');
                 btn.textContent = '🌡 Mapa de Calor';
             } else {
-                // Activar calor → ocultar puntos
                 marcadores.forEach(m => map.removeLayer(m));
                 calorCapa.addTo(map);
                 calorActivo = true;
@@ -141,6 +179,35 @@
             }
         }
 
+        // NUEVO: Función para alternar Pantalla Completa
+        function toggleFullscreen() {
+            const btn = document.getElementById('btn-fullscreen');
+            const iconExpand = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> Pantalla Completa`;
+            const iconCollapse = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg> Salir`;
+
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().then(() => {
+                    btn.innerHTML = iconCollapse;
+                    setTimeout(() => map.invalidateSize(), 300);
+                }).catch(err => console.warn('Fullscreen no disponible:', err));
+            } else {
+                document.exitFullscreen().then(() => {
+                    btn.innerHTML = iconExpand;
+                    setTimeout(() => map.invalidateSize(), 300);
+                });
+            }
+        }
+
+        // NUEVO: Sincronizar el botón si el usuario sale presionando "Esc"
+        document.addEventListener('fullscreenchange', () => {
+            const btn = document.getElementById('btn-fullscreen');
+            if (!document.fullscreenElement) {
+                btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg> Pantalla Completa`;
+                setTimeout(() => map.invalidateSize(), 300);
+            }
+        });
+
+        // Tu Fetch original, limpio e intacto
         fetch('/api/mapa-datos')
           .then(r => r.json())
           .then(puntos => {
@@ -163,7 +230,7 @@
                 }
             });
 
-            // Marcadores — guardamos referencia para el toggle
+            // Marcadores
             puntos.forEach(p => {
                 const m = L.circleMarker([p.lat, p.lon], {
                     color      : p.color,
