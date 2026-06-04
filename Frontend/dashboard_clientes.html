@@ -1729,7 +1729,7 @@ DESCRIPCIÓN:
           font-size:9.5px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;
           padding:4px 10px;border-radius:7px;
           background:var(--lavender-pale);color:var(--purple);
-        ">Mayo 2026</span>
+        ">Junio 2026</span>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <!-- Leyenda -->
@@ -2383,12 +2383,12 @@ renderCalendario();
   // C1: exceso_consumo es semestral. Para comparar contra M3_PER_CAPITA_ANUAL (133.59 m³/hab/año)
   // se anualiza ×2 antes de calcular la población equivalente, igual que modelos_ml.py (HC-01).
   const pobEq       = Math.round(totalExceso * 2 * 0.20 / 133.59);
-  const kpiDefs = [
-    { label:'Colonias con pérdida', val: conExceso.length,   color:'var(--rose)',   icon:'⚠' },
-    { label:'m³ en exceso total',   val: fmt(totalExceso),   color:'var(--sky)',    icon:'💧' },
-    { label:'Pérdida estimada',     val: fmtMXN(totalCosto), color:'var(--amber)',  icon:'💰' },
-    { label:'Habitantes abastecibles/año (133.59 m³/hab/año)',    val: fmt(pobEq),          color:'var(--sage)',   icon:'👥' },
-  ];
+const kpiDefs = [
+  { label:'Colonias con pérdida', val: conExceso.length,   color:'var(--rose)',  icon:'◈' },
+  { label:'m³ en exceso total',   val: fmt(totalExceso),   color:'var(--sky)',   icon:'◉' },
+  { label:'Pérdida estimada',     val: fmtMXN(totalCosto), color:'var(--amber)', icon:'◌' },
+  { label:'Habitantes abastecibles/año (133.59 m³/hab/año)', val: fmt(pobEq), color:'var(--sage)', icon:'◎' },
+];
   const kpiEl = document.getElementById('ana-kpis');
   if (kpiEl) {
     kpiEl.innerHTML = kpiDefs.map(k => `

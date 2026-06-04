@@ -1,0 +1,86 @@
+========================================================================
+REPORTE DE METRICAS DEL MODELO -- HydroTrace AI
+Seccion 8.2: Metricas minimas esperadas del modelo
+========================================================================
+
+1. REGRESION LINEAL MULTIPLE
+------------------------------------------------------------------------
+  R2 (Coeficiente de Determinacion)  : 0.2787
+  MAE (Error Absoluto Medio)          : 128,243.70 m3 (semestral)
+  Colonias usadas                     : 160
+  Features                            : pob, densidad_poblacional, superficie_km2_calculada, idsm, uso_suelo_num
+
+  Coeficientes del modelo:
+    pob                                      +4.5391
+    densidad_poblacional                     -3.3209
+    superficie_km2_calculada                 -4581.5509
+    idsm                                     +96424.9401
+    uso_suelo_num                            +179326.0921
+    intercepto                               +59214.5307
+
+  NOTA R2: Un R2 moderado o bajo es esperado. El consumo hidrico
+  depende de variables no publicas (actividad informal, habitos,
+  estado de la red). La regresion genera la variable exceso_consumo
+  como linea base para que Isolation Forest detecte desviaciones.
+
+2. SEGMENTACION K-MEANS (K=4)
+------------------------------------------------------------------------
+  Score de Silueta                    : 0.4449
+  Inercia                             : 241.45
+  Numero de clusters                  : 4
+
+  Distribucion por cluster:
+    Cluster 0: 4 colonias
+    Cluster 1: 107 colonias
+    Cluster 2: 1 colonias
+    Cluster 3: 48 colonias
+
+  NOTA Silueta: Un valor entre 0.20 y 0.55 es aceptable para datos
+  urbanos reales. El objetivo de K-Means no es separabilidad maxima
+  sino grupos con interpretabilidad operativa (residencial, mixto,
+  comercial, industrial) para mejorar los diagnosticos de IF.
+
+3. DETECCION DE ANOMALIAS (ISOLATION FOREST)
+------------------------------------------------------------------------
+  Total colonias analizadas           : 160
+  Colonias anomalas                   : 26
+  Tasa de anomalias                   : 16.25%
+
+  Distribucion de diagnosticos:
+    NORMAL                                               131 colonias
+    DEFICIENCIA (Posible Baja Presión o Desabasto)       17 colonias
+    SOSPECHOSO (Exceso Detectado por IA)                 7 colonias
+    CRÍTICO (Posible Fuga de Red)                        4 colonias
+    SOSPECHOSO (Posible Huachicol)                       1 colonias
+
+4. TASA DE CONFIANZA DE DETECCION
+------------------------------------------------------------------------
+  Tasa de confianza                   : 50.0%
+  Mediana reportes ciudadanos          : 53.0
+  Anomalas CON respaldo ciudadano      : 13
+  Anomalas SIN respaldo ciudadano      : 13
+
+  NOTA Confianza: No es una metrica estandar de ML, sino una
+  validacion cruzada del proyecto. Mide coherencia entre la senal
+  estadistica (Isolation Forest) y la senal ciudadana (SEGUIAGUA).
+  Tasa alta = las anomalias del modelo coinciden con zonas donde
+  los habitantes reportan problemas reales en la red hidrica.
+
+5. COBERTURA GEOESPACIAL
+------------------------------------------------------------------------
+  Alcaldias cubiertas                 : 16/16 (100.0%)
+  Colonias en el modelo               : 160
+  Colonias con coordenadas validas    : 159 (99.4%)
+  Colonias dataset original (ETL)     : 160
+
+6. REPRODUCIBILIDAD DEL PIPELINE
+------------------------------------------------------------------------
+  Columnas esperadas                  : 8
+  Columnas presentes                  : 8
+  Columnas ausentes                   : Ninguna
+  Nulos en columnas criticas          : 0
+  Pipeline reproducible               : SI
+
+========================================================================
+FIN DEL REPORTE
+========================================================================
